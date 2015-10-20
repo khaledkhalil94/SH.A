@@ -1,0 +1,355 @@
+
+body {
+  background-color: #E5E5E5;
+  background: #fefefe;
+  background-image: url("http://i.imgur.com/VZKhO2A.png");
+  background-image: url("http://i.imgur.com/VZKhO2A.png"), 
+  -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fefefe), color-stop(100%,#fcfcfc));
+  background-image: url("http://i.imgur.com/VZKhO2A.png"), 
+  -webkit-linear-gradient(top, #fefefe 0%,#fcfcfc 100%);
+  background-image: url("http://i.imgur.com/VZKhO2A.png"), linear-gradient(to bottom, #E6E5E5 0%,#D8D7D7 100%);
+}
+
+.header {
+  background-color: white;
+  color: #ccc;
+  margin: 0 auto;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 1174px;
+  height: auto;
+  background-color:white;
+}
+
+.sha-logo {
+  margin-top: 20px;
+  color: #fff;
+  float: right;
+  width: 130px;
+  height: 123px;
+  background: url("http://i.imgur.com/IETlIkd.png") no-repeat;
+  background-size: 130px 123px;
+}
+
+.quick-links {
+  position: relative;
+  width: auto;
+  max-width: 800px;
+  float: left;
+}
+
+.col-md-8 > div > ul > li:nth-child(1) {
+  border-right: 2px #e0e0e0 solid;
+  padding-right: 20px;
+}
+
+.fa {
+  font-size:25px;
+}
+
+.quick-links > ul {
+  padding-left: 25px;
+}
+
+.quick-links ul li {
+  display: inline-block;
+  margin-top: 12px;
+  margin-left: 10px;
+  font-size: 15px;
+  color: black;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.quick-links ul li:nth-child(5) {
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 30px;
+  border-left: 2px #e0e0e0 solid;
+}
+
+.quick-links ul li a:hover {
+  color: #0000E6 !important;
+}
+
+.navbar-default {
+  position:relative;
+  max-width:100%;
+  list-style: none;
+  text-decoration: none;
+  border: none;
+  background-color:#f7f7f7;
+  padding-top: 30px;
+}
+
+.collapse {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.navbar-default .container-fluid .navbar-nav > li {
+  padding-right: 10px;
+  padding-left: 20px;
+  border-right: 2px groove #4F4F71;
+  direction: rtl;
+}
+
+ul.nav.navbar-nav {
+  display: inline-block;
+  float: none;
+}
+
+.navbar-default .navbar-collapse {
+  text-align: center;
+}
+
+.caret {
+  margin-right:5px;
+}
+
+.dropdown:hover {
+  background-color: rgb(62, 62, 103);
+}
+
+.dropdown:hover .dropdown-menu {
+  background-color: #f4f6f7;
+  display: block;
+  right: -2px;
+  left: auto;
+}
+
+.dropdown ul {
+  background-color: #f9f9f9;
+  box-shadow: none;
+  border: 0;
+  border-top: none;
+  margin-left: -1px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-radius: 0;
+}
+
+.dropdown ul li a {
+  padding-left: 0px;
+  padding-right: 5px;
+  text-align:right;
+  margin-right: 0;
+}
+
+.dropdown ul li {
+  padding: 10px 0px 10px 8px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+/*google colors, personal signature*/
+.dropdown ul li:nth-child(1) {
+  border-right: 2px blue solid;
+}
+
+.dropdown ul li:nth-child(2) {
+  border-right: 2px red solid;
+}
+
+.dropdown ul li:nth-child(3) {
+  border-right: 2px yellow solid;
+}
+
+.dropdown ul li:nth-child(4) {
+ border-right: 2px blue solid;
+}
+
+.dropdown ul li:nth-child(5) {
+  border-right: 2px green solid;
+}
+
+.dropdown ul li:nth-child(6) {
+ border-right: 2px red solid;
+}
+
+.dropdown ul li a:hover {
+  color: black;
+  background-color: inherit;
+}
+
+.dropdown ul li:hover {
+  color: black;
+  background-color: #EFEFEF;
+}
+.main>.content>.row {
+  margin-top:150px;
+  padding-bottom: 20px;
+}
+
+#accordion p>span {
+  direction: rtl;
+  float:left;
+  color: black;
+  margin-left: 10px;
+}
+
+.faculties > .row {
+  direction: rtl;
+  margin-top: 50px;
+  margin-right: 15px;
+}
+
+.faculties .row .col-md-4 {
+  float:right;
+}
+
+
+.faculties .row .col-md-3, .col-md-9, .col-md-4 {
+  padding-right:3px;
+}
+
+.row {
+  margin-right:0;
+  margin-left: 0;
+}
+
+.faculties .row p {
+  font-size: 18px;
+}
+
+.faculties .row h4 {
+  text-align: center;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.faculties > div > div .row {
+  border: 1px #E5E5E5 solid;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px 2px rgba(204,204,204,0.7);
+}
+
+.footer {
+  background-color: #272B44;
+  color: #CFD3D8;
+}
+.footer-row {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.footer-links .contacts>ul, .links>ul {
+  list-style: none;
+  padding-right: 20px;
+  margin-top: 20px;
+  font-size: 17px;
+}
+
+.footer-links .contacts>ul>li, .links>ul>li {
+  margin-top: 7px;
+}
+
+
+.footer-links h3 {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.footer-links {
+  direction: rtl;
+}
+
+.footer .footer-links ul li p, .footer .footer-links ul li a {
+  display:inline;
+  margin-right: 7px;
+  margin-left: 5px;
+}
+
+.popover-content > ul {
+  color:black;
+  list-style:circle;
+  padding-right: 20px;
+}
+
+.container-fluid {
+  background-color: rgb(56, 76, 97);
+}
+
+#bs-example-navbar-collapse-1 > ul > li:nth-child(1) {
+  border-left: 2px groove #4f4f71;
+  padding-left: 10px;
+}
+
+#accordion h4 a {
+  text-decoration: none;
+}
+
+#accordion .panel.panel-default {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+#accordion .panel.panel-default .panel-body a {
+  color: blue;
+}
+
+.newsticker a {
+  color: black;
+}
+
+.faculties a {
+  color: #333;
+}
+
+
+.carousel-caption a {
+  color: #FFA700;
+  font-weight: 600;
+  font-size: 29px;
+}
+
+.carousel-caption h3 {
+  color: #FFB300;
+  font-weight: 600;
+  font-size: 29px;
+}
+
+.faculties > div > div:nth-child(1) > div > div.col-md-9 {
+  right: -9px;
+  padding-left: 0px;
+}
+
+#collapseOne > div > img {
+  float: left;
+}
+
+.header > div > div > div.col-md-8 > div > ul > li > a {
+  color: rgb(3, 12, 134);}
+
+
+  #accordion h4 a p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  @media (max-width: 992px){
+
+    .footer > div > div > div.col-md-4 > div {
+      direction:rtl;
+    }
+    .footer-links .col-md-6 {
+      border-top: 1px rgba(193, 193, 193, 0.6) solid;
+    }
+
+    .footer-left {
+      direction: rtl;
+    }
+
+    .navbar-default .container-fluid .navbar-nav > li {
+      border-left: 2px groove #4F4F71;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-fluid {
+      height: 50px;
+    }
+
+  }

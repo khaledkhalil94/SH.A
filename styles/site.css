@@ -1,0 +1,46 @@
+﻿.glyphicon
+{/*override*/
+}
+
+.pagination .glyphicon
+{
+    margin-right:0px !important; /*override*/
+}
+
+.pagination a
+{
+    color:#555;
+}
+
+.panel ul
+{
+    padding:0px;
+    margin:0px;
+    list-style:none;
+}
+
+.news-item
+{
+    padding:4px 4px;
+    margin:0px;
+    border-bottom:1px dotted #555; 
+}
+
+.panel-heading {
+	direction: rtl;
+}
+
+.panel-heading b {
+   
+    margin-right: 5px;
+}
+
+.demo1 li {
+    direction: rtl;
+}
+
+.panel-body > div > ul > li > table > tbody > tr > td {
+    padding: 10px 5px 10px;
+    font-size: 18px;
+    text-align: right;
+}

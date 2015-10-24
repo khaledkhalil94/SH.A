@@ -5,7 +5,7 @@
           <div class="quick-links">
             <ul class="links">
               <li>
-                <a href="https://www.facebook.com"></i>
+                <a href="https://www.facebook.com"><i class="fa fa-2x fa-facebook-official"></i>
                 </a>
               </li>
               <li><a href="#">إتصل بنا</a>

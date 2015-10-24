@@ -145,27 +145,31 @@ ul.nav.navbar-nav {
 
 /*google colors, personal signature*/
 .dropdown ul li:nth-child(1) {
-  border-right: 2px blue solid;
+  border-right: 2px #0089fa solid;
 }
 
 .dropdown ul li:nth-child(2) {
-  border-right: 2px red solid;
+  border-right: 2px #ff002b solid;
 }
 
 .dropdown ul li:nth-child(3) {
-  border-right: 2px yellow solid;
+  border-right: 2px #ffa900 solid;
 }
 
 .dropdown ul li:nth-child(4) {
- border-right: 2px blue solid;
+ border-right: 2px #00a753 solid;
 }
 
 .dropdown ul li:nth-child(5) {
-  border-right: 2px green solid;
+  border-right: 2px #0089fa solid;
 }
 
 .dropdown ul li:nth-child(6) {
- border-right: 2px red solid;
+ border-right: 2px #ff002b solid;
+}
+
+.dropdown ul li:nth-child(7) {
+  border-right: 2px #ffa900 solid;
 }
 
 .dropdown ul li a:hover {

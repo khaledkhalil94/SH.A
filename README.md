@@ -12,7 +12,8 @@ Feel free to fork/commit to the project.
 
 # Front-end structure
 
-CSS/JS Bootstrap framework
+* CSS/JS Bootstrap framework
+* Font Awesome icons
 
 # Back-end structure
 * PHP

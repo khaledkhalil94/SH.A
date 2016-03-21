@@ -24,13 +24,6 @@ Feel free to fork/commit to the project.
 * Add/redesign elements on the main page
 * Create sub-pages
 * Add database
-* Create Search model
 * Create registration system
-* Validate
-* Add discussion/comments on topics
 
-# To-add later
-* Something using AJAX 
 
-# Note
-You need a local host to run this project or move every code from the inc folder to each line it's included in in the main index.php file.

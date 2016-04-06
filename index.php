@@ -1,20 +1,21 @@
 <?php
+require_once ("config/config.php");
 $pageTitle = "SHA";
-include ('inc/head.php'); 
+include (ROOT_PATH . "inc/head.php"); 
 ?>
 <body>
-  <?php include ('inc/header.php') ?>
-  <?php include ('inc/navbar.php') ?>
+  <?php include (ROOT_PATH . 'inc/header.php') ?>
+  <?php include (ROOT_PATH . 'inc/navbar.php') ?>
   <div class="main">
     <div class="content">
-      <?php include ('inc/body/carousel.php') ?>
-      <?php include ('inc/body/faculties.php') ?>
+      <?php include (ROOT_PATH . 'inc/body/carousel.php') ?>
+      <?php include (ROOT_PATH . 'inc/body/faculties.php') ?>
       <div class="row">
-        <?php include ('inc/body/newsticker.php') ?>
-        <?php include ('inc/body/accordion.php') ?>
+        <?php include (ROOT_PATH . 'inc/body/newsticker.php') ?>
+        <?php include (ROOT_PATH . 'inc/body/accordion.php') ?>
       </div>
     </div>
   </div>
-  <?php include ('inc/footer.php') ?>
+  <?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

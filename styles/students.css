@@ -1,0 +1,53 @@
+.container {
+}
+
+.container.section {
+    background-color: white;
+    padding: 100px;
+}
+
+.wrapper h2 {
+    text-align: center;
+}
+
+.students li {
+    list-style: none;
+    padding: 10px;
+    border: 7px solid #DCDCDC;
+    border-radius: 4px;
+    margin: 20px;
+}
+li {}
+
+
+.students a {
+    color: #320AFF;
+    text-decoration: underline;
+}
+
+.details {
+    background-color: white;
+    padding: 100px;
+}
+
+.details p {
+    border: 2px #868686 groove;
+    padding: 8px;
+}
+
+.section .pagination {
+width: 100%;margin-bottom: 0;padding-left: 60px;}
+
+.section .pagination a {
+    border: 1px black solid;
+    padding: 6px 10px;
+    text-decoration: none;
+}
+
+.section .pagination span {
+    border: 1px black solid;
+    padding: 6px 10px;
+    text-decoration: none;
+    background-color: grey;
+    color: white;
+}

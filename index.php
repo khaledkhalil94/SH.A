@@ -1,5 +1,5 @@
 <?php
-require_once ("config/config.php");
+require_once ("classes/init.php");
 $pageTitle = "SHA";
 include (ROOT_PATH . "inc/head.php"); 
 ?>

@@ -6,7 +6,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="author" content="Khaled Khalil">
   <title><?php echo $pageTitle; ?></title>
-  <link rel="shortcut icon" href="<?php echo BASE_URL; ?>images/SH.A_Logo-icon.jpg" type="image/vnd.microsoft.icon" />
+<!--   <link rel="shortcut icon" href="<?php echo BASE_URL; ?>images/SH.A_Logo-icon.jpg" type="image/vnd.microsoft.icon" /> -->
   <script src="<?php echo BASE_URL; ?>scripts/jquery-1.11.3.min.js"></script>
   <script src="<?php echo BASE_URL; ?>scripts/bootstrap-3.3.5.min.js"></script>
   <script type='text/javascript' src='<?php echo BASE_URL; ?>scripts/carousel.js'></script>

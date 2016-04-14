@@ -13,7 +13,7 @@
 .carousel-caption {
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.8);
-  text-align: right;
+  /* text-align: right; */
 }
 /* Declare heights because of positioning of img element */
 

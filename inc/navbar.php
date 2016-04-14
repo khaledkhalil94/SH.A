@@ -12,17 +12,20 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
-            <a href="<?php echo BASE_URL; ?>">Home</a>
-           </li>
+            <a href="<?= BASE_URL; ?>">Home</a>
+          </li>
           <li>
-            <a href="<?php echo BASE_URL; ?>login/">Log In</a>
-           </li>
+            <a href="<?= BASE_URL; ?>students/">Students</a>
+          </li>
           <li>
-            <a href="<?php echo BASE_URL; ?>students/">Students</a>
-           </li>
+            <a href="<?= BASE_URL; ?>search.php">Search</a>
+          </li>
           <li>
-            <a href="<?php echo BASE_URL; ?>search/">Search</a>
-           </li>
+            <a href="<?= BASE_URL; ?>login.php">Log In</a>
+          </li>           
+          <li>
+          <a href="<?= BASE_URL; ?>signup.php">Sign Up</a>
+          </li>
         </ul>
       </div>
     </div>

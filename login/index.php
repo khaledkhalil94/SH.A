@@ -22,10 +22,6 @@ require_once ("../config/config.php");
         </form>
       </div>
     </div>
-        <?php foreach($students as $id => $student){ 
-
-        
-         } ?>
   </div>
 <?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>

@@ -26,24 +26,20 @@ body {
 .sha-logo {
   margin-top: 20px;
   color: #fff;
-  float: right;
+  /* float: right; */
   width: 130px;
   height: 123px;
-  background: url("http://i.imgur.com/IETlIkd.png") no-repeat;
+  /* background: url("http://i.imgur.com/IETlIkd.png") no-repeat; */
   background-size: 130px 123px;
 }
 
 .quick-links {
   position: relative;
   width: auto;
-  max-width: 800px;
-  float: left;
+  /* max-width: 800px; */
+  /* float: left; */
 }
 
-.col-md-8 > div > ul > li:nth-child(1) {
-  border-right: 2px #e0e0e0 solid;
-  padding-right: 20px;
-}
 
 .fa {
   font-size:25px;
@@ -51,16 +47,18 @@ body {
 
 .quick-links > ul {
   padding-left: 25px;
+  margin-top: 12px;
+  direction: rtl;
 }
 
 .quick-links ul li {
   display: inline-block;
-  margin-top: 12px;
+  /* margin-top: 12px; */
   margin-left: 10px;
   font-size: 15px;
   color: black;
-  padding-right: 5px;
-  padding-left: 5px;
+  /* padding-right: 5px; */
+  /* padding-left: 5px; */
 }
 
 .quick-links ul li:nth-child(5) {
@@ -194,15 +192,10 @@ ul.nav.navbar-nav {
 }
 
 .faculties > .row {
-  direction: rtl;
+  /* direction: rtl; */
   margin-top: 50px;
   margin-right: 15px;
 }
-
-.faculties .row .col-md-4 {
-  float:right;
-}
-
 
 .faculties .row .col-md-3, .col-md-9, .col-md-4 {
   padding-right:3px;
@@ -253,10 +246,6 @@ ul.nav.navbar-nav {
 .footer-links h3 {
   font-weight: bold;
   font-size: 25px;
-}
-
-.footer-links {
-  direction: rtl;
 }
 
 .footer .footer-links ul li p, .footer .footer-links ul li a {
@@ -323,7 +312,7 @@ ul.nav.navbar-nav {
   float: left;
 }
 
-.header > div > div > div.col-md-8 > div > ul > li > a {
+.header .links li a {
   color: rgb(3, 12, 134);}
 
 

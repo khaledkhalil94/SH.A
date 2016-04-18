@@ -252,6 +252,7 @@ ul.nav.navbar-nav {
   display:inline;
   margin-right: 7px;
   margin-left: 5px;
+  color: rgb(246, 244, 255);
 }
 
 .popover-content > ul {

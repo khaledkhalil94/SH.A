@@ -2,6 +2,9 @@
 require_once('init.php');
 class DatabaseObject {
 
+	// static $magic_quotes_active;
+	// static $real_escape_string_exists;
+
 	public static function find_all_students(){
 		$sql = "SELECT * FROM " .static::$table_name;
 		$all = static::find_by_sql($sql);
@@ -44,30 +47,67 @@ class DatabaseObject {
 		return array_key_exists($attribute, $object_vars);
 	}
 
+	public function create(){
+		global $connection;
+		$sql = "INSERT INTO ".static::$table_name;
+		$sql .=	" (`";
+		$sql .=	implode("`, `", array_keys($this->attributes()));
+		$sql .= "`) VALUES ('";
+		$sql .= implode("', '", array_values($this->attributes()));
+		$sql .=  "')";
+
+		if($connection->query($sql)){
+			echo "created";
+			 header('Location:index.php');
+		} else {
+			echo "<br>";
+			$error = ($connection->errorInfo());
+			echo $error[2];
+		}
+	}
+
+
 	// first, create an empty assoc array $attributes
 	// iterate through every db_field using a foreach loop
 	// in each step, assign the key to the array to the value fields
 	// for example, $attributes[username] = $this-username = ~the inserted value.
+	
 	public function attributes(){
 		$attributes = array();
-		foreach (DB::$db_fields as $field) {
+		foreach (static::$db_fields as $field) {
 			if(property_exists($this, $field)){
-				$attributes[$field] = $this->$field;
+				$attributes[$field] = $this->escape_value($this->$field);
 			}
 		}
 		return $attributes;
 	}
 
-	public function create(){
-		global $connection;
-		$sql = "INSERT INTO login_info
-				(`id`, `username`, `password`)
-				VALUES( null, '{$this->username}', '{$this->password}')";
-		if($connection->query($sql)){
-			echo "created";
+	public function validate_username($value){
+		$value = trim($value);
+		if (isset($value) && $value !== ""){
+			return $value;
 		} else {
-			echo "Error";
+			exit("Username can't be empty");
 		}
+	}
+
+	public function validate_password($value){
+		if (empty($value)){
+			exit("Password can't be empty");
+		} elseif(strlen($value) < 2) {
+			exit("Password must be at least 2 characters long");
+		}
+		return $value;
+	}
+
+	public function escape_value($value) {
+		global $connection;
+		if( $this->real_escape_string_exists ) { // PHP v4.3.0 or higher
+			// undo any magic quote effects so mysql_real_escape_string can do the work
+			if( $this->magic_quotes_active ) { $value = stripslashes( $value ); }
+			$value = $connection->quote($value);
+		}
+		return $value;
 	}
 
 }

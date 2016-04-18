@@ -39,6 +39,7 @@ class Session {
 		session_destroy();
 		$this->logged_in = false;
 	}
+
 }
 
 $session = new Session();

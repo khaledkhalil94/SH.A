@@ -1,5 +1,5 @@
 <?php
-require_once('Database.php');
+require_once('init.php');
 
 class Student extends DatabaseObject {
 	
@@ -8,18 +8,22 @@ class Student extends DatabaseObject {
 	public $lastName;
 	public $id;
 	public $address;
+	public $phoneNumber;
 
-	protected static $db_fields = array('firstName', 'lastName', 'id');
+
+	protected static $db_fields = array('username', 'password');
 
 	public static function authenticate($username="", $password=""){
+		global $DatabaseObject;
 		global $connection;
-
-		$sql = "SELECT * FROM login_info
-				WHERE username = '{$username}'
-				AND password = '{$password}'
+		$sql = "SELECT * FROM $table_name
+				WHERE username = ?
+				AND password = ?
 				LIMIT 1";
 
 		$found_user = $connection->prepare($sql);
+		$found_user->bindParam(1, $username);
+		$found_user->bindParam(2, $password);
 		$found_user->execute();
 
 		$found = $found_user->fetch(PDO::FETCH_OBJ);
@@ -27,63 +31,24 @@ class Student extends DatabaseObject {
 		return $found;
 	}
 
-	// public static function find_all_students(){
-	// 	$sql = "SELECT * FROM students";
-	// 	$all = self::find_by_sql($sql);
-	// 	return $all;
-	// }
+	public function create_user(){
+		global $connection;
+		$sql = "INSERT INTO $table_name
+				(`username`, `password`)
+				VALUES('{$this->username}', '{$this->password}')";
+		if($connection->query($sql)){
+			echo "created";
+		} else {
+			echo "Error";
+		}
+	}
 
-	// public static function find_by_id($id){
-	// 	$sql = "SELECT * FROM students WHERE id={$id}";
-	// 	$found = self::find_by_sql($sql);
-	// 	return !empty($found) ? array_shift($found) : false;
-	// }
+	public function full_name() {
+		//$student = Self::find_by_id($id);
+		return $this->firstName . " " . $this->lastName;
+	}
 
-	// public static function find_by_sql($sql=""){
-	// 	global $connection;
-
-	// 	$result = $connection->prepare($sql);
-	// 	$result->execute();
-	// 	$object_array = array();
-	// 	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-	// 		$object_array[] = self::instantiate($row);
-	// 	}
-	// 	return $object_array;
-	// }
-
-	// private static function instantiate($student){
-	// 	$object = new self;
-
-	// 	foreach ($student as $attribute => $value) {
-	// 		if ($object->has_attribute($attribute)) {
-	// 			$object->$attribute = $value;
-	// 		}
-	// 	}
-
-	// 	return $object;
-	// }
-
-	// private function has_attribute($attribute){
-	// 	$object_vars = get_object_vars($this);
-
-	// 	return array_key_exists($attribute, $object_vars);
-	// }
-
-	// // first, create an empty assoc array $attributes
-	// // iterate through every db_field using a foreach loop
-	// // in each step, assign the key to the array to the value fields
-	// // for example, $attributes[username] = $this-username = ~the inserted value.
-	// public function attributes(){
-	// 	$attributes = array();
-	// 	foreach (DB::$db_fields as $field) {
-	// 		if(property_exists($this, $field)){
-	// 			$attributes[$field] = $this->$field;
-	// 		}
-	// 	}
-	// 	return $attributes;
-	// }
-
-	public static function full_name($id) {
+	public function full_name_by_id($id) {
 		$student = Self::find_by_id($id);
 		return $student->firstName . " " . $student->lastName;
 	}

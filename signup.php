@@ -10,9 +10,14 @@ if($session->is_logged_in()){
 
 if (isset($_POST['submit'])) {
 
-    $student = new Student();
-    $student->username = $_POST['username'];
-    $student->password = $_POST['password'];
+$username = $_POST['username'];
+$password = $_POST['password'];
+$email = $_POST['email'];
+
+    $student = new StudentInfo();
+    $student->username = $DatabaseObject->validate_username($username);
+    $student->password = $DatabaseObject->validate_password($password);
+    $student->email = $email;
     $student->create();
 }
 
@@ -37,6 +42,10 @@ require(ROOT_PATH . 'inc/head.php');
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" value="" />
+            </div>
+            <div class="form-group">
+                <label for="email">email</label>
+                <input type="email" class="form-control" name="email" value="" />
             </div>
 
             <!-- <input type="hidden" name="token" value="" /> -->

@@ -14,6 +14,8 @@ class Database {
 			die($e->getMessage());
 		}
 	}
+
+	
 }
 
 $database = new Database();

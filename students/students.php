@@ -1,8 +1,8 @@
 <?php
 require_once ("../classes/init.php");
 $pageTitle = "Students";
-//include (ROOT_PATH . 'students/info.php');
-// $students = get_students_all();
+
+
 // $students_per_page = 4;
 
 // if (empty($_GET["pg"])){
@@ -46,27 +46,42 @@ $pageTitle = "Students";
     <div class="container section">
       <div class="wrapper">
         <h2>Students list</h2>
-
         <div class="pagination">
           <?php// include (ROOT_PATH . "inc/navigation.php"); ?>
         </div>
-
+<?php
+            $students = StudentInfo::find_all_students();
+            $users=array();
+            foreach ($students as $student) {
+                $users[] = Student::find_by_id($student->id);
+            }
+            $student = new Student();
+?>
         <ul class="students">
 
          <?php
+         $out = array();
+            foreach ($users as $key => $value){
+                $out[] = (object)array_merge((array)$students[$key], (array)$value);
+            }
+            $users = $out;
 
-         $users = Student::find_all_students();
          foreach ($users as $user) {
 
-          $output = "";
-            $output = $output . "<li>";
-            $output = $output .  "name: " . $user->firstName . "<br>";
-            $output = $output .  "ID: " . $user->id . "<br>";
-            $output = $output .  "address:" . " " . $user->address . "<br>";
-            $output = $output .  "Full Page:" . " " . "<a href=" . BASE_URL . "students/" . $user->id . '/' . ">Details</a>";
-            $output = $output .  "</li>";
-
-            echo $output;
+            if (Student::find_by_id($user->id)) {
+              $output = "";
+                $output = $output . "<li>";
+                $output = $output .  "name: " . $user->username . "<br>";
+                
+                $output = $output .  "full name: " . $student->full_name_by_id($user->id) . "<br>";
+                $output = $output .  "ID: " . $user->id . "<br>";
+                if(isset($user->address)){
+                    $output = $output .  "address:" . " " . $user->address . "<br>";
+                }
+                $output = $output .  "Full Page:" . " " . "<a href=" . BASE_URL . "students/" . $user->id . '/' . ">Details</a>";
+                $output = $output .  "</li>";
+                echo $output;
+            }
          }
         //  $position = 0;
         //  $display = "";

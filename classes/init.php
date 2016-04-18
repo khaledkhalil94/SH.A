@@ -10,12 +10,15 @@ define('DOCROOT', dirname(__FILE__));
 
 
 require_once("Session.php");
-function autoloader($class_name){
-	$path = DOCROOT . "/{$class_name}.php";
-	require_once($path);
-}
+require_once("DatabaseObject.php");
+require_once('Database.php');
 
-spl_autoload_register('autoloader');
+ function autoloader($class_name){
+ 	$path = DOCROOT . "/{$class_name}.php";
+ 	require_once($path);
+ }
+
+ spl_autoload_register('autoloader');
 	
 
 

@@ -22,14 +22,6 @@ include (ROOT_PATH . 'inc/navbar.php');
  ?>
 <div class="container">
 <?php echo "Username: " . $studentInfo->username . "<br>";?>
-<?php 
-if (!empty($studentInfo->email)){
-	echo "E-Mail: " . $studentInfo->email . "<br>";
-} else {
-	echo "User has not set an E-Mail! <br>";
-}
- ?>
-
 
 	<div class="details row">
 		<div class="col-md-5">
@@ -41,9 +33,8 @@ if (!empty($studentInfo->email)){
 				<p><?php echo "Address: " . $student->address; ?></p>
 				<p><?php echo "Phone Number: " . $student->phoneNumber; ?></p>
 			</div>
+		<a class="btn btn-default" href="<?php echo BASE_URL."students/editstudent.php?id=".$id?>" role="button">Update your information</a>
 	</div>
-	
-	<a href="<?php echo BASE_URL ."students/editstudent.php?id=". $id ?>"><p>Edit information</p></a>
 </div>
 <?php
 include (ROOT_PATH . 'inc/footer.php');

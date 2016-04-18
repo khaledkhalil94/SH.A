@@ -1,10 +1,9 @@
 <?php
 require_once ("classes/init.php");
-$pageTitle = "SHA";
+$pageTitle = "Home Page";
 include (ROOT_PATH . "inc/head.php"); 
 ?>
 <body>
-<?php print_r($_GET); ?>
   <?php include (ROOT_PATH . 'inc/header.php') ?>
   <?php include (ROOT_PATH . 'inc/navbar.php') ?>
   <div class="main">

@@ -26,17 +26,9 @@
     border-bottom:1px dotted #555; 
 }
 
-.panel-heading {
-	direction: rtl;
-}
-
 .panel-heading b {
    
     margin-right: 5px;
-}
-
-.demo1 li {
-    direction: rtl;
 }
 
 .panel-body > div > ul > li > table > tbody > tr > td {

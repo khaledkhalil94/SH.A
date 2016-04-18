@@ -3,7 +3,7 @@ require_once('init.php');
 class DatabaseObject {
 
 	// static $magic_quotes_active;
-	// static $real_escape_string_exists;
+	 public $real_escape_string_exists;
 
 	public static function find_all_students(){
 		$sql = "SELECT * FROM " .static::$table_name;
@@ -45,6 +45,27 @@ class DatabaseObject {
 		$object_vars = get_object_vars($this);
 
 		return array_key_exists($attribute, $object_vars);
+	}
+
+	public function update(){
+		global $connection;
+		$sql = "UPDATE ".static::$table_name;
+		$sql .= " SET ";
+		$array = $this->attributes();
+		$copy = $array;
+		foreach ($array as $key => $value) {
+			$comma = ", ";
+			if(!next($copy)) $comma = "";
+				$sql .= "`{$key}`" . " = " . "'{$value}'" . $comma;
+		}
+		$sql .= " ";
+		$sql .= " WHERE id = {$this->id}";
+
+		if(!$connection->query($sql)){
+			echo "<br>";
+			$error = ($connection->errorInfo());
+			echo $error[2];
+		}
 	}
 
 	public function create(){

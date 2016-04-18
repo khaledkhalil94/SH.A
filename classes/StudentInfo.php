@@ -10,20 +10,20 @@ class StudentInfo extends DatabaseObject {
 	public $email;
 
 
-	protected static $db_fields = array('id', 'username', 'password');
+	protected static $db_fields = array('id', 'username', 'password', 'email');
 
-	public function update(){
-		global $connection;
-		$sql = "UPDATE ".self::$table_name;
-		$sql .= " SET username = '{$this->username}'";
-		$sql .= " WHERE id = {$this->id}";
+	// public function update(){
+	// 	global $connection;
+	// 	$sql = "UPDATE ".self::$table_name;
+	// 	$sql .= " SET username = '{$this->username}'";
+	// 	$sql .= " WHERE id = {$this->id}";
 
-		if(!$connection->query($sql)){
-			echo "<br>";
-			$error = ($connection->errorInfo());
-			echo $error[2];
-		}
-	}
+	// 	if(!$connection->query($sql)){
+	// 		echo "<br>";
+	// 		$error = ($connection->errorInfo());
+	// 		echo $error[2];
+	// 	}
+	// }
 
 }
 

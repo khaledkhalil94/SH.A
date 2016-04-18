@@ -11,7 +11,7 @@ class Student extends DatabaseObject {
 	public $phoneNumber;
 
 
-	protected static $db_fields = array('username', 'password');
+	protected static $db_fields = array('firstName', 'lastName', 'address', 'phoneNumber');
 
 	public static function authenticate($username="", $password=""){
 		global $DatabaseObject;

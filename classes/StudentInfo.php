@@ -12,18 +12,23 @@ class StudentInfo extends DatabaseObject {
 
 	protected static $db_fields = array('id', 'username', 'password', 'email');
 
-	// public function update(){
-	// 	global $connection;
-	// 	$sql = "UPDATE ".self::$table_name;
-	// 	$sql .= " SET username = '{$this->username}'";
-	// 	$sql .= " WHERE id = {$this->id}";
+	public static function authenticate($username="", $password=""){
+		global $DatabaseObject;
+		global $connection;
+		$sql = "SELECT * FROM " . static::$table_name ."
+				WHERE username = ?
+				AND password = ?
+				LIMIT 1";
 
-	// 	if(!$connection->query($sql)){
-	// 		echo "<br>";
-	// 		$error = ($connection->errorInfo());
-	// 		echo $error[2];
-	// 	}
-	// }
+		$found_user = $connection->prepare($sql);
+		$found_user->bindParam(1, $username);
+		$found_user->bindParam(2, $password);
+		$found_user->execute();
+
+		$found = $found_user->fetch(PDO::FETCH_OBJ);
+
+		return $found;
+	}
 
 }
 

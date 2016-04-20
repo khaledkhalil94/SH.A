@@ -1,7 +1,7 @@
 <?php
 require_once ("../classes/init.php");
 if (isset($_GET['id'])) {
-	$id = intval($_GET["id"]);
+	$id = (int)$_GET["id"];
 }
 
 $studentInfo = StudentInfo::find_by_id($id);
@@ -33,7 +33,13 @@ include (ROOT_PATH . 'inc/navbar.php');
 				<p><?php echo "Address: " . $student->address; ?></p>
 				<p><?php echo "Phone Number: " . $student->phoneNumber; ?></p>
 			</div>
+		<?php //if (isset($session->user_id)) {
+				//if($student->id === $session->user_id){
+		 ?>
 		<a class="btn btn-default" href="<?php echo BASE_URL."students/editstudent.php?id=".$id?>" role="button">Update your information</a>
+		<a class="btn btn-default" href="<?php echo BASE_URL."students/account.php"?>" role="button">Change account settings</a>
+		<?php 	//}
+			//} ?>
 	</div>
 </div>
 <?php

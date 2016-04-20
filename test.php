@@ -1,5 +1,10 @@
-<?php require_once ('students/info.php');
+<?php 
+require_once('classes/init.php');
 
-var_dump(get_students_subset(1,5));
+echo "<pre>";
+print_r($_SESSION);
+
+echo $session->msg;
+
 
 ?>

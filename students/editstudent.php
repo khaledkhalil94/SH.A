@@ -1,19 +1,26 @@
 <?php
 require_once ("../classes/init.php");
-if (isset($_GET['id'])) {
-	$id = intval($_GET["id"]);
+
+// if (!isset($session->user_id)) {
+// 	header("Location: " . BASE_URL . "index.php");
+// }
+
+//$id = (int)$session->user_id;
+$id = $_GET['id'];
+
+if ($_GET['id'] != $id) {
+	header("Location: " . BASE_URL . "students/editstudent.php?id=".$id);
 }
+
+// if((int)$session->user_id !== (int)$id){
+// 	header("Location: " . BASE_URL . "index.php");
+// }
 
 $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($studentInfo->id);
 
-if (empty($student)){
-	echo "User was not found!";
-	//header("Location: " . BASE_URL . "students/");
-	exit;
-}
-
 if (isset($_POST['submit'])) {
+
 
     $studentInfo->username = $_POST['username'];
     $studentInfo->password = $_POST['password'];
@@ -23,12 +30,14 @@ if (isset($_POST['submit'])) {
     $student->address = $_POST['address'];
     $student->phoneNumber = $_POST['phoneNumber'];
 
-    if($studentInfo->update()){
-    	echo "username updated";
-    }
-    if($student->update()){
-    	echo "username updated";
-    }
+
+	  if($student->update() && $studentInfo->update()){
+	 		$session->message("Your information have been updated");
+
+	 } else {
+	 	echo $_SESSION['fail']['sqlerr'];
+	 }
+
 
 }
 
@@ -39,6 +48,12 @@ include (ROOT_PATH . 'inc/header.php');
 include (ROOT_PATH . 'inc/navbar.php');
  ?>
 <div class="container section">
+<?php if(!empty($session->msg)):?>
+<div class="alert alert-success" role="alert"> <?= $session->msg; ?></div>
+<?php endif; ?>
+
+
+
 <h2>Update your information</h2>
 <h4><?php echo "Username: ";?><?php echo $studentInfo->username; ?></h4>
 <br>

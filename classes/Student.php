@@ -13,35 +13,35 @@ class Student extends DatabaseObject {
 
 	protected static $db_fields = array('firstName', 'lastName', 'address', 'phoneNumber');
 
-	public static function authenticate($username="", $password=""){
-		global $DatabaseObject;
-		global $connection;
-		$sql = "SELECT * FROM $table_name
-				WHERE username = ?
-				AND password = ?
-				LIMIT 1";
+	// public static function authenticate($username="", $password=""){
+	// 	global $DatabaseObject;
+	// 	global $connection;
+	// 	$sql = "SELECT * FROM " . static::$table_name ."
+	// 			WHERE username = ?
+	// 			AND password = ?
+	// 			LIMIT 1";
 
-		$found_user = $connection->prepare($sql);
-		$found_user->bindParam(1, $username);
-		$found_user->bindParam(2, $password);
-		$found_user->execute();
+	// 	$found_user = $connection->prepare($sql);
+	// 	$found_user->bindParam(1, $username);
+	// 	$found_user->bindParam(2, $password);
+	// 	$found_user->execute();
 
-		$found = $found_user->fetch(PDO::FETCH_OBJ);
+	// 	$found = $found_user->fetch(PDO::FETCH_OBJ);
 
-		return $found;
-	}
+	// 	return $found;
+	// }
 
-	public function create_user(){
-		global $connection;
-		$sql = "INSERT INTO $table_name
-				(`username`, `password`)
-				VALUES('{$this->username}', '{$this->password}')";
-		if($connection->query($sql)){
-			echo "created";
-		} else {
-			echo "Error";
-		}
-	}
+	// public function create_user(){
+	// 	global $connection;
+	// 	$sql = "INSERT INTO $table_name
+	// 			(`username`, `password`)
+	// 			VALUES('{$this->username}', '{$this->password}')";
+	// 	if($connection->query($sql)){
+	// 		echo "created";
+	// 	} else {
+	// 		echo "Error";
+	// 	}
+	// }
 
 	public function full_name() {
 		//$student = Self::find_by_id($id);

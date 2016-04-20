@@ -6,16 +6,15 @@ if($session->is_logged_in()){
 }
 
 if (isset($_POST['submit'])){
-	$username = $_POST['id'];
+	  $username = $_POST['id'];
     $password = $_POST['password'];
     //search for the user in the database
-    $found_user = Student::authenticate($username, $password);
+    $found_user = StudentInfo::authenticate($username, $password);
 
     if ($found_user) {
     	//success
       $session->login($found_user);
-      
-      //header('Location:index.php');
+      header('Location:index.php');
   } else {
       // error message
       echo "No user were found";

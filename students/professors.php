@@ -1,39 +1,7 @@
 <?php
 require_once ("../classes/init.php");
-$pageTitle = "Students";
+$pageTitle = "Professors";
 
-
-// $students_per_page = 4;
-
-// if (empty($_GET["pg"])){
-//   $current_page = 1;
-// } else {
-//   $current_page = $_GET["pg"];
-// }
-
-// $current_page = intval($current_page);
-// $total_students = all_count();
-
-// $total_pages = ceil($total_students / $students_per_page);
-// $next_page = $current_page + 1;
-// $prev_page = $current_page - 1;
-
-
-// if ($current_page > $total_pages){
-//   header ("Location: ./?pg=" . $total_pages);
-// }
-
-// if ($current_page < 1 ){
-//   header ("Location: ./");
-// }
-
-// $start = (($current_page - 1) * $students_per_page) + 1;
-// $end = $current_page * $students_per_page;
-// if ($end > $total_students){
-//   $end = $total_students;
-// }
-
-// $students = get_students_subset($start, $end);
 ?>
 <body>
   <?php
@@ -45,12 +13,12 @@ $pageTitle = "Students";
   <div class="main">
     <div class="container section">
       <div class="wrapper">
-        <h2>Students list</h2>
+        <h2>PROFS</h2>
         <div class="pagination">
           <?php// include (ROOT_PATH . "inc/navigation.php"); ?>
         </div>
 <?php
-            $students = StudentInfo::find_all_students();
+            $profs = StudentInfo::find_all_students();
             $users=array();
             foreach ($students as $student) {
                 $users[] = Student::find_by_id($student->id);
@@ -83,17 +51,7 @@ $pageTitle = "Students";
                 echo $output;
             }
          }
-        //  $position = 0;
-        //  $display = "";
-        //  $displayCount = 5;
-        //  foreach($students as $student){
-        //   $position = $position + 1;
-        //   if ($position <= $displayCount) {
-        //     $display = $display . displayHTML($student);
-        //   }
 
-        // }
-        // echo $display;
         ?>
       </ul>
       <div class="pagination">

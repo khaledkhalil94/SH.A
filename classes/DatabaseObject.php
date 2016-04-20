@@ -3,7 +3,7 @@ require_once('init.php');
 class DatabaseObject {
 
 	// static $magic_quotes_active;
-	 public $real_escape_string_exists;
+	 //public $real_escape_string_exists;
 
 	public static function find_all_students(){
 		$sql = "SELECT * FROM " .static::$table_name;
@@ -47,25 +47,76 @@ class DatabaseObject {
 		return array_key_exists($attribute, $object_vars);
 	}
 
+	public function updatee(){
+		global $connection;
+
+		$class = get_called_class();
+
+		$fields = array_keys((array)$this);
+
+		//$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
+		$sql = "UPDATE students SET firstName = 'tzestaaaaaaaaaaaaaaa22' WHERE id = '5501'";
+		$stmt = $connection->prepare($sql);
+		// $stmt->bindValue(1, "testaaaaaaaaaaaaaaaa22");
+		$res = $stmt->execute();
+		var_dump($res);
+
+		// if (!$res) {
+		// 	//return false;
+		// } 
+		//return true;
+		
+		// if($res) {
+		// 	$_SESSION['success']['class'] = "";
+		// 	$_SESSION['success']['class'] .= $class . " - ";
+		// 	//var_dump($res);
+		// 	//return true;
+
+		// } else {
+		// 	$error = ($stmt->errorInfo());
+		// 	echo $sql;
+		// 	$_SESSION['fail']['sqlerr'] = $error[2];
+		// 	$_SESSION['fail']['class'] = $class;
+		// 	return false;
+		// }
+		//return true;
+	}
+
 	public function update(){
 		global $connection;
-		$sql = "UPDATE ".static::$table_name;
-		$sql .= " SET ";
-		$array = $this->attributes();
-		$copy = $array;
-		foreach ($array as $key => $value) {
-			$comma = ", ";
-			if(!next($copy)) $comma = "";
-				$sql .= "`{$key}`" . " = " . "'{$value}'" . $comma;
-		}
-		$sql .= " ";
-		$sql .= " WHERE id = {$this->id}";
 
-		if(!$connection->query($sql)){
-			echo "<br>";
-			$error = ($connection->errorInfo());
-			echo $error[2];
-		}
+		$class = get_called_class();
+
+		$fields = array_keys((array)$this);
+
+		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
+		$stmt = $connection->prepare($sql);
+		$res = $stmt->execute($values);
+
+		if(!$res) {
+			$error = ($stmt->errorInfo());
+			$_SESSION['fail']['sqlerr'] = $error[2];
+			$_SESSION['fail']['class'] .= $class . " ";
+			//var_dump($res);
+			return false;
+
+		 } 
+		 
+		return true;
+	}
+	private function pdoSet($fields, &$values, $source = array()) {
+	  $set = '';
+	  $values = array();
+	  $array = (array)$this;
+	  if (!$source) $source = &$array;
+	  foreach ($fields as $field) {
+	    if (isset($source[$field])) {
+	      $set.="`$field`=:$field, ";
+	      $values[$field] = $source[$field];
+	    }
+	  }
+
+	  return substr($set, 0, -2); 
 	}
 
 	public function create(){
@@ -121,18 +172,31 @@ class DatabaseObject {
 		return $value;
 	}
 
-	public function escape_value($value) {
-		global $connection;
-		if( $this->real_escape_string_exists ) { // PHP v4.3.0 or higher
-			// undo any magic quote effects so mysql_real_escape_string can do the work
-			if( $this->magic_quotes_active ) { $value = stripslashes( $value ); }
-			$value = $connection->quote($value);
-		}
-		return $value;
-	}
-
 }
 
 $DatabaseObject = new DatabaseObject();
 
+	// public function update(){
+	// 	global $connection;
+	// 	$sql = "UPDATE ".static::$table_name;
+	// 	$sql .= " SET ";
+	// 	$array = array();
+	// 	foreach ($this->attributes() as $key => $value) {
+	// 		$array[] = "{$key} = '{$value}'"; 
+	// 	}
+	// 	$sql .= implode(", ", $array);
+	// 	$sql .= " WHERE id = {$this->id}";
+	// 	$sql = "UPDATE ".static::$table_name . " SET username = :username WHERE id = {$this->id}";
+
+
+	// 	$result = $connection->prepare($sql);
+	// 	$result->bindParam(':username', $this->username);
+
+	// 	$res = $result->execute();
+
+	// 	if(!$res){
+	// 		$error = ($connection->errorInfo());
+	// 		echo $error[2];
+	// 	}
+	// }
 ?>

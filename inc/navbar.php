@@ -1,3 +1,5 @@
+  <?php 
+  require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php"); ?>
   <div class="navbar-default">
     <div class="container-fluid">
       <!--responsive menu-->
@@ -15,17 +17,33 @@
             <a href="<?= BASE_URL; ?>">Home</a>
           </li>
           <li>
+           <?php if($session->is_logged_in()): ?>
+            <a href="<?= BASE_URL."students/".$session->user_id;?>/">Profile</a>
+          </li>
+          <?php endif; ?>  
+          <li>
             <a href="<?= BASE_URL; ?>students/">Students</a>
+          </li> 
+          <li>
+            <a href="<?= BASE_URL; ?>students/professors.php">Professors</a>
+          </li> 
+          <li>
+            <a href="<?= BASE_URL; ?>faculties.php">Faculties</a>
           </li>
           <li>
             <a href="<?= BASE_URL; ?>search.php">Search</a>
           </li>
+          <?php if(!$session->is_logged_in()): ?>
           <li>
             <a href="<?= BASE_URL; ?>login.php">Log In</a>
-          </li>           
+          </li>
           <li>
           <a href="<?= BASE_URL; ?>signup.php">Sign Up</a>
-          </li>
+          </li>  
+          <?php endif; ?>           
+          <?php if($session->is_logged_in()): ?>
+            <li><a href="<?= BASE_URL; ?>logout.php">Log Out</a></li>
+          <?php endif; ?>
         </ul>
       </div>
     </div>

@@ -5,6 +5,8 @@ class Session {
 	private $logged_in=false;
 	public $user_id;
 	public $username;
+	public $msg;
+
 
 	function __construct(){
 		session_start();
@@ -38,6 +40,15 @@ class Session {
 		unset($this->user_id);
 		session_destroy();
 		$this->logged_in = false;
+	}
+
+	public function message($msg){
+		if(isset($msg)){
+			$this->msg = $_SESSION['msg'] = $msg;
+			unset($_SESSION['msg']);
+		} else {
+			$this->msg = " ";
+		}
 	}
 
 }

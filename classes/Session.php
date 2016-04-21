@@ -11,6 +11,7 @@ class Session {
 	function __construct(){
 		session_start();
 		$this->check_login();
+
 	}
 
 	public function is_logged_in(){
@@ -25,6 +26,16 @@ class Session {
 			$this->logged_in = false;
 		}
 
+	}
+
+	public function login_by_id($id){
+		global $connection;
+		$sql = "SELECT * FROM login_info WHERE id = {$id}";
+		$stmt = $connection->prepare($sql);
+		
+		$stmt->execute();
+		$user = $stmt->fetch(PDO::FETCH_OBJ);
+		$this->login($user);
 	}
 
 	public function login($user){
@@ -47,7 +58,7 @@ class Session {
 			$this->msg = $_SESSION['msg'] = $msg;
 			unset($_SESSION['msg']);
 		} else {
-			$this->msg = " ";
+			$this->msg = "aa";
 		}
 	}
 
@@ -56,3 +67,4 @@ class Session {
 $session = new Session();
 
 ?>
+

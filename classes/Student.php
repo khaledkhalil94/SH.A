@@ -9,9 +9,48 @@ class Student extends DatabaseObject {
 	public $id;
 	public $address;
 	public $phoneNumber;
+	public $faculty_id;
 
 
-	protected static $db_fields = array('firstName', 'lastName', 'address', 'phoneNumber');
+	protected static $db_fields = array('firstName', 'lastName', 'address', 'phoneNumber', 'faculty_id');
+
+	public function get_faculty($id){
+		global $connection;
+
+		$sql = "SELECT name FROM faculties ";
+		$sql .= "WHERE id = {$id} ";
+		$sql .= "LIMIT 1";
+
+		$stmt = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
+		if($stmt){
+			return $stmt['name'];
+		}
+		if(!$stmt) {
+			$error = ($connection->errorInfo());
+			echo $error[2];
+		}
+	}
+
+	public function get_students_by_faculty($id){
+		global $connection;
+
+		$sql = "SELECT * FROM students ";
+		$sql .= "WHERE faculty_id = {$id}";
+		$all = static::find_by_sql($sql);
+		return $all;
+	}
+
+	public function full_name() {
+		//$student = Self::find_by_id($id);
+		return $this->firstName . " " . $this->lastName;
+	}
+
+	public function full_name_by_id($id) {
+		$student = Self::find_by_id($id);
+		return $student->firstName . " " . $student->lastName;
+	}
+
+}
 
 	// public static function authenticate($username="", $password=""){
 	// 	global $DatabaseObject;
@@ -42,16 +81,3 @@ class Student extends DatabaseObject {
 	// 		echo "Error";
 	// 	}
 	// }
-
-	public function full_name() {
-		//$student = Self::find_by_id($id);
-		return $this->firstName . " " . $this->lastName;
-	}
-
-	public function full_name_by_id($id) {
-		$student = Self::find_by_id($id);
-		return $student->firstName . " " . $student->lastName;
-	}
-
-}
-

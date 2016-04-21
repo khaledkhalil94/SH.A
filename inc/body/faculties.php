@@ -2,10 +2,10 @@
         <div class="row">
           <div class="col-md-4">
             <div class="row">
-              <a href="#"><h4>Engineering</h4></a>
+              <a href="<?= BASE_URL; ?>inc/faculties/engineering.php"><h4>Engineering</h4></a>
               <div class="col-md-3">
                 <div class="uni-glyph">
-                  <img src="images/icons/hie.png" alt="HIE" title="HIE" width="80">
+                  <img src="<?= BASE_URL; ?>images/icons/hie.png" alt="HIE" title="HIE" width="80">
                 </div>
               </div>
               <div class="col-md-9">
@@ -16,10 +16,10 @@
           </div>
           <div class="col-md-4">
             <div class="row">
-              <a href="#"><h4>Computer Science</h4></a>
+              <a href="<?= BASE_URL; ?>inc/faculties/Computer_Science.php"><h4>Computer Science</h4></a>
               <div class="col-md-3">
                 <div class="uni-glyph">
-                  <img src="images/icons/hicit.png" alt="HICIT" title="HICIT" width="80">
+                  <img src="<?= BASE_URL; ?>images/icons/hicit.png" alt="HICIT" title="HICIT" width="80">
                 </div>
               </div>
               <div class="col-md-9">
@@ -30,14 +30,14 @@
           </div>
           <div class="col-md-4">
             <div class="row">
-              <a href="#"><h4>Mass Media</h4></a>
+              <a href="<?= BASE_URL; ?>inc/faculties/Medicine.php"><h4>Medicine</h4></a>
               <div class="col-md-3">
                 <div class="uni-glyph">
-                  <img src="images/icons/ihmi.png" alt="IHMI" title="IHMI" width="80">
+                  <img src="<?= BASE_URL; ?>images/icons/ihmi.png" alt="IHMI" title="IHMI" width="80">
                 </div>
               </div>
               <div class="col-md-9">
-                <p>Graduating high skilled liars.
+                <p>Graduating high skilled doctors.
                   <br>
                 </p>
               </div>

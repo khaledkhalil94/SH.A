@@ -18,7 +18,7 @@
           </li>
           <li>
            <?php if($session->is_logged_in()): ?>
-            <a href="<?= BASE_URL."students/".$session->user_id;?>/">Profile</a>
+            <a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
           </li>
           <?php endif; ?>  
           <li>
@@ -28,7 +28,7 @@
             <a href="<?= BASE_URL; ?>students/professors.php">Professors</a>
           </li> 
           <li>
-            <a href="<?= BASE_URL; ?>faculties.php">Faculties</a>
+            <a href="<?= BASE_URL; ?>inc/faculties">Faculties</a>
           </li>
           <li>
             <a href="<?= BASE_URL; ?>search.php">Search</a>

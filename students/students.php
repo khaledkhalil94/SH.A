@@ -3,37 +3,6 @@ require_once ("../classes/init.php");
 $pageTitle = "Students";
 
 
-// $students_per_page = 4;
-
-// if (empty($_GET["pg"])){
-//   $current_page = 1;
-// } else {
-//   $current_page = $_GET["pg"];
-// }
-
-// $current_page = intval($current_page);
-// $total_students = all_count();
-
-// $total_pages = ceil($total_students / $students_per_page);
-// $next_page = $current_page + 1;
-// $prev_page = $current_page - 1;
-
-
-// if ($current_page > $total_pages){
-//   header ("Location: ./?pg=" . $total_pages);
-// }
-
-// if ($current_page < 1 ){
-//   header ("Location: ./");
-// }
-
-// $start = (($current_page - 1) * $students_per_page) + 1;
-// $end = $current_page * $students_per_page;
-// if ($end > $total_students){
-//   $end = $total_students;
-// }
-
-// $students = get_students_subset($start, $end);
 ?>
 <body>
   <?php
@@ -67,33 +36,22 @@ $pageTitle = "Students";
             $users = $out;
 
          foreach ($users as $user) {
-
             if (Student::find_by_id($user->id)) {
+              $faculty = $student->get_faculty($user->faculty_id);
+              $faculty = ucwords(str_replace("_", " ", $faculty));
+
               $output = "";
                 $output = $output . "<li>";
-                $output = $output .  "name: " . $user->username . "<br>";
-                
-                $output = $output .  "full name: " . $student->full_name_by_id($user->id) . "<br>";
+                $output = $output .  "Username: " . $user->username . "<br>";
+                $output = $output .  "Full name: " . $student->full_name_by_id($user->id) . "<br>";
                 $output = $output .  "ID: " . $user->id . "<br>";
-                if(!empty($user->address)){
-                    $output = $output .  "address:" . " " . $user->address . "<br>";
-                }
+                $output = $output .  "Faculty: " . " " . $faculty . "<br><br>";
                 $output = $output . "<a href=" . BASE_URL . "students/" . $user->id . "/>View profile</a>";
                 $output = $output .  "</li>";
                 echo $output;
             }
          }
-        //  $position = 0;
-        //  $display = "";
-        //  $displayCount = 5;
-        //  foreach($students as $student){
-        //   $position = $position + 1;
-        //   if ($position <= $displayCount) {
-        //     $display = $display . displayHTML($student);
-        //   }
 
-        // }
-        // echo $display;
         ?>
       </ul>
       <div class="pagination">

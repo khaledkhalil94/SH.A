@@ -5,6 +5,8 @@ class DatabaseObject {
 	// static $magic_quotes_active;
 	 //public $real_escape_string_exists;
 
+
+
 	public static function find_all_students(){
 		$sql = "SELECT * FROM " .static::$table_name;
 		$all = static::find_by_sql($sql);
@@ -47,46 +49,10 @@ class DatabaseObject {
 		return array_key_exists($attribute, $object_vars);
 	}
 
-	public function updatee(){
-		global $connection;
-
-		$class = get_called_class();
-
-		$fields = array_keys((array)$this);
-
-		//$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
-		$sql = "UPDATE students SET firstName = 'tzestaaaaaaaaaaaaaaa22' WHERE id = '5501'";
-		$stmt = $connection->prepare($sql);
-		// $stmt->bindValue(1, "testaaaaaaaaaaaaaaaa22");
-		$res = $stmt->execute();
-		var_dump($res);
-
-		// if (!$res) {
-		// 	//return false;
-		// } 
-		//return true;
-		
-		// if($res) {
-		// 	$_SESSION['success']['class'] = "";
-		// 	$_SESSION['success']['class'] .= $class . " - ";
-		// 	//var_dump($res);
-		// 	//return true;
-
-		// } else {
-		// 	$error = ($stmt->errorInfo());
-		// 	echo $sql;
-		// 	$_SESSION['fail']['sqlerr'] = $error[2];
-		// 	$_SESSION['fail']['class'] = $class;
-		// 	return false;
-		// }
-		//return true;
-	}
-
 	public function update(){
 		global $connection;
 
 		$class = get_called_class();
-
 		$fields = array_keys((array)$this);
 
 		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
@@ -94,7 +60,7 @@ class DatabaseObject {
 		$res = $stmt->execute($values);
 
 		if(!$res) {
-			$error = ($stmt->errorInfo());
+			$error = ($connection->errorInfo());
 			$_SESSION['fail']['sqlerr'] = $error[2];
 			$_SESSION['fail']['class'] .= $class . " ";
 			//var_dump($res);
@@ -104,6 +70,8 @@ class DatabaseObject {
 		 
 		return true;
 	}
+
+	
 	private function pdoSet($fields, &$values, $source = array()) {
 	  $set = '';
 	  $values = array();
@@ -119,18 +87,28 @@ class DatabaseObject {
 	  return substr($set, 0, -2); 
 	}
 
-	public function create(){
+
+	public function create_user(){
 		global $connection;
+		global $session;
+		// Create new user in the login_info table
 		$sql = "INSERT INTO ".static::$table_name;
 		$sql .=	" (`";
 		$sql .=	implode("`, `", array_keys($this->attributes()));
 		$sql .= "`) VALUES ('";
 		$sql .= implode("', '", array_values($this->attributes()));
 		$sql .=  "')";
+		$createl = $connection->prepare($sql);
 
-		if($connection->query($sql)){
-			echo "created";
-			 header('Location:index.php');
+		//register the user in the students table
+		$sql = "INSERT INTO students (`id`) VALUES ('{$this->id}')";
+		$creates = $connection->prepare($sql);
+
+		if($createl->execute() && $creates->execute()){
+			$session->login_by_id($this->id);
+		 	$session->message("Thanks for signing up, please update your information");
+			 	header("Location:".BASE_URL."students/".$this->id."/");
+
 		} else {
 			echo "<br>";
 			$error = ($connection->errorInfo());
@@ -148,7 +126,7 @@ class DatabaseObject {
 		$attributes = array();
 		foreach (static::$db_fields as $field) {
 			if(property_exists($this, $field)){
-				$attributes[$field] = $this->escape_value($this->$field);
+				$attributes[$field] = $this->$field;
 			}
 		}
 		return $attributes;
@@ -199,4 +177,39 @@ $DatabaseObject = new DatabaseObject();
 	// 		echo $error[2];
 	// 	}
 	// }
+
+	// public function updatee(){
+	// 	global $connection;
+
+	// 	$class = get_called_class();
+
+	// 	$fields = array_keys((array)$this);
+
+	// 	//$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
+	// 	$sql = "UPDATE students SET firstName = 'tzestaaaaaaaaaaaaaaa22' WHERE id = '5501'";
+	// 	$stmt = $connection->prepare($sql);
+	// 	// $stmt->bindValue(1, "testaaaaaaaaaaaaaaaa22");
+	// 	$res = $stmt->execute();
+	// 	var_dump($res);
+
+		// if (!$res) {
+		// 	//return false;
+		// } 
+		//return true;
+		
+		// if($res) {
+		// 	$_SESSION['success']['class'] = "";
+		// 	$_SESSION['success']['class'] .= $class . " - ";
+		// 	//var_dump($res);
+		// 	//return true;
+
+		// } else {
+		// 	$error = ($stmt->errorInfo());
+		// 	echo $sql;
+		// 	$_SESSION['fail']['sqlerr'] = $error[2];
+		// 	$_SESSION['fail']['class'] = $class;
+		// 	return false;
+		// }
+		//return true;
+	//}
 ?>

@@ -13,12 +13,14 @@ if (isset($_POST['submit'])) {
 $username = $_POST['username'];
 $password = $_POST['password'];
 $email = $_POST['email'];
+$id = $_POST['id'];
 
     $student = new StudentInfo();
     $student->username = $DatabaseObject->validate_username($username);
     $student->password = $DatabaseObject->validate_password($password);
     $student->email = $email;
-    $student->create();
+    $student->id = $id;
+    $student->create_user();
 }
 
 ?>
@@ -38,6 +40,10 @@ require(ROOT_PATH . 'inc/head.php');
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" name="username" value="" />
+            </div>
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" name="id" value="" />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

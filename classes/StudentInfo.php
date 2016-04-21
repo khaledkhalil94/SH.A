@@ -13,7 +13,7 @@ class StudentInfo extends DatabaseObject {
 	protected static $db_fields = array('id', 'username', 'password', 'email');
 
 	public static function authenticate($username="", $password=""){
-		global $DatabaseObject;
+		//global $DatabaseObject;
 		global $connection;
 		$sql = "SELECT * FROM " . static::$table_name ."
 				WHERE username = ?

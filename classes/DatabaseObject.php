@@ -104,6 +104,10 @@ class DatabaseObject {
 		$sql = "INSERT INTO students (`id`) VALUES ('{$this->id}')";
 		$creates = $connection->prepare($sql);
 
+		$sql = "INSERT INTO profile_pic (`user_id`) VALUES ('{$this->id}')";
+		$createp = $connection->prepare($sql);
+		$createp->execute();
+
 		if($createl->execute() && $creates->execute()){
 			$session->login_by_id($this->id);
 		 	$session->message("Thanks for signing up, please update your information");

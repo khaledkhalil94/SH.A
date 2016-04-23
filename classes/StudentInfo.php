@@ -15,7 +15,7 @@ class StudentInfo extends DatabaseObject {
 	public static function authenticate($username="", $password=""){
 		//global $DatabaseObject;
 		global $connection;
-		$sql = "SELECT * FROM " . static::$table_name ."
+		$sql = "SELECT * FROM login_info
 				WHERE username = ?
 				AND password = ?
 				LIMIT 1";

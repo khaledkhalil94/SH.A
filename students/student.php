@@ -3,9 +3,9 @@ require_once ("../classes/init.php");
 if (isset($_GET['id'])) {
 	$id = (int)$_GET["id"];
 }
-
 $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($studentInfo->id);
+$img_path = $student->get_profile_pic($id);
 
 $faculty = $student->get_faculty($student->faculty_id);
 $faculty = ucwords(str_replace("_", " ", $faculty));
@@ -34,7 +34,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 
 	<div class="details row">
 		<div class="col-md-5">
-			<div class="image"><img src=<?php echo $student->id;?> alt=""></div>
+			<div class="image"><img src=<?php echo $img_path;?> alt="" style="width:278px;"></div>
 		</div>
 			<div class="col-md-6">
 				<p><?php echo "Name: " . $student->full_name(); ?></p>
@@ -44,14 +44,14 @@ include (ROOT_PATH . 'inc/navbar.php');
 				<?php if (!empty($faculty)): ?>
 					<p><?php echo "Faculty: " . $faculty; ?></p>
 				<?php endif ?>
+				<?php //if (isset($session->user_id)) {
+						//if($student->id === $session->user_id){
+				 ?>
+				<a class="btn btn-default" href="<?php echo BASE_URL."students/settings/editstudent.php?id=".$id?>" role="button">Update your information</a>
+				<a class="btn btn-default" href="<?php echo BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
+				<?php 	//}
+					//} ?>
 			</div>
-		<?php //if (isset($session->user_id)) {
-				//if($student->id === $session->user_id){
-		 ?>
-		<a class="btn btn-default" href="<?php echo BASE_URL."students/settings/editstudent.php?id=".$id?>" role="button">Update your information</a>
-		<a class="btn btn-default" href="<?php echo BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
-		<?php 	//}
-			//} ?>
 	</div>
 </div>
 <?php

@@ -25,6 +25,7 @@ $pageTitle = "Students";
                 $users[] = Student::find_by_id($student->id);
             }
             $student = new Student();
+            
 ?>
         <ul class="students">
 
@@ -39,20 +40,28 @@ $pageTitle = "Students";
             if (Student::find_by_id($user->id)) {
               $faculty = $student->get_faculty($user->faculty_id);
               $faculty = ucwords(str_replace("_", " ", $faculty));
-
+              $img_path = $student->get_profile_pic($user->id);
               $output = "";
                 $output = $output . "<li>";
+                $output = $output . "<div class=\"row\">";
+                $output = $output . "<div class=\"col-md-3\">";
+                $output = $output . "<div class=\"image\"><img src=" . $img_path ." style=\"width:155px;\"></div>";
+                $output = $output . "</div>";
+                $output = $output . "<div class=\"col-md-6\">";
                 $output = $output .  "Username: " . $user->username . "<br>";
                 $output = $output .  "Full name: " . $student->full_name_by_id($user->id) . "<br>";
                 $output = $output .  "ID: " . $user->id . "<br>";
                 $output = $output .  "Faculty: " . " " . $faculty . "<br><br>";
                 $output = $output . "<a href=" . BASE_URL . "students/" . $user->id . "/>View profile</a>";
+                $output = $output . "</div>";
+                $output = $output . "</div>";
                 $output = $output .  "</li>";
-                echo $output;
+              echo $output;
             }
          }
 
-        ?>
+              ?>
+
       </ul>
       <div class="pagination">
         <?php //include (ROOT_PATH . "inc/navigation.php"); ?>

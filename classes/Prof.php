@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-class Student extends User {
+class Student extends DatabaseObject {
 	
 	protected static $table_name="students";
 	public $firstName;
@@ -10,10 +10,9 @@ class Student extends User {
 	public $address;
 	public $phoneNumber;
 	public $faculty_id;
-	public $has_pic;
 
 
-	protected static $db_fields = array('id', 'firstName', 'lastName', 'address', 'phoneNumber', 'faculty_id');
+	protected static $db_fields = array('firstName', 'lastName', 'address', 'phoneNumber', 'faculty_id');
 
 	function __construct(){
 	}
@@ -31,6 +30,7 @@ class Student extends User {
 		}
 	}
 
+
 	public function upload_pic(){
 		global $connection;
 
@@ -47,9 +47,8 @@ class Student extends User {
 			$path = BASE_URL . 'images/profilepic/'.$_FILES['userfile']['name'];
 			$sql = "INSERT INTO profile_pic (`user_id`, `path`, `type`, `size`) VALUES ($this->id, '$path','$fileType', '$fileSize')";
 			if(!$connection->query($sql)){
-				exit($connection->errorInfo()[2]);
+				echo $connection->errorInfo()[2];
 			}
-			$connection->query("UPDATE students SET `has_pic` = '1' WHERE `id` = {$this->id}");
 		}
 	}
 
@@ -68,14 +67,13 @@ class Student extends User {
 		$sql = "UPDATE profile_pic SET `path` = '$path', `type` = '$fileType', `size` = '$fileSize' WHERE user_id = {$this->id}";
 		$stmt = $connection->query($sql);
 		if($stmt) {
-			unlink($img_path);
 			move_uploaded_file($fileTmp, $uploadfile);
 			return true;
 		} else {
 			$error = ($connection->errorInfo());
 			echo $sql;
 			echo $error[2];
- 		}
+ 		} 
 	}
 
 	public function delete_pic(){
@@ -90,8 +88,7 @@ class Student extends User {
 
 		unlink($img_path);
 
-		$connection->query("UPDATE students SET `has_pic` = '0' WHERE `id` = {$this->id}");
-		$sql = "DELETE FROM `profile_pic` WHERE `user_id` = {$this->id}";
+		$sql = "UPDATE profile_pic SET `path` = '/sha/images/profilepic/pp.png', `type` = 'image/png', `size` = '5143' WHERE user_id = {$this->id}";
 		$stmt = $connection->query($sql);
 		if($stmt) {
 			//flash

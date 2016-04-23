@@ -40,7 +40,7 @@ $pageTitle = "Students";
             if (Student::find_by_id($user->id)) {
               $faculty = $student->get_faculty($user->faculty_id);
               $faculty = ucwords(str_replace("_", " ", $faculty));
-              $img_path = $student->get_profile_pic($user->id);
+              $img_path = ($user->has_pic) ? $student->get_profile_pic($user->id) :  BASE_URL."images/profilepic/pp.png";
               $output = "";
                 $output = $output . "<li>";
                 $output = $output . "<div class=\"row\">";

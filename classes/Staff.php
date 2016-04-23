@@ -3,7 +3,7 @@ require_once('init.php');
 
 class StudentInfo extends User {
 	
-	protected static $table_name="login_info";
+	protected static $table_name="staff";
 	public $id;
 	public $username;
 	public $password;
@@ -41,7 +41,7 @@ class StudentInfo extends User {
 
 	public static function authenticate($username="", $password=""){
 		global $connection;
-		$sql = "SELECT * FROM login_info
+		$sql = "SELECT * FROM staff
 				WHERE username = ?
 				AND password = ?
 				LIMIT 1";

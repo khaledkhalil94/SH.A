@@ -5,7 +5,12 @@ if (isset($_GET['id'])) {
 }
 $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($studentInfo->id);
-$img_path = $student->get_profile_pic($id);
+
+if($student->has_pic){
+	$img_path = $student->get_profile_pic($student->id);
+} else {
+	$img_path = BASE_URL."images/profilepic/pp.png";
+}
 
 $faculty = $student->get_faculty($student->faculty_id);
 $faculty = ucwords(str_replace("_", " ", $faculty));

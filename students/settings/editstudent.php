@@ -11,12 +11,6 @@ if ($_GET['id'] != $id) {
 	header("Location: " . BASE_URL . "students/editstudent.php?id=".$id);
 }
 
-//require upload file
-//require(ROOT_PATH . "classes/upload.php");
-
-// if((int)$session->user_id !== (int)$id){
-// 	header("Location: " . BASE_URL . "index.php");
-// }
 
 $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($id);
@@ -77,18 +71,19 @@ include (ROOT_PATH . 'inc/navbar.php');
 <br>
 	<div class="container">
 		<div class="col-md-4">
-
-			<?php if(empty($img_path)){ ?>
+			
+			<?php // if the user has no picture at all
+			 if(empty($img_path)){ ?>
 			<p>Upload profile picture</p>
 	 		<?php	if (isset($_POST['upload'])) {
 	 					if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-	 						
 							$student->upload_pic();
+							header("Refresh:0");
 	 					}
 					}
-				} else { ?>
+				} else { //use already has a profile picture ?>
 				<div class="image"><img src=<?php echo $img_path;?> alt="" style="width:228px;"></div>
 				<p>Change your profile picture</p>
 		 		<?php
@@ -97,6 +92,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 	 						echo "Please select a valid photo";
 	 					} else {
 							$student->update_pic();
+							header("Refresh:0");
 					}
 				}
 			}
@@ -116,10 +112,11 @@ include (ROOT_PATH . 'inc/navbar.php');
 				<form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
 					$student->delete_pic();
+					
 					    }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />
 				</form>
-					<?php endif; ?>
+			<?php endif; ?>
 		</div>
 
 		<div class="col-md-6">

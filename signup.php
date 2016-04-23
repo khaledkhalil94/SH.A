@@ -9,18 +9,22 @@ if($session->is_logged_in()){
 <?php 
 
 if (isset($_POST['submit'])) {
+    if (empty($_POST['username'])) {
+        exit('Put in a username');
+    }
+    switch ($_POST['type']) {
+        case 'student':
+            StudentInfo::create_user();
+            break;
 
-$username = $_POST['username'];
-$password = $_POST['password'];
-$email = $_POST['email'];
-$id = $_POST['id'];
-
-    $student = new StudentInfo();
-    $student->username = $DatabaseObject->validate_username($username);
-    $student->password = $DatabaseObject->validate_password($password);
-    $student->email = $email;
-    $student->id = $id;
-    $student->create_user();
+        case 'professor':
+            
+            break;
+        
+        default:
+            echo "Please select type";
+            break;
+    }
 }
 
 ?>
@@ -53,7 +57,14 @@ require(ROOT_PATH . 'inc/head.php');
                 <label for="email">email</label>
                 <input type="email" class="form-control" name="email" value="" />
             </div>
-
+            <label class="radio-inline">
+              <input type="radio" name="type" id="inlineRadio2" value="student">I'm a student
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor
+            </label>
+            <br>
+            <br>
             <!-- <input type="hidden" name="token" value="" /> -->
             <input type="submit" name="submit" value="Create" />
 

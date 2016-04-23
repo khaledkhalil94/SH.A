@@ -10,7 +10,7 @@ define('DEF_PIC', "C:/xampp/htdocs/sha/images/profilepic/pp.png");
 
 
 require_once("Session.php");
-require_once("DatabaseObject.php");
+require_once("User.php");
 require_once('Database.php');
 
  function autoloader($class_name){

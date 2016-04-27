@@ -18,14 +18,19 @@
           </li>
           <li>
            <?php if($session->is_logged_in()): ?>
-            <a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
+            <?php if ($_SESSION['type'] == "student"): ?>
+              <a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
+            <?php endif ?>
+            <?php if ($_SESSION['type'] == "professor"): ?>
+              <a href="<?= BASE_URL."staff/professor.php?id=".USER_ID;?>">Profile</a>
+            <?php endif ?>
           </li>
           <?php endif; ?>  
           <li>
             <a href="<?= BASE_URL; ?>students/">Students</a>
           </li> 
           <li>
-            <a href="<?= BASE_URL; ?>students/professors.php">Professors</a>
+            <a href="<?= BASE_URL; ?>staff/professors.php">Professors</a>
           </li> 
           <li>
             <a href="<?= BASE_URL; ?>inc/faculties">Faculties</a>

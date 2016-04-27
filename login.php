@@ -9,7 +9,20 @@ if (isset($_POST['submit'])){
 	  $username = $_POST['id'];
     $password = $_POST['password'];
     //search for the user in the database
-    $found_user = StudentInfo::authenticate($username, $password);
+    switch ($_POST['type']) {
+    case 'student':
+       $found_user = StudentInfo::authenticate($username, $password);
+        break;
+
+    case 'professor':
+        $found_user = StaffInfo::authenticate($username, $password);
+        break;
+    
+    default:
+        echo "Please select type";
+        break;
+    }
+    
 
     if ($found_user) {
     	//success
@@ -42,6 +55,14 @@ require(ROOT_PATH . 'inc/head.php');
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
           </div>
+          <label class="radio-inline">
+            <input type="radio" name="type" checked id="inlineRadio2" value="student">I'm a student
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor
+          </label>
+            <br>
+            <br>
           <button type="submit" name="submit" class="btn btn-default">Log in</button>
         </form>
       </div>

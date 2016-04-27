@@ -2,12 +2,24 @@
 require_once('init.php');
 class User {
 
-	// static $magic_quotes_active;
-	 //public $real_escape_string_exists;
+	public static function authenticate($username="", $password=""){
+		global $connection;
+		$sql = "SELECT * FROM ". static::$table_name."
+				WHERE username = ?
+				AND password = ?
+				LIMIT 1";
 
+		$found_user = $connection->prepare($sql);
+		$found_user->bindParam(1, $username);
+		$found_user->bindParam(2, $password);
+		$found_user->execute();
 
+		$found = $found_user->fetch(PDO::FETCH_OBJ);
 
-	public static function find_all_students(){
+		return $found;
+	}
+
+	public static function get_all_users(){
 		$sql = "SELECT * FROM " .static::$table_name;
 		$all = static::find_by_sql($sql);
 		return $all;
@@ -54,10 +66,10 @@ class User {
 		return true;
 	}
 
-	protected static function instantiate($student){
+	protected static function instantiate($user){
 		$object = new static;
 
-		foreach ($student as $attribute => $value) {
+		foreach ($user as $attribute => $value) {
 			if ($object->has_attribute($attribute)) {
 				$object->$attribute = $value;
 			}
@@ -85,6 +97,15 @@ class User {
 	  }
 
 	  return substr($set, 0, -2); 
+	}
+
+	public static function create_user(){
+		global $connection;
+		$user = self::instantiate($_POST);
+		$user->type = $_POST['type']; 
+		if($user->create()){
+			return $user;
+		}
 	}
 
 	protected function create(){
@@ -137,66 +158,37 @@ class User {
 		return $value;
 	}
 
+	public static function get_count(){
+		global $connection;
+		$res = $connection->query("SELECT count(*) FROM ".static::$table_name);
+		return $res->fetch()[0];
+
+	}
+
+	public static function get_users($rpp,$offset){
+		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
+		return self::find_by_sql($sql);
+	}
+
+	public static function get_faculty($id){
+		global $connection;
+
+		$sql = "SELECT name FROM faculties ";
+		$sql .= "WHERE id = {$id} ";
+		$sql .= "LIMIT 1";
+
+		$stmt = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
+		if($stmt){
+			return $stmt['name'];
+		}
+		if(!$stmt) {
+			$error = ($connection->errorInfo());
+			echo $error[2];
+		}
+	}
+
 }
 
-$DatabaseObject = new User();
+$User = new User();
 
-	// public function update(){
-	// 	global $connection;
-	// 	$sql = "UPDATE ".static::$table_name;
-	// 	$sql .= " SET ";
-	// 	$array = array();
-	// 	foreach ($this->attributes() as $key => $value) {
-	// 		$array[] = "{$key} = '{$value}'"; 
-	// 	}
-	// 	$sql .= implode(", ", $array);
-	// 	$sql .= " WHERE id = {$this->id}";
-	// 	$sql = "UPDATE ".static::$table_name . " SET username = :username WHERE id = {$this->id}";
-
-
-	// 	$result = $connection->prepare($sql);
-	// 	$result->bindParam(':username', $this->username);
-
-	// 	$res = $result->execute();
-
-	// 	if(!$res){
-	// 		$error = ($connection->errorInfo());
-	// 		echo $error[2];
-	// 	}
-	// }
-
-	// public function updatee(){
-	// 	global $connection;
-
-	// 	$class = get_called_class();
-
-	// 	$fields = array_keys((array)$this);
-
-	// 	//$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
-	// 	$sql = "UPDATE students SET firstName = 'tzestaaaaaaaaaaaaaaa22' WHERE id = '5501'";
-	// 	$stmt = $connection->prepare($sql);
-	// 	// $stmt->bindValue(1, "testaaaaaaaaaaaaaaaa22");
-	// 	$res = $stmt->execute();
-	// 	var_dump($res);
-
-		// if (!$res) {
-		// 	//return false;
-		// } 
-		//return true;
-		
-		// if($res) {
-		// 	$_SESSION['success']['class'] = "";
-		// 	$_SESSION['success']['class'] .= $class . " - ";
-		// 	//var_dump($res);
-		// 	//return true;
-
-		// } else {
-		// 	$error = ($stmt->errorInfo());
-		// 	echo $sql;
-		// 	$_SESSION['fail']['sqlerr'] = $error[2];
-		// 	$_SESSION['fail']['class'] = $class;
-		// 	return false;
-		// }
-		//return true;
-	//}
 ?>

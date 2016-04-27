@@ -1,18 +1,20 @@
-     <a <?php if ($prev_page < 1){echo 'style="visibility:hidden;"';} ?>
-     	href="./?pg=<?php echo $prev_page; ?>">«</a>
+<?php 
+if ($pagination->has_prev_page()) {
+  echo "<a href=?page=". $pagination->prev_page() ."> &laquo; </a>";
+}
 
-    <?php $i = 0; 
-     while ($i < $total_pages) :
-       $i += 1; 
-       if ($i == $current_page) : ?>
-        <span><?php echo $i ?></span>
-      <?php else : ?>
-        <a href="./?pg=<?php echo $i; ?>"><?php echo $i; ?></a>
-      <?php endif;     
-      endwhile; ?>
 
-    
-    <a <?php if ($next_page > $total_pages){echo 'style="visibility:hidden;"';} ?>
-     	href="./?pg=<?php echo $next_page; ?>">»
-     </a>
+$total_pages = $pagination->total_pages();
+for ($i=1; $i <= $total_pages ; $i++) { 
+    if ($i == $current_page) {
+        echo "<span>{$i}</span>";
+    }else {
+        echo "<a href=?page={$i}>{$i}</a>";
+    }
 
+}
+if ($pagination->has_next_page()) {
+  echo "<a href=?page=". $pagination->next_page() ."> &raquo;</a>";
+}
+
+ ?>

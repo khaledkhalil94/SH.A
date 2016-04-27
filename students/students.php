@@ -15,11 +15,22 @@ $pageTitle = "Students";
     <div class="container section">
       <div class="wrapper">
         <h2>Students list</h2>
-        <div class="pagination">
-          <?php// include (ROOT_PATH . "inc/navigation.php"); ?>
-        </div>
 <?php
-            $students = StudentInfo::find_all_students();
+            $rpp = 4; //results per page
+            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+            $pagination = new Pagination($rpp, $current_page);
+            if ($current_page < 1 || $current_page > $pagination->total_pages()) {
+              $pagination->current_page = 1;
+            } 
+
+            $students = StudentInfo::get_users($rpp,$pagination->offset());
+
+?>
+            <div class="pagination">
+              <?php include (ROOT_PATH . "inc/navigation.php"); ?>
+            </div>
+<?php
+
             $users=array();
             foreach ($students as $student) {
                 $users[] = Student::find_by_id($student->id);
@@ -37,8 +48,9 @@ $pageTitle = "Students";
             $users = $out;
 
          foreach ($users as $user) {
+
             if (Student::find_by_id($user->id)) {
-              $faculty = $student->get_faculty($user->faculty_id);
+              $faculty = Student::get_faculty($user->faculty_id);
               $faculty = ucwords(str_replace("_", " ", $faculty));
               $img_path = ($user->has_pic) ? $student->get_profile_pic($user->id) :  BASE_URL."images/profilepic/pp.png";
               $output = "";
@@ -59,12 +71,11 @@ $pageTitle = "Students";
               echo $output;
             }
          }
-
               ?>
 
       </ul>
       <div class="pagination">
-        <?php //include (ROOT_PATH . "inc/navigation.php"); ?>
+        <?php include (ROOT_PATH . "inc/navigation.php"); ?>
       </div>
     </div>
   </div>

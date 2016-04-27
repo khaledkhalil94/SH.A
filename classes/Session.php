@@ -42,6 +42,7 @@ class Session {
 		if($user){
 			$this->user_id = $_SESSION['user_id'] = $user->id;
 			$this->username = $_SESSION['username'] = $user->username;
+			$_SESSION['type'] = $user->type;
 			$this->logged_in = true;
 		}
 	}

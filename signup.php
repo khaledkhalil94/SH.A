@@ -14,11 +14,11 @@ if (isset($_POST['submit'])) {
     }
     switch ($_POST['type']) {
         case 'student':
-            StudentInfo::create_user();
+            StudentInfo::create_student();
             break;
 
         case 'professor':
-            
+            StaffInfo::create_staff();
             break;
         
         default:
@@ -58,7 +58,7 @@ require(ROOT_PATH . 'inc/head.php');
                 <input type="email" class="form-control" name="email" value="" />
             </div>
             <label class="radio-inline">
-              <input type="radio" name="type" id="inlineRadio2" value="student">I'm a student
+              <input type="radio" name="type" checked id="inlineRadio2" value="student">I'm a student
             </label>
             <label class="radio-inline">
               <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor

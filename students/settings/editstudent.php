@@ -63,7 +63,9 @@ include (ROOT_PATH . 'inc/navbar.php');
 <?php endif; ?>
 
 <?php 
-	$img_path = $student->get_profile_pic($id);
+	$ProfilePicture = new ProfilePicture($studentInfo->type);
+	$ProfilePicture->id = $id;
+	$img_path = $ProfilePicture->get_profile_pic($id);
  ?>
 
 <h2>Update your information</h2>
@@ -79,7 +81,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 	 					if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$student->upload_pic();
+							$ProfilePicture->upload_pic();
 							header("Refresh:0");
 	 					}
 					}
@@ -91,7 +93,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 			 			if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$student->update_pic();
+							$ProfilePicture->update_pic();
 							header("Refresh:0");
 					}
 				}
@@ -111,7 +113,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 
 				<form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
-					$student->delete_pic();
+					$ProfilePicture->delete_pic();
 					
 					    }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />

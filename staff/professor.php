@@ -6,11 +6,11 @@ if (isset($_GET['id'])) {
 $userInfo = StaffInfo::find_by_id($id);
 $user = Professor::find_by_id($userInfo->id);
 
-// if($user->has_pic){
-// 	$img_path = $user->get_profile_pic($user->id);
-// } else {
-// 	$img_path = BASE_URL."images/profilepic/pp.png";
-// }
+if($userInfo->has_pic){
+	$img_path = ProfilePicture::get_profile_pic($user->id);
+} else {
+	$img_path = BASE_URL."images/profilepic/pp.png";
+}
 
 
 $faculty = $user->get_faculty($user->faculty_id);
@@ -41,7 +41,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 
 	<div class="details row">
 		<div class="col-md-5">
-			<div class="image"><img src=<?php echo $img_path;?> alt="" style="width:278px;"></div>
+			<div class="image"><img src="<?php echo $img_path;?>" alt="" style="width:278px;"></div>
 		</div>
 			<div class="col-md-6">
 				<p><?php echo "Name: " . $user->full_name(); ?></p>

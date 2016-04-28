@@ -12,6 +12,7 @@ define('DEF_PIC', "C:/xampp/htdocs/sha/images/profilepic/pp.png");
 require_once("Session.php");
 require_once("User.php");
 require_once('Database.php');
+require_once('ProfilePicture.php');
 
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";

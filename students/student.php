@@ -7,7 +7,7 @@ $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($studentInfo->id);
 
 if($student->has_pic){
-	$img_path = $student->get_profile_pic($student->id);
+	$img_path = ProfilePicture::get_profile_pic($student->id);
 } else {
 	$img_path = BASE_URL."images/profilepic/pp.png";
 }
@@ -39,7 +39,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 
 	<div class="details row">
 		<div class="col-md-5">
-			<div class="image"><img src=<?php echo $img_path;?> alt="" style="width:278px;"></div>
+			<div class="image"><img src="<?php echo $img_path;?>" alt="" style="width:278px;"></div>
 		</div>
 			<div class="col-md-6">
 				<p><?php echo "Name: " . $student->full_name(); ?></p>

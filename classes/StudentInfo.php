@@ -8,6 +8,7 @@ class StudentInfo extends User {
 	public $username;
 	public $password;
 	public $email;
+	public $type;
 
 
 	protected static $db_fields = array('id', 'username', 'password', 'email', 'type');

@@ -8,11 +8,13 @@ class StaffInfo extends User {
 	public $username;
 	public $password;
 	public $email;
+	public $has_pic;
+	public $type;
 
 
 
 
-	protected static $db_fields = array('id', 'username', 'password', 'email');
+	protected static $db_fields = array('id', 'username', 'password', 'email', 'has_pic');
 
 	public static function create_staff(){
 		global $connection;

@@ -62,7 +62,9 @@ include (ROOT_PATH . 'inc/navbar.php');
 <?php endif; ?>
 
 <?php 
-	//$img_path = $user->get_profile_pic($id);
+	$ProfilePicture = new ProfilePicture($userInfo->type);
+	$ProfilePicture->id = $id;
+	$img_path = ProfilePicture::get_profile_pic($id);
  ?>
 
 <h2>Update your information</h2>
@@ -78,7 +80,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 	 					if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$user->upload_pic();
+							$ProfilePicture->upload_pic($id);
 							header("Refresh:0");
 	 					}
 					}
@@ -90,13 +92,13 @@ include (ROOT_PATH . 'inc/navbar.php');
 			 			if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$user->update_pic();
+							$ProfilePicture->update_pic($id);
 							header("Refresh:0");
 					}
 				}
 			}
 				 ?>
-			<form enctype="multipart/form-data" action="<?php echo "edituser.php?id=". $id ?>" method="POST">
+			<form enctype="multipart/form-data" action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 			    <!-- MAX_FILE_SIZE must precede the file input field -->
 			    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
 			    <!-- Name of input element determines name in $_FILES array -->
@@ -108,9 +110,9 @@ include (ROOT_PATH . 'inc/navbar.php');
 			<?php if(!empty($img_path)):
 			  ?>
 
-				<form action="<?php echo "edituser.php?id=". $id ?>" method="POST">
+				<form action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
-					$user->delete_pic();
+					$ProfilePicture->delete_pic($id);
 					
 					    }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />

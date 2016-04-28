@@ -6,7 +6,7 @@ if($session->is_logged_in()){
 }
 
 if (isset($_POST['submit'])){
-	  $username = $_POST['id'];
+	  $username = $_POST['Username'];
     $password = $_POST['password'];
     //search for the user in the database
     switch ($_POST['type']) {
@@ -48,8 +48,8 @@ require(ROOT_PATH . 'inc/head.php');
       <div class="form">
         <form action="login.php" method="post" >
           <div class="form-group">
-            <label for="exampleInputEmail1">User ID</label>
-            <input type="id" class="form-control" id="exampleInputEmail1" name="id" placeholder="ID">
+            <label for="Username">Username</label>
+            <input type="id" class="form-control" id="Username" name="Username" placeholder="ID">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Password</label>

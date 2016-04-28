@@ -17,21 +17,29 @@
             <a href="<?= BASE_URL; ?>">Home</a>
           </li>
           <li>
+
            <?php if($session->is_logged_in()): ?>
+            
             <?php if ($_SESSION['type'] == "student"): ?>
               <a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
             <?php endif ?>
-            <?php if ($_SESSION['type'] == "professor"): ?>
+
+
+            <?php if ($_SESSION['type'] == "staff"): ?>
               <a href="<?= BASE_URL."staff/professor.php?id=".USER_ID;?>">Profile</a>
             <?php endif ?>
+
+
           </li>
           <?php endif; ?>  
-          <li>
-            <a href="<?= BASE_URL; ?>students/">Students</a>
-          </li> 
+          <?php if($session->is_logged_in() && $session->adminCheck()): ?>
+            <li>
+              <a href="<?= BASE_URL; ?>students/">Students</a>
+            </li>
           <li>
             <a href="<?= BASE_URL; ?>staff/professors.php">Staff</a>
           </li> 
+          <?php endif ?>
           <li>
             <a href="<?= BASE_URL; ?>faculties">Faculties</a>
           </li>

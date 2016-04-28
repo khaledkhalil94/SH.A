@@ -63,7 +63,7 @@ include (ROOT_PATH . 'inc/navbar.php');
 
 
 	        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
-	        <a class="btn btn-default" href="<?php echo BASE_URL."students/".USER_ID; ?>/" role="button">Cancel</a>
+	        <a class="btn btn-default" href="<?php echo BASE_URL."staff/professor.php?id=".USER_ID; ?>/" role="button">Cancel</a>
 	    </form>
 	   </div>
 </div>

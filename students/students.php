@@ -1,7 +1,7 @@
 <?php
 require_once ("../classes/init.php");
 $pageTitle = "Students";
-
+$session->adminCheck();
 
 ?>
 <body>

@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
 $userInfo = StaffInfo::find_by_id($id);
 $user = Professor::find_by_id($userInfo->id);
 
-if($userInfo->has_pic){
+if($user->has_pic){
 	$img_path = ProfilePicture::get_profile_pic($user->id);
 } else {
 	$img_path = BASE_URL."images/profilepic/pp.png";

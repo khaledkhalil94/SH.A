@@ -62,9 +62,14 @@ include (ROOT_PATH . 'inc/navbar.php');
 <?php endif; ?>
 
 <?php 
-	$ProfilePicture = new ProfilePicture($userInfo->type);
-	$ProfilePicture->id = $id;
-	$img_path = ProfilePicture::get_profile_pic($id);
+$ProfilePicture = new ProfilePicture($userInfo->type);
+$ProfilePicture->id = $id;
+
+if($user->has_pic){
+$img_path = ProfilePicture::get_profile_pic($id);
+} else {
+	$img_path = BASE_URL."images/profilepic/pp.png";
+}
  ?>
 
 <h2>Update your information</h2>

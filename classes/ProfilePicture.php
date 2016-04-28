@@ -13,7 +13,7 @@
  				break;
 
  			case 'staff':
- 				$this->table_name = "staff";
+ 				$this->table_name = "professor";
  				break;
  			
  			default:

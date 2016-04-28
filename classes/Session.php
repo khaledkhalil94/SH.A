@@ -20,6 +20,7 @@ class Session {
 	private function check_login(){
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];
+			$this->username = $_SESSION['username'];
 			$this->logged_in = true;
 		} else {
 			unset($this->user_id);
@@ -50,6 +51,7 @@ class Session {
 	public function logout(){
 		unset($_SESSION['user_id']);
 		unset($this->user_id);
+		unset($this->username);
 		session_destroy();
 		$this->logged_in = false;
 	}
@@ -60,6 +62,22 @@ class Session {
 			unset($_SESSION['msg']);
 		} else {
 			$this->msg = "aa";
+		}
+	}
+
+	public function adminLock(){
+		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){
+			return true;
+		} else {
+			echo $this->user_id;
+			exit("You must be an admin to review this page.");
+		}
+	}
+	public function adminCheck(){
+		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){
+			return true;
+		} else {
+			return false;
 		}
 	}
 

@@ -21,10 +21,10 @@ class Student extends User {
 	
 
 	public function display_students ($id){
+		global $ProfilePicture;
 		$students = self::get_students_by_faculty($id);
-
          foreach ($students as $student) {
-              $img_path = ($student->has_pic) ? $student->get_profile_pic($student->id) :  BASE_URL."images/profilepic/pp.png";
+              $img_path = ($student->has_pic) ? $ProfilePicture->get_profile_pic($student->id) :  BASE_URL."images/profilepic/pp.png";
               $output = "";
                 $output .= "<li>";
                 $output .= "<div class=\"row\">";

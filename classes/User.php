@@ -13,9 +13,7 @@ class User {
 		$found_user->bindParam(1, $username);
 		$found_user->bindParam(2, $password);
 		$found_user->execute();
-
 		$found = $found_user->fetch(PDO::FETCH_OBJ);
-
 		return $found;
 	}
 

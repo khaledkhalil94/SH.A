@@ -30,10 +30,10 @@
             <a href="<?= BASE_URL; ?>students/">Students</a>
           </li> 
           <li>
-            <a href="<?= BASE_URL; ?>staff/professors.php">Professors</a>
+            <a href="<?= BASE_URL; ?>staff/professors.php">Staff</a>
           </li> 
           <li>
-            <a href="<?= BASE_URL; ?>inc/faculties">Faculties</a>
+            <a href="<?= BASE_URL; ?>faculties">Faculties</a>
           </li>
           <li>
             <a href="<?= BASE_URL; ?>search.php">Search</a>

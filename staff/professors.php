@@ -35,7 +35,7 @@ $pageTitle = "Professors";
                 $output = $output .  "name: " . $prof->firstName . "<br>";
                 $output = $output .  "ID: " . $prof->id . "<br>";
                 $output = $output .  "Faculty: " . " " . $faculty . "<br>";
-                $output = $output . "BIO: " . $prof->bio . "<br>";
+                $output = $output . "Position: " . $prof->type . "<br>";
                 $output = $output . "Profile: <a href=" . BASE_URL . "staff/professor.php?id=" . $prof->id . ">View profile</a>";
                 $output = $output .  "</li>";
                 echo $output;

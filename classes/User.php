@@ -110,7 +110,6 @@ class User {
 
 	protected function create(){
 		global $connection;
-		global $session;
 
 		$sql = "INSERT INTO ".static::$table_name;
 		$sql .=	" (`";
@@ -185,6 +184,10 @@ class User {
 			$error = ($connection->errorInfo());
 			echo $error[2];
 		}
+	}
+
+	public function full_name() {
+		return $this->firstName . " " . $this->lastName;
 	}
 
 }

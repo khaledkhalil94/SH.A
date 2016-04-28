@@ -103,6 +103,28 @@ class Student extends User {
  		} 
 	}
 
+	public function display_students ($id){
+		$students = self::get_students_by_faculty($id);
+
+         foreach ($students as $student) {
+              $img_path = ($student->has_pic) ? $student->get_profile_pic($student->id) :  BASE_URL."images/profilepic/pp.png";
+              $output = "";
+                $output .= "<li>";
+                $output .= "<div class=\"row\">";
+                $output .= "<div class=\"col-md-2\">";
+                $output .= "<div class=\"image\"><img src=" . $img_path ." style=\"width:120px;\"></div>";
+                $output .= "</div>";
+                $output .= "<div class=\"col-md-6\">";
+                $output .=  "Full name: " . $student->full_name_by_id($student->id) . "<br>";
+                $output .=  "ID: " . $student->id . "<br>";
+                $output .= "<a href=" . BASE_URL . "students/" . $student->id . "/>View profile</a>";
+                $output .= "</div>";
+                $output .= "</div>";
+                $output .=  "</li>";
+              echo $output;
+         }
+	}
+
 	public function get_students_by_faculty($id){
 		global $connection;
 
@@ -110,11 +132,6 @@ class Student extends User {
 		$sql .= "WHERE faculty_id = {$id}";
 		$all = static::find_by_sql($sql);
 		return $all;
-	}
-
-	public function full_name() {
-		//$student = Self::find_by_id($id);
-		return $this->firstName . " " . $this->lastName;
 	}
 
 	public function full_name_by_id($id) {

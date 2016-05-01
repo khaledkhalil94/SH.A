@@ -13,8 +13,12 @@ class User {
 		$found_user->bindParam(1, $username);
 		$found_user->bindParam(2, $password);
 		$found_user->execute();
-		$found = $found_user->fetch(PDO::FETCH_OBJ);
-		return $found;
+		return $found_user->fetch(PDO::FETCH_OBJ);
+	}
+
+	public static function get_users($rpp,$offset){
+		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
+		return self::find_by_sql($sql);
 	}
 
 	public static function get_all_users(){
@@ -40,7 +44,6 @@ class User {
 		}
 		return $object_array;
 	}
-
 
 	public function update(){
 		global $connection;
@@ -121,7 +124,6 @@ class User {
 		}
 	}
 
-
 	// first, create an empty assoc array $attributes
 	// iterate through every db_field using a foreach loop
 	// in each step, assign the key to the array to the value fields
@@ -160,11 +162,6 @@ class User {
 		$res = $connection->query("SELECT count(*) FROM ".static::$table_name);
 		return $res->fetch()[0];
 
-	}
-
-	public static function get_users($rpp,$offset){
-		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
-		return self::find_by_sql($sql);
 	}
 
 	public static function get_faculty($id){

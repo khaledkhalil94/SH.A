@@ -20,7 +20,7 @@ class StudentInfo extends User {
 
 		$user = self::create_user();
 
-		$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')" ;
+		$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')";
 		$stmt = $connection->prepare($sql);
 
 		if($stmt->execute()){

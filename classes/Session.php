@@ -69,7 +69,6 @@ class Session {
 		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){
 			return true;
 		} else {
-			echo $this->user_id;
 			exit("You must be an admin to review this page.");
 		}
 	}
@@ -78,6 +77,22 @@ class Session {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public function userLock($user){
+		if($user){
+			if($this->is_logged_in() && $this->user_id === $user->id){
+				return true;
+			} elseif($this->adminCheck()){
+				return true;
+			} else {
+				echo ("You can't view this page.");
+				redirect_to_D("/sha", 2);
+			}
+		} else {
+			echo ("User was not found.");
+			redirect_to_D("/sha", 2);
 		}
 	}
 

@@ -7,12 +7,10 @@ class Pagination {
 	public $total_count;
 
 
-	function __construct($rpp, $current_page) {
+	function __construct($rpp, $current_page, $total_count) {
 		$this->rpp = $rpp;
 		$this->current_page = $current_page;
-		
-		$this->total_count = StudentInfo::get_count();
-
+		$this->total_count = $total_count;
 	}
 
 

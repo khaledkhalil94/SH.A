@@ -6,8 +6,6 @@ $pageTitle = "Professors";
 <body>
   <?php
   include (ROOT_PATH . 'inc/head.php'); 
-  include (ROOT_PATH . 'inc/header.php');
-  include (ROOT_PATH . 'inc/navbar.php');
   ?>
 <?php
     $admin = StaffInfo::find_by_id(1);

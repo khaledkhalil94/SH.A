@@ -7,8 +7,6 @@ $pageTitle = "Students";
 <body>
 	<?php
 	include (ROOT_PATH . 'inc/head.php'); 
-	include (ROOT_PATH . 'inc/header.php');
-	include (ROOT_PATH . 'inc/navbar.php');
 	?>
 
 	<div class="main">

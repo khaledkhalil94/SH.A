@@ -20,3 +20,5 @@
   <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>styles/students.css"/>
   <link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>styles/search.css"/>
 </head>
+<?php require_once("header.php"); ?>
+<?php require_once("navbar.php"); ?>

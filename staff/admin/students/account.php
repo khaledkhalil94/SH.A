@@ -1,21 +1,23 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
-$id = $session->user_id;
+$session->adminLock();
+$id = $_GET['id'];
 
 
 $studentInfo = StudentInfo::find_by_id($id);
-$session->userLock($studentInfo);
+//$student = Student::find_by_id($studentInfo->id);
 
 if (isset($_POST['submit'])) {
+
 
     $studentInfo->username = $_POST['username'];
     $studentInfo->password = $_POST['password'];
     $studentInfo->email = $_POST['email'];
 
+
 	if($studentInfo->update()){
 		$session->message("Your information have been updated");
-		header("Location: " . BASE_URL . "students/".$session->user_id."/");
+		//header("Location: " . BASE_URL . "students/".$session->user_id."/");
 	} else {
 		echo $_SESSION['fail']['sqlerr'];
 	}
@@ -23,6 +25,7 @@ if (isset($_POST['submit'])) {
 
 }
 
+$section = "students";
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
@@ -33,29 +36,29 @@ include (ROOT_PATH . "inc/head.php");
 
 
 
-<h2>Update your account settings</h2>
+<h2>Update account settings</h2>
 <h4><?php echo "Username: ";?><?php echo $studentInfo->username; ?></h4>
 <br>
 	<div class="jumbotron">
-	    <form action="<?php echo "account.php" ?>" method="POST">
+	    <form action="<?= "account.php?id=".$id ?>" method="POST">
 	        <div class="form-group">
 	            <label for="username">Username</label>
-	            <input type="text" class="form-control" name="username" value="<?php echo $studentInfo->username ?>"/>
+	            <input type="text" class="form-control" name="username" value="<?= $studentInfo->username ?>"/>
 	        </div>
 
 	        <div class="form-group">
 	            <label for="password">Password</label>
-	            <input type="pwd" class="form-control" name="password" value="<?php echo $studentInfo->password ?>" />
+	            <input type="pwd" class="form-control" name="password" value="<?= $studentInfo->password ?>" />
 	        </div>
 
 	        <div class="form-group">
 	            <label for="email">email</label>
-	            <input type="email" class="form-control" name="email" value="<?php echo $studentInfo->email ?>" />
+	            <input type="email" class="form-control" name="email" value="<?= $studentInfo->email ?>" />
 	        </div>
 
 
 	        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
-	        <a class="btn btn-default" href="<?php echo BASE_URL."students/".USER_ID; ?>/" role="button">Cancel</a>
+	        <a class="btn btn-default" href="<?= "student.php?id=".$id; ?>" role="button">Cancel</a>
 	    </form>
 	   </div>
 </div>

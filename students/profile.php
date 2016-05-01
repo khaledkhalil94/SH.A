@@ -1,9 +1,11 @@
 <?php
 require_once ("../classes/init.php");
-if (isset($_GET['id'])) {
-	$id = (int)$_GET["id"];
-}
+$id = isset($_GET['id']) ? $_GET['id'] : 5502;
+//if(!$id) echo "User was not found!"; redirect_to_D("/sha", 2);
+
+
 $studentInfo = StudentInfo::find_by_id($id);
+//$session->userLock($studentInfo);
 $student = Student::find_by_id($studentInfo->id);
 
 if($student->has_pic){
@@ -27,8 +29,6 @@ if (empty($studentInfo)){
 $section = "students";
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
-include (ROOT_PATH . 'inc/header.php');
-include (ROOT_PATH . 'inc/navbar.php');
  ?>
 <div class="container">
 <?php if(!empty($_SESSION['msg'])):?>

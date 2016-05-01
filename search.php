@@ -17,9 +17,6 @@ if (isset($_GET["s"])){
  ?>
 <body>
 <?php 
-include (ROOT_PATH . 'inc/header.php');
-include (ROOT_PATH . 'inc/navbar.php');
-
 $search_term = "";
 if (isset($_GET["s"])){
 	$search_term = trim($_GET["s"]);

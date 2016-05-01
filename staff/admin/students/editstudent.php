@@ -1,15 +1,19 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+$session->adminLock();
+// if (!isset($session->user_id)) {
+// 	header("Location: " . BASE_URL . "index.php");
+// }
+//$id = (int)$session->user_id;
 $id = isset($_GET['id']) ? $_GET['id'] : null;
+
 if(!$id){
-	echo "User was not found!";
 	redirect_to_D("/sha", 2);
 }
 
+
 $studentInfo = StudentInfo::find_by_id($id);
-$session->userLock($studentInfo);
-$student = Student::find_by_id($studentInfo->id);
+$student = Student::find_by_id($id);
 
 if (isset($_POST['submit'])) {
 	    $student->firstName = $_POST['firstName'];
@@ -62,7 +66,7 @@ include (ROOT_PATH . "inc/head.php");
 	$img_path = $ProfilePicture->get_profile_pic($id);
  ?>
 
-<h2>Update your information</h2>
+<h2>Update information</h2>
 
 <br>
 	<div class="container">
@@ -116,7 +120,7 @@ include (ROOT_PATH . "inc/head.php");
 		</div>
 
 		<div class="col-md-6">
-		    <form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+		    <form action="<?= "editstudent.php?id=". $id ?>" method="POST">
 				
 		        <div class="form-group">
 		            <label for="firstName">First Name</label>
@@ -146,7 +150,7 @@ include (ROOT_PATH . "inc/head.php");
 				</select>
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
-		        <a class="btn btn-default" href="<?php echo BASE_URL."students/".USER_ID; ?>/" role="button">Cancel</a>
+		        <a class="btn btn-default" href="<?= "student.php?id=".$id; ?>" role="button">Cancel</a>
 		    </form>
 		</div>
     </div>

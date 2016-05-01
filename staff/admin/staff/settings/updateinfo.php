@@ -1,44 +1,47 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
-$id = isset($_GET['id']) ? $_GET['id'] : null;
-if(!$id){
-	echo "User was not found!";
-	redirect_to_D("/sha", 2);
+require_once ("../../classes/init.php");
+
+// if (!isset($session->user_id)) {
+// 	header("Location: " . BASE_URL . "index.php");
+// }
+//$id = (int)$session->user_id;
+$id = $_GET['id'];
+
+if ($_GET['id'] != $id) {
+	header("Location: " . BASE_URL . "users/edituser.php?id=".$id);
 }
 
-$studentInfo = StudentInfo::find_by_id($id);
-$session->userLock($studentInfo);
-$student = Student::find_by_id($studentInfo->id);
+
+$userInfo = StaffInfo::find_by_id($id);
+$user = Professor::find_by_id($id);
 
 if (isset($_POST['submit'])) {
-	    $student->firstName = $_POST['firstName'];
-	    $student->lastName = $_POST['lastName'];
-	    $student->address = $_POST['address'];
-	    $student->phoneNumber = $_POST['phoneNumber'];
+	    $user->firstName = $_POST['firstName'];
+	    $user->lastName = $_POST['lastName'];
+	    $user->bio = $_POST['bio'];
 
 	    switch ($_POST['faculty_id']) {
 	    	case 'Engineering':
-	    		$student->faculty_id = "1";
+	    		$user->faculty_id = "1";
 	    		break;
 
 	    	case 'Computer Science':
-	    		$student->faculty_id = "2";
+	    		$user->faculty_id = "2";
 	    		break;    
 
 	    	case 'Medicine':
-	    		$student->faculty_id = "3";
+	    		$user->faculty_id = "3";
 	    		break;
 	    
 	    	default:
-	    		$student->faculty_id = "0";
+	    		$user->faculty_id = "0";
 	    		break;
 	    }
 
-	  if($student->update()){
+	  if($user->update()){
 
 	 	$session->message("Your information have been updated");
-	 	//header("Location: " . BASE_URL . "students/".$session->user_id."/");
+	 	//header("Location: " . BASE_URL . "users/".$session->user_id."/");
 
 	 } else {
 	 	echo $_SESSION['fail']['sqlerr'];
@@ -47,9 +50,11 @@ if (isset($_POST['submit'])) {
 
 }
 
-$section = "students";
-$pageTitle = $student->id;
+$section = "users";
+$pageTitle = $user->id;
 include (ROOT_PATH . "inc/head.php");
+include (ROOT_PATH . 'inc/header.php');
+include (ROOT_PATH . 'inc/navbar.php');
  ?>
 <div class="container section">
 <?php if(!empty($session->msg)):?>
@@ -57,9 +62,14 @@ include (ROOT_PATH . "inc/head.php");
 <?php endif; ?>
 
 <?php 
-	$ProfilePicture = new ProfilePicture($studentInfo->type);
-	$ProfilePicture->id = $id;
-	$img_path = $ProfilePicture->get_profile_pic($id);
+$ProfilePicture = new ProfilePicture($userInfo->type);
+$ProfilePicture->id = $id;
+
+if($user->has_pic){
+$img_path = ProfilePicture::get_profile_pic($id);
+} else {
+	$img_path = BASE_URL."images/profilepic/pp.png";
+}
  ?>
 
 <h2>Update your information</h2>
@@ -75,7 +85,7 @@ include (ROOT_PATH . "inc/head.php");
 	 					if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$ProfilePicture->upload_pic();
+							$ProfilePicture->upload_pic($id);
 							header("Refresh:0");
 	 					}
 					}
@@ -87,13 +97,13 @@ include (ROOT_PATH . "inc/head.php");
 			 			if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$ProfilePicture->update_pic();
+							$ProfilePicture->update_pic($id);
 							header("Refresh:0");
 					}
 				}
 			}
 				 ?>
-			<form enctype="multipart/form-data" action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+			<form enctype="multipart/form-data" action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 			    <!-- MAX_FILE_SIZE must precede the file input field -->
 			    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
 			    <!-- Name of input element determines name in $_FILES array -->
@@ -105,9 +115,9 @@ include (ROOT_PATH . "inc/head.php");
 			<?php if(!empty($img_path)):
 			  ?>
 
-				<form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+				<form action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
-					$ProfilePicture->delete_pic();
+					$ProfilePicture->delete_pic($id);
 					
 					    }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />
@@ -116,37 +126,32 @@ include (ROOT_PATH . "inc/head.php");
 		</div>
 
 		<div class="col-md-6">
-		    <form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+		    <form action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 				
 		        <div class="form-group">
 		            <label for="firstName">First Name</label>
-		            <input type="firstName" class="form-control" name="firstName" value="<?php echo $student->firstName ?>" />
+		            <input type="firstName" class="form-control" name="firstName" value="<?php echo $user->firstName ?>" />
 		        </div>
 
 		        <div class="form-group">
 		            <label for="lastName">Last Name</label>
-		            <input type="lastName" class="form-control" name="lastName" value="<?php echo $student->lastName ?>" />
+		            <input type="lastName" class="form-control" name="lastName" value="<?php echo $user->lastName ?>" />
 		        </div>
 
 		        <div class="form-group">
-		            <label for="address">Address</label>
-		            <input type="address" class="form-control" name="address" value="<?php echo $student->address ?>" />
-		        </div>
-
-		        <div class="form-group">
-		            <label for="phoneNumber">Phone Number</label>
-		            <input type="phoneNumber" class="form-control" name="phoneNumber" value="<?php echo $student->phoneNumber ?>" />
+		            <label for="about">About</label>
+		            <textarea class="form-control" name="bio" rows="3"><?php echo $user->bio ?></textarea>
 		        </div>
 
 		        <label for="phoneNumber">Select your faculty</label>
 		        <select class="form-control" name="faculty_id">
-				  <option <?php if ($student->faculty_id == "1") {echo "selected";} ?>>Engineering</option>
-				  <option <?php if ($student->faculty_id == "2") {echo "selected";} ?> >Computer Science</option>
-				  <option <?php if ($student->faculty_id == "3") {echo "selected";} ?>>Medicine</option>
+				  <option <?php if ($user->faculty_id == "1") {echo "selected";} ?>>Engineering</option>
+				  <option <?php if ($user->faculty_id == "2") {echo "selected";} ?> >Computer Science</option>
+				  <option <?php if ($user->faculty_id == "3") {echo "selected";} ?>>Medicine</option>
 				</select>
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
-		        <a class="btn btn-default" href="<?php echo BASE_URL."students/".USER_ID; ?>/" role="button">Cancel</a>
+		        <a class="btn btn-default" href="<?php echo BASE_URL."staff/professor.php?id=".USER_ID; ?>/" role="button">Cancel</a>
 		    </form>
 		</div>
     </div>

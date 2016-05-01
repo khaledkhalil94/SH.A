@@ -34,10 +34,10 @@
           <?php endif; ?>  
           <?php if($session->is_logged_in() && $session->adminCheck()): ?>
             <li>
-              <a href="<?= BASE_URL; ?>students/">Students</a>
+              <a href="<?= BASE_URL; ?>staff/admin/students/students.php">Students</a>
             </li>
           <li>
-            <a href="<?= BASE_URL; ?>staff/professors.php">Staff</a>
+            <a href="<?= BASE_URL; ?>staff/admin/staff/professors.php">Staff</a>
           </li> 
           <?php endif ?>
           <li>
@@ -52,10 +52,15 @@
           </li>
           <li>
           <a href="<?= BASE_URL; ?>signup.php">Sign Up</a>
-          </li>  
+          </li>
           <?php endif; ?>           
           <?php if($session->is_logged_in()): ?>
             <li><a href="<?= BASE_URL; ?>logout.php">Log Out</a></li>
+          <?php endif; ?>
+          <?php if($session->is_logged_in() && $session->adminCheck()): ?>
+          <li>
+          <a href="<?= BASE_URL; ?>staff/admin" style="color:red">Admin Control Panel</a>
+          </li>
           <?php endif; ?>
         </ul>
       </div>

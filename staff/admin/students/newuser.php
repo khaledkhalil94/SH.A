@@ -1,44 +1,23 @@
 <?php
-require_once ("classes/init.php");
-$pageTitle = "Sign Up";
-if($session->is_logged_in()){
-    header('Location:index.php');
-}
-?>
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+$session->adminLock();
 
-<?php 
+
+$pageTitle = "Create a new user";
+include (ROOT_PATH . "inc/head.php");
 
 if (isset($_POST['submit'])) {
-    if (empty($_POST['username'])) {
-        exit('Put in a username');
+    if (empty($_POST['username']) && empty($_POST['id'])) {
+        exit('Please enter username or ID');
     }
-    switch ($_POST['type']) {
-        case 'student':
-            StudentInfo::create_student();
-            break;
-
-        case 'professor':
-            StaffInfo::create_staff();
-            break;
-        
-        default:
-            echo "Please select type";
-            break;
-    }
+    Admin::create();
 }
-
 ?>
 
-<?php
-require(ROOT_PATH . 'inc/head.php'); 
- ?>
-
-</pre>
-<body>
-  <div class="main">
-    <div class="container">
+<div class="main">
+	<div class="container">
       <div class="form">
-        <form action="signup.php" method="POST">
+        <form action="newuser.php" method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" name="username" value="" />
@@ -56,10 +35,10 @@ require(ROOT_PATH . 'inc/head.php');
                 <input type="email" class="form-control" name="email" value="" />
             </div>
             <label class="radio-inline">
-              <input type="radio" name="type" checked id="inlineRadio2" value="student">I'm a student
+              <input type="radio" name="type" checked id="inlineRadio2" value="student">Student
             </label>
             <label class="radio-inline">
-              <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor
+              <input type="radio" name="type" id="inlineRadio3" value="staff">Staff
             </label>
             <br>
             <br>
@@ -68,8 +47,9 @@ require(ROOT_PATH . 'inc/head.php');
 
         </form>
       </div>
-    </div>
-  </div>
-<?php include (ROOT_PATH . 'inc/footer.php') ?>
-</body>
-</html>
+	</div>
+</div>
+
+<?php
+include (ROOT_PATH . 'inc/footer.php');
+?>

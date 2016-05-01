@@ -41,8 +41,6 @@ require(ROOT_PATH . 'inc/head.php');
   ?>
 </pre>
 <body>
-<?php include (ROOT_PATH . 'inc/header.php') ?>
-<?php include (ROOT_PATH . 'inc/navbar.php') ?>
   <div class="main">
     <div class="container">
       <div class="form">

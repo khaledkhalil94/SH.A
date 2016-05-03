@@ -27,7 +27,6 @@ if (empty($studentInfo)){
 	header("Location: " . BASE_URL . "students/settings/editstudent.php?id=".$id);
 }
 
-$section = "students";
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
@@ -49,7 +48,7 @@ include (ROOT_PATH . "inc/head.php");
 				<?= !empty($faculty) ? "<p>Faculty {$faculty}</p>" : null ?>
 				<a class="btn btn-default" href="<?= BASE_URL."staff/admin/students/editstudent.php?id=".$id?>" role="button">Change information</a>
 				<a class="btn btn-default" href="<?= BASE_URL."staff/admin/students/account.php?id=".$id?>" role="button">Change settings</a>
-				<a class="btn btn-default" href="" role="button">Preview user logs</a>
+				<a class="btn btn-default" href="<?= "previewlogs.php?id=".$id ?>" role="button">Preview user logs</a>
 				<a class="btn btn-danger" href="<?= BASE_URL."staff/admin/students/deleteuser.php?id=".$id ?>" role="button">Delete User</a>
 
 			</div>

@@ -341,3 +341,19 @@ ul.nav.navbar-nav {
 .section h2 {
     text-align: center;
 }
+
+
+.logs .row {
+    background-color: #CCCCCC;
+    padding: 10px;
+}
+
+.time {
+    font-size: small;
+    color: #B7B7B7;
+}
+
+.logs p {
+    margin: 10px;
+    font-size: large;
+}

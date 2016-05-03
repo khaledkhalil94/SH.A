@@ -14,6 +14,7 @@ require_once("User.php");
 require_once('Database.php');
 require_once('ProfilePicture.php');
 require_once('pagination.php');
+require_once('StudentInfo.php');
 
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";

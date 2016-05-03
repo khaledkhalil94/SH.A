@@ -13,21 +13,25 @@ class Admin extends User {
 
 	public function create(){
 		global $connection;
-		$sql = "INSERT INTO `login_info` (`id`, `username`, `password`, `email`, `type`) VALUES ('{$_POST['id']}','{$_POST['username']}','{$_POST['password']}','{$_POST['email']}','{$_POST['type']}')";
+		$id = intval($_POST['id']);
+		if(!$id){
+			exit("ID must be number");
+		}
+		$sql = "INSERT INTO `login_info` (`id`, `username`, `password`, `email`, `type`) VALUES ('{$id}','{$_POST['username']}','{$_POST['password']}','{$_POST['email']}','{$_POST['type']}')";
 		$stmt = $connection->prepare($sql);
 		if($stmt->execute()){
 			$sql = "INSERT INTO students (`id`) VALUES ('{$_POST['id']}')";
 			$stmt = $connection->prepare($sql);
 			
-			if($stmt->execute()){
-				echo "Success";
-			} else {
+			if(!$stmt->execute()){
 				$error = $stmt->errorInfo();
 				echo "error: ".$error[2];
 			}
 		} else{
 			$error = $stmt->errorInfo();
-			echo "error: ".$error[2];
+			if($error[1] == 1062){
+				echo "User ID already exists in the database";
+			}
 		}
 	}
 
@@ -42,6 +46,33 @@ class Admin extends User {
 		return true;
 
 	}
+
+	public static function getUserLogs($id){
+		global $connection;
+		$sql = "SELECT * FROM `logs` WHERE user_id = {$id}";
+		$stmt = $connection->query($sql);
+		$array = array();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$array[] = $row;
+		}
+		return $array;
+
+	}
+
+	public static function deletelog($id){
+		global $connection;
+		$sql = "DELETE FROM `logs` WHERE id = {$id} LIMIT 1";
+		$connection->query($sql);
+
+	}
+
+	public static function deletelogs($id){
+		global $connection;
+		$sql = "DELETE FROM `logs` WHERE user_id = {$id}";
+		$connection->query($sql);
+
+	}
+
 }
 
 ?>

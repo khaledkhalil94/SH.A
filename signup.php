@@ -12,6 +12,10 @@ if (isset($_POST['submit'])) {
     if (empty($_POST['username'])) {
         exit('Put in a username');
     }
+    if(!is_numeric($_POST['id'])){
+        echo "ID must be number";
+        exit;
+    }
     switch ($_POST['type']) {
         case 'student':
             StudentInfo::create_student();

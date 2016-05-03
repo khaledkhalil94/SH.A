@@ -38,4 +38,8 @@ class StaffInfo extends User {
 
 	}
 
+	public function full_name() {
+		return $this->firstName . " " . $this->lastName;
+	}
+
 }

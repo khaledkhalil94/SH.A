@@ -180,11 +180,10 @@ class User {
 			echo $error[2];
 		}
 	}
-
+	
 	public function full_name() {
 		return $this->firstName . " " . $this->lastName;
 	}
-
 }
 
 $User = new User();

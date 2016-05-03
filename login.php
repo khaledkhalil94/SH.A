@@ -6,33 +6,25 @@ if($session->is_logged_in()){
 }
 
 if (isset($_POST['submit'])){
-	  $username = $_POST['Username'];
-    $password = $_POST['password'];
-    //search for the user in the database
-    switch ($_POST['type']) {
-    case 'student':
-       $found_user = StudentInfo::authenticate($username, $password);
-        break;
-
-    case 'professor':
-        $found_user = StaffInfo::authenticate($username, $password);
-        break;
+	  $username = trim(strtolower($_POST['Username']));
+    $password = trim(strtolower($_POST['password']));
     
-    default:
-        echo "Please select type";
-        break;
-    }
-    
+    if($username == "admin"){
+      $found_user = StaffInfo::authenticate($username, $password);
+      } else {
+        $found_user = StudentInfo::authenticate($username, $password);
+      }
 
     if ($found_user) {
     	//success
+      $StudentInfo->log("login", $found_user);
       $session->login($found_user);
       header('Location:index.php');
-  } else {
-      // error message
-      echo "No user were found";
+    } else {
+        // error message
+        echo "No user were found";
 
-  }
+    }
 }
 
 
@@ -53,13 +45,6 @@ require(ROOT_PATH . 'inc/head.php');
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
           </div>
-          <label class="radio-inline">
-            <input type="radio" name="type" checked id="inlineRadio2" value="student">I'm a student
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor
-          </label>
-            <br>
             <br>
           <button type="submit" name="submit" class="btn btn-default">Log in</button>
         </form>

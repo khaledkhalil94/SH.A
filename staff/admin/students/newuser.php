@@ -44,6 +44,7 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- <input type="hidden" name="token" value="" /> -->
             <input type="submit" name="submit" value="Create" />
+            <a class="btn btn-default" href="<?= "students.php"; ?>" role="button">Cancel</a>
 
         </form>
       </div>

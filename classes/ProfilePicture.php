@@ -84,27 +84,28 @@
 
 	public function delete_pic(){
 		global $connection;
-
-		$img_path = $_SERVER["DOCUMENT_ROOT"] . $this->get_profile_pic($this->id);
-
-		if($img_path == DEF_PIC ){
-			return false;
-			exit;
-		}
-
-		unlink($img_path);
-
-		$connection->query("UPDATE {$this->table_name} SET `has_pic` = '0' WHERE `id` = {$this->id}");
-		$sql = "DELETE FROM `profile_pic` WHERE `user_id` = {$this->id}";
-		$stmt = $connection->query($sql);
-		if($stmt) {
-			//flash
+		$path = $this->get_profile_pic($this->id);
+		if (empty($path)) {
 			return true;
 		} else {
-			$error = ($connection->errorInfo());
-			echo $sql;
-			echo $error[2];
- 		} 
+			$img_path = $_SERVER["DOCUMENT_ROOT"] . $this->get_profile_pic($this->id);
+			if($img_path == DEF_PIC ){
+				return false;
+				exit;
+			}
+			unlink($img_path);
+			$connection->query("UPDATE {$this->table_name} SET `has_pic` = '0' WHERE `id` = {$this->id}");
+			$sql = "DELETE FROM `profile_pic` WHERE `user_id` = {$this->id}";
+			$stmt = $connection->query($sql);
+			if($stmt) {
+				//flash
+				return true;
+			} else {
+				$error = ($connection->errorInfo());
+				echo $sql;
+				echo $error[2];
+	 		} 
+	 	}
 	}
 
  }

@@ -3,6 +3,7 @@
 class Session {
 
 	private $logged_in=false;
+	private $level;
 	public $user_id;
 	public $username;
 	public $msg;
@@ -21,6 +22,7 @@ class Session {
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];
 			$this->username = $_SESSION['username'];
+			$this->level = $_SESSION['level'];
 			$this->logged_in = true;
 		} else {
 			unset($this->user_id);
@@ -43,9 +45,10 @@ class Session {
 		if($user){
 			$this->user_id = $_SESSION['user_id'] = $user->id;
 			$this->username = $_SESSION['username'] = $user->username;
-			$_SESSION['type'] = $user->type;
-			$this->logged_in = true;
+			$this->type = $_SESSION['level'] = $user->type;
+			$this->level = true;
 		}
+
 	}
 
 	public function logout(){
@@ -58,11 +61,22 @@ class Session {
 
 	public function message($msg){
 		if(isset($msg)){
-			$this->msg = $_SESSION['msg'] = $msg;
-			unset($_SESSION['msg']);
-		} else {
-			$this->msg = "aa";
+			$_SESSION['msg'] = $msg;
 		}
+	}
+
+	public function displayMsg(){
+		 if(isset($_SESSION['msg'])){
+		 	$this->msg = $_SESSION['msg'];
+		 } else {
+		 	return false;
+		 }
+		unset($_SESSION['msg']);
+		return $this->msg;
+	}
+
+	public function getLevel(){
+		return $this->level;
 	}
 
 	public function adminLock(){

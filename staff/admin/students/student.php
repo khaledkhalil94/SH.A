@@ -32,7 +32,7 @@ include (ROOT_PATH . "inc/head.php");
  ?>
 <div class="container">
 <?php if(!empty($_SESSION['msg'])):?>
-<div class="alert alert-success" role="alert"> <?= $_SESSION['msg']; ?></div>
+<div class="alert alert-success" role="alert"> <?= $session->displayMsg(); ?></div>
 <?php endif; ?>
 <a href="<?= "students.php" ?>">&laquo; Go back</a>
 

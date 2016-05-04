@@ -4,17 +4,17 @@ $session->adminLock();
 $id = $_GET['id'];
 
 
-$studentInfo = StudentInfo::find_by_id($id);
-$pageTitle = $studentInfo->id;
+$user = StudentInfo::find_by_id($id);
+$pageTitle = $user->id;
 include (ROOT_PATH . "inc/head.php");
 
 if (isset($_POST['submit'])){
 	$admin = StaffInfo::authenticate("admin", $_POST['password']);
 	if($admin){
-		$delete = Admin::delete($studentInfo);
-		$delete ? $msg = "User has been deleted!" : false;
-	} else {
-		$msg = "Error";
+		if(Admin::delete($user)){
+			$session->message("{$user->username} has been deleted");
+			header("Location: /students");
+		}
 	}
 }
 ?>

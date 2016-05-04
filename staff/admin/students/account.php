@@ -16,8 +16,8 @@ if (isset($_POST['submit'])) {
 
 
 	if($studentInfo->update()){
-		$session->message("Your information have been updated");
-		//header("Location: " . BASE_URL . "students/".$session->user_id."/");
+		$session->message("{$studentInfo->username}'s settings have been updated");
+		header("Location: student.php?id=".$id);
 	} else {
 		echo $_SESSION['fail']['sqlerr'];
 	}

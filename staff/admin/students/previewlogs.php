@@ -1,16 +1,17 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $session->adminLock();
+$msg = $session->displayMsg();
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-
 if(!$id){
 	redirect_to_D("/sha", 2);
 }
-$studentInfo = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : die("User was not found");
-$student = Student::find_by_id($studentInfo->id);
+$User = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : StaffInfo::find_by_id($id);
+$student = Student::find_by_id($User->id);
 
 if (isset($_GET["clall"]) && $_GET["clall"] == "1") {
 	Admin::deletelogs($id);
+	$session->message("All logs have been deleted.");
 	redirect_to_D(basename(__FILE__)."?id={$id}");
 } elseif (isset($_GET["dellog"])) {
 	Admin::deletelog($_GET["dellog"]);
@@ -43,7 +44,8 @@ include (ROOT_PATH . "inc/head.php");
 			$output .= "</div>";
 			$output .= "</li>";
 		}
-		echo empty($logs) ? "User has no logs." : $output;
+		echo empty($logs) ? empty($logs) && $msg ? $msg : "User has no logs." : $output;
+
 		echo "</ul>";
 	  ?>
 	</div>

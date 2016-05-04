@@ -1,10 +1,6 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $session->adminLock();
-// if (!isset($session->user_id)) {
-// 	header("Location: " . BASE_URL . "index.php");
-// }
-//$id = (int)$session->user_id;
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if(!$id){
@@ -41,8 +37,8 @@ if (isset($_POST['submit'])) {
 
 	  if($student->update()){
 
-	 	$session->message("Your information have been updated");
-	 	//header("Location: " . BASE_URL . "students/".$session->user_id."/");
+	 	$session->message("{$studentInfo->username}'s information have been updated");
+		header("Location: student.php?id=".$id);
 
 	 } else {
 	 	echo $_SESSION['fail']['sqlerr'];

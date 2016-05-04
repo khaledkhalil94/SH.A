@@ -20,12 +20,12 @@
 
            <?php if($session->is_logged_in()): ?>
             
-            <?php if ($_SESSION['type'] == "student"): ?>
+            <?php if ($session->getLevel() == "student"): ?>
               <a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
             <?php endif ?>
 
 
-            <?php if ($_SESSION['type'] == "staff"): ?>
+            <?php if ($session->getLevel() == "staff"): ?>
               <a href="<?= BASE_URL."staff/professor.php?id=".USER_ID;?>">Profile</a>
             <?php endif ?>
 

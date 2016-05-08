@@ -9,14 +9,9 @@ if(!$id){
 $studentInfo = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : die("User was not found");
 $student = Student::find_by_id($studentInfo->id);
 
-if($student->has_pic){
-	$img_path = ProfilePicture::get_profile_pic($student->id);
-} else {
-	$img_path = BASE_URL."images/profilepic/pp.png";
-}
 
-$faculty = $student->get_faculty($student->faculty_id);
-$faculty = ucwords(str_replace("_", " ", $faculty));
+$img_path = ProfilePicture::get_profile_pic($student);
+$faculty = Student::get_faculty($student->faculty_id);
 
 if (empty($studentInfo)){
 	echo "User was not found!";

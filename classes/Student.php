@@ -20,11 +20,11 @@ class Student extends User {
 
 	
 
-	public function display_students ($id){
+	public function display_students($id){
 		global $ProfilePicture;
 		$students = self::get_students_by_faculty($id);
          foreach ($students as $student) {
-              $img_path = ($student->has_pic) ? $ProfilePicture->get_profile_pic($student->id) :  BASE_URL."images/profilepic/pp.png";
+              $img_path = $ProfilePicture->get_profile_pic($student);
               $output = "";
                 $output .= "<li>";
                 $output .= "<div class=\"row\">";
@@ -54,6 +54,29 @@ class Student extends User {
 	public function full_name_by_id($id) {
 		$student = Self::find_by_id($id);
 		return $student->firstName . " " . $student->lastName;
+	}
+
+	public function full_name() {
+		return $this->firstName . " " . $this->lastName;
+	}
+
+	public static function upload_pic($POST) {
+		global $ProfilePicture;
+		$ProfilePicture->table_name = self::$table_name;
+		$ProfilePicture->upload_pic($POST);
+	}
+
+	public static function update_pic($POST) {
+		global $ProfilePicture;
+		$ProfilePicture->table_name = self::$table_name;
+		$ProfilePicture->id = $_POST['id'];
+		$ProfilePicture->update_pic($POST);
+	}
+
+	public static function delete_pic() {
+		global $ProfilePicture;
+		$ProfilePicture->table_name = self::$table_name;
+		$ProfilePicture->delete_pic();
 	}
 
 }

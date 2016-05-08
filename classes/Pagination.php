@@ -13,6 +13,35 @@ class Pagination {
 		$this->total_count = $total_count;
 	}
 
+	public static function display($total_count){
+		global $rpp;
+		global $pagination;
+		$rpp = 4; //results per page
+		$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+		$pagination = new Pagination($rpp, $current_page, $total_count);
+
+		if ($current_page < 1 || $current_page > $pagination->total_pages()) {
+		  $pagination->current_page = 1;
+		} 
+
+		if ($pagination->has_prev_page()) {
+		  echo "<a href=?page=". $pagination->prev_page() ."> &laquo; </a>";
+		}
+
+
+		$total_pages = $pagination->total_pages();
+		for ($i=1; $i <= $total_pages ; $i++) { 
+		    if ($i == $current_page) {
+		        echo "<span>{$i}</span>";
+		    }else {
+		        echo "<a href=?page={$i}>{$i}</a>";
+		    }
+
+		}
+		if ($pagination->has_next_page()) {
+		  echo "<a href=?page=". $pagination->next_page() ."> &raquo;</a>";
+		}
+	}
 
 	public function offset(){
 		return ($this->current_page - 1) * $this->rpp;

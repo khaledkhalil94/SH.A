@@ -357,3 +357,13 @@ ul.nav.navbar-nav {
     margin: 10px;
     font-size: large;
 }
+
+.message {
+    width: 40%;
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.container {
+}

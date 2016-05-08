@@ -16,11 +16,6 @@ class User {
 		return $found_user->fetch(PDO::FETCH_OBJ);
 	}
 
-	public static function get_users($rpp,$offset){
-		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
-		return self::find_by_sql($sql);
-	}
-
 	public static function get_all_users(){
 		$sql = "SELECT * FROM " .static::$table_name;
 		$all = static::find_by_sql($sql);
@@ -173,7 +168,7 @@ class User {
 
 		$stmt = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
 		if($stmt){
-			return $stmt['name'];
+			return ucwords(str_replace("_", " ", $stmt['name']));
 		}
 		if(!$stmt) {
 			$error = ($connection->errorInfo());
@@ -183,6 +178,15 @@ class User {
 	
 	public function full_name() {
 		return $this->firstName . " " . $this->lastName;
+	}
+
+	public static function get_users($rpp,$offset){
+		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
+		return self::find_by_sql($sql);
+	}
+
+	public static function displayPag(){
+		Pagination::display(static::get_count());
 	}
 }
 

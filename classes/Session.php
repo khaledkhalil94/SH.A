@@ -12,6 +12,9 @@ class Session {
 	function __construct(){
 		session_start();
 		$this->check_login();
+		if(isset($this->user_id)){
+			define("USER_ID", $this->user_id);
+		}
 
 	}
 
@@ -59,10 +62,11 @@ class Session {
 		$this->logged_in = false;
 	}
 
-	public function message($msg){
+	public function message($msg, $location=null){
 		if(isset($msg)){
 			$_SESSION['msg'] = $msg;
 		}
+		redirect_to_D($location);
 	}
 
 	public function displayMsg(){

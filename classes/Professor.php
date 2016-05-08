@@ -15,11 +15,11 @@ class Professor extends User {
 	protected static $db_fields = array('id', 'firstName', 'lastName', 'faculty_id', 'bio', 'type');
 
 	
-	public function display_prof ($id){
+	public function display_prof($id){
 		global $ProfilePicture;
 		$users = self::get_prof_by_faculty($id);
 	     foreach ($users as $user) {
-			$img_path = ($user->has_pic) ? $ProfilePicture->get_profile_pic($user->id) :  BASE_URL."images/profilepic/pp.png";
+			$img_path = $ProfilePicture->get_profile_pic($user);
 	      	$output = "";
 	        $output .= "<li>";
          	$output .= "<div class=\"row\">";

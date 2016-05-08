@@ -14,10 +14,9 @@ if (isset($_POST['submit'])) {
     $studentInfo->email = $_POST['email'];
 
 	if($studentInfo->update()){
-		$session->message("Your information have been updated");
-		header("Location: " . BASE_URL . "students/".$session->user_id."/");
+		$session->message("Your information have been updated", USER_URL);
 	} else {
-		echo $_SESSION['fail']['sqlerr'];
+		$session->message($_SESSION['fail']['sqlerr'], USER_URL);
 	}
 
 
@@ -55,7 +54,7 @@ include (ROOT_PATH . "inc/head.php");
 
 
 	        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
-	        <a class="btn btn-default" href="<?php echo BASE_URL."students/".USER_ID; ?>/" role="button">Cancel</a>
+	        <a class="btn btn-default" href="<?php echo USER_URL; ?>" role="button">Cancel</a>
 	    </form>
 	   </div>
 </div>

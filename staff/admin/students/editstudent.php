@@ -57,9 +57,10 @@ include (ROOT_PATH . "inc/head.php");
 <?php endif; ?>
 
 <?php 
-	$ProfilePicture = new ProfilePicture($studentInfo->type);
-	$ProfilePicture->id = $id;
-	$img_path = $ProfilePicture->get_profile_pic($id);
+$img_path = ProfilePicture::get_profile_pic($student);
+$has_pic = (bool)$student->has_pic;
+$ProfilePicture->has_pic = $has_pic;
+$ProfilePicture->id = $id;
  ?>
 
 <h2>Update information</h2>
@@ -67,49 +68,35 @@ include (ROOT_PATH . "inc/head.php");
 <br>
 	<div class="container">
 		<div class="col-md-4">
-			
-			<?php // if the user has no picture at all
-			 if(empty($img_path)){ ?>
-			<p>Upload profile picture</p>
-	 		<?php	if (isset($_POST['upload'])) {
-	 					if (empty($_FILES['userfile']['name'])) {
-	 						echo "Please select a valid photo";
-	 					} else {
-							$ProfilePicture->upload_pic();
-							header("Refresh:0");
-	 					}
-					}
-				} else { //use already has a profile picture ?>
-				<div class="image"><img src=<?php echo $img_path;?> alt="" style="width:228px;"></div>
-				<p>Change your profile picture</p>
-		 		<?php
-			 		if (isset($_POST['upload'])) {
-			 			if (empty($_FILES['userfile']['name'])) {
-	 						echo "Please select a valid photo";
-	 					} else {
-							$ProfilePicture->update_pic();
-							header("Refresh:0");
-					}
+	 		<?php // Upload or Change profile picture
+	 			if (isset($_POST['upload'])) {
+ 					if (empty($_FILES['userfile']['name'])) {
+ 						echo "Please select a valid photo";
+ 					} else {
+ 						$has_pic ? Student::update_pic($_POST) : Student::upload_pic($_POST);
+						header("Refresh:0"); // session msg
+ 					}
 				}
-			}
-				 ?>
+			?>
+ 			 	<div class="image"><img src=<?= $img_path; ?> alt="" style="width:228px;"></div>
+			 <p>Change your profile picture</p> 
+
 			<form enctype="multipart/form-data" action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
-			    <!-- MAX_FILE_SIZE must precede the file input field -->
-			    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-			    <!-- Name of input element determines name in $_FILES array -->
+			    <input type="hidden" name="MAX_FILE_SIZE" value=<?= MAX_PIC_SIZE ?> />
 			    <input name="userfile" type="file" />
+			    <input type="hidden" name="id" value="<?= $student->id ?>" />
 			    <input type="submit" name="upload" value="Upload" />
 			</form>
 			<br>
-
-			<?php if(!empty($img_path)):
+			
+			<?php //Delete profile picture
+			 if($has_pic):
 			  ?>
-
 				<form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
-					$ProfilePicture->delete_pic();
-					
-					    }?>
+						Student::delete_pic();
+						header("Refresh:0");
+					   }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />
 				</form>
 			<?php endif; ?>

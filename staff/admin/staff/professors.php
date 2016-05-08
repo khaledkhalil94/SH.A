@@ -12,26 +12,15 @@ $pageTitle = "Professors";
     <div class="container section">
       <div class="wrapper">
         <h2>PROFS</h2>
-<?php
-            $rpp = 4; //results per page
-            $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-            $pagination = new Pagination($rpp, $current_page, Professor::get_count());
-            if ($current_page < 1 || $current_page > $pagination->total_pages()) {
-              $pagination->current_page = 1;
-            } 
-?>
             <div class="pagination">
-              <?php include (ROOT_PATH . "inc/navigation.php"); ?>
+              <?php Professor::displayPag(); ?>
             </div>
-<?php
-            $profsid = Professor::get_users($rpp,$pagination->offset());
 
-?>
         <ul class="students">
 
          <?php
-
-        foreach ($profsid as $prof) {
+         $profs = Professor::get_users($rpp, $pagination->offset());
+        foreach ($profs as $prof) {
 
             if (StaffInfo::find_by_id($prof->id)) {
               $faculty = StaffInfo::get_faculty($prof->faculty_id);
@@ -51,7 +40,7 @@ $pageTitle = "Professors";
         ?>
       </ul>
       <div class="pagination">
-        <?php //include (ROOT_PATH . "inc/navigation.php"); ?>
+        <?php Professor::displayPag(); ?>
       </div>
     </div>
   </div>

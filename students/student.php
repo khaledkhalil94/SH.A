@@ -11,14 +11,8 @@ $studentInfo = StudentInfo::find_by_id($id);
 $session->userLock($studentInfo);
 $student = Student::find_by_id($studentInfo->id);
 
-if($student->has_pic){
-	$img_path = ProfilePicture::get_profile_pic($student->id);
-} else {
-	$img_path = BASE_URL."images/profilepic/pp.png";
-}
-
-$faculty = $student->get_faculty($student->faculty_id);
-$faculty = ucwords(str_replace("_", " ", $faculty));
+$img_path = ProfilePicture::get_profile_pic($student);
+$faculty = Student::get_faculty($student->faculty_id);
 
 if (empty($studentInfo)){
 	echo "User was not found!";
@@ -31,12 +25,8 @@ if (empty($studentInfo)){
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
-<div class="container">
-<?php if(!empty($_SESSION['msg'])):?>
-<div class="alert alert-success" role="alert"> <?= $_SESSION['msg']; ?></div>
-<?php endif; ?>
-
-
+<div class="content">
+<?= msgs(); ?>
 	<div class="details row">
 <?php if ($session->adminCheck()): ?>
 	<a class="btn btn-default" href="<?= BASE_URL."staff/admin/students/student.php?id=".$id?>" style="float:right;" role="button">Edit user</a>
@@ -49,7 +39,7 @@ include (ROOT_PATH . "inc/head.php");
 				<p><?= "ID: " . $student->id; ?></p>
 				<p><?= "Address: " . $student->address; ?></p>
 				<p><?= "Phone Number: " . $student->phoneNumber; ?></p>
-				<?= !empty($faculty) ? "<p>Faculty {$faculty}</p>" : null ?>
+				<?= !empty($faculty) ? "<p>Faculty :{$faculty}</p>" : null ?>
 				<?php if ($session->userLock($studentInfo)): ?>
 				<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php?id=".$id?>" role="button">Update your information</a>
 				<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>

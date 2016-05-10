@@ -4,21 +4,13 @@ require_once('init.php');
 class Student extends User {
 	
 	protected static $table_name="students";
-	public $firstName;
-	public $lastName;
-	public $id;
-	public $address;
-	public $phoneNumber;
-	public $faculty_id;
-	public $has_pic;
+	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic;
+	protected static $db_fields = array();
 
-
-	protected static $db_fields = array('id', 'firstName', 'lastName', 'address', 'phoneNumber', 'faculty_id');
-
-	function __construct(){
+	public function __construct(){
+		global $db_fields;
+		self::$db_fields = array_keys((array)$this);
 	}
-
-	
 
 	public function display_students($id){
 		global $ProfilePicture;
@@ -60,17 +52,17 @@ class Student extends User {
 		return $this->firstName . " " . $this->lastName;
 	}
 
-	public static function upload_pic($POST) {
+	public static function upload_pic($data) {
 		global $ProfilePicture;
 		$ProfilePicture->table_name = self::$table_name;
-		$ProfilePicture->upload_pic($POST);
+		$ProfilePicture->upload_pic($data);
 	}
 
-	public static function update_pic($POST) {
+	public static function update_pic($data) {
 		global $ProfilePicture;
 		$ProfilePicture->table_name = self::$table_name;
 		$ProfilePicture->id = $_POST['id'];
-		$ProfilePicture->update_pic($POST);
+		$ProfilePicture->update_pic($data);
 	}
 
 	public static function delete_pic() {

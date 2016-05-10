@@ -48,6 +48,7 @@ include (ROOT_PATH . "inc/head.php");
 
 		echo "</ul>";
 	  ?>
+	  <a class="btn btn-default" href="<?= "student.php?id=".$id; ?>" role="button">Go back</a>
 	</div>
 </div>
 

@@ -4,13 +4,7 @@ require_once('init.php');
 class Professor extends User {
 	
 	protected static $table_name="professor";
-	public $id;
-	public $firstName;
-	public $lastName;
-	public $faculty_id;
-	public $bio;
-	public $type;
-	public $has_pic;
+	public $id, $firstName, $lastName, $faculty_id, $bio, $type, $has_pic;
 
 	protected static $db_fields = array('id', 'firstName', 'lastName', 'faculty_id', 'bio', 'type');
 

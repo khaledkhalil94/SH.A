@@ -9,12 +9,6 @@ $studentInfo = StudentInfo::find_by_id($id);
 
 if (isset($_POST['submit'])) {
 
-
-    $studentInfo->username = $_POST['username'];
-    $studentInfo->password = $_POST['password'];
-    $studentInfo->email = $_POST['email'];
-
-
 	if($studentInfo->update()){
 		$session->message("{$studentInfo->username}'s settings have been updated");
 		header("Location: student.php?id=".$id);
@@ -54,6 +48,7 @@ include (ROOT_PATH . "inc/head.php");
 	        <div class="form-group">
 	            <label for="email">email</label>
 	            <input type="email" class="form-control" name="email" value="<?= $studentInfo->email ?>" />
+	            <input type="hidden" name="id" value="<?php echo $studentInfo->id ?>" />
 	        </div>
 
 

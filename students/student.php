@@ -8,7 +8,6 @@ if(!$id){
 }
 
 $studentInfo = StudentInfo::find_by_id($id);
-$session->userLock($studentInfo);
 $student = Student::find_by_id($studentInfo->id);
 
 $img_path = ProfilePicture::get_profile_pic($student);
@@ -25,12 +24,19 @@ if (empty($studentInfo)){
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
-<div class="content">
+<div class="content student">
 <?= msgs(); ?>
+<?php if (Messages::hasMsgs($id) && $session->userCheck($student)): ?>
+		<div style="text-align:center; padding-top: 15px;">
+			<span style="background-color:red; padding:10px;">
+				<a href="../messages" style="color:white;"><?php Messages::Msgs($id); ?></a>
+			</span>
+		</div>
+<?php endif; ?>
 	<div class="details row">
-<?php if ($session->adminCheck()): ?>
-	<a class="btn btn-default" href="<?= BASE_URL."staff/admin/students/student.php?id=".$id?>" style="float:right;" role="button">Edit user</a>
-<?php endif ?>
+	<?php if (!$session->userCheck($studentInfo)): ?>
+	<a style="float:right;" class="btn btn-default" href="<?= BASE_URL."students/messages/compose.php?to={$id}"?>" role="button">Send a private message</a>
+	<?php endif; ?>
 		<div class="col-md-5">
 			<div class="image"><img src="<?php echo $img_path;?>" alt="" style="width:278px;"></div>
 		</div>
@@ -39,8 +45,8 @@ include (ROOT_PATH . "inc/head.php");
 				<p><?= "ID: " . $student->id; ?></p>
 				<p><?= "Address: " . $student->address; ?></p>
 				<p><?= "Phone Number: " . $student->phoneNumber; ?></p>
-				<?= !empty($faculty) ? "<p>Faculty :{$faculty}</p>" : null ?>
-				<?php if ($session->userLock($studentInfo)): ?>
+				<?= !empty($faculty) ? "<p>Faculty: {$faculty}</p>" : null ?>
+				<?php if ($session->userCheck($studentInfo)): ?>
 				<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php?id=".$id?>" role="button">Update your information</a>
 				<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
 				<?php endif; ?>

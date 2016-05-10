@@ -46,6 +46,11 @@
           <li>
             <a href="<?= BASE_URL; ?>search.php">Search</a>
           </li>
+          <?php if($session->is_logged_in()): ?>
+          <li>
+            <a href="<?= BASE_URL; ?>students/messages">Inbox<?= " <span class=\"label label-danger\">". Messages::getMsgsCount(USER_ID) ."</span>";  ?></a>
+          </li>
+          <?php endif; ?>  
           <?php if(!$session->is_logged_in()): ?>
           <li>
             <a href="<?= BASE_URL; ?>login.php">Log In</a>

@@ -38,11 +38,17 @@ function msgs(){
 	$output .= "<div class=\"alert alert-success\" role=\"alert\">". $session->displayMsg() . "</div>";
 	$output .= "</div>";
 
-	if(!empty($_SESSION['msg'])){
+	if(!empty($session->msg)){
 		return $output;
 	}
-
 }
+
+function human_filesize($bytes, $decimals = 2) {
+  $sz = 'BKMGTP';
+  $factor = floor((strlen($bytes) - 1) / 3);
+  return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $sz[(int)$factor];
+}
+
 
  spl_autoload_register('autoloader');
 

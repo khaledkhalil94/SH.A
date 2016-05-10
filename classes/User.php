@@ -22,8 +22,9 @@ class User {
 		return $all;
 	}
 
-	public static function find_by_id($id){
+	public static function find_by_id($id, $msql=""){
 		$sql = "SELECT * FROM " .static::$table_name." WHERE id={$id}";
+		if(!empty($msql)) $sql .= $msql;
 		$found = static::find_by_sql($sql);
 		return !empty($found) ? array_shift($found) : false;
 	}
@@ -42,11 +43,12 @@ class User {
 
 	public function update(){
 		global $connection;
-
+		$object = $this->instantiate($_POST);
+		//exit(print_r($this));
 		$class = get_called_class();
-		$fields = array_keys((array)$this);
+		$fields = array_keys((array)$object);
 
-		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($fields,$values)." WHERE id = {$this->id}";
+		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($object,$fields,$values)." WHERE id = {$object->id}";
 		$stmt = $connection->prepare($sql);
 		$res = $stmt->execute($values);
 
@@ -56,10 +58,23 @@ class User {
 			$_SESSION['fail']['class'] .= $class . " ";
 			//var_dump($res);
 			return false;
-
 		 } 
-		 
 		return true;
+	}
+
+	private function pdoSet($object,$fields, &$values, $source = array()) {
+	  $set = '';
+	  $values = array();
+	  $array = (array)$object;
+	  if (!$source) $source = &$array;
+	  foreach ($fields as $field) {
+	    if (isset($source[$field])) {
+	      $set.="`$field`=:$field, ";
+	      $values[$field] = $source[$field];
+	    }
+	  }
+
+	  return substr($set, 0, -2); 
 	}
 
 	protected static function instantiate($user){
@@ -80,27 +95,14 @@ class User {
 		return array_key_exists($attribute, $object_vars);
 	}
 
-	private function pdoSet($fields, &$values, $source = array()) {
-	  $set = '';
-	  $values = array();
-	  $array = (array)$this;
-	  if (!$source) $source = &$array;
-	  foreach ($fields as $field) {
-	    if (isset($source[$field])) {
-	      $set.="`$field`=:$field, ";
-	      $values[$field] = $source[$field];
-	    }
-	  }
-
-	  return substr($set, 0, -2); 
-	}
-
 	public static function create_user(){
 		global $connection;
 		$user = self::instantiate($_POST);
 		$user->type = $_POST['type']; 
 		if($user->create()){
 			return $user;
+		} else {
+			return false;
 		}
 	}
 
@@ -109,26 +111,33 @@ class User {
 
 		$sql = "INSERT INTO ".static::$table_name;
 		$sql .=	" (`";
-		$sql .=	implode("`, `", array_keys($this->attributes()));
-		$sql .= "`) VALUES ('";
-		$sql .= implode("', '", array_values($this->attributes()));
-		$sql .=  "')";
+		$sql .=	implode("`, `", array_keys($this->attributes($values)));
+		$sql .= "`) VALUES (:";
+		$sql .= implode(", :", array_keys($this->attributes($values)));
+		$sql .=  ")";
+
 		$stmt = $connection->prepare($sql);
-		if($stmt->execute()){			
+		//exit($sql);
+		if($stmt->execute($values)){
 			return true;
+		}else {
+			$error = ($stmt->errorInfo());
+			echo $error[2];
 		}
 	}
 
 	// first, create an empty assoc array $attributes
 	// iterate through every db_field using a foreach loop
 	// in each step, assign the key to the array to the value fields
-	// for example, $attributes[username] = $this-username = ~the inserted value.
+	// for example, $attributes[username] = $this->username = ~the inserted value.
 	
-	public function attributes(){
+	public function attributes(&$values){
 		$attributes = array();
+		$values = array();
 		foreach (static::$db_fields as $field) {
 			if(property_exists($this, $field)){
 				$attributes[$field] = $this->$field;
+				$values[":".$field] = $this->$field;
 			}
 		}
 		return $attributes;

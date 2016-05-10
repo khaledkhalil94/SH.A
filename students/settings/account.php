@@ -9,10 +9,6 @@ $session->userLock($studentInfo);
 
 if (isset($_POST['submit'])) {
 
-    $studentInfo->username = $_POST['username'];
-    $studentInfo->password = $_POST['password'];
-    $studentInfo->email = $_POST['email'];
-
 	if($studentInfo->update()){
 		$session->message("Your information have been updated", USER_URL);
 	} else {
@@ -50,6 +46,7 @@ include (ROOT_PATH . "inc/head.php");
 	        <div class="form-group">
 	            <label for="email">email</label>
 	            <input type="email" class="form-control" name="email" value="<?php echo $studentInfo->email ?>" />
+	            <input type="hidden" name="id" value="<?php echo $studentInfo->id ?>" />
 	        </div>
 
 

@@ -11,6 +11,7 @@ $session->adminLock();
 
   <div class="main">
     <div class="container section">
+  <?= msgs(); ?>
       <a class="btn btn-default" href="<?= "newuser.php"?>" role="button">Add a new user</a>
       <div class="wrapper">
         <h2>Students list</h2>

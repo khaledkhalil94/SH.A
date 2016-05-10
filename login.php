@@ -19,8 +19,7 @@ if (isset($_POST['submit'])){
     	//success
       $StudentInfo->log("login", $found_user);
       $session->login($found_user);
-      $session->message('You have logged in.');
-      header('Location:index.php');
+      $session->message('You have logged in.', "/sha");
     } else {
         // error message
         echo "No user were found";

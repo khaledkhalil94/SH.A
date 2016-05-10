@@ -31,9 +31,7 @@ $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
 <div class="container">
-<?php if(!empty($_SESSION['msg'])):?>
-<div class="alert alert-success" role="alert"> <?= $_SESSION['msg']; ?></div>
-<?php endif; ?>
+<?= msgs(); ?>
 
 <?php echo "Username: " . $studentInfo->username . "<br>";?>
 

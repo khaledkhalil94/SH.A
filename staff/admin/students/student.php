@@ -25,16 +25,15 @@ if (empty($studentInfo)){
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
  ?>
-<div class="container">
-<?php if(!empty($_SESSION['msg'])):?>
-<div class="alert alert-success" role="alert"> <?= $session->displayMsg(); ?></div>
-<?php endif; ?>
+<div class="content">
+<?= msgs(); ?>
 <a href="<?= "students.php" ?>">&laquo; Go back</a>
 
 	<div class="details row">
 		<div class="col-md-5">
 			<div class="image"><img src="<?= $img_path;?>" alt="" style="width:278px;"></div>
 		</div>
+		<a class="btn btn-default" href="<?= BASE_URL."staff/admin/students/compose.php?to=".$id?>" role="button">Send a private message</a>
 			<div class="col-md-6">
 				<p><?= "Name: " . $student->full_name(); ?></p>
 				<p><?= "ID: " . $student->id; ?></p>

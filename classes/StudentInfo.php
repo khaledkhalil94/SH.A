@@ -4,22 +4,20 @@ require_once('init.php');
 class StudentInfo extends User {
 	
 	protected static $table_name="login_info";
-	public $id;
-	public $username;
-	public $password;
-	public $email;
-	public $type;
-	
+	public $id,	$username,	$password,	$email,	$type;	
+	protected static $db_fields = array();
 
-
-	protected static $db_fields = array('id', 'username', 'password', 'email', 'type');
+	public function __construct(){
+		global $db_fields;
+		self::$db_fields = array_keys((array)$this);
+	}
 
 	public static function create_student(){
 		global $connection;
 		global $session;
 		global $StudentInfo;
 		$user = self::create_user();
-
+		if(!$user) return false;
 		$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')";
 		$stmt = $connection->prepare($sql);
 

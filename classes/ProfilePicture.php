@@ -20,6 +20,19 @@
 		}
 	}
 
+	public static function get_pic_info($id){
+		global $connection;
+		$sql = "SELECT * FROM profile_pic WHERE user_id = {$id}";
+		$stmt = $connection->query($sql);
+		$res = $stmt->fetch(PDO::FETCH_OBJ);
+		return $res;
+
+		if(!$stmt){
+			echo $sql;
+			echo $connection->errorInfo()[2];
+		}
+	}
+
 	public function upload_pic(){
 		global $connection;
 

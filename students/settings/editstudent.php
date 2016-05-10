@@ -12,26 +12,22 @@ $session->userLock($studentInfo);
 $student = Student::find_by_id($studentInfo->id);
 
 if (isset($_POST['submit'])) {
-	    $student->firstName = $_POST['firstName'];
-	    $student->lastName = $_POST['lastName'];
-	    $student->address = $_POST['address'];
-	    $student->phoneNumber = $_POST['phoneNumber'];
 
 	    switch ($_POST['faculty_id']) {
 	    	case 'Engineering':
-	    		$student->faculty_id = "1";
+	    		$_POST['faculty_id'] = "1";
 	    		break;
 
 	    	case 'Computer Science':
-	    		$student->faculty_id = "2";
+	    		$_POST['faculty_id'] = "2";
 	    		break;    
 
 	    	case 'Medicine':
-	    		$student->faculty_id = "3";
+	    		$_POST['faculty_id'] = "3";
 	    		break;
 	    
 	    	default:
-	    		$student->faculty_id = "0";
+	    		$_POST['faculty_id'] = "0";
 	    		break;
 	    }
 
@@ -118,6 +114,7 @@ $ProfilePicture->id = $id;
 		        <div class="form-group">
 		            <label for="phoneNumber">Phone Number</label>
 		            <input type="phoneNumber" class="form-control" name="phoneNumber" value="<?php echo $student->phoneNumber ?>" />
+		            <input type="hidden" name="id" value="<?php echo $student->id ?>" />
 		        </div>
 
 		        <label for="phoneNumber">Select your faculty</label>

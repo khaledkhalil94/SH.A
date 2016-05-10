@@ -67,6 +67,7 @@ class Session {
 			$_SESSION['msg'] = $msg;
 		}
 		redirect_to_D($location);
+		exit;
 	}
 
 	public function displayMsg(){
@@ -88,6 +89,7 @@ class Session {
 			return true;
 		} else {
 			exit("You must be an admin to review this page.");
+			return false;
 		}
 	}
 	public function adminCheck(){
@@ -108,9 +110,23 @@ class Session {
 				echo ("You can't view this page.");
 				redirect_to_D("/sha", 2);
 			}
+		} elseif($this->adminCheck()){
+				return true;
 		} else {
 			echo ("User was not found.");
 			redirect_to_D("/sha", 2);
+		}
+	}
+
+	public function userCheck($user){
+		if($user){
+			if($this->is_logged_in() && $this->user_id === $user->id){
+				return true;
+			} elseif($this->adminCheck()){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 

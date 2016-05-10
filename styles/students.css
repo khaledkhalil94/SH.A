@@ -27,12 +27,12 @@
     text-decoration: underline;
 }
 
-.details {
+.student .details {
     background-color: white;
-    padding: 70px;
+    padding: 60px;
 }
 
-.details p {
+.student .details p {
     border: 2px #868686 groove;
     padding: 8px;
 }

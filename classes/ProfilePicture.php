@@ -1,11 +1,11 @@
 <?php
-
+require_once('init.php');
  class ProfilePicture {
 
- 	public $table_name;
- 	public $id;
- 	public $type;
- 	public $has_pic=false;
+ 	public $table_name,
+ 			$id,
+ 			$type,
+ 			$has_pic=false;
 
 	public static function get_profile_pic($user){
 		global $connection;

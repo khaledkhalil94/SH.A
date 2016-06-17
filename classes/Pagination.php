@@ -13,10 +13,8 @@ class Pagination {
 		$this->total_count = $total_count;
 	}
 
-	public static function display($total_count){
-		global $rpp;
+	public static function display($total_count, $rpp){
 		global $pagination;
-		$rpp = 4; //results per page
 		$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 		$pagination = new Pagination($rpp, $current_page, $total_count);
 
@@ -24,23 +22,35 @@ class Pagination {
 		  $pagination->current_page = 1;
 		} 
 
-		if ($pagination->has_prev_page()) {
-		  echo "<a href=?page=". $pagination->prev_page() ."> &laquo; </a>";
+    	if(isset($_GET)){
+			foreach ($_GET as $key => $value) {
+				$q = $key != "page" ? "&{$key}={$value}" : null;
+			}
 		}
+		$q = isset($q) ? $q :null;
+		if ($total_count > $rpp):
+			if ($pagination->has_prev_page()) {
+				$vis = ($pagination->prev_page() > 1) ? "visible;" : "hidden;";
 
+				echo "<a style=visibility:{$vis} href=?page=1{$q}> &laquo; </a>";
+				echo "<a href=?page=". $pagination->prev_page() ."{$q}> &lsaquo; </a>";
+			}
+			
+			for ($i=1; $i <= $pagination->total_pages(); $i++) { 
+			    if ($i == $current_page) {
+			        echo "<span>{$i}</span>";
+			    }else {
+			        echo "<a href=?page={$i}{$q}>{$i}</a>";
+			    }
 
-		$total_pages = $pagination->total_pages();
-		for ($i=1; $i <= $total_pages ; $i++) { 
-		    if ($i == $current_page) {
-		        echo "<span>{$i}</span>";
-		    }else {
-		        echo "<a href=?page={$i}>{$i}</a>";
-		    }
-
-		}
-		if ($pagination->has_next_page()) {
-		  echo "<a href=?page=". $pagination->next_page() ."> &raquo;</a>";
-		}
+			}
+			if ($pagination->has_next_page()) {
+				echo "<a href=?page=". $pagination->next_page() ."{$q}>&rsaquo;</a>";
+				if($pagination->next_page() != $pagination->lastPage()){
+					echo "<a href=?page=" . $pagination->lastPage() . "{$q}>&raquo;</a>";
+				}
+			}
+		endif;
 	}
 
 	public function offset(){
@@ -69,6 +79,14 @@ class Pagination {
 
 	public function has_prev_page(){
 		return $this->prev_page() >= 1 ? true : false;
+	}
+
+	public function firstPage(){
+		return $this->total_pages();
+	}
+
+	public function lastPage(){
+		return $this->total_pages();
 	}
 
 

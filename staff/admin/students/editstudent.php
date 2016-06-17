@@ -32,12 +32,9 @@ if (isset($_POST['submit'])) {
 	    }
 
 	  if($student->update()){
-
-	 	$session->message("{$studentInfo->username}'s information have been updated");
-		header("Location: student.php?id=".$id);
-
+	 	$session->message("{$studentInfo->username}'s information have been updated", "./students.php");
 	 } else {
-	 	//echo $_SESSION['fail']['sqlerr'];
+	 	$session->message("Something went wrong!", "./students.php", "warning");
 	 }
 
 

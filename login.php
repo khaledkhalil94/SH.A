@@ -19,11 +19,9 @@ if (isset($_POST['submit'])){
     	//success
       $StudentInfo->log("login", $found_user);
       $session->login($found_user);
-      $session->message('You have logged in.', "/sha");
+      $session->message('You have logged in successfully.', "/sha");
     } else {
-        // error message
-        echo "No user were found";
-
+      $session->message("Username or Password is wrong!", "/sha", "danger");
     }
 }
 

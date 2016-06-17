@@ -1,5 +1,5 @@
 <?php
-require_once ("../classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 if (isset($_GET['id'])) {
 	$id = (int)$_GET["id"];
 }
@@ -7,7 +7,7 @@ $userInfo = StaffInfo::find_by_id($id);
 $user = Professor::find_by_id($userInfo->id);
 
 if($user->has_pic){
-	$img_path = ProfilePicture::get_profile_pic($user->id);
+	$img_path = ProfilePicture::get_profile_pic($user);
 } else {
 	$img_path = BASE_URL."images/profilepic/pp.png";
 }

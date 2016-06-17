@@ -21,9 +21,17 @@ if (isset($_GET["clall"]) && $_GET["clall"] == "1") {
 $pageTitle = "Preview Logs";
 include (ROOT_PATH . "inc/head.php");
  ?>
+
 <div class="container">
 	<div class="jumbotron">
-	<?php $logs = Admin::getUserLogs($id); 
+	 <div class="section">
+		 <div class="pagination">
+		  <?php $rpp = 6;
+		  Pagination::display(Admin::getUserLogsCount($id), $rpp); ?>
+		</div>
+	</div>
+	<br>
+	<?php $logs = Admin::get_logs($id, $pagination->rpp, $pagination->offset()); 
 	if(!empty($logs)){ ?>
 		<a href="<?= "?id={$id}&clall=1"; ?>">Clear all logs</a>
 	<?php
@@ -38,9 +46,8 @@ include (ROOT_PATH . "inc/head.php");
 			$output .= "</div>";
 			$output .= "<p>";
 			$output .= "User ". $log['log'];
+			$output .= "<a style=\"float:right;\" class=\"btn btn-default\" href=\"".basename(__FILE__)."?id={$id}&dellog=". $log['id'] ."\"><i class=\"fa fa-trash-o fa-lg\"></i> Delete</a>";
 			$output .= "</p>";
-			$output .= "<br>";
-			$output .= "<a href=\"".basename(__FILE__)."?id={$id}&dellog=". $log['id'] ."\">Delete log</a>";
 			$output .= "</div>";
 			$output .= "</li>";
 		}

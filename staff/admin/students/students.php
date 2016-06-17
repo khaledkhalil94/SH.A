@@ -16,40 +16,49 @@ $session->adminLock();
       <div class="wrapper">
         <h2>Students list</h2>
             <div class="pagination">
-              <?php StudentInfo::displayPag(); ?>
+              <?php $rpp = 10;
+              Pagination::display(StudentInfo::get_count(), $rpp); ?>
             </div>
 
-        <ul class="students">
-
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>ID</th>
+						<th>Username</th>
+						<th>Full Name</th>
+						<th>Faculty</th>
+						<th>Last Activtiy</th>
+						<th>Profile</th>
+					</tr>
+				</thead>
          <?php
-         $students = Student::get_users($rpp, $pagination->offset());
+         $students = Student::get_users($pagination->rpp, $pagination->offset());
+         $num = 0;
          foreach ($students as $student) {
+         	$num++;
             if (StudentInfo::find_by_id($student->id)) {
               $faculty = Student::get_faculty($student->faculty_id);
               $img_path = $ProfilePicture->get_profile_pic($student);
-              $output = "";
-                $output = $output . "<li>";
-                $output = $output . "<div class=\"row\">";
-                $output = $output . "<div class=\"col-md-3\">";
-                $output = $output . "<div class=\"image\"><img src=" . $img_path ." style=\"width:155px;\"></div>";
-                $output = $output . "</div>";
-                $output = $output . "<div class=\"col-md-6\">";
-                $output = $output .  "Username: " . StudentInfo::find_by_id($student->id)->username . "<br>";
-                $output = $output .  "Full name: " . $student->full_name() . "<br>";
-                $output = $output .  "ID: " . $student->id . "<br>";
-                $output = $output .  "Faculty: " . " " . $faculty . "<br><br>";
-                $output = $output . "<a href=" .BASE_URL . "staff/admin/students/student.php?id=" . $student->id . ">View profile</a>";
-                $output = $output . "</div>";
-                $output = $output . "</div>";
-                $output = $output .  "</li>";
-              echo $output;
-            }
-         }
-              ?>
+              $dateAgo = get_timeago(StudentInfo::find_by_id($student->id)->activity);
+?>
+				<tbody>
+					<tr>
+						<td><?= $num; ?></td>
+						<td><?= $student->id; ?></td>
+						<td><?= StudentInfo::find_by_id($student->id)->username; ?></td>
+						<td><?= $student->full_name(); ?></td>
+						<td><?= $faculty; ?></td>
+						<td><?= $dateAgo; ?></td>
+						<td><?= "<a href=" .BASE_URL . "staff/admin/students/student.php?id=" . $student->id . ">View profile</a>"; ?></td>
+					</tr>
+				</tbody>
+ <?php       }
+         } ?>
+			</table>
 
-      </ul>
       <div class="pagination">
-        <?php StudentInfo::displayPag(); ?>
+        <?php Pagination::display(StudentInfo::get_count(), $rpp); ?>
       </div>
     </div>
   </div>

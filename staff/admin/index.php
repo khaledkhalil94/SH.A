@@ -15,6 +15,7 @@ $session->adminLock();
 			</div>
       <a href="<?= "students/students.php" ?>"><h3>Browse all students</h3></a>
       <a href="<?= "staff/professors.php" ?>"><h3>Browse staff</h3></a>
+      <a href="<?= "messages/reports.php" ?>"><h3>Browse messages reports</h3></a>
     </div>
   </div>
 </div>

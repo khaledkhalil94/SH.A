@@ -4,7 +4,7 @@ require_once('init.php');
 class StudentInfo extends User {
 	
 	protected static $table_name="login_info";
-	public $id,	$username,	$password,	$email,	$type;	
+	public $id,	$username,	$password,	$email,	$type, $activity, $register_date;
 	protected static $db_fields = array();
 
 	public function __construct(){

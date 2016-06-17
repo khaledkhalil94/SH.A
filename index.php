@@ -1,6 +1,5 @@
 <?php
 require_once ("classes/init.php");
-$session->displayMsg();
 $pageTitle = "Home Page";
 include (ROOT_PATH . "inc/head.php"); 
 ?>
@@ -8,8 +7,8 @@ include (ROOT_PATH . "inc/head.php");
   <div class="main">
     <div class="content">
 
-      <?php //$msg->display();
-      include (ROOT_PATH . 'inc/body/carousel.php') ?>
+      <?= msgs(); ?>
+      <?php include (ROOT_PATH . 'inc/body/carousel.php') ?>
       <?php include (ROOT_PATH . 'inc/body/faculties.php') ?>
       <div class="row">
         <?php include (ROOT_PATH . 'inc/body/newsticker.php') ?>

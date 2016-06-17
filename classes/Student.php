@@ -4,7 +4,7 @@ require_once('init.php');
 class Student extends User {
 	
 	protected static $table_name="students";
-	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic;
+	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$profile_visibility;
 	protected static $db_fields = array();
 
 	public function __construct(){

@@ -1,5 +1,5 @@
 <?php 
-
+require_once('init.php');
 class Session {
 
 	private $logged_in=false;
@@ -7,6 +7,7 @@ class Session {
 	public $user_id;
 	public $username;
 	public $msg;
+	public $msgType="success";
 
 
 	function __construct(){
@@ -14,8 +15,8 @@ class Session {
 		$this->check_login();
 		if(isset($this->user_id)){
 			define("USER_ID", $this->user_id);
+			if (USER_ID != 1 ) $this->updateActivity(USER_ID);		
 		}
-
 	}
 
 	public function is_logged_in(){
@@ -51,7 +52,12 @@ class Session {
 			$this->type = $_SESSION['level'] = $user->type;
 			$this->level = true;
 		}
+	}
 
+	private function updateActivity($id){
+		global $connection;
+		$sql = "UPDATE `login_info` SET activity = CURRENT_TIMESTAMP WHERE id = {$id}";
+		$connection->query($sql);
 	}
 
 	public function logout(){
@@ -62,9 +68,10 @@ class Session {
 		$this->logged_in = false;
 	}
 
-	public function message($msg, $location=null){
+	public function message($msg, $location=null, $msgType="success"){
 		if(isset($msg)){
 			$_SESSION['msg'] = $msg;
+			$_SESSION['msgType'] = $msgType;
 		}
 		redirect_to_D($location);
 		exit;
@@ -73,11 +80,16 @@ class Session {
 	public function displayMsg(){
 		 if(isset($_SESSION['msg'])){
 		 	$this->msg = $_SESSION['msg'];
+		 	$this->msgType = $_SESSION['msgType'];
 		 } else {
 		 	return false;
 		 }
 		unset($_SESSION['msg']);
-		return $this->msg;
+		unset($_SESSION['msgType']);
+		$msgInfo = array();
+		$msgInfo["msg"] = $this->msg;
+		$msgInfo["msgType"] = $this->msgType;
+		return $msgInfo;
 	}
 
 	public function getLevel(){
@@ -109,9 +121,10 @@ class Session {
 			} else {
 				echo ("You can't view this page.");
 				redirect_to_D("/sha", 2);
+				return false;
 			}
-		} elseif($this->adminCheck()){
-				return true;
+		} elseif ($this->adminCheck()){
+			return true;
 		} else {
 			echo ("User was not found.");
 			redirect_to_D("/sha", 2);
@@ -127,6 +140,22 @@ class Session {
 			} else {
 				return false;
 			}
+		}
+	}
+
+	public function profilePrivacy($user){
+		switch($user->profile_visibility){
+			case '1': //public
+				return true;
+				break;			
+
+			case '0': //private
+				return $this->userLock($user) ? true : exit("This profile is private!");
+				break;			
+
+			case '2': //users only
+				return $this->is_logged_in() ? true : exit("You must be logged in");
+				break;
 		}
 	}
 

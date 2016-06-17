@@ -44,7 +44,7 @@ class User {
 	public function update(){
 		global $connection;
 		$object = $this->instantiate($_POST);
-		//exit(print_r($this));
+		//exit(print_r($_POST));
 		$class = get_called_class();
 		$fields = array_keys((array)$object);
 
@@ -53,12 +53,12 @@ class User {
 		$res = $stmt->execute($values);
 
 		if(!$res) {
-			$error = ($connection->errorInfo());
+			$error = ($stmt->errorInfo());
 			$_SESSION['fail']['sqlerr'] = $error[2];
-			$_SESSION['fail']['class'] .= $class . " ";
+			$_SESSION['fail']['sql'] = $sql;
 			//var_dump($res);
 			return false;
-		 } 
+		 }
 		return true;
 	}
 
@@ -98,7 +98,7 @@ class User {
 	public static function create_user(){
 		global $connection;
 		$user = self::instantiate($_POST);
-		$user->type = $_POST['type']; 
+		$user->type = $_POST['type'];
 		if($user->create()){
 			return $user;
 		} else {
@@ -161,9 +161,11 @@ class User {
 		return $value;
 	}
 
-	public static function get_count(){
+	public static function get_count($msql=""){
 		global $connection;
-		$res = $connection->query("SELECT count(*) FROM ".static::$table_name);
+		$sql = "SELECT count(*) FROM ".static::$table_name;
+		if(!empty($msql)) $sql .= $msql;
+		$res = $connection->query($sql);
 		return $res->fetch()[0];
 
 	}
@@ -194,9 +196,6 @@ class User {
 		return self::find_by_sql($sql);
 	}
 
-	public static function displayPag(){
-		Pagination::display(static::get_count());
-	}
 }
 
 $User = new User();

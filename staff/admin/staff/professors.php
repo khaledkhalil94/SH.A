@@ -13,7 +13,10 @@ $pageTitle = "Professors";
       <div class="wrapper">
         <h2>PROFS</h2>
             <div class="pagination">
-              <?php Professor::displayPag(); ?>
+
+              <?php $rpp = 5;
+               Pagination::display(Professor::get_count(), $rpp);
+               ?>
             </div>
 
         <ul class="students">
@@ -40,7 +43,7 @@ $pageTitle = "Professors";
         ?>
       </ul>
       <div class="pagination">
-        <?php Professor::displayPag(); ?>
+        <?php Pagination::display(Professor::get_count(), $rpp); ?>
       </div>
     </div>
   </div>

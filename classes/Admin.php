@@ -47,6 +47,14 @@ class Admin extends User {
 
 	}
 
+	public static function getUserLogsCount($id){
+		global $connection;
+		$sql = "SELECT count(*) FROM `logs` WHERE user_id = {$id}";
+		$res = $connection->query($sql);
+		return $res->fetch()[0];
+
+	}
+
 	public static function getUserLogs($id){
 		global $connection;
 		$sql = "SELECT * FROM `logs` WHERE user_id = {$id}";
@@ -57,6 +65,18 @@ class Admin extends User {
 		}
 		return $array;
 
+	}
+
+	public static function get_logs($id, $rpp, $offset){
+		global $connection;
+		$sql = "SELECT * FROM `logs` WHERE user_id = {$id} LIMIT {$rpp} OFFSET {$offset}";
+		$stmt = $connection->query($sql);
+		$array = array();
+		while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$array[] = $row;
+		}
+		return $array;
+		// return Parent::find_by_sql($sql);
 	}
 
 	public static function deletelog($id){

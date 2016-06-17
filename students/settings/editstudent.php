@@ -1,35 +1,18 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
-$id = isset($_GET['id']) ? $_GET['id'] : null;
+//$id = isset($_GET['id']) ? $_GET['id'] : null;
+$id = USER_ID;
 if(!$id){
 	echo "User was not found!";
 	redirect_to_D("/sha", 2);
 }
-
 $studentInfo = StudentInfo::find_by_id($id);
 $session->userLock($studentInfo);
 $student = Student::find_by_id($studentInfo->id);
+$session->userLock($student);
 
 if (isset($_POST['submit'])) {
-
-	    switch ($_POST['faculty_id']) {
-	    	case 'Engineering':
-	    		$_POST['faculty_id'] = "1";
-	    		break;
-
-	    	case 'Computer Science':
-	    		$_POST['faculty_id'] = "2";
-	    		break;    
-
-	    	case 'Medicine':
-	    		$_POST['faculty_id'] = "3";
-	    		break;
-	    
-	    	default:
-	    		$_POST['faculty_id'] = "0";
-	    		break;
-	    }
 
 	  if($student->update()){
 	 	$session->message("Your information have been updated", USER_URL);
@@ -119,10 +102,18 @@ $ProfilePicture->id = $id;
 
 		        <label for="phoneNumber">Select your faculty</label>
 		        <select class="form-control" name="faculty_id">
-				  <option <?php if ($student->faculty_id == "1") {echo "selected";} ?>>Engineering</option>
-				  <option <?php if ($student->faculty_id == "2") {echo "selected";} ?> >Computer Science</option>
-				  <option <?php if ($student->faculty_id == "3") {echo "selected";} ?>>Medicine</option>
+				  <option value="2" <?= $student->faculty_id == "1" ? "selected" : null; ?>>Engineering</option>
+				  <option value="1" <?= $student->faculty_id == "2" ? "selected" : null; ?> >Computer Science</option>
+				  <option value="3" <?= $student->faculty_id == "3" ? "selected" : null; ?>>Medicine</option>
 				</select>
+				<br>
+				<label for="phoneNumber">Change your profile privacy</label>
+		        <select class="form-control" name="profile_visibility">
+				  <option value="1" <?= $student->profile_visibility == "1" ? "selected" : null; ?>>Public (anyone can see your profile)</option>
+				  <option value="0" <?= $student->profile_visibility == "0" ? "selected" : null; ?>>Private (Only you can see your profile)</option>
+				  <option value="2" <?= $student->profile_visibility == "2" ? "selected" : null; ?>>Only users can see your profile</option>
+				</select>
+
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
 		        <a class="btn btn-default" href="<?= USER_URL; ?>" role="button">Cancel</a>

@@ -3,6 +3,7 @@ require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 if (!isset($_GET['to'])) exit("404");
 $user_id = $_GET['to'];
 $selfId=$session->user_id;
+if ($selfId == $_GET['to']) $session->message("You can't send a message to yourself.", ".");
 
 $pageTitle = "Send a message";
 include (ROOT_PATH . "inc/head.php");
@@ -15,7 +16,7 @@ if (isset($_POST['submit'])) {
 	}
 
 }
-$messages = Messages::getSenderMsgs($selfId, $user_id);
+$messages = Messages::getConvo($selfId, $user_id);
 $staff = StaffInfo::find_by_id($user_id) ? true : false;
 if ($staff) exit("You can't send a message to this account.");
 
@@ -47,8 +48,7 @@ if ($staff) exit("You can't send a message to this account.");
 				$sender = $staff ? Professor::find_by_id($user_id) : Student::find_by_id($message->sender_id);
 				$self = $selfId == $sender->id ? true : false;
 				$img_path = $ProfilePicture->get_profile_pic($sender);
-				$date = strtotime($message->date);
-				$date = (date('Y',$date)) == date('Y') ? date('j M h:ia',$date) : date('j M Y, h:ia',$date);
+				$date = displayDate($message->date);
 ?>
 				<div class="details row">
 				<hr>

@@ -1,6 +1,6 @@
 <?php
 require_once ("../classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+//$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 if(!$id){
 	echo "User was not found!";
@@ -14,15 +14,15 @@ $img_path = ProfilePicture::get_profile_pic($student);
 $faculty = Student::get_faculty($student->faculty_id);
 
 if (empty($studentInfo)){
-	echo "User was not found!";
+	exit("User was not found!");
 	//header("Location: " . BASE_URL . "students/");
-	exit;
 } elseif(empty($student)){
 	$session->message("Please update your information");
 	header("Location: " . BASE_URL . "students/settings/editstudent.php?id=".$id);
 }
 $pageTitle = $studentInfo->id;
 include (ROOT_PATH . "inc/head.php");
+$session->profilePrivacy($student);
  ?>
 <div class="content student">
 <?= msgs(); ?>
@@ -47,7 +47,7 @@ include (ROOT_PATH . "inc/head.php");
 				<p><?= "Phone Number: " . $student->phoneNumber; ?></p>
 				<?= !empty($faculty) ? "<p>Faculty: {$faculty}</p>" : null ?>
 				<?php if ($session->userCheck($studentInfo)): ?>
-				<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php?id=".$id?>" role="button">Update your information</a>
+				<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php"?>" role="button">Update your information</a>
 				<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
 				<?php endif; ?>
 			</div>

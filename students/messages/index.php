@@ -42,9 +42,11 @@ include (ROOT_PATH . "inc/head.php");
 					$staff = StaffInfo::find_by_id($message->sender_id) ? true : false;
 					$sender = $staff ? Professor::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
 					$img_path = $ProfilePicture->get_profile_pic($sender);
-					$date = strtotime($message->date);
-					$date = (date('Y',$date)) == date('Y') ? date('j M h:ia',$date) : date('j M Y, h:ia',$date);
-
+					$date = displayDate($message->date);
+					$time = get_timeago($message->date);
+					$subject = $message->subject;
+					if (strlen($subject) > 100) $subject = substr($subject, 0, 102)."...";
+					$title = empty($message->title) ? "[Untitled]" : $message->title;
 					?>
 					<tr <?php if($staff) echo "class=\"danger\"" ?>>
 						<td><div class="image"><img src="<?= $img_path ?>" style="width:55px;"></div></td>
@@ -54,13 +56,14 @@ include (ROOT_PATH . "inc/head.php");
 							<?php }else{ ?>
 							<li style="list-style:none;"><?= ucfirst($sender->firstName); ?></li>
 							<?php } ?>
-							<li style="list-style:none;"><div class="time"><?= $date; ?></div></li>
+							<li style="list-style:none;"><div class="time" title="<?= $date; ?>"><?= $time; ?></div></li>
 						</ul></td>
 						<td>
 							<ul>
 								<a style="color:black;text-decoration: none;" href="inbox.php?msg=<?= $message->id?>">
-									<li style="list-style:none;"><b><?= $message->title; if(!Messages::isSeen($message->id)) echo " <span class=\"label label-success\">New!</span>"; ?></b></li>
-									<li style="list-style:none;"><?= substr($message->subject, 0, 102)."..."; ?></li>
+									<li style="list-style:none;"><b><?= $title;
+									 if(!Messages::isSeen($message->id)) echo " <span class=\"label label-success\">New!</span>"; ?></b></li>
+									<li style="list-style:none;"><?= $subject; ?></li>
 								</a>
 
 							</ul>

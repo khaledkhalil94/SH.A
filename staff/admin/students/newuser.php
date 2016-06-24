@@ -7,11 +7,29 @@ $pageTitle = "Create a new user";
 include (ROOT_PATH . "inc/head.php");
 
 if (isset($_POST['submit'])) {
-    if (empty($_POST['username']) && empty($_POST['id'])) {
-        exit('Please enter username or ID');
+    if (empty($_POST['username'])) {
+        exit('Put in a username');
     }
-    Admin::create();
+    if(!is_numeric($_POST['id'])){
+        echo "ID must be number";
+        exit;
+    }
+    switch ($_POST['type']) {
+        case 'student':
+            if($user = StudentInfo::create_student()){
+                $session->message("User has been created.", "..");
+            }
+            break;
+        case 'staff':
+            Staff::create_staff();
+            break;
+        
+        default:
+            echo "Please select type";
+            break;
+    }
 }
+
 ?>
 
 <div class="main">

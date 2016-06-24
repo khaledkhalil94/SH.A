@@ -1,6 +1,5 @@
 <?php
 require_once ("../classes/init.php");
-//$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 if(!$id){
 	echo "User was not found!";
@@ -8,22 +7,29 @@ if(!$id){
 }
 
 $studentInfo = StudentInfo::find_by_id($id);
+if (empty($studentInfo))$session->message("Invalid user.", "/sha/404.php");
+
 $student = Student::find_by_id($studentInfo->id);
-
-$img_path = ProfilePicture::get_profile_pic($student);
-$faculty = Student::get_faculty($student->faculty_id);
-
-if (empty($studentInfo)){
-	exit("User was not found!");
-	//header("Location: " . BASE_URL . "students/");
-} elseif(empty($student)){
+if(empty($student)){
 	$session->message("Please update your information");
 	header("Location: " . BASE_URL . "students/settings/editstudent.php?id=".$id);
 }
-$pageTitle = $studentInfo->id;
+
+$img_path = ProfilePicture::get_profile_pic($student);
+$faculty = Student::get_faculty($student->faculty_id);
+$name = $student->full_name();
+$id = $student->id;
+$email = $studentInfo->email;
+$location = $student->address;
+$gender = $student->gender;
+$phoneNumber = $student->phoneNumber;
+
+
+$pageTitle = $id;
 include (ROOT_PATH . "inc/head.php");
-$session->profilePrivacy($student);
+Student::profilePrivacy($student);
  ?>
+
 <div class="content student">
 <?= msgs(); ?>
 <?php if (Messages::hasMsgs($id) && $session->userCheck($student)): ?>
@@ -33,24 +39,43 @@ $session->profilePrivacy($student);
 			</span>
 		</div>
 <?php endif; ?>
+
 	<div class="details row">
-	<?php if (!$session->userCheck($studentInfo)): ?>
-	<a style="float:right;" class="btn btn-default" href="<?= BASE_URL."students/messages/compose.php?to={$id}"?>" role="button">Send a private message</a>
-	<?php endif; ?>
+		<?php if (!$session->userCheck($studentInfo) && $session->is_logged_in()): ?>
+			<a style="float:right;" class="btn btn-default" href="<?= BASE_URL."students/messages/compose.php?to={$id}"?>" role="button">Send a private message</a>
+		<?php endif; ?>
 		<div class="col-md-5">
+			<h4><?= "<b>" . $name . "</b>"; ?></h4>
 			<div class="image"><img src="<?php echo $img_path;?>" alt="" style="width:278px;"></div>
+			
 		</div>
-			<div class="col-md-6">
-				<p><?= "Name: " . $student->full_name(); ?></p>
-				<p><?= "ID: " . $student->id; ?></p>
-				<p><?= "Address: " . $student->address; ?></p>
-				<p><?= "Phone Number: " . $student->phoneNumber; ?></p>
-				<?= !empty($faculty) ? "<p>Faculty: {$faculty}</p>" : null ?>
-				<?php if ($session->userCheck($studentInfo)): ?>
-				<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php"?>" role="button">Update your information</a>
-				<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
-				<?php endif; ?>
-			</div>
+
+		<div class="col-md-6">
+		<p><?= "ID: " . $id; ?></p>
+
+		<?php if (Student::CheckPrivacy($student,$student->email_privacy) && !empty($email)): ?>
+			<p><?= "E-Mail: " . $email; ?></p>
+		<?php endif; ?>
+
+		<?php if (Student::CheckPrivacy($student,$student->country_privacy) && !empty($location)): ?>
+			<p><?= "Address: " . $location; ?></p>
+		<?php endif; ?>
+
+		<?php if (Student::CheckPrivacy($student,$student->phoneNumber_privacy) && !empty($phoneNumber)): ?>
+			<p><?= "Phone Number: " . $phoneNumber; ?></p>
+		<?php endif; ?>
+
+		<?php if (Student::CheckPrivacy($student,$student->gender_privacy) && !empty($gender)): ?>
+			<p><?= "Gender: " . $gender; ?></p>
+		<?php endif; ?>
+
+			<?= !empty($faculty) ? "<p>Faculty: {$faculty}</p>" : null ?>
+			<?php if ($session->userCheck($studentInfo)): ?>
+			<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php"?>" role="button">Update your information</a>
+			<a class="btn btn-default" href="<?= BASE_URL."students/settings/editprivacy.php"?>" role="button">Update your privacy</a>
+			<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
+			<?php endif; ?>
+		</div>
 	</div>
 </div>
 <?php

@@ -8,7 +8,7 @@ $pageTitle = "Professors";
   include (ROOT_PATH . 'inc/head.php'); 
   ?>
 <?php
-    $admin = StaffInfo::find_by_id(1);
+    $admin = Staff::find_by_id(1);
 
 ?>
   <div class="main">

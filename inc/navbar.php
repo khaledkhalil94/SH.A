@@ -41,6 +41,9 @@
           </li> 
           <?php endif ?>
           <li>
+            <a href="<?= BASE_URL; ?>pages">News</a>
+          </li>
+          <li>
             <a href="<?= BASE_URL; ?>faculties">Faculties</a>
           </li>
           <li>

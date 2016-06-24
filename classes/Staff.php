@@ -1,60 +1,73 @@
 <?php
 require_once('init.php');
 
-class StudentInfo extends User {
+class Staff extends User {
 	
 	protected static $table_name="staff";
-	public $id;
-	public $username;
-	public $password;
-	public $email;
+	public $id, $username, $password, $email, $type="staff", $firstName, $lastName, $department_id;
+	protected static $db_fields = array();
 
-
-	protected static $db_fields = array('id', 'username', 'password', 'email', 'type');
-
-	public static function create_user(){
-		global $connection;
-		global $session;
-		$user = parent::instantiate($_POST);
-		$user->type = $_POST['type']; 
-		if($user->create()){
-			echo "here";
-			$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')";
-			$creates = $connection->prepare($sql);
-
-			$sql = "INSERT INTO profile_pic (`user_id`) VALUES ('{$user->id}')";
-			$createp = $connection->prepare($sql);
-
-
-			if($creates->execute() && $createp->execute()){
-				$session->login_by_id($user->id);
-			 	$session->message("Thanks for signing up, please update your information");
-				 	header("Location:".BASE_URL."students/".$user->id."/");
-
-			} else {
-				echo "err<br>";
-				$error = $creates->errorInfo();
-				echo $error[2];
-			}
-		}
+	public function __construct(){
+		global $db_fields;
+		self::$db_fields = array_keys((array)$this);
 	}
 
-	public static function authenticate($username="", $password=""){
+	public static function create_staff(){
 		global $connection;
-		$sql = "SELECT * FROM staff
-				WHERE username = ?
-				AND password = ?
-				LIMIT 1";
+		global $session;
 
-		$found_user = $connection->prepare($sql);
-		$found_user->bindParam(1, $username);
-		$found_user->bindParam(2, $password);
-		$found_user->execute();
+		$user = self::create_user();
 
-		$found = $found_user->fetch(PDO::FETCH_OBJ);
+		//$sql = "INSERT INTO staff (`id`) VALUES ('{$user->id}')" ;
+		// $stmt = $connection->prepare($sql);
 
-		return $found;
+		// if($stmt->execute()){
+		// 	$session->login($user);
+		//  	$session->message("Thanks for signing up, please update your information");
+		// 	 	//header("Location:".BASE_URL."professors/".$user->id."/");
+
+		// } else {
+		// 	echo "err<br>";
+		// 	$error = $stmt->errorInfo();
+		// 	echo $error[2];
+		// }
+
+	}
+
+	public function display_prof($id){
+		global $ProfilePicture;
+		$users = self::get_prof_by_faculty($id);
+	     foreach ($users as $user) {
+			// $img_path = $ProfilePicture->get_profile_pic($user);
+	      	$output = "";
+	        $output .= "<li>";
+         	$output .= "<div class=\"row\">";
+            // $output .= "<div class=\"col-md-2\">";
+            // $output .= "<div class=\"image\"><img src=" . $img_path ." style=\"width:120px;\"></div>";
+            // $output .= "</div>";
+            $output .= "<div class=\"col-md-6\">";
+	        $output .=  "Name: " . $user->firstName . "<br>";
+	        $output .=  "ID: " . $user->id . "<br>";
+	        $output .=  "Position: " . ucwords($user->type) . "<br>";
+	        $output .= "<a href=" . BASE_URL . "staff/professor.php?id=" . $user->id . ">View profile</a>";
+            $output .= "</div>";
+            $output .= "</div>";
+	        $output .=  "</li>";
+	      echo $output;
+	  	}
+	}
+
+	private function get_prof_by_faculty($id){
+		global $connection;
+
+		$sql = "SELECT * FROM staff ";
+		$sql .= "WHERE department_id = {$id}";
+		$all = static::find_by_sql($sql);
+		return $all;
+	}
+
+	public function full_name() {
+		return $this->firstName . " " . $this->lastName;
 	}
 
 }
-

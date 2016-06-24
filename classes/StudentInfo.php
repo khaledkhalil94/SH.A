@@ -4,7 +4,7 @@ require_once('init.php');
 class StudentInfo extends User {
 	
 	protected static $table_name="login_info";
-	public $id,	$username,	$password,	$email,	$type, $activity, $register_date;
+	public $id,	$username, $password, $email, $type="student", $activity, $register_date;
 	protected static $db_fields = array();
 
 	public function __construct(){
@@ -17,15 +17,16 @@ class StudentInfo extends User {
 		global $session;
 		global $StudentInfo;
 		$user = self::create_user();
-		if(!$user) return false;
+		//if(!$user) return false;
 		$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')";
 		$stmt = $connection->prepare($sql);
 
-		if($stmt->execute()){
-			$session->login($user);
-		 	$session->message("Thanks for signing up, please update your information");
-     		self::log("signup", $user);
-			 	header("Location:".BASE_URL."students/".$user->id."/");
+		if($user && $stmt->execute()){
+			return $user;
+			// $session->login($user);
+		 	// $session->message("Thanks for signing up, please update your information");
+   			// self::log("signup", $user);
+			// header("Location:".BASE_URL."students/".$user->id."/");
 
 		} else {
 			echo "err<br>";

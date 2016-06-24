@@ -12,7 +12,7 @@ if ($_GET['id'] != $id) {
 }
 
 
-$userInfo = StaffInfo::find_by_id($id);
+$userInfo = Staff::find_by_id($id);
 $user = Professor::find_by_id($id);
 
 if (isset($_POST['submit'])) {

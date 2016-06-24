@@ -7,7 +7,7 @@ if (!isset($session->user_id)) {
 
 $id = (int)$session->user_id;
 
-$userInfo = StaffInfo::find_by_id($id);
+$userInfo = Staff::find_by_id($id);
 
 if (isset($_POST['submit'])) {
 

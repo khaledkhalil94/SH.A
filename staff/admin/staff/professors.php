@@ -15,35 +15,32 @@ $pageTitle = "Professors";
             <div class="pagination">
 
               <?php $rpp = 5;
-               Pagination::display(Professor::get_count(), $rpp);
+               Pagination::display(Staff::get_count(), $rpp);
                ?>
             </div>
 
         <ul class="students">
 
          <?php
-         $profs = Professor::get_users($rpp, $pagination->offset());
+         $profs = Staff::get_users($rpp, $pagination->offset());
         foreach ($profs as $prof) {
-
-            if (StaffInfo::find_by_id($prof->id)) {
-              $faculty = StaffInfo::get_faculty($prof->faculty_id);
-              $faculty = ucwords(str_replace("_", " ", $faculty));
-              $output = "";
-                $output = $output . "<li>";
-                $output = $output .  "name: " . $prof->firstName . "<br>";
-                $output = $output .  "ID: " . $prof->id . "<br>";
-                $output = $output .  "Faculty: " . " " . $faculty . "<br>";
-                $output = $output . "Position: " . $prof->type . "<br>";
-                $output = $output . "Profile: <a href=professor.php?id=" . $prof->id . ">View profile</a>";
-                $output = $output .  "</li>";
-                echo $output;
-            }
+          $faculty = Staff::get_faculty($prof->department_id);
+          $faculty = ucwords(str_replace("_", " ", $faculty));
+          $output = "";
+            $output = $output . "<li>";
+            $output = $output .  "name: " . $prof->firstName . "<br>";
+            $output = $output .  "ID: " . $prof->id . "<br>";
+            $output = $output . "Position: " . $prof->type . "<br>";
+            $output = $output . "Department: " . $faculty . "<br>";
+            $output = $output . "Profile: <a href=professor.php?id=" . $prof->id . ">View profile</a>";
+            $output = $output .  "</li>";
+            echo $output;
          }
 
         ?>
       </ul>
       <div class="pagination">
-        <?php Pagination::display(Professor::get_count(), $rpp); ?>
+        <?php Pagination::display(Staff::get_count(), $rpp); ?>
       </div>
     </div>
   </div>

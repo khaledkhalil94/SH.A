@@ -7,7 +7,7 @@ class Session {
 	public $user_id;
 	public $username;
 	public $msg;
-	public $msgType="success";
+	public $msgType;
 
 
 	function __construct(){
@@ -51,6 +51,7 @@ class Session {
 			$this->username = $_SESSION['username'] = $user->username;
 			$this->type = $_SESSION['level'] = $user->type;
 			$this->level = true;
+			defined('USER_ID') ? null : define('USER_ID', $this->user_id);
 		}
 	}
 
@@ -74,7 +75,6 @@ class Session {
 			$_SESSION['msgType'] = $msgType;
 		}
 		redirect_to_D($location);
-		exit;
 	}
 
 	public function displayMsg(){
@@ -140,22 +140,6 @@ class Session {
 			} else {
 				return false;
 			}
-		}
-	}
-
-	public function profilePrivacy($user){
-		switch($user->profile_visibility){
-			case '1': //public
-				return true;
-				break;			
-
-			case '0': //private
-				return $this->userLock($user) ? true : exit("This profile is private!");
-				break;			
-
-			case '2': //users only
-				return $this->is_logged_in() ? true : exit("You must be logged in");
-				break;
 		}
 	}
 

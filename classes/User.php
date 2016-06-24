@@ -43,16 +43,16 @@ class User {
 
 	public function update(){
 		global $connection;
-		$object = $this->instantiate($_POST);
 		//exit(print_r($_POST));
+		$object = $this->instantiate($_POST);
 		$class = get_called_class();
 		$fields = array_keys((array)$object);
 
 		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($object,$fields,$values)." WHERE id = {$object->id}";
 		$stmt = $connection->prepare($sql);
 		$res = $stmt->execute($values);
-
 		if(!$res) {
+			//exit($sql);
 			$error = ($stmt->errorInfo());
 			$_SESSION['fail']['sqlerr'] = $error[2];
 			$_SESSION['fail']['sql'] = $sql;
@@ -98,7 +98,7 @@ class User {
 	public static function create_user(){
 		global $connection;
 		$user = self::instantiate($_POST);
-		$user->type = $_POST['type'];
+		//$user->type = $_POST['type'];
 		if($user->create()){
 			return $user;
 		} else {

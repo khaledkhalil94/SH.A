@@ -6,7 +6,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 if(!$id){
 	redirect_to_D("/sha", 2);
 }
-$User = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : StaffInfo::find_by_id($id);
+$User = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : Staff::find_by_id($id);
 $student = Student::find_by_id($User->id);
 
 if (isset($_GET["clall"]) && $_GET["clall"] == "1") {

@@ -4,7 +4,8 @@ require_once('init.php');
 class Student extends User {
 	
 	protected static $table_name="students";
-	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$profile_visibility;
+	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$profile_privacy,
+			$gender,$email_privacy,$country_privacy,$phoneNumber_privacy,$gender_privacy;
 	protected static $db_fields = array();
 
 	public function __construct(){
@@ -69,6 +70,41 @@ class Student extends User {
 		global $ProfilePicture;
 		$ProfilePicture->table_name = self::$table_name;
 		$ProfilePicture->delete_pic();
+	}
+
+	public static function profilePrivacy($user){
+		global $session;
+		switch($user->profile_privacy){
+			case '1': //public
+				return true;
+				break;			
+
+			case '0': //private
+				return $session->userLock($user) ? true : exit("This profile is private!");
+				break;			
+
+			case '2': //users only
+				return $session->is_logged_in() ? true : exit("You must be logged in");
+				break;
+		}
+	}
+
+	public static function CheckPrivacy($user, $property){
+		global $session;
+		switch ($property) {
+			case '1': //public
+				return true;
+				break;			
+
+			case '0': //private
+				return $session->userCheck($user) ? true : false;
+				break;			
+
+			case '2': //users only
+				return $session->is_logged_in() ? true : false;
+				break;
+		}
+
 	}
 
 }

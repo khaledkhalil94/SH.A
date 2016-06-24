@@ -94,12 +94,17 @@ $ProfilePicture->id = $id;
 		            <input type="address" class="form-control" name="address" value="<?php echo $student->address ?>" />
 		        </div>
 
+		        <label for="phoneNumber">Change your gender</label>
+		        <select class="form-control" name="gender">
+				  <option value="male" <?= $student->gender == "male" ? "selected" : null; ?>>Male</option>
+				  <option value="female" <?= $student->gender == "female" ? "selected" : null; ?> >Female</option>
+				</select>
+				<br>
+
 		        <div class="form-group">
 		            <label for="phoneNumber">Phone Number</label>
 		            <input type="phoneNumber" class="form-control" name="phoneNumber" value="<?php echo $student->phoneNumber ?>" />
-		            <input type="hidden" name="id" value="<?php echo $student->id ?>" />
 		        </div>
-
 		        <label for="phoneNumber">Select your faculty</label>
 		        <select class="form-control" name="faculty_id">
 				  <option value="2" <?= $student->faculty_id == "1" ? "selected" : null; ?>>Engineering</option>
@@ -107,14 +112,8 @@ $ProfilePicture->id = $id;
 				  <option value="3" <?= $student->faculty_id == "3" ? "selected" : null; ?>>Medicine</option>
 				</select>
 				<br>
-				<label for="phoneNumber">Change your profile privacy</label>
-		        <select class="form-control" name="profile_visibility">
-				  <option value="1" <?= $student->profile_visibility == "1" ? "selected" : null; ?>>Public (anyone can see your profile)</option>
-				  <option value="0" <?= $student->profile_visibility == "0" ? "selected" : null; ?>>Private (Only you can see your profile)</option>
-				  <option value="2" <?= $student->profile_visibility == "2" ? "selected" : null; ?>>Only users can see your profile</option>
-				</select>
 
-				<br>
+	            <input type="hidden" name="id" value="<?php echo $student->id ?>" />
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />
 		        <a class="btn btn-default" href="<?= USER_URL; ?>" role="button">Cancel</a>
 		    </form>

@@ -4,30 +4,19 @@ $pageTitle = "Sign Up";
 if($session->is_logged_in()){
     header('Location:index.php');
 }
-?>
-
-<?php 
 
 if (isset($_POST['submit'])) {
+    //if (empty($_POST['username']) || empty($_POST['email'])) {
     if (empty($_POST['username'])) {
-        exit('Put in a username');
-    }
-    if(!is_numeric($_POST['id'])){
-        echo "ID must be number";
-        exit;
-    }
-    switch ($_POST['type']) {
-        case 'student':
-            StudentInfo::create_student();
-            break;
-
-        case 'professor':
-            StaffInfo::create_staff();
-            break;
-        
-        default:
-            echo "Please select type";
-            break;
+        exit("Username and password can't be empty");
+    } elseif(!is_numeric($_POST['id'])){
+         exit("ID must be number");
+    } else {
+        if($user = StudentInfo::create_student()){
+            $session->login($user);
+            StudentInfo::log("signup", $user);
+            $session->message("Thanks for signing up, please update your information", BASE_URL."students/".$user->id."/");
+        }
     }
 }
 
@@ -59,12 +48,6 @@ require(ROOT_PATH . 'inc/head.php');
                 <label for="email">email</label>
                 <input type="email" class="form-control" name="email" value="" />
             </div>
-            <label class="radio-inline">
-              <input type="radio" name="type" checked id="inlineRadio2" value="student">I'm a student
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="type" id="inlineRadio3" value="professor">I'm a professor
-            </label>
             <br>
             <br>
             <!-- <input type="hidden" name="token" value="" /> -->

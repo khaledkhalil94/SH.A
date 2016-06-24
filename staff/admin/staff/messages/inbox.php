@@ -40,7 +40,7 @@ $message = Messages::getMsg($user_id, $msgid);
 if(!$message) $session->message("Message not found", "../messages");
 Messages::msgSeen($user_id, $msgid);
 $staff = Staff::find_by_id($message->sender_id) ? true : false;
-$sender = $staff ? Staff::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
+$sender = $staff ? Professor::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
 $img_path = $ProfilePicture->get_profile_pic($sender);
 $date = displayDate($message->date);
 include (ROOT_PATH . "inc/head.php");

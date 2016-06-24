@@ -70,4 +70,10 @@ function displayDate($dat, $format=""){
 	}
 	return $date;
 }
+
+function ctrim($content, $lenght){
+	$lenght = rand($lenght-5, $lenght+5);
+	if (strlen($content) > $lenght) $content = substr($content, 0, $lenght) . "...";
+	return $content;
+}
 ?>

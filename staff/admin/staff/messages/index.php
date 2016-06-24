@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ("../../classes/init.php");
 $session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
 $id = $session->user_id;
 if(!$id){
@@ -40,7 +40,7 @@ include (ROOT_PATH . "inc/head.php");
 				<tbody>
 					<?php foreach ($messages as $message): 
 					$staff = Staff::find_by_id($message->sender_id) ? true : false;
-					$sender = $staff ? Staff::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
+					$sender = $staff ? Professor::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
 					$img_path = $ProfilePicture->get_profile_pic($sender);
 					$date = displayDate($message->date);
 					$time = get_timeago($message->date);

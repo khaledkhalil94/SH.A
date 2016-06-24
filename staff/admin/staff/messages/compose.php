@@ -1,8 +1,12 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 if (!isset($_GET['to'])) exit("404");
+
 $user_id = $_GET['to'];
-$selfId=$session->user_id;
+$selfId = $session->user_id;
+$admin = $session->adminCheck();
+
+if ($user_id === 1) exit("You can't send a message to this account.");
 if ($selfId == $_GET['to']) $session->message("You can't send a message to yourself.", ".");
 
 $pageTitle = "Send a message";
@@ -17,8 +21,6 @@ if (isset($_POST['submit'])) {
 
 }
 $messages = Messages::getConvo($selfId, $user_id);
-$staff = Staff::find_by_id($user_id) ? true : false;
-if ($staff) exit("You can't send a message to this account.");
 
 ?>
 
@@ -45,7 +47,7 @@ if ($staff) exit("You can't send a message to this account.");
 			</form>
 		</div>
 			<?php foreach($messages as $message):
-				$sender = $staff ? Staff::find_by_id($selfId) : Student::find_by_id($message->sender_id);
+				$sender = $admin ? Staff::find_by_id($selfId) : Student::find_by_id($message->sender_id);
 				$self = $selfId == $sender->id ? true : false;
 				$img_path = $ProfilePicture->get_profile_pic($sender);
 				$date = displayDate($message->date);
@@ -56,7 +58,7 @@ if ($staff) exit("You can't send a message to this account.");
 				<a href="<?= "../".$sender->id ?>/"><img src="<?= $img_path ?>" style="width:105px;"></a>
 				</div>
 				<div class="col-md-10">
-				<div class="time"><p><?php echo $self ? "You" : $sender->firstName; ?> sent at <?= $date; ?></p></div>
+				<div class="time"><p><?php echo $self ? "You" : $sender->firstName; ?> - <?= get_timeago($message->date); ?></p></div>
 				<p><?= $message->subject; ?></p>
 				</div>
 				</div>

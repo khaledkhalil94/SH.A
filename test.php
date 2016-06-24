@@ -7,13 +7,13 @@ unset($_SESSION['fail']);
 
 echo "<pre>";
 
-$data = $connection->query("SELECT props FROM `students` WHERE id = 5501");
-$data = $data->fetch()['props'];
+$data = $connection->query("SELECT privacy FROM `students` WHERE id = 5501");
+$data = $data->fetch()['privacy'];
 $data = json_decode($data, true);
 $data['has_pic'] = 0;
 
 $json = json_encode($data);
-$sql = "UPDATE `students` SET props = '$json' WHERE id = 5501";
+$sql = "UPDATE `students` SET privacy = '$json' WHERE id = 5501";
 $res = $connection->query($sql);
 if(!$res){
 	echo $connection->errorInfo()[2];

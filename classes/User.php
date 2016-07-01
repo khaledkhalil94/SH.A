@@ -77,12 +77,12 @@ class User {
 	  return substr($set, 0, -2); 
 	}
 
-	protected static function instantiate($user){
+	protected static function instantiate($data){
 		$object = new static;
 
-		foreach ($user as $attribute => $value) {
+		foreach ($data as $attribute => $value) {
 			if ($object->has_attribute($attribute)) {
-				$object->$attribute = $value;
+				$object->$attribute = trim($value);
 			}
 		}
 
@@ -96,7 +96,6 @@ class User {
 	}
 
 	public static function create_user(){
-		global $connection;
 		$user = self::instantiate($_POST);
 		//$user->type = $_POST['type'];
 		if($user->create()){
@@ -121,6 +120,20 @@ class User {
 		if($stmt->execute($values)){
 			return true;
 		}else {
+			$error = ($stmt->errorInfo());
+			echo $error[2];
+		}
+	}
+
+	public static function delete($id){
+		global $connection;
+		$sql = "DELETE FROM ".static::$table_name." where id = {$id}";
+
+		$stmt = $connection->prepare($sql);
+		//exit($sql);
+		if($stmt->execute()){
+			return true;
+		} else {
 			$error = ($stmt->errorInfo());
 			echo $error[2];
 		}
@@ -173,9 +186,9 @@ class User {
 	public static function get_faculty($id){
 		global $connection;
 
-		$sql = "SELECT name FROM faculties ";
-		$sql .= "WHERE id = {$id} ";
-		$sql .= "LIMIT 1";
+		$sql = "SELECT name FROM faculties
+				WHERE id = {$id} 
+				LIMIT 1";
 
 		$stmt = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
 		if($stmt){
@@ -196,6 +209,16 @@ class User {
 		return self::find_by_sql($sql);
 	}
 
+	public static function query($sql){
+		global $connection;
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = ($stmt->errorInfo());
+			echo $error[2];
+		}
+		return true;
+	}
 }
 
 $User = new User();

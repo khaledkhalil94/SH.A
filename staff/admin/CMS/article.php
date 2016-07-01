@@ -11,7 +11,6 @@ if (!isset($id)) exit("404 NOT FOUND!");
 <body>
 	<div class="container section">
 	<?= msgs(); ?>
-	TODO: add publication type
 		<span><?= User::get_faculty($article->faculty_id); ?></span><br>
 		<span><?= array_search($article->faculty_id, $faculties); ?></span>
 			<div class="row">
@@ -20,7 +19,7 @@ if (!isset($id)) exit("404 NOT FOUND!");
 						<h2 class="blog-post-title"><?= $article->title; ?></h2>
 						<p class="blog-post-meta time"><?= displayDate($article->created, "M d, Y"); ?> by <?= $article->author; ?></p>
 						<hr>
-						<p style="min-height:320px;"><?= $article->content; ?></p>
+						<p style="min-height:420px;"><?= $article->content; ?></p>
 					</div>
 				</div>
 				<div class="col-sm-3 col-sm-offset-1 blog-sidebar" style="border-left: 1px #e2e2e2 solid;">
@@ -33,7 +32,7 @@ if (!isset($id)) exit("404 NOT FOUND!");
 				</div>
 			</div>
 		</div>
-		<a type="button" href="." class="btn btn-default">Go back</a>
+		<a type="button" href="./articles.php" class="btn btn-default">Go back</a>
 		<?php if($session->adminCheck()): ?>
 			<a type="button" href="edit.php?id=<?= $id; ?>" class="btn btn-warning">Edit</a>
 		<?php endif; ?>

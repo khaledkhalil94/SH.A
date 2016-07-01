@@ -21,7 +21,7 @@ if (isset($_POST['submit'])){
       $session->login($found_user);
       $session->message('You have logged in successfully.', "/sha");
     } else {
-      $session->message("Username or Password is wrong!", "/sha", "danger");
+      $session->message("Username or Password is wrong!", "", "danger");
     }
 }
 
@@ -33,6 +33,7 @@ require(ROOT_PATH . 'inc/head.php');
 <body>
   <div class="main">
     <div class="container">
+  <?= msgs(); ?>
       <div class="form">
         <form action="login.php" method="post" >
           <div class="form-group">

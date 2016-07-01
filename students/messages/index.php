@@ -22,7 +22,7 @@ include (ROOT_PATH . "inc/head.php");
 ?>
 <div class="content">
 	<?= msgs(); ?>
-
+TODO: use inner joins for fetching messages
 	<div class="jumbotron">
 		<div class="container">
 			<h2><b>Inbox</b></h2>

@@ -17,6 +17,8 @@ class Session {
 			define("USER_ID", $this->user_id);
 			if (USER_ID != 1 ) $this->updateActivity(USER_ID);		
 		}
+		// to avoid errors when not logged in
+		defined('USER_ID') ? USER_ID : define('USER_ID', "");
 	}
 
 	public function is_logged_in(){

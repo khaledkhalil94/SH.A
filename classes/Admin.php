@@ -101,6 +101,44 @@ class Admin extends User {
 
 	}
 
+	public static function get_articles($dp="", $order="created desc"){
+		global $connection;
+		$sql = "SELECT * FROM `content` ";
+			if (!empty($dp)) {
+				$sql .= "WHERE status = {$dp} AND ";
+			} else {
+				$sql .= "WHERE ";
+			}
+		$sql .=	" type != 'main' ORDER BY {$order}
+				";
+
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public static function get_del_articles(){
+		global $connection;
+		$sql = "SELECT * FROM `content` 
+				WHERE status = 3
+				ORDER BY created
+				";
+		$stmt = $connection->prepare($sql);
+		if(!$stmt->execute()){
+			echo $stmt->errorInfo()[2];
+		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public static function get_del_count(){
+		global $connection;
+		$sql = "SELECT count(*) FROM `content` 
+				WHERE status = 3
+				";
+		$res = $connection->query($sql);
+		return $res->fetch()[0];
+
+	}
+
 }
 
 ?>

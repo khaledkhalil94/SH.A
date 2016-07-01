@@ -11,16 +11,12 @@ $id = 2;
 
 	<div class="main">
 		<div class="container section">
-			<div class="wrapper" style="text-align:center;">
-				<p><?= Faculty::display_content("main", $id); ?></p>
-
-				<ul class="students">
-					<h3>Staff</h3>
-					<?php Staff::display_prof($id); ?>
-				</ul>
+			<div class="wrapper" style="text-align:centera;">
 				<ul class="students">
 					<h3>Students registered in Computer Science</h3>
-					<?php Student::display_students($id); ?>
+					<!-- <pre> -->
+					<?php (Student::display_students($id)); ?>
+					<!-- </pre> -->
 				</ul>
 			</div>
 		</div>

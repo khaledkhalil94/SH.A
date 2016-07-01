@@ -6,8 +6,6 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 if(!$id){
 	redirect_to_D("/sha", 2);
 }
-
-
 $studentInfo = StudentInfo::find_by_id($id);
 $student = Student::find_by_id($id);
 
@@ -127,9 +125,9 @@ include (ROOT_PATH . "inc/head.php");
 
 		        <label for="phoneNumber">Select your faculty</label>
 		        <select class="form-control" name="faculty_id">
-				  <option <?php if ($student->faculty_id == "1") {echo "selected";} ?>>Engineering</option>
-				  <option <?php if ($student->faculty_id == "2") {echo "selected";} ?>>Computer Science</option>
-				  <option <?php if ($student->faculty_id == "3") {echo "selected";} ?>>Medicine</option>
+				  <option <?= ($student->faculty_id == "1") ? "selected" : null; ?>>Engineering</option>
+				  <option <?= ($student->faculty_id == "2") ? "selected" : null; ?>>Computer Science</option>
+				  <option <?= ($student->faculty_id == "3") ? "selected" : null; ?>>Medicine</option>
 				</select>
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />

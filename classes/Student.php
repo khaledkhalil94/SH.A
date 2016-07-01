@@ -35,13 +35,26 @@ class Student extends User {
          }
 	}
 
-	public function get_students_by_faculty($id){
+	// public function get_students_by_faculty($id){
+	// 	global $connection;
+
+	// 	$sql = "SELECT * FROM students ";
+	// 	$sql .= "WHERE faculty_id = {$id}";
+	// 	$all = static::find_by_sql($sql);
+	// 	return $all;
+	// }
+
+	public static function get_students_by_faculty($id){
 		global $connection;
 
-		$sql = "SELECT * FROM students ";
-		$sql .= "WHERE faculty_id = {$id}";
+		$sql = "
+				SELECT students.id, students.has_pic, faculties.name
+				FROM `students`
+				INNER JOIN `faculties` ON students.faculty_id = faculties.id
+				WHERE students.faculty_id = {$id}
+				";
 		$all = static::find_by_sql($sql);
-		return $all;
+	 	return $all;
 	}
 
 	public function full_name_by_id($id) {

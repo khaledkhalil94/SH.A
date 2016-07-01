@@ -64,7 +64,7 @@ function get_timeago( $ptime ){
 function displayDate($dat, $format=""){
 	$date = strtotime($dat);
 	if(empty($format)){
-		$date = (date('Y',$date)) == date('Y') ? date('j M h:ia',$date) : date('j M Y, h:ia',$date);
+		$date = (date('Y',$date)) == date('Y') ? date('j M h:i',$date) : date('j M Y, h:i',$date);
 	} else {
 		$date = date($format,$date);
 	}
@@ -72,8 +72,7 @@ function displayDate($dat, $format=""){
 }
 
 function ctrim($content, $lenght){
-	$lenght = rand($lenght-5, $lenght+5);
-	if (strlen($content) > $lenght) $content = substr($content, 0, $lenght) . "...";
+	if (strlen($content) > $lenght) $content = substr($content, 0, $lenght);
 	return $content;
 }
 ?>

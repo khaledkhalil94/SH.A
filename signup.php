@@ -9,8 +9,6 @@ if (isset($_POST['submit'])) {
     //if (empty($_POST['username']) || empty($_POST['email'])) {
     if (empty($_POST['username'])) {
         exit("Username and password can't be empty");
-    } elseif(!is_numeric($_POST['id'])){
-         exit("ID must be number");
     } else {
         if($user = StudentInfo::create_student()){
             $session->login($user);
@@ -35,10 +33,6 @@ require(ROOT_PATH . 'inc/head.php');
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" name="username" value="" />
-            </div>
-            <div class="form-group">
-                <label for="id">ID</label>
-                <input type="text" class="form-control" name="id" value="" />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

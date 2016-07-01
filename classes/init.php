@@ -19,6 +19,9 @@ require_once('ProfilePicture.php');
 require_once('pagination.php');
 require_once('StudentInfo.php');
 require_once('functions.php');
+require_once('Faculty.php');
+require_once('Comment.php');
+require_once('QNA.php');
 
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";
@@ -33,5 +36,10 @@ if (defined('BASE_URL') && defined('USER_ID')) {
 }
 
 
+$faculties = array("Engineering" => 1, "Computer Science" => 2, "Medicine" => 3);
+
+	$greenIcon = "<i style=\"color:green;\" class=\"fa fa-circle status-published\"></i>";
+	$greyIcon = "<i style=\"color:grey;\" class=\"fa fa-circle status-published\"></i>";
+	$redIcon = "<i style=\"color:red;\" class=\"fa fa-circle status-published\"></i>";
 
 ?>

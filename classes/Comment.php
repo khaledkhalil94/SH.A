@@ -4,7 +4,7 @@ require_once('init.php');
 * 
 */
 class Comment extends User {
-	public $id, $post_id, $uid, $content, $created, $last_modified, $status="1", $report="0";
+	public $id, $post_id, $uid, $content, $created, $last_modified, $status="1";
 	protected static $table_name="comments";
 	protected static $db_fields = array();
 
@@ -91,6 +91,24 @@ class Comment extends User {
 		$sql = "UPDATE ".static::$table_name." SET report = 1
 				WHERE id = {$id} LIMIT 1";
 		if ($connection->query($sql)) $session->message("Comment has been reported.", "question.php?id={$id}", "success");
+	}
+
+	public function get_reports(){
+		global $connection;
+
+		$sql = "SELECT comments.id as c_id, comments.content as comment, 
+				reports.* FROM `reports`
+				INNER JOIN `comments` ON reports.post_id = comments.id
+				ORDER BY date";
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = ($stmt->errorInfo());
+			echo $error[2];
+		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+
 	}
 
 }

@@ -109,9 +109,22 @@ class Admin extends User {
 			} else {
 				$sql .= "WHERE ";
 			}
-		$sql .=	" type != 'main' ORDER BY {$order}
-				";
-
+		$sql .=	" type != 'main' ";
+		switch ($order) {
+			case 'date':
+				$sql .= "ORDER BY created DESC";
+				break;
+			case 'status':
+				$sql .= "ORDER BY status ASC";
+				break;
+			case 'author':
+				$sql .= "ORDER BY author ASC";
+				break;
+			
+			default:
+				$sql .= "ORDER BY created DESC";
+				break;
+		}
 		$stmt = $connection->query($sql);
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
@@ -137,6 +150,35 @@ class Admin extends User {
 		$res = $connection->query($sql);
 		return $res->fetch()[0];
 
+	}
+
+	public static function getQuestions($dis="", $order){
+		global $connection;
+		$sql = "SELECT * FROM `questions` ";
+		if ($dis === "rep") {
+			$sql .= "WHERE report = 1 ";
+		} elseif(!empty($dis) || $dis===0){
+			$sql .= "WHERE status = {$dis} ";
+		}
+		switch ($order) {
+			case 'date':
+				$sql .= "ORDER BY created DESC";
+				break;
+			case 'status':
+				$sql .= "ORDER BY status DESC";
+				break;
+			case 'author':
+				$sql .= "GROUP BY uid";
+				break;
+			
+			default:
+				$sql .= "ORDER BY created DESC";
+				break;
+		}
+		
+		//exit($sql);
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 }

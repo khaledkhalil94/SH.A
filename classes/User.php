@@ -211,11 +211,14 @@ class User {
 
 	public static function query($sql){
 		global $connection;
+		global $session;
 		$stmt = $connection->prepare($sql);
 
 		if(!$stmt->execute()){
 			$error = ($stmt->errorInfo());
 			echo $error[2];
+			$session->message( $error[2], ".", "warning");
+			return false;
 		}
 		return true;
 	}

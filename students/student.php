@@ -1,6 +1,6 @@
 <?php
 require_once ("../classes/init.php");
-$id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+$id = sanitize_id($_GET['id']) ?: null;
 if(!$id){
 	echo "User was not found!";
 	redirect_to_D("/sha", 20);

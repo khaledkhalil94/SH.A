@@ -75,4 +75,40 @@ function ctrim($content, $lenght){
 	if (strlen($content) > $lenght) $content = substr($content, 0, $lenght);
 	return $content;
 }
+
+function append_queries($query){
+	if(empty($query)) return false; // if the url does not have a query string
+
+	$query = array_unique(explode("&",$query)); // skip any duplicated queries
+
+	foreach ($query as $q) {
+		list($k, $v) = explode("=", $q);
+		$qs[$k] = $v;
+	}
+	foreach ($qs as $key => $value) {
+		$$key = $value;
+
+	}
+	$qz = array();
+	if (count($qs) > 1) {
+		$qz['display'] = "?sortby={$sortby}&";
+		$qz['sortby'] = "?display={$display}&";
+	} elseif(isset($display)){
+		$qz['display'] = "?";
+		$qz['sortby'] = "?display={$display}&";
+	} elseif(isset($sortby)) {
+		$qz['sortby'] = "?";
+		$qz['display'] = "?sortby={$sortby}&";
+	}
+		
+return $qz;
+}
+
+function BackBtn(){
+	echo "<a type=\"button\" href=\".\" class=\"btn btn-default\">Back</a>";
+}
+
+function sanitize_id($id){
+	return (int)filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+}
 ?>

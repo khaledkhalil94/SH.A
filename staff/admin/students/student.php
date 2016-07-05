@@ -1,7 +1,7 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $session->adminLock();
-$id = isset($_GET['id']) ? $_GET['id'] : null;
+$id =sanitize_id($_GET['id']) ?: null;
 
 if(!$id){
 	redirect_to_D("/sha", 2);

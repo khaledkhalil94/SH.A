@@ -1,4 +1,4 @@
-<?php 
+<?php  // TO BE REMOVED
 require_once('init.php');
 /**
 * 

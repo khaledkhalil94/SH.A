@@ -1,4 +1,5 @@
 <?php
+// TO BE REMOVED
 require_once('init.php');
 
 class Staff extends User {

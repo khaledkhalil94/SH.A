@@ -25,9 +25,11 @@ $qs = QNA::get_content();
 			$user = Student::find_by_id($q->uid) ?: Staff::find_by_id($q->uid);
 			$self = $session->userCheck($user);
 			$commentsCount = count(Comment::get_comments($q->id));
-			$commentsCount = $commentsCount > 1 ? $commentsCount." Comments" : $commentsCount === 0 ? "0 Comments" : "1 Comment";
+			$commentsCount = $commentsCount > 1 ? $commentsCount." Comments" : ($commentsCount === 0 ? "0 Comments" : "1 Comment");
 			$votes = QNA::get_votes($q->id);
 			$votes = $votes > 1 ? $votes." Points" : ($votes === NULL ? "0 Points" : "1 Point");
+			$reports_count = QNA::get_reports("questions", $q->id) ? QNA::get_reports("questions", $q->id)[0]->count : null ; 
+			$reports_count = $reports_count > 1 ? $reports_count." Reports" : ($reports_count === NULL ? "0 Reports" : "1 Report");
 			?>
 				<div class="jumbotron">
 					<a href="../questions/question.php?id=<?php echo $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
@@ -40,6 +42,9 @@ $qs = QNA::get_content();
 					<br><br><br><hr>
 					<!-- TODO: add Number of comments/points -->
 					<span><?=$votes;?> and </span><span><?= $commentsCount; ?></span>
+					<?php if($session->adminCheck()): ?>
+						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $q->id; ?>"> and <?= $reports_count; ?></a>
+					<?php endif; ?>
 				</div>
 			<?php 
 	 	endforeach; ?>

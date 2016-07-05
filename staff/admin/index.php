@@ -6,6 +6,13 @@ $allCount = Faculty::articles_count();
 $delCount = Admin::get_del_count();
 $pubCount = Faculty::pub_count();
 $unPubCount = $allCount - $pubCount;
+$q_reports = QNA::reports("questions");
+$c_reports = QNA::reports("comments");
+
+// echo "<pre>";
+// print_r(QNA::get_reports("", 10652));
+// exit;
+
 ?>
 <body>
   <?php
@@ -20,8 +27,11 @@ $unPubCount = $allCount - $pubCount;
       <a href="<?= "students/students.php" ?>"><h3>Browse all students</h3></a>
       <a href="<?= "staff/professors.php" ?>"><h3>Browse staff</h3></a>
       <a href="<?= "messages/reports.php" ?>"><h3>Browse messages reports</h3></a>
-      <h3><?= "There are {$delCount} articles marked for deletion and waiting your approval." ?><a href="<?= "cms/articles.php?display=del" ?>">..Browse</a></h3>
-      <h3><?= "or browse all articles." ?><a href="<?= "cms/articles.php" ?>">..Browse</a></h3>
+      <h3><a href="<?= "questions" ?>">Browse questions.</a></h3>
+      <h3><a href="<?= "pages/articles.php" ?>">Browse all articles.</a></h3>
+      <h3><?= "{$delCount} articles marked for deletion." ?><a href="<?= "pages/articles.php?display=del" ?>">..Browse</a></h3>
+      <h3><?= count($c_reports)." comment reported." ?><a href="<?= "questions/reports.php" ?>">..Browse</a></h3>
+      <h3><?= count($q_reports)." questions reported." ?><a href="<?= "questions" ?>">..Browse</a></h3>
       
     </div>
   </div>

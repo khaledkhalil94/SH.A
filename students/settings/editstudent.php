@@ -94,7 +94,7 @@ $ProfilePicture->id = $id;
 		            <input type="address" class="form-control" name="address" value="<?php echo $student->address ?>" />
 		        </div>
 
-		        <label for="phoneNumber">Change your gender</label>
+		        <label for="gender">Change your gender</label>
 		        <select class="form-control" name="gender">
 				  <option value="male" <?= $student->gender == "male" ? "selected" : null; ?>>Male</option>
 				  <option value="female" <?= $student->gender == "female" ? "selected" : null; ?> >Female</option>
@@ -105,7 +105,7 @@ $ProfilePicture->id = $id;
 		            <label for="phoneNumber">Phone Number</label>
 		            <input type="phoneNumber" class="form-control" name="phoneNumber" value="<?php echo $student->phoneNumber ?>" />
 		        </div>
-		        <label for="phoneNumber">Select your faculty</label>
+		        <label for="faculty">Select your faculty</label>
 		        <select class="form-control" name="faculty_id">
 				  <option value="2" <?= $student->faculty_id == "1" ? "selected" : null; ?>>Engineering</option>
 				  <option value="1" <?= $student->faculty_id == "2" ? "selected" : null; ?> >Computer Science</option>

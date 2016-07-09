@@ -15,8 +15,13 @@ switch ($display) {
 		$Count = count($qs);
 		break;
 	case 'rep':
-		require("index_rep.php");
-		exit;
+		$qsz = QNA::reports("questions");
+		$qs = array();
+		foreach ($qsz as $r) {
+		 	$qs[] = array_shift(QNA::get_reports("questions", $r));
+		 }
+		 //print_r($qs); exit;
+		$Count = count($qs);
 		break;
 	default:
 		$qs = Admin::getQuestions("",$sortby); 
@@ -76,23 +81,19 @@ $query = append_queries($_SERVER['QUERY_STRING']);
 					//$q = array_shift($q);
 					//print_r($q); exit;
 						$id = $q->id; $uid= $q->uid; $title = $q->title; $content = $q->content;
-						$created = $q->created; $last_modified = $q->last_modified; $status = $q->status;
-						$reports_count = QNA::get_reports("questions", $id) ? QNA::get_reports("questions", $id)[0]->count : null;
+						$created = $q->date; $status = $q->status;
+						$reports_count = $q->count ?: null;
 					?>
 					<tr>
 						<td >
-							<p><a href="/sha/questions/question.php?id=<?= $id; ?>"><b><?= $title; ?></b></a></p>
+							<p><a href="/sha/questions/question.php?id=<?= $q->post_id; ?>"><b><?= $title; ?></b></a></p>
 							<div class="time"><?= displayDate($created); ?></div>
 							<p><?= $content; ?></p>
 						</td>
 						<td>
 							<p"><?php if($status == "1"){echo $greenIcon." Public";}else{echo $redIcon." Private";}?></p>
 						</td>
-						<?php if(empty($reports_count)){ ?>
-							<td><span><?= $reports_count; ?></span></td>
-						<?php } else { ?>
-							<td><a href="report.php?id=<?=$q->id;?>"><?= $reports_count; ?></a></td>
-						<?php } ?>
+						<td><a href="report.php?id=<?=$q->post_id;?>"><?= $reports_count; ?></a></td>
 						<td><a type="button" href="edit.php?id=<?= $id; ?>" class="btn btn-warning">Edit</a></td>
 					</tr>
 					<?php endforeach; ?>

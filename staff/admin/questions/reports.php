@@ -28,6 +28,7 @@ if (isset($_GET['dl'])) {
 				</thead>
 				<tbody>
 					<?php
+					//print_r(QNA::get_reports("comments")); exit;
 					$i = 0;
 				foreach ($reports as $report):
 					$i++;
@@ -37,10 +38,10 @@ if (isset($_GET['dl'])) {
 					?>
 					<tr>
 						<td>
-							<a style="color:black;text-decoration: none;" href="/sha/questions/question.php?id=<?= $reportz->q_id; ?>">
-								<h3><p style="list-style:none;"><?= $reportz->q_content; ?></a> <span style="font-size:small;background-color:red;">Reported <?= $reportz->count; ?> times</span></p></h3>
+							<a style="color:black;text-decoration: none;" href="/sha/questions/question.php?id=<?= $reportz->post_id; ?>">
+								<h3><p style="list-style:none;"><?= $reportz->content; ?></a> <span style="font-size:small;background-color:red;">Reported <?= $reportz->count; ?> times</span></p></h3>
 							</a>
-							<p style="list-style:none;">by: <?= $reportz->q_uid; ?></p>
+							<p style="list-style:none;">by: <?= $reportz->uid; ?></p>
 								<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#<?= $i; ?>">View report details</button>
 								<div id="<?= $i; ?>" class="collapse"><br>
 								<?php foreach ($reporters as $report) { ?>

@@ -9,7 +9,7 @@ if(isset($_POST['submit'])){
 	print_r($_POST);
 	echo "</pre>";
 	if (!empty(trim($_POST['title'])) && !empty(trim($_POST['content']))) {
-		if ($faculty->updatea($_POST)){
+		if ($faculty->update($_POST)){
 			$session->message("Your article has been updated successfully!", "./articles.php", "success");
 		} else {
 			$session->message("Something went wrong!", ".", "danger");

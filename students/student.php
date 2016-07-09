@@ -1,13 +1,11 @@
 <?php
 require_once ("../classes/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
-if(!$id){
-	echo "User was not found!";
-	redirect_to_D("/sha", 20);
-}
+if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
+
 
 $studentInfo = StudentInfo::find_by_id($id);
-if (empty($studentInfo))$session->message("Invalid user.", "/sha/404.php");
+if (empty($studentInfo)) $session->message("Invalid user.", "/sha/404.php", "warning");
 
 $student = Student::find_by_id($studentInfo->id);
 if(empty($student)){
@@ -23,11 +21,10 @@ $email = $studentInfo->email;
 $location = $student->address;
 $gender = $student->gender;
 $phoneNumber = $student->phoneNumber;
-
+$self = $session->userCheck($studentInfo) ? true : false;
 
 $pageTitle = $id;
 include (ROOT_PATH . "inc/head.php");
-Student::profilePrivacy($student);
  ?>
 
 <div class="content student">
@@ -39,18 +36,24 @@ Student::profilePrivacy($student);
 			</span>
 		</div>
 <?php endif; ?>
-
 	<div class="details row">
-		<?php if (!$session->userCheck($studentInfo) && $session->is_logged_in()): ?>
-			<a style="float:right;" class="btn btn-default" href="<?= BASE_URL."students/messages/compose.php?to={$id}"?>" role="button">Send a private message</a>
-		<?php endif; ?>
+	
+		<?php if (!$self && $session->is_logged_in()): ?>
+		<?php if($student->profile_privacy == 1){?>
+			<a style="float:right;" class="btn btn-default" href="<?= BASE_URL."messages/compose.php?to={$id}"?>" role="button">Send a private message</a>
+		<?php }
+		endif; ?>
 		<div class="col-md-5">
 			<h4><?= "<b>" . $name . "</b>"; ?></h4>
 			<div class="image"><img src="<?php echo $img_path;?>" alt="" style="width:278px;"></div>
-			
+			<br>BIO/ABOUT
 		</div>
+<?php if($student->profile_privacy == 1) { // public ?>
 
 		<div class="col-md-6">
+		<?php if (!$self): ?>
+			<button class="btn btn-success">Follow</button><br><br>
+		<?php endif; ?>
 		<p><?= "ID: " . $id; ?></p>
 
 		<?php if (Student::CheckPrivacy($student,$student->email_privacy) && !empty($email)): ?>
@@ -70,12 +73,17 @@ Student::profilePrivacy($student);
 		<?php endif; ?>
 
 			<?= !empty($faculty) ? "<p>Faculty: {$faculty}</p>" : null ?>
-			<?php if ($session->userCheck($studentInfo)): ?>
+			<?php if ($self): ?>
 			<a class="btn btn-default" href="<?= BASE_URL."students/settings/editstudent.php"?>" role="button">Update your information</a>
 			<a class="btn btn-default" href="<?= BASE_URL."students/settings/editprivacy.php"?>" role="button">Update your privacy</a>
 			<a class="btn btn-default" href="<?= BASE_URL."students/settings/account.php"?>" role="button">Change account settings</a>
 			<?php endif; ?>
 		</div>
+		<?php } elseif($student->profile_privacy == 2){
+			echo "This profile is private, however you can <a href=\"/sha/messages/compose.php?to={$id}\">send him a private message.</a>";
+			} elseif($student->profile_privacy == 3){
+			echo "Only friends of {$name} can view his profile.";
+				} ?> 
 	</div>
 </div>
 <?php

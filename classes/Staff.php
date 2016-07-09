@@ -5,7 +5,7 @@ require_once('init.php');
 class Staff extends User {
 	
 	protected static $table_name="staff";
-	public $id, $username, $password, $email, $type="staff", $firstName, $lastName, $department_id;
+	public $id, $username, $password, $email, $type="staff", $firstName, $lastName, $department_id, $has_pic;
 	protected static $db_fields = array();
 
 	public function __construct(){

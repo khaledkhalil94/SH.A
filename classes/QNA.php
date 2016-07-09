@@ -13,24 +13,29 @@ class QNA extends User {
 		self::$db_fields = array_keys((array)$this);
 	}
 
-	public static function get_content(){
+	public static function get_content($faculty_id=""){
 		global $connection;
 		$sql = "SELECT * FROM `questions` 
-				WHERE status = 1
-				ORDER BY created DESC
+				WHERE status = 1 ";
+				if (!empty($faculty_id)) {
+				 $sql .= "AND faculty_id = $faculty_id ";
+				}
+		$sql .= "ORDER BY created DESC
 				";
 		$stmt = $connection->query($sql);
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
-	public static function sidebar_content($id){
-		$article = self::find_by_id($id);
-		$articles = self::get_content($article->faculty_id);
+	public static function sidebar_content($q){
+		$articles = self::get_content($q->faculty_id);
+
+		$var = "";
 		foreach ($articles as $article): 
-			if ($article->id != $id): 
-				return "<a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a>";
+			if ($article->id != $q->id): 
+				$var .= "<a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a>";
 			endif; 
 		endforeach;
+		return $var;
 	}
 
 
@@ -149,7 +154,8 @@ class QNA extends User {
 	public function get_reports($table="", $post_id=""){
 		global $connection;
 
-		$sql = "SELECT $table.id as q_id, $table.content as q_content, $table.uid as q_uid,
+		//$sql = "SELECT $table.id as q_id, $table.title as q_title, $table.status as q_status, $table.content as q_content, $table.uid as q_uid,
+		$sql = "SELECT $table.*,
 				CONCAT(students.firstName, ' ', students.lastName) AS reporterName,
 				reports.* "; 
 		if (!empty($post_id)) $sql .= ", (SELECT count(*) FROM `reports` WHERE reports.post_id = {$post_id}) as count ";

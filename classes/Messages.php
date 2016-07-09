@@ -23,37 +23,62 @@ class Messages extends User {
 		unset($this->sender_id);
 	}
 
-	// get all undeleted messages by user id
+	// get all visible messages by user id
 	public static function getMsgs($id){
 		global $connection;
-		$sql = "SELECT * FROM `messages` WHERE user_id = {$id} AND deleted = 0 ORDER BY seen ASC, Date DESC";
-		return parent::find_by_sql($sql);
+		$sql = "SELECT 
+				profile_pic.path AS img_path,
+				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
+				messages.* FROM `messages` 
+				LEFT JOIN `students` ON messages.sender_id = students.id
+				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
+				WHERE messages.user_id = {$id} AND deleted = 0 
+				ORDER BY seen ASC, Date DESC";
+		$stmt = $connection->prepare($sql);
+		if (!$stmt->execute()) {
+			echo $stmt->errorInfo()[2];
+		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	// get a single message by it's id
-	public static function getMsg($user_id, $id){
+	public static function getMsg($id){
 		global $connection;
-		$sql = " AND deleted = 0 AND user_id = {$user_id} LIMIT 1 ";
-		return parent::find_by_id($id, $sql);
-	}
-
-	// get a single message by it's id
-	public static function getMsgById($id){
-		global $connection;
-		return parent::find_by_id($id);
+		$sql = "SELECT students.id AS u_id, staff.id AS s_id,
+				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
+				messages.* FROM `messages` 
+				LEFT JOIN `students` ON messages.sender_id = students.id
+				LEFT JOIN `staff` ON messages.sender_id = staff.id
+				WHERE messages.id = {$id} AND deleted = 0";
+		$stmt = $connection->prepare($sql);
+		if (!$stmt->execute()) {
+			echo $stmt->errorInfo()[2];
+		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	// get conversational messages between two users by their ids
-	public static function getConvo($selfId, $id){
+	public static function getConvo($selfId, $id, $limit=""){
 		global $connection;
-		$sql = "SELECT * FROM `messages` WHERE
-				deleted = 0 
+		$sql = "SELECT profile_pic.path AS img_path, staff.id AS s_id,
+				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
+				messages.* FROM `messages` 
+				LEFT JOIN `students` ON messages.sender_id = students.id
+				LEFT JOIN `staff` ON messages.sender_id = staff.id
+				LEFT JOIN `profile_pic` ON {$id} = profile_pic.user_id
+				WHERE deleted = 0 
 				AND
-				(user_id = {$selfId} AND sender_id = {$id})
+				(messages.user_id = {$selfId} AND messages.sender_id = {$id}
 				OR 
-				(user_id = {$id} AND sender_id = {$selfId})
-				ORDER BY Date DESC";
-		return parent::find_by_sql($sql);
+				messages.user_id = {$id} AND messages.sender_id = {$selfId})
+				ORDER BY Date DESC ";
+		if(!empty($limit)) $sql .= "LIMIT {$limit}";
+				
+		$stmt = $connection->prepare($sql);
+		if (!$stmt->execute()) {
+			echo $stmt->errorInfo()[2];
+		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	// get count of unread messages by user id
@@ -96,9 +121,17 @@ class Messages extends User {
 	}
 
 	// marks a message as unread
-	public static function msgUnSee($user_id, $id){
+	public static function msgUnSee($id){
+		exit("as");
 		global $connection;
-		$sql = "UPDATE `messages` SET seen = 0 WHERE id = {$id} AND user_id = {$user_id} LIMIT 1";
+		$sql = "UPDATE `messages` SET seen = 0 WHERE id = {$id} LIMIT 1";
+		$stmt = $connection->prepare($sql);
+		if (!$stmt->execute()) {
+			echo $stmt->errorInfo()[2];
+			exit;
+		}
+		exit("asd");
+		return parent::query($sql); exit;
 		$res = $connection->exec($sql);
 		return (bool)$res ? true : false;
 	}
@@ -106,30 +139,12 @@ class Messages extends User {
 	// deletes a messages (just hide it)
 	public static function deleteMsg($user_id, $id){
 		global $connection;
-		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id} AND user_id = {$user_id} LIMIT 1";
+		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id}
+		AND (user_id OR sender_id = {$user_id})
+		LIMIT 1";
 		$res = $connection->exec($sql);
 		return (bool)$res ? true : false;
     }
-
-    public static function report($id){
-    	global $connection;
-		$sql = "UPDATE `messages` SET report = 1 WHERE id = {$id} LIMIT 1";
-		$res = $connection->exec($sql);
-		return (bool)$res ? true : false;
-    }
-
-    public static function unReport($id){
-    	global $connection;
-		$sql = "UPDATE `messages` SET report = 0 WHERE id = {$id} LIMIT 1";
-		$res = $connection->exec($sql);
-		return (bool)$res ? true : false;
-    }
-
-    public static function getReports(){
-    	global $connection;
-    	return parent::find_by_sql("SELECT * FROM messages WHERE report = 1");
-    }
-
 }
 
 

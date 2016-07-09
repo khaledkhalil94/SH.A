@@ -1,19 +1,20 @@
 <?php
 require_once ("classes/init.php");
 $pageTitle = "Sign Up";
-if($session->is_logged_in()){
-    header('Location:index.php');
-}
+if($session->is_logged_in()) header('Location:index.php');
+
 
 if (isset($_POST['submit'])) {
-    //if (empty($_POST['username']) || empty($_POST['email'])) {
     if (empty($_POST['username'])) {
         exit("Username and password can't be empty");
     } else {
+        $_POST['id'] = mt_rand(10000,20000);
         if($user = StudentInfo::create_student()){
             $session->login($user);
-            StudentInfo::log("signup", $user);
-            $session->message("Thanks for signing up, please update your information", BASE_URL."students/".$user->id."/");
+            //StudentInfo::log("signup", $user);
+            redirect_to_D("welcome.php");
+            require_once("welcome.php");
+            exit;
         }
     }
 }
@@ -28,6 +29,7 @@ require(ROOT_PATH . 'inc/head.php');
 <body>
   <div class="main">
     <div class="container">
+    <?= msgs(); ?>
       <div class="form">
         <form action="signup.php" method="POST">
             <div class="form-group">

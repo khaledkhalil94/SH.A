@@ -10,15 +10,16 @@ if(isset($_POST['submit'])){
 	}
 	
 
-	// echo "<pre>";
-	// print_r($_POST);
-	// echo "</pre>";
+	 // echo "<pre>";
+	 // print_r($_POST);
+	 // echo "</pre>";
+	 // exit;
 }
 ?>
 <body>
 	<div class="container section">
 	<?= msgs(); ?>
-	<h3>Create a new article</h3>
+	<h3>Create a new page</h3>
 		<form action="" method="POST">
 			<div class="form-group">
 				<label for="title">Title</label>
@@ -38,12 +39,10 @@ if(isset($_POST['submit'])){
 				<option value="3">Medicine</option>
 			</select>
 			<br>
-			<p><b>Choose Article Type</b></p>
-			<select class="form-control" name="type">
-				<option value="article">Article</option>
-				<option value="news">News</option>
-				<option value="main">Main Content</option>
-			</select>
+			<p><b>Choose page type</b></p>
+			<label class="radio-inline"><input type="radio" checked value="article" name="type">Article</label>
+			<label class="radio-inline"><input type="radio" value="news" name="type">News</label>
+			<br>
 			<br>
 			<p><b>Choose Status</b></p>
 			<div class="checkbox">

@@ -13,39 +13,57 @@ class Faculty extends User {
 		self::$db_fields = array_keys((array)$this);
 	}
 
-	public static function get_content($type, $id=""){
+	public static function get_article($id){
 		global $connection;
-		$sql = "SELECT * FROM `content` 
-				WHERE type = '{$type}' ";
-				if (!empty($id)) $sql .= "AND faculty_id = {$id} "; 
+		$sql = "SELECT faculties.name AS fac_name, content.* FROM `content` 
+				LEFT JOIN faculties ON content.faculty_id = faculties.id
+				WHERE content.id = '{$id}'";
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ)[0];
+	}
+
+	public static function get_content($type, $id="", $limit=""){
+		global $connection;
+		$id = (int)$id;
+		$sql = "SELECT faculties.name AS fac_name, content.* FROM `content` 
+				LEFT JOIN faculties ON content.faculty_id = faculties.id
+				WHERE content.type = '{$type}' ";
+				if (!empty($id) || $id === "0") $sql .= "AND faculty_id = {$id} "; 
 		$sql .= "AND status = 1 
-				ORDER BY created DESC
-				";
+				ORDER BY created DESC ";
+				if (!empty($limit)) $sql .= "LIMIT {$limit} "; 
+				
 		$stmt = $connection->query($sql);
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	public static function main_content(){
-		 $content = self::get_content("main", 0);
-		 $main = $content[0];
-		 $main = $main->content;
-		 return $main;
+		global $connection;
+		$sql = "SELECT * FROM `content` 
+				WHERE type = 'main'
+				AND faculty_id = 0";
+				
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ)[0];
 	}
 
-	public static function sidebar_content($type, $id){
-		$article = self::find_by_id($id);
-		$articles = self::get_content($type, $article->faculty_id);
+	public static function sidebar_content($id, $fac_id="", $limit=""){
+		$articles = self::get_content("article", $fac_id, $limit);
+		$var = "";
 		foreach ($articles as $article): 
 			if ($article->id != $id): 
-				echo "<a href=\"articles.php?id={$article->id}\"><p>{$article->title}</p></a>";
+				$var .= "<a href=\"articles.php?id={$article->id}\"><p>{$article->title}</p></a>";
 			endif; 
 		endforeach;
+		return $var;
 	}
 
-	public static function sidebar_news(){
-		$news = self::get_content("news");
+	public static function sidebar_news($id="", $limit=""){
+		$news = self::get_content("news","", $limit);
 		foreach ($news as $new): 
-			echo "<a href=\"articles.php?id={$new->id}\"><p>{$new->title}</p></a>";
+			if ($new->id != $id): 
+				echo "<a href=\"articles.php?id={$new->id}\"><p>{$new->title}</p></a>";
+			endif; 
 		endforeach;
 	}
 

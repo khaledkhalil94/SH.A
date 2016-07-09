@@ -31,8 +31,8 @@ if(isset($_POST['submit'])){
 				<textarea class="form-control" name="content" rows="7"><?= $content->content; ?></textarea>
 			</div>
 			<input type="hidden" name="author" class="form-control" value="staff" >
-			<input type="id" name="author" class="form-control" value="<?= $id; ?>" >
-			<br>
+			<input type="hidden" name="id" class="form-control" value="<?= $id; ?>" >
+			<?php if($content->type != "main"): ?>
 			<p><b>Choose department</b></p>
 			<select class="form-control" name="faculty_id">
 				<option <?= ($content->faculty_id == "0") ? "selected" : null; ?> value="0">Public</option>
@@ -41,12 +41,10 @@ if(isset($_POST['submit'])){
 				<option <?= ($content->faculty_id == "3") ? "selected" : null; ?> value="3">Medicine</option>
 			</select>
 			<br>
-			<p><b>Choose Article Type</b></p>
-			<select class="form-control" name="type">
-				<option <?= ($content->type == "article") ? "selected" : null; ?> value="article">Article</option>
-				<option <?= ($content->type == "news") ? "selected" : null; ?> value="news">News</option>
-				<option <?= ($content->type == "main") ? "selected" : null; ?> value="main">Main Content</option>
-			</select>
+				<p><b>Choose Article Type</b></p>
+				<label class="radio-inline"><input type="radio" <?= ($content->type == "article") ? "checked" : null; ?> value="article" name="type">Article</label>
+				<label class="radio-inline"><input type="radio" <?= ($content->type == "news") ? "checked" : null; ?> value="news" name="type">News</label>
+			<br>
 			<br>
 			<p><b>Choose Status</b></p>
 			<div class="radio">
@@ -63,6 +61,7 @@ if(isset($_POST['submit'])){
 					 Marked for deletion
 				</label>
 			</div>
+			<?php endif; ?>
 			<br>
 			<button type="submit" name="submit" class="btn btn-success">Submit</button>
 			<a type="button" href="./articles.php?id=<?= $id; ?>" class="btn btn-default">Cancel</a>

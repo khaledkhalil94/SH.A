@@ -97,7 +97,7 @@ class Student extends User {
 				break;			
 
 			case '2': //users only
-				return $session->is_logged_in() ? true : exit("You must be logged in");
+				return $session->userCheck($user) ? true : "";
 				break;
 		}
 	}

@@ -9,16 +9,16 @@ if(isset($_GET['display'])){
 	$articles = Faculty::get_content("article");
 	
 }
-
+$mainContent = Faculty::main_content();
 ?>
 <body>
 	<div class="container section">
-	<?php if ($session->adminCheck()): ?>
-		<a type="button" href="create.php" class="btn btn-default">Create a new article</a>
-	<?php endif; ?>
 	<?= msgs(); ?>
 		<div class="page-header" style="text-align:center;">
-			<p><?= Faculty::main_content(); ?></p>
+			<p><?= $mainContent->content; ?></p>
+			<?php if ($session->adminCheck()): ?>
+				<a type="button" href="edit.php?id=<?= $mainContent->id; ?>" class="btn btn-warning">Edit</a>
+			<?php endif; ?>
 		</div>
 		<h3>Latest Articles</h3>
 		<nav class="navbar navbar-inverse" style="color:white; width:726px;">
@@ -35,6 +35,9 @@ if(isset($_GET['display'])){
 		  </div>
 		</nav>
 		<!-- TODO: Add pagination -->
+		<?php if ($session->adminCheck()): ?>
+			<a type="button" href="create.php" class="btn btn-default">Create a new article</a>
+		<?php endif; ?>
 		<div class="row">
 			<div class="col-sm-9 blog-main">
 				<?php 
@@ -44,7 +47,7 @@ if(isset($_GET['display'])){
 					if ($i == 0) {  //Featuring first item ?>
 						<div class="jumbotron">
 							<a href="../pages/articles.php?id=<?php echo $article->id; ?>"><h3> <?= $article->title; ?> </h3></a>
-							<span class="time"> <?= User::get_faculty($article->faculty_id); ?> </span><br>
+							<span class="time"> <?= ucwords(str_replace("_", " ", $article->fac_name)); ?> </span><br>
 							<span class="time"> <?= displayDate($article->created, "M d, Y"); ?></span>
 							<p> <?= $subject; ?> </p>
 							<a href="../pages"></a>
@@ -54,7 +57,7 @@ if(isset($_GET['display'])){
 					} else { ?>
 						<div class="well">
 							<a href="../pages/articles.php?id=<?php echo $article->id; ?>"><h3> <?= $article->title; ?> </h3></a>
-							<span class="time"> <?= User::get_faculty($article->faculty_id); ?> </span><br>
+							<span class="time"> <?= ucwords(str_replace("_", " ", $article->fac_name)); ?> </span><br>
 							<span class="time"> <?= displayDate($article->created, "M d, Y"); ?></span>
 							<p> <?= $subject; ?> </p>
 							<a href="../pages"></a>

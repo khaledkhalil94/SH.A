@@ -22,6 +22,7 @@ class User {
 		return $all;
 	}
 
+// To be removed
 	public static function find_by_id($id, $msql=""){
 		$sql = "SELECT * FROM " .static::$table_name." WHERE id={$id}";
 		if(!empty($msql)) $sql .= $msql;
@@ -29,6 +30,7 @@ class User {
 		return !empty($found) ? array_shift($found) : false;
 	}
 
+// To be removed
 	public static function find_by_sql($sql=""){
 		global $connection;
 
@@ -107,6 +109,7 @@ class User {
 
 	protected function create(){
 		global $connection;
+		global $session;
 
 		$sql = "INSERT INTO ".static::$table_name;
 		$sql .=	" (`";
@@ -121,7 +124,10 @@ class User {
 			return true;
 		}else {
 			$error = ($stmt->errorInfo());
-			echo $error[2];
+			if($error[1] == "1062"){
+				$session->message("Username is already taken, please choose another one.", "", "danger");
+			}
+			//return false;
 		}
 	}
 

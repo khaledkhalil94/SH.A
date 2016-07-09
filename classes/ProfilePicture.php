@@ -9,10 +9,12 @@ require_once('init.php');
 
 	public static function get_profile_pic($user){
 		global $connection;
+		if (!$user->has_pic) return $img_path = BASE_URL."images/profilepic/pp.png";
+
 		$sql = "SELECT `path` FROM profile_pic WHERE user_id = {$user->id}";
 		$stmt = $connection->query($sql);
 		$res = $stmt->fetch()['path'];
-		return $img_path = $user->has_pic ? $res :  BASE_URL."images/profilepic/pp.png";
+		return $img_path = $res;
 
 		if(!$stmt){
 			echo $sql;

@@ -1,8 +1,4 @@
-﻿.glyphicon
-{/*override*/
-}
-
-.pagination .glyphicon
+﻿.pagination .glyphicon
 {
     margin-right:0px !important; /*override*/
 }

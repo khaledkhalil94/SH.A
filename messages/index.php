@@ -51,9 +51,14 @@ include_once (ROOT_PATH . "inc/head.php");
 				</thead>
 				<tbody>
 					<?php foreach ($messagez as $message):
+					// echo "<pre>";
+					// print_r($message);
+					// echo "</pre>";
+					// echo $ids[1];
+					// exit;
 					$senderID = $ids[$i];
-					$staff = !empty($message->s_id) ? true : false;
-					$sender = $staff ? Staff::find_by_id($senderID) : Student::find_by_id($senderID);
+					$sender = Student::find_by_id($senderID);
+					$staff = ($message->type == "staff" || $message->type == "admin") ? true : false;
 					$date = displayDate($message->date);
 					$time = get_timeago($message->date);
 					$subject = $message->subject;
@@ -64,7 +69,7 @@ include_once (ROOT_PATH . "inc/head.php");
 						<td><div class="image"><img src="<?= $message->img_path; ?>" style="width:55px;"></div></td>
 						<td ><ul>
 							<?php if (!$staff){ ?>
-							<li style="list-style:none;"><a href="/sha/students/<?= $senderID ?>/"><?= $sender->full_name(); ?></a></li>
+							<li style="list-style:none;"><a href="/sha/students/<?= $senderID ?>/"><?= $message->u_fullname; ?></a></li>
 							<?php }else{ ?>
 							<li style="list-style:none;">Adminstration</li>
 							<?php } ?>

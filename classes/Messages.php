@@ -44,11 +44,10 @@ class Messages extends User {
 	// get a single message by it's id
 	public static function getMsg($id){
 		global $connection;
-		$sql = "SELECT students.id AS u_id, staff.id AS s_id,
+		$sql = "SELECT students.id AS u_id
 				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
 				messages.* FROM `messages` 
 				LEFT JOIN `students` ON messages.sender_id = students.id
-				LEFT JOIN `staff` ON messages.sender_id = staff.id
 				WHERE messages.id = {$id} AND deleted = 0";
 		$stmt = $connection->prepare($sql);
 		if (!$stmt->execute()) {
@@ -60,12 +59,13 @@ class Messages extends User {
 	// get conversational messages between two users by their ids
 	public static function getConvo($selfId, $id, $limit=""){
 		global $connection;
-		$sql = "SELECT profile_pic.path AS img_path, staff.id AS s_id,
+		$sql = "SELECT profile_pic.path AS img_path,
+				login_info.type AS type,
 				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
 				messages.* FROM `messages` 
 				LEFT JOIN `students` ON messages.sender_id = students.id
-				LEFT JOIN `staff` ON messages.sender_id = staff.id
 				LEFT JOIN `profile_pic` ON {$id} = profile_pic.user_id
+				INNER JOIN `login_info` ON {$id} = login_info.id
 				WHERE deleted = 0 
 				AND
 				(messages.user_id = {$selfId} AND messages.sender_id = {$id}

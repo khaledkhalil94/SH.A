@@ -16,12 +16,6 @@ class User {
 		return $found_user->fetch(PDO::FETCH_OBJ);
 	}
 
-	public static function get_all_users(){
-		$sql = "SELECT * FROM " .static::$table_name;
-		$all = static::find_by_sql($sql);
-		return $all;
-	}
-
 // To be removed
 	public static function find_by_id($id, $msql=""){
 		$sql = "SELECT * FROM " .static::$table_name." WHERE id={$id}";
@@ -100,16 +94,16 @@ class User {
 	public static function create_user(){
 		$user = self::instantiate($_POST);
 		//$user->type = $_POST['type'];
-		if($user->create()){
-			return $user;
-		} else {
-			return false;
-		}
+		$user->create();
+		return $user;
+		// } else {
+		// 	return $user;
+		// 	return false;
+		// }
 	}
 
 	protected function create(){
 		global $connection;
-		global $session;
 
 		$sql = "INSERT INTO ".static::$table_name;
 		$sql .=	" (`";
@@ -124,10 +118,8 @@ class User {
 			return true;
 		}else {
 			$error = ($stmt->errorInfo());
-			if($error[1] == "1062"){
-				$session->message("Username is already taken, please choose another one.", "", "danger");
-			}
-			//return false;
+			return $error[2];
+				// $session->message("Username is already taken, please choose another one.", "", "danger");
 		}
 	}
 

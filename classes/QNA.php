@@ -47,9 +47,6 @@ class QNA extends User {
 		if(!$session->is_logged_in()) {
 			$session->message("You must login to upvote.", "question.php?id={$post->id}", "warning");
 			return false;
-		} elseif($post->uid === $session->user_id){
-			$session->message("You can't upvote your own post.", "question.php?id={$post->id}", "warning");
-			return false;
 		}
 
 		$sql = "INSERT INTO `points` (post_id, user_id) 
@@ -58,28 +55,34 @@ class QNA extends User {
 
 		if(!$stmt->execute()){
 			$error = ($stmt->errorInfo());
-			$session->message($error[2], "", "danger");
+			return $error[2];
 		}
-		$session->message("Thanks for your upboat.", "question.php?id={$post->id}", "success");
+		return true;
 
 	}
 
-	public static function downvote($id, $uid){
+	public static function downvote($post, $uid){
 		global $connection;
 		global $session;
 
 		//if not logged in
 		if(!$session->is_logged_in()) {
-			$session->message("You must login to downvote.", "question.php?id={$id}", "warning");
+			$session->message("You must login to downvote.", "question.php?id={$post->id}", "warning");
 			return false;
 		}
 
 		$sql = "DELETE FROM `points`
-				WHERE post_id = {$id}
+				WHERE post_id = {$post->id}
 				AND user_id = {$uid}
 				LIMIT 1";
-		parent::query($sql);
-		$session->message("Thanks for your downboat.", "question.php?id={$id}", "success");
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = ($stmt->errorInfo());
+			return $error[2];
+		}
+		return true;
 	}
 
 	public static function has_voted($id, $uid){
@@ -114,7 +117,7 @@ class QNA extends User {
 		global $session;
 
 		//if not logged in
-		$author =  Student::find_by_id($post->uid) ?:  Staff::find_by_id($post->uid);
+		$author =  Student::find_by_id($post->uid);
 		if(!$session->is_logged_in()) {
 			$session->message("You must login to delete.", "", "warning");
 			return false;

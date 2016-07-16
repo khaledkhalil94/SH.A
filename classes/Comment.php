@@ -23,12 +23,33 @@ class Comment extends User {
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
+	public function getComment() {
+		global $connection;
+		$sql = "SELECT comments.*,
+				CONCAT(students.firstName, ' ', students.lastName) AS name,
+				profile_pic.path FROM `comments`
+				INNER JOIN `students` ON comments.uid = students.id
+				INNER JOIN `profile_pic` ON comments.uid = profile_pic.user_id
+				WHERE comments.id = {$this->id} 
+				AND comments.status = 1
+				LIMIT 1
+				";
+		$stmt = $connection->prepare($sql);
+		if(!$stmt->execute()){
+				$error = ($stmt->errorInfo());
+				$_SESSION['err'] = $error[2];
+				return $error[2];
+			}
+
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
+
 	public static function get_votes($id){
 		global $connection;
 		$sql = "SELECT SUM(points.votes) AS count from `points`
 				INNER JOIN `comments` ON points.post_id = comments.id
 				WHERE comments.id = {$id}";
-				$stmt = $connection->prepare($sql);
+		$stmt = $connection->prepare($sql);
 		if(!$stmt->execute()){
 				$error = ($stmt->errorInfo());
 				echo $error[2];
@@ -37,34 +58,43 @@ class Comment extends User {
 	}
 
 
-	public static function comment(){
+	public function comment(){
 		global $comment;
-		global $session;
-		if(isset($_POST['comment'])){
+		$_POST = $_POST['comment'];
+		if(isset($_POST['content'])){
 			if (!empty(trim($_POST['content']))) {
 				// random id number for the comment
 				$_POST['id'] = mt_rand(400000,500000);
-				if ($comment->create_user($_POST)) $session->message("Your comment has been submitted successfully!", "", "success");
+				return $comment->create_user();
 			} else {
-				$session->message("Comment can't be empty!", "", "danger");
+				return "Comment can't be empty.";
 			}
 		}
 	}
 
-	public static function delete($comment){
+	public function deleteComment(){
+		global $connection;
 		global $session;
-
 		//if not logged in
 		if(!$session->is_logged_in()) {
-			$session->message("You must login to upvote.", "", "warning");
-			return false;
-		} elseif(USER_ID !== Student::find_by_id($comment->uid)->id){
-			$session->message("You can't delete this comment.", "question.php?id={$comment->id}", "warning");
+
+			return "You are not logged in!";
+
+		} elseif(USER_ID !== $this->getComment()['uid']){
+			echo "You are not the comment owner!";
 			return false;
 		}
 
-		if (parent::delete($comment->id)) $session->message("Comment has been deleted!", "question.php?id={$comment->post_id}", "success");
+		$sql = "DELETE FROM `comments` where id = {$this->id}";
 
+		$stmt = $connection->prepare($sql);
+		if($stmt->execute()){
+			return array('status'=>'success','message'=>'Comment has been deleted successfully.');
+		} else {
+			$error = ($stmt->errorInfo());
+			echo $error[2];
+			return false;
+		}
 	}
 
 	public static function delete_comments($comments){

@@ -10,19 +10,6 @@ body {
   background-image: url("http://i.imgur.com/VZKhO2A.png"), linear-gradient(to bottom, #E6E5E5 0%,#D8D7D7 100%);
 }
 
-.header {
-  background-color: white;
-  color: #ccc;
-  margin: 0 auto;
-}
-
-.content {
-  margin: 0 auto;
-  max-width: 1174px;
-  height: auto;
-  background-color:white;
-}
-
 .sha-logo {
   margin-top: 20px;
   color: #fff;
@@ -359,8 +346,7 @@ ul.nav.navbar-nav {
 }
 
 .message {
-    width: 40%;
-    text-align: center;
+ text-align: center;
     margin: auto;
     margin-top: 30px;
 }

@@ -6,7 +6,7 @@
 <h3>Comments (<span id="commentscount"><?= count($comments); ?></span>): </h3>
 <form class="ui reply form" action="">
 	<div class="field">
-		<textarea name="content" id="textarea" rows="2" placeholder="Add a new comment.."></textarea>
+		<textarea name="content" id="comment-submit-textarea" rows="2" placeholder="Add a new comment.."></textarea>
 	</div>
 	<input type="hidden" name="post_id" class="form-control" value="<?= $id; ?>" >
 	<input type="hidden" name="uid" class="form-control" value="<?= USER_ID; ?>" >
@@ -55,21 +55,21 @@
 								<h4><?= $comment->content; ?></h4>
 							</div>
 							<div class="actions">
-							<?php if($voted){ ?>
+								<?php if($voted){ ?>
 								<a class="comment-vote-btn voted"><i class="heart circular red icon"></i></a><span class="comment-votes-count"><?=$votes;?></span>
-							<?php } else { ?>
+								<?php } else { ?>
 								<a class="comment-vote-btn"><i class="heart circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
-							<?php 
+								<?php 
 								} ?>
 
-							<?php if ($self || $session->adminCheck()) { ?>
+								<?php if ($self || $session->adminCheck()) { ?>
 								<a class="edit" id="edit"><i class="edit large icon"></i> Edit</a>
 								<a style="color:red;" class="delete" id="del">Delete</a>
-							<?php } ?>
+								<?php } ?>
 
-							<?php if (!$self) { ?>
-								<a class="report" href="report.php?id=<?=$comment->id;?>">Report</a>
-							<?php } ?>
+								<?php if (!$self) { ?>
+								<a class="report" id="post_report">Report</a>
+								<?php } ?>
 
 							</div>
 						</div>
@@ -78,4 +78,83 @@
 
 		<?php endforeach; 
 	}?>
+</div>
+
+
+<div class="ui small modal comment delete">
+	<div class="ui segment">
+		<div class="header">
+			<h3>DELETE</h3>
+		</div>
+		<div class="content">
+			<div class="description">
+				<h3><b>Are you sure you want to delete this comment ? This action cannot be undone.</b></h3><br>
+				<div class="ui teal message" style="text-align:left;">
+					<p></p>
+				</div>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui white deny button">
+				Cancel
+			</div>
+			<div class="ui blue button" id="comment-confirmDel">
+				Delete
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="ui small modal post delete">
+	<div class="ui segment">
+		<div class="header">
+			<h3>DELETE</h3>
+		</div>
+		<div class="content">
+			<div class="description">
+				<p>This question and all it's comments will be deleted permanently , are you sure you want to continue ?</p><br>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui white deny button">
+				Cancel
+			</div>
+			<div class="ui blue button" id="post-confirmDel">
+				Delete
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="ui small modal report">
+	<div class="header">
+		<h3>REPORT</h3>
+	</div>
+	<div class="content">
+		<div class="description">
+			<h4>Are you sure you want to report this post ?</h4>
+			<div class="ui teal message" style="text-align:left;">
+				<p></p>
+			</div>
+			<br>
+		</div>
+		<div class="ui toggle checkbox">
+			<input type="checkbox" name="public" class="hidden" tabindex="0">
+			<label>Add message</label>
+		</div>
+		<div class="ui form" id="modalForm" style="display:none;">
+			<div class="field">
+				<textarea rows="4"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui white deny button" id="report-cancel">
+			Cancel
+		</div>
+		<div class="ui blue button" id="report-confirm">
+			Report
+		</div>
+	</div>
 </div>

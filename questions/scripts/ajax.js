@@ -1,6 +1,7 @@
 // post vote
 $(function(){
-	$('#votebtn').on('click', function(e){
+	$('.blog-post').on('click', '#votebtn', function(e){
+
 		e.preventDefault();
 		$btn = $(this)
 		$('#votebtn').addClass("loading");
@@ -52,9 +53,378 @@ $(function(){
 	});
 });
 
+// post delete
+$(function(){
+
+	var $this;
+
+	$('.blog-post').on('click', '#post-delete', function(e){
+		e.preventDefault();
+
+		$this = $(this);
+
+		$('.ui.modal.post.delete').modal('show');
+
+	});
+
+	$('#post-confirmDel').click(function(e){
+
+		e.stopPropagation();
+
+		var $id = $this.parents('.blog-post').attr('id');
+		console.log($id);
+
+		// add loading
+		$('.modal.post.delete .segment').addClass('loading');
+		
+		$.ajax({
+			url: './crud/delete.php',
+			type: 'post',
+			data: {'delete':{'action':'post-delete', 'id': $id}},
+			success: function(data, status) {
+				json = $.parseJSON(data);
+				var $status = json.status;
+				if($status == "success") {
+					console.log('deleted');
+					window.location.replace('./')
+
+					} else { 
+						var $errMsg = "\
+									<div class=\"ui error message\">\
+									<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
+									<div class=\"header\">\
+									Error!\
+									</div>\
+									<ul class=\"list\">\
+									<h3>"+json.msg+"</h3>\
+									</ul>\
+									</div>";
+						$('.modal.post.delete .segment').removeClass('loading');
+						$('.modal.post.delete .segment').addClass('raised padded');
+						$('.modal.post.delete .segment').children().remove();
+						$('.modal.post.delete .segment').append($errMsg);
+
+						console.log(json);
+
+						$('#post-errmsg-close-icon').click(function(e){
+							$('.modal.post.delete').modal('hide');
+
+						});
+					}
+				},
+				error: function(xhr, desc, err) {
+					console.log(xhr);
+					console.log("Details: " + desc + "\nError:" + err);
+				}
+			}); // end ajax call
+
+	});
+});
+
+// post edit
+$(function(){
+	var $postOrgContent;
+	var $newContent;
+
+	// on editing
+	$('.blog-post').on('click', '#post-edit', function(e){
+		e.stopPropagation();
+
+		$this = $(this);
+		
+		
+		$postDOM = $this.closest('.blog-post');
+		$content = $postDOM.find('.ui.container p').text();
+		$title = $postDOM.find('.ui.header h3').text();
+
+		var $titleEdit = "\
+			<div class=\"ui vertical segment title-form form\">\
+			<div class=\"field\">\
+			<textarea style=\"resize:none;\" id=\"content\" rows=\"1\">"+$title+"</textarea><br />\
+			</div>\
+			</div>";
+		var $contentEdit = "\
+			<div class=\"ui vertical segment content-form form\">\
+			<div class=\"field\">\
+			<textarea id=\"content\" rows=\"8\">"+$content+"</textarea><br />\
+			</div>\
+			</div>";
+
+		$postOrgTitle = $postDOM.find('.header .blog-post-title').replaceWith($titleEdit);
+		$postOrgContent = $postDOM.find('.container p').replaceWith($contentEdit);
+
+		var $newActions = "\
+							<div class=\"actions\">\
+							<button class=\"ui green button\" id=\"post-confirm-save\">Save</button>\
+							<button class=\"ui button\" id=\"post-cancel\">Cancel</button>\
+							</div>";
+
+		$postOrgActions = $postDOM.find('.actions').replaceWith($newActions);
+	});
+
+	// on clicking Save
+	$('.blog-post').on('click', '#post-confirm-save', function(e){
+		e.stopPropagation();
+
+		var $PostID = $postDOM.attr('id');
+
+		$newContent = $postDOM.find('.content-form textarea#content').val();
+		$newTitle = $postDOM.find('.title-form textarea#content').val();
+		console.log($newContent);
+
+		if (typeof $newContent == 'undefined') return; // if content is not defined
+		if ($newContent.trim() == '') return; // if comment is empty
+
+		if (($content == $newContent) && ($title == $newTitle)) { // if the new content is the same as the current content
+			$('#post-cancel').click();
+			return;
+		}
+
+		if ($content != $newContent) {
+			$postDOM.find('.form.content-form').addClass('loading');
+		} else {
+			$postDOM.find('.form.content-form').replaceWith($postOrgContent);
+		}
+			
+		if ($title != $newTitle) {
+			$postDOM.find('.form.title-form').addClass('loading');
+		} else {
+			$postDOM.find('.form.title-form').replaceWith($postOrgTitle);
+		}
+
+		$.ajax({
+			url: './crud/editComment.php',
+			type: 'post',
+			data: {'data':{'action':'post-edit', 'title': $newTitle, 'content': $newContent, 'id':$PostID, 'user_id':$userID}},
+
+			success: function(data, status) {
+				var json = $.parseJSON(data);
+				console.log(json)
+				if(json.status == "success") {
+
+					var $editedDOM = '(edited <span id="post-date-ago" title="'+json.edit_date+'">'+moment(json.edit_date).fromNow()+'</span>)';
+
+					if($postDOM.find('#post-date-ago').length > 0){
+						$postDOM.find('#post-date-ago').text(moment(json.edit_date).fromNow())
+					} else {
+						$postDOM.find('.time').append($editedDOM);
+					}
+
+					$postDOM.find('.form.content-form').replaceWith('<p>'+$newContent+'</p>');
+					$postDOM.find('.form.title-form').replaceWith('<h3>'+$newTitle+'</h3>');
+
+					$postDOM.find('.actions').replaceWith($postOrgActions);
+				}
+			},
+			error: function(xhr, desc, err) {
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		}); // end ajax call
+		console.log('can');
+	});
+
+	// on clicking Cancel
+	$('.blog-post').on('click', '#post-cancel', function(e){
+		e.stopPropagation();
+
+		console.log('cancel');
+
+		$postDOM.find('.content-form.form').replaceWith($postOrgContent);
+		$postDOM.find('.title-form.form').replaceWith($postOrgTitle);
+
+		$postDOM.find('.actions').replaceWith($postOrgActions);
+
+		return null;
+	});
+});
+
+// post/comment report
+// BUGGED >> TO BE FIXED SOON^valvetime
+$(function(){
+
+	var $element;
+	var $postID;
+	var $content;
+	var $orgDOM;
+	var $reportConfirm;
+	var $errMsg;
+
+	// activating the modal on clicking report
+	$('.container.section').on('click', '#post_report', function(e){
+
+		$this = $(this);
+
+		// check if it's a blog post or a comment
+		var $Post = ($this.parents('.blog-post').length) ? true : false;
+
+		if($Post){ 
+
+			$element = $this.closest('.blog-post');
+			$postID = $element.attr('id');
+			console.log($postID);
+
+		} else { 
+
+			$element = $this.closest('.comment');
+			$postID = $element.attr('id');
+			console.log($postID);
+
+		}
+		
+		$('.ui.modal.report').modal("setting", {
+			onHidden: function () {
+				$('#report-cancel').click();
+				if (typeof($orgDOM) !== 'undefined') {
+					$('.modal.report .message').replaceWith($orgDOM);
+				}
+				$('.modal.report .actions').append($reportConfirm);
+			}
+		}).modal("show");
+		
+
+		if($Post){ // if it's a blog post
+
+			$('.ui.message').remove();
+
+		} else { // else it's a comment
+
+			$content = $element.find($('h4')).text();
+			$('.description p').text($content);
+			console.log($content);
+
+		}
+
+
+	});
+
+	// toggling the checkbox
+	$('.modal.report').on('click','.checkbox', function(){ 
+		$('.checkbox').checkbox({
+			onChange: function() {
+				$('#modalForm').toggle(450);
+			}
+		});
+	});
+
+
+	// submitting the report
+	$('.modal.report').on('click', '#report-confirm', function(e){
+
+		var $newContent = $('#modalForm textarea').val();
+
+		// ADD class="ui segment loading" instead of the loader
+		$loader = 
+				"<div class=\"ui container segment\" style=\"margin:40px 0px;\">\
+				<div class=\"ui loading form\" id=\"modalForm\">\
+				<div class=\"field\">\
+				<textarea rows=\"6\"></textarea>\
+				</div>\
+				</div>\
+				</div>";
+		$('.checkbox').checkbox('uncheck');
+		$('#modalForm textarea').val('');
+		console.log($('.description p'));
+		$orgDOM = $('.modal.report .content').replaceWith($loader);
+
+		$.ajax({
+			url: './crud/report.php',
+			type: 'post',
+			data: {'report':
+				 	{
+				 		'action':'report-comment',
+				 		'content':$newContent,
+				 		'post_id':$postID,
+				 		'uid':$userID
+				 	}
+				},
+			success: function(data, status) {
+
+				json = $.parseJSON(data);
+
+					
+				if (json.status == "success") { // report success
+					console.log("raported");
+					$sucMsg = "\
+								<div class=\"ui success message\" style=\"width: 95%; margin: 25px auto;\">\
+								<div class=\"header\">\
+								Success!\
+								</div>\
+								<ul class=\"list\">\
+								<li>Comment has been reported, thanks for you submission.</li>\
+								</ul>\
+								</div>\
+								</div>";
+
+					$('.modal.report .container').replaceWith($sucMsg);
+
+					$reportConfirm = $('#report-confirm');
+					$reportConfirm.remove();
+
+				} else if(json.errKey == 1062) { // duplicate key >> already reported
+					
+						$errMsg = "\
+								<div class=\"ui error message\" style=\"width: 95%; margin: 25px auto;\">\
+								<div class=\"header\">\
+								Error!\
+								</div>\
+								<ul class=\"list\">\
+								<li>You have already reported this comment.</li>\
+								</ul>\
+								</div>\
+								</div>";
+						$cancelBtn = "\
+										<div class=\"actions\" style=\"text-align:right;\">\
+										<div class=\"ui white deny button\" id=\"report-cancel\">Close\
+										</div>\
+										</div>";
+
+						$('.modal.report .container').replaceWith($errMsg);
+
+						$reportConfirm = $('#report-confirm');
+						$reportConfirm.remove();
+
+				} else {
+					$errMsg = "\
+								<div class=\"ui error message\" style=\"width: 95%; margin: 25px auto;\">\
+								<div class=\"header\">\
+								Error!\
+								</div>\
+								<ul class=\"list\">\
+								<li>"+json.errMsg+".</li>\
+								</ul>\
+								</div>\
+								</div>";
+
+					$('.modal.report .container').replaceWith($errMsg);
+					$reportConfirm = $('#report-confirm');
+					$reportConfirm.remove();
+					console.log(json);
+				}
+			},
+			error: function(xhr, desc, err) {
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		}); // end ajax call
+			
+		//$('#report-cancel').click();
+	});
+
+	// cancelling
+	$('.modal.report').on('click', '#report-cancel', function(e){
+		e.stopPropagation();
+		console.log('cancelling');
+		$newContent = '';
+		$('#modalForm textarea').val('');
+		$('.checkbox').checkbox('uncheck');
+		
+	});
+});
+
 // comment votes
 $(function(){
-	$('.comment-vote-btn').on('click', function(e){
+	$('#comments').on('click', '.comment-vote-btn', function(e){
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -120,11 +490,11 @@ $(function(){
 
 // comment submit
 $(function(){
-	$(".field textarea").focusin(function(){
+	$("#comment-submit-textarea").focusin(function(){
 		$('#subcomment').show();
 	});
 
-	$("#textarea").keyup(function(){
+	$("#comment-submit-textarea").keyup(function(){
 		var $this = $(this);
 		var $value = $this.val();
 		var len = $this.val().length;
@@ -185,32 +555,50 @@ $(function(){
 
 // comment delete
 $(function(){
-	$('.commentz').on('click', '#del', function(e){
-		console.log($(this));
+
+	var $this;
+
+	$('#comments').on('click', '#del', function(e){
+		e.preventDefault();
+
+		$this = $(this);
+		var $content = $this.closest('.comment').find($('h4')).text();
+
+		$('.description p').text($content);
+		$('.ui.modal.comment.delete').modal('show');
+
+	});
+
+	$('#comment-confirmDel').click(function(e){
+
 		e.stopPropagation();
 		e.preventDefault();
-		var $commentDOM = $(this).parents('.comment');
-		var $id = $(this).parents('.comment').attr('id');
+
+		var $commentDOM = $this.parents('.comment');
+		var $id = $this.parents('.comment').attr('id');
 		var $emptycmt = '<span id=\"emptycmt\">There is nothing here yet, be the first to comment!</span>'
+
 		$.ajax({
 			url: './crud/delete.php',
 			type: 'post',
-			data: {'data':{'action':'delete', 'id': $id}},
+			data: {'delete':{'action':'comment-delete', 'id': $id}},
 			success: function(data, status) {
 				var $status = $.parseJSON(data).status;
 				if($status == "success") {
 
-						// decrement the comments count
-						var commentscount = parseInt($('#commentscount').text()) - 1;
-						$('#commentscount').text(commentscount);
+					// decrement the comments count
+					var commentscount = parseInt($('#commentscount').text()) - 1;
+					$('#commentscount').text(commentscount);
 
-						// remove the comment from the DOM
-						$commentDOM.remove();
+					// remove the comment from the DOM
+					$commentDOM.remove();
 
-						// if all comments are removed, add the empty comment text
-						if (commentscount === 0) {
-							$('#comments').append($emptycmt);
-						}
+					// if all comments are removed, add the empty comment text
+					if (commentscount === 0) {
+						$('#comments').append($emptycmt);
+					}
+
+					$('.ui.small.modal').modal('hide');
 
 					}
 				},
@@ -228,26 +616,29 @@ $(function(){
 	var $content;
 	var $commentDOM;
 	var $orgContent;
+	var $this;
+	var $newContent = "";
 
 	// on editing
 	$('#comments').on('click', '#edit', function(e){
 		e.stopPropagation();
 		e.preventDefault();
 
-		var $this = $(this);
-		var $newContent = "";
+		$this = $(this);
+		$('#cancel').click();
+		
 		$commentDOM = $this.closest('.comment');
 		var $element = $commentDOM.find('.text h4');
 		$content = $element.text();
 
 		var $input = "\
-		<div class=\"ui form\">\
-		<div class=\"field\">\
-		<textarea id=\"content\" rows=\"2\">"+$content+"</textarea><br />\
-		<button class=\"ui mini green button\" id=\"save\">Save</button>\
-		<button class=\"ui mini button\" id=\"cancel\">Cancel</button>\
-		</div>\
-		</div>";
+					<div class=\"ui form\">\
+					<div class=\"field\">\
+					<textarea id=\"content\" rows=\"2\">"+$content+"</textarea><br />\
+					<button class=\"ui mini green button\" id=\"save\">Save</button>\
+					<button class=\"ui mini button\" id=\"cancel\">Cancel</button>\
+					</div>\
+					</div>";
 
 		$orgContent = $element.replaceWith($input);
 		$commentDOM.find('.actions').hide();
@@ -257,10 +648,10 @@ $(function(){
 	// on clicking Save
 	$('#comments').on('click', '#save', function(e){
 		e.stopPropagation();
-		var $this = $(this);
+
 		var $commentID = $commentDOM.attr('id');
 
-		var $newContent = $commentDOM.find('textarea#content').val();
+		$newContent = $commentDOM.find('textarea#content').val();
 		console.log($newContent);
 
 		if (typeof $newContent == 'undefined') return; // if content is not defined
@@ -271,13 +662,12 @@ $(function(){
 			return;
 		}
 
-		// add some sexy events
 		$this.closest('.comment').find('.form').addClass('loading');
 
 		$.ajax({
 			url: './crud/editComment.php',
 			type: 'post',
-			data: {'data':{'action':'edit', 'content': $newContent, 'id':$commentID}},
+			data: {'data':{'action':'comment-edit', 'content': $newContent, 'id':$commentID, 'user_id':$userID}},
 			success: function(data, status) {
 				var $data = $.parseJSON(data);
 				var $editedDOM = '(edited <span id="editedDate" title="'+$data.edit_date+'">'+moment($data.edit_date).fromNow()+'</span>)';
@@ -304,22 +694,10 @@ $(function(){
 	// on clicking Cancel
 	$('#comments').on('click', '#cancel', function(e){
 		e.stopPropagation();
-		var $this = $(this);
 
 		$(this).closest('.comment').find('.form').replaceWith($orgContent);
 		$commentDOM.find('.actions').show();
 		return null;
-	});
-});
-
-// parsing and displaying times
-$(function(){
-	$('.comments').each(function(index, value) {
-		$date = $(this).find('#commentDate').text();
-		$(this).find('#commentDate').text(moment($date).fromNow());
-
-		$date = $(this).find('#editedDate').text();
-		$(this).find('#editedDate').text(moment($date).fromNow());
 	});
 });
 
@@ -340,7 +718,7 @@ $.fn.comment = function(DataObject){
 	<h4>"+DataObject.content+"</h4>\
 	</div>\
 	<div class=\"actions\">\
-	<i class=\"heart red icon\"></i>\
+	<a class=\"comment-vote-btn\"><i class=\"heart circular icon\"></i></a><span class=\"comment-votes-count\"></span>\
 	<a class=\"edit\" id=\"edit\">Edit</a>\
 	<a style=\"color:red;\" class=\"delete\" id=\"del\">Delete</a>\
 	</div>\
@@ -350,10 +728,27 @@ $.fn.comment = function(DataObject){
 	return $comment;
 };
 
+// toggle hover class
 $(function(){
 	$('.comment-vote-btn.voted i').hover(
 		function() {
     		$(this).toggleClass("empty");
   		}
   	);
+});
+
+// parsing and displaying times
+$(function(){
+
+	$('#post-date').text(moment($('#post-date').text()).fromNow());
+	$('#post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
+
+
+	$('.comments').each(function(index, value) {
+		$date = $(this).find('#commentDate').text();
+		$(this).find('#commentDate').text(moment($date).fromNow());
+
+		$date = $(this).find('#editedDate').text();
+		$(this).find('#editedDate').text(moment($date).fromNow());
+	});
 });

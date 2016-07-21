@@ -129,29 +129,49 @@ class QNA extends User {
 				parent::query("UPDATE `questions` SET status = 0 WHERE id = {$post->id}") // hides the post
 				//parent::delete($post->id) // deletes the post
 				){
-				//$session->message("Question has been deleted!", ".", "success");
+
 				return true;
 			}
 		}
-		$session->message("You can't delete this question.", "question.php?id={$post->id}", "warning");
 		return false;
 
 	}
 
-	public static function report($post){
+	public function report(){
 		global $connection;
 		global $session;
-		if(!$session->is_logged_in()) {
-			$session->message("You must login to report.", "", "warning");
-			return false;
+
+		$_POST = $_POST['report'];
+
+		if(!$session->is_logged_in())  exit("You must login to report.");
+
+		if ($_POST['uid'] !== USER_ID) exit("Error, wrong uid");
+
+		$this->uid = USER_ID;
+		$this->post_id = sanitize_id($_POST['post_id']);
+
+		if(isset($_POST['content'])){
+			$this->content = trim($_POST['content']);
+			if (empty($this->content)) $this->content = "";
 		}
-		$reporter = USER_ID;
+
+		$_SESSION['this'] = $this;
+
 		$sql = "INSERT INTO `reports`
 				(post_id, reporter, content, date) 
-				VALUES ('{$post->id}','{$reporter}', ? ,CURRENT_TIME)";
+				VALUES ('{$this->post_id}','{$this->uid}', ? ,CURRENT_TIME)";
+
 		$stmt = $connection->prepare($sql);
-		$stmt->bindParam(1, $_POST['content']);
-		return $stmt->execute();
+		$stmt->bindParam(1, $this->content);
+
+		//return $stmt->execute();
+
+		if($stmt->execute() == false){
+			$error = $stmt->errorInfo();
+			return json_encode(array('status' => 'fail', 'errKey' => $error[1], 'errMsg' =>  $error[2]));
+		} else {
+			return json_encode(array('status' => 'success'));
+		}
 	}
 
 	public function get_reports($table="", $post_id=""){
@@ -201,6 +221,15 @@ class QNA extends User {
 		global $connection;
 		$sql = "DELETE FROM `reports` WHERE id = {$id}";
 		return parent::query($sql);
+	}
+
+	public static function did_report($post_id, $uid){
+		global $connection;
+
+		$sql = "SELECT 1 FROM `reports` WHERE post_id = {$post_id} AND reporter = {$uid}";
+
+		$stmt = $connection->query($sql);
+		return $stmt->fetch()[1];
 	}
 
 }

@@ -69,6 +69,7 @@ if($q->last_modified > $q->created){
 			</div>
 			<script>
 				$('#popup').popup({on: 'click'});
+			
 			</script>
 		<hr>
 		<p><a href="/sha/login.php">Login</a> or <a href="/sha/signup.php">sign up</a> to comment on this post.</p>

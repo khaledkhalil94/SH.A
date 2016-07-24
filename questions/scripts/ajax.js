@@ -53,6 +53,144 @@ $(function(){
 	});
 });
 
+// post publish
+$(function(){
+
+	var $this;
+
+	$('.blog-post').on('click', '#post-publish', function(e){
+		e.preventDefault();
+
+		$this = $(this);
+
+		$('.ui.modal.post.publish').modal('show');
+
+	});
+
+	$('#post-confirmPub').click(function(e){
+
+		e.stopPropagation();
+
+		var $id = $postID;
+		console.log($id);
+
+		// add loading
+		$('.modal.post.publish .segment').addClass('loading');
+		
+		$.ajax({
+			url: './crud/unpublish.php',
+			type: 'post',
+			data: {'status':{'action':'post-publish', 'id': $id}},
+			success: function(data, status) {
+				json = $.parseJSON(data);
+				var $status = json.status;
+				if($status == "success") {
+					console.log('published');
+					$('.modal.post.publish').modal('hide');
+					window.location.reload(false);
+
+				} else { 
+					var $errMsg = "\
+								<div class=\"ui error message\">\
+								<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
+								<div class=\"header\">\
+								Error!\
+								</div>\
+								<ul class=\"list\">\
+								<h3>"+json.msg+"</h3>\
+								</ul>\
+								</div>";
+					$('.modal.post.publish .segment').removeClass('loading').addClass('raised padded');
+					$('#post-publish').parent().removeClass('active selected');
+					$('.modal.post.publish .segment').children().remove();
+					$('.modal.post.publish .segment').append($errMsg);
+
+					console.log(json);
+
+					$('#post-errmsg-close-icon').click(function(e){
+						$('.modal.post.publish').modal('hide');
+
+					});
+				}
+				},
+				error: function(xhr, desc, err) {
+					console.log(xhr);
+					console.log("Details: " + desc + "\nError:" + err);
+				}
+			}); // end ajax call
+
+	});
+});
+
+// post unpublish
+$(function(){
+
+	var $this;
+
+	$('.blog-post').on('click', '#post-unpublish', function(e){
+		e.preventDefault();
+
+		$this = $(this);
+
+		$('.ui.modal.post.unpublish').modal('show');
+
+	});
+
+	$('#post-confirmUnP').click(function(e){
+
+		e.stopPropagation();
+
+		var $id = $postID;
+		console.log($id);
+
+		// add loading
+		$('.modal.post.unpublish .segment').addClass('loading');
+		
+		$.ajax({
+			url: './crud/unpublish.php',
+			type: 'post',
+			data: {'status':{'action':'post-unpublish', 'id': $id}},
+			success: function(data, status) {
+				json = $.parseJSON(data);
+				var $status = json.status;
+				if($status == "success") {
+					console.log('unpublishd');
+					$('.modal.post.unpublish').modal('hide');
+					window.location.reload(false);
+
+				} else { 
+					var $errMsg = "\
+								<div class=\"ui error message\">\
+								<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
+								<div class=\"header\">\
+								Error!\
+								</div>\
+								<ul class=\"list\">\
+								<h3>"+json.msg+"</h3>\
+								</ul>\
+								</div>";
+					$('.modal.post.unpublish .segment').removeClass('loading').addClass('raised padded');
+					$('#post-unpublish').parent().removeClass('active selected');
+					$('.modal.post.unpublish .segment').children().remove();
+					$('.modal.post.unpublish .segment').append($errMsg);
+
+					console.log(json);
+
+					$('#post-errmsg-close-icon').click(function(e){
+						$('.modal.post.unpublish').modal('hide');
+
+					});
+				}
+				},
+				error: function(xhr, desc, err) {
+					console.log(xhr);
+					console.log("Details: " + desc + "\nError:" + err);
+				}
+			}); // end ajax call
+
+	});
+});
+
 // post delete
 $(function(){
 
@@ -99,8 +237,8 @@ $(function(){
 									<h3>"+json.msg+"</h3>\
 									</ul>\
 									</div>";
-						$('.modal.post.delete .segment').removeClass('loading');
-						$('.modal.post.delete .segment').addClass('raised padded');
+						$('.modal.post.delete .segment').removeClass('loading').addClass('raised padded');
+						$('#post-delete').parent().removeClass('active selected');
 						$('.modal.post.delete .segment').children().remove();
 						$('.modal.post.delete .segment').append($errMsg);
 
@@ -132,7 +270,6 @@ $(function(){
 
 		$this = $(this);
 		
-		
 		$postDOM = $this.closest('.blog-post');
 		$content = $postDOM.find('.ui.container p').text();
 		$title = $postDOM.find('.ui.header h3').text();
@@ -154,12 +291,14 @@ $(function(){
 		$postOrgContent = $postDOM.find('.container p').replaceWith($contentEdit);
 
 		var $newActions = "\
-							<div class=\"actions\">\
-							<button class=\"ui green button\" id=\"post-confirm-save\">Save</button>\
-							<button class=\"ui button\" id=\"post-cancel\">Cancel</button>\
-							</div>";
+			<div class=\"actions\">\
+			<button class=\"ui green button\" id=\"post-confirm-save\">Save</button>\
+			<button class=\"ui button\" id=\"post-cancel\">Cancel</button>\
+			</div>";
 
 		$postOrgActions = $postDOM.find('.actions').replaceWith($newActions);
+
+		$('.ui.pointing.dropdown').hide();
 	});
 
 	// on clicking Save
@@ -191,6 +330,9 @@ $(function(){
 		} else {
 			$postDOM.find('.form.title-form').replaceWith($postOrgTitle);
 		}
+
+		$('#post-edit').parent().removeClass('active selected');
+		$('.ui.pointing.dropdown').show();
 
 		$.ajax({
 			url: './crud/editComment.php',
@@ -228,12 +370,13 @@ $(function(){
 	$('.blog-post').on('click', '#post-cancel', function(e){
 		e.stopPropagation();
 
-		console.log('cancel');
-
 		$postDOM.find('.content-form.form').replaceWith($postOrgContent);
 		$postDOM.find('.title-form.form').replaceWith($postOrgTitle);
 
 		$postDOM.find('.actions').replaceWith($postOrgActions);
+
+		$('#post-edit').parent().removeClass('active selected');
+		$('.ui.pointing.dropdown').show();
 
 		return null;
 	});
@@ -418,11 +561,12 @@ $(function(){
 		$newContent = '';
 		$('#modalForm textarea').val('');
 		$('.checkbox').checkbox('uncheck');
-		
+	
 	});
 });
 
 // comment votes
+// NEEDS IMPROVMENTS
 $(function(){
 	$('#comments').on('click', '.comment-vote-btn', function(e){
 		e.preventDefault();
@@ -445,6 +589,7 @@ $(function(){
 					if(status == "success") {
 						$comment.find($('.comment-vote-btn')).addClass("voted");
 						$comment.find($('.comment-vote-btn i')).addClass("red");
+
 						//$comment.find($('.comment-vote-btn')).text("unlike");
 
 						var $votescount = parseInt($comment.find($('.comment-votes-count')).text());
@@ -591,7 +736,7 @@ $(function(){
 					$('#commentscount').text(commentscount);
 
 					// remove the comment from the DOM
-					$commentDOM.remove();
+					$commentDOM.parent().remove();
 
 					// if all comments are removed, add the empty comment text
 					if (commentscount === 0) {
@@ -641,7 +786,8 @@ $(function(){
 					</div>";
 
 		$orgContent = $element.replaceWith($input);
-		$commentDOM.find('.actions').hide();
+		$commentDOM.find('#comment-actions').hide();
+		$commentDOM.find('.comment-points').hide();
 
 	});
 
@@ -680,7 +826,9 @@ $(function(){
 					}
 
 					$commentDOM.find('.form').replaceWith('<h4>'+$newContent+'</h4>');
-					$('.comment .actions').show();
+
+					$commentDOM.find('#comment-actions').show();
+					$commentDOM.find('.comment-points').show();
 				}
 			},
 			error: function(xhr, desc, err) {
@@ -696,7 +844,9 @@ $(function(){
 		e.stopPropagation();
 
 		$(this).closest('.comment').find('.form').replaceWith($orgContent);
-		$commentDOM.find('.actions').show();
+
+		$commentDOM.find('#comment-actions').show();
+		$commentDOM.find('.comment-points').show();
 		return null;
 	});
 });
@@ -704,26 +854,33 @@ $(function(){
 // the comment object
 $.fn.comment = function(DataObject){
 	var $comment = " \
-	<div class=\"ui comments\">\
-	<div class=\"comment\" id=\""+DataObject.id+"\">\
-	<a class=\"avatar\" href=\"/sha/students/"+DataObject.uid+"/\">\
-	<img src=\""+DataObject.path+"\">\
-	</a>\
-	<div class=\"content\">\
-	<a class=\"author\" href=\"/sha/students/"+DataObject.uid+"/\">"+DataObject.name+"</a>\
-	<div class=\"metadata\">\
-	<span class=\"date\">"+moment(DataObject.created).fromNow()+"</span>\
-	</div>\
-	<div class=\"text\">\
-	<h4>"+DataObject.content+"</h4>\
-	</div>\
-	<div class=\"actions\">\
-	<a class=\"comment-vote-btn\"><i class=\"heart circular icon\"></i></a><span class=\"comment-votes-count\"></span>\
-	<a class=\"edit\" id=\"edit\">Edit</a>\
-	<a style=\"color:red;\" class=\"delete\" id=\"del\">Delete</a>\
-	</div>\
-	</div>\
-	</div>\
+	<div class=\"ui minimal comments\">\
+		<div class=\"ui comment padded segment\" id=\""+DataObject.id+"\">\
+			<a class=\"avatar\" href=\"/sha/students/"+DataObject.uid+"/\">\
+				<img src=\""+DataObject.path+"\">\
+			</a>\
+			<div class=\"content\">\
+				<a class=\"author\" href=\"/sha/students/"+DataObject.uid+"/\">"+DataObject.name+"</a>\
+				<div class=\"metadata\">\
+					<span class=\"date\">"+moment(DataObject.created).fromNow()+"</span>\
+				</div>\
+				<div class=\"text\">\
+					<h4>"+DataObject.content+"</h4>\
+				</div>\
+				<a class=\"comment-vote-btn\"><i class=\"heart circular icon\"></i></a><span class=\"comment-votes-count\"></span>\
+				<div title=\"Actions\" class=\"ui pointing dropdown\">\
+					<i class=\"ellipsis link big horizontal icon\"></i>\
+					<div class=\"menu\">\
+						<div class=\"item\" id=\"edit\">\
+							<a class=\"edit\">Edit</a>\
+						</div>\
+						<div class=\"item\" id=\"del\">\
+							<a class=\"delete\">Delete</a>\
+						</div>\
+					</div>\
+				</div>\
+			</div>\
+		</div>\
 	</div>"
 	return $comment;
 };
@@ -737,18 +894,25 @@ $(function(){
   	);
 });
 
-// parsing and displaying times
+$('.message .close')
+  .on('click', function() {
+    $(this)
+      .closest('.message')
+      .transition('fade');
+  });
+
+//parsing and displaying times
 $(function(){
 
 	$('#post-date').text(moment($('#post-date').text()).fromNow());
 	$('#post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
 
 
-	$('.comments').each(function(index, value) {
-		$date = $(this).find('#commentDate').text();
-		$(this).find('#commentDate').text(moment($date).fromNow());
+	// $('.comments').each(function(index, value) {
+	// 	$date = $(this).find('#commentDate').text();
+	// 	$(this).find('#commentDate').text(moment($date).fromNow());
 
-		$date = $(this).find('#editedDate').text();
-		$(this).find('#editedDate').text(moment($date).fromNow());
-	});
+	// 	$date = $(this).find('#editedDate').text();
+	// 	$(this).find('#editedDate').text(moment($date).fromNow());
+	// });
 });

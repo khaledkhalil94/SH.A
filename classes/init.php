@@ -7,7 +7,7 @@ defined('DB_NAME')   ? null : define('DB_NAME', "sha2");
 defined('BASE_URL')  ? null : define('BASE_URL', "/sha/");
 defined('ROOT_PATH') ? null : define('ROOT_PATH',  $_SERVER["DOCUMENT_ROOT"] . "/sha/");
 defined('DOCROOT')   ? null : define('DOCROOT', __DIR__);
-defined('DEF_PIC')   ? null : define('DEF_PIC', ROOT_PATH."images/profilepic/pp.png");
+defined('DEF_PIC')   ? null : define('DEF_PIC', BASE_URL."images/profilepic/pp.png");
 
 
 defined('MAX_PIC_SIZE') ? null : define('MAX_PIC_SIZE', 300000);

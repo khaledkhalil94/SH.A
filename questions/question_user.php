@@ -2,7 +2,8 @@
 // The view for the users
 $pageTitle = "Question/User";
 $id = sanitize_id($_GET['id']) ?: null;
-if(!$q = QNA::find_by_id($id)) {
+
+if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
 	if ($q = Comment::find_by_id($id)) { 
 		$q = $q->post_id;
@@ -15,12 +16,13 @@ if(!$q = QNA::find_by_id($id)) {
 
 //if($q->status == 0 && !$session->adminCheck()) $session->message("Page was not found!", "/sha/404.php", "warning");
 
-
-// if can't find id in the student database (not a student), try to find it in the staff database (staff)
 $user = Student::find_by_id($q->uid);
-$self = $q->uid === USER_ID;
 
-//if (isset($_GET['dlq'])) QNA::delete($q);
+if (!($session->userCheck($user) || $session->adminCheck()) && ($q->status == "2")){
+	$session->message("Page was not found!", "/sha/404.php", "warning");
+}
+
+$self = $q->uid === USER_ID;
 
 $voted = QNA::has_voted($id, USER_ID);
 
@@ -35,15 +37,15 @@ if($q->last_modified > $q->created){
 	$edited = "";
 }
 $isReported = QNA::reports("questions", $id);
-$reports_count = QNA::get_reports("questions", $id) ? QNA::get_reports("questions", $id)[0]->count : null; 
-$reports_count = $reports_count > 1 ? "This post has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This post has been reported once.");
+$reports_count = QNA::get_reports("questions", $id) ?: null; 
+$reports_count = $reports_count > 1 ? $reports_count." times." : ($reports_count === NULL ? NULL : "1 time.");
 include (ROOT_PATH . 'inc/head.php');
-$name = !$self ? $user->full_name() : "You";
+$name = $q->full_name;
+$imgPath = $q->img_path ?: DEF_PIC;
 ?>
 <script>
 var $postID = <?= $_GET['id'];?>;
 var $userID = <?= USER_ID;?>;
-var $imgPath = "<?= ProfilePicture::get_profile_pic(Student::find_by_id(USER_ID));?>";
 </script>
 <body>
 	<div class="container section">

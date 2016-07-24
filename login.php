@@ -9,11 +9,9 @@ if (isset($_POST['submit'])){
 	  $username = trim(strtolower($_POST['Username']));
     $password = trim(strtolower($_POST['password']));
     
-    if($username == "admin"){
-      $found_user = Staff::authenticate($username, $password);
-      } else {
-        $found_user = StudentInfo::authenticate($username, $password);
-      }
+
+    $found_user = StudentInfo::authenticate($username, $password);
+
 
     if ($found_user) {
     	//success

@@ -13,14 +13,48 @@ class QNA extends User {
 		self::$db_fields = array_keys((array)$this);
 	}
 
+	public static function get_question($id){
+		global $connection;
+
+		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+				faculties.title AS fac, profile_pic.path AS img_path,
+				questions.* FROM `questions`
+				INNER JOIN `students` ON students.id = questions.uid
+				INNER JOIN `faculties` ON faculties.id = questions.faculty_id
+				LEFT JOIN `profile_pic` ON profile_pic.user_id = questions.uid
+
+				WHERE questions.id = {$id} AND questions.status != 0";
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			echo $error[2];
+		}
+
+		return array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
+		
+	}
+
 	public static function get_content($faculty_id=""){
 		global $connection;
 		$sql = "SELECT * FROM `questions` 
-				WHERE status = 1 ";
+				WHERE status != 0 ";
 				if (!empty($faculty_id)) {
 				 $sql .= "AND faculty_id = $faculty_id ";
 				}
 		$sql .= "ORDER BY created DESC
+				";
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public static function get_content_by_user($uid){
+		global $connection;
+		$sql = "SELECT * FROM `questions` 
+				WHERE status = 1
+				AND uid = {$uid}
+				ORDER BY created DESC
 				";
 		$stmt = $connection->query($sql);
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -32,12 +66,11 @@ class QNA extends User {
 		$var = "";
 		foreach ($articles as $article): 
 			if ($article->id != $q->id): 
-				$var .= "<a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a>";
+				$var .= "<li class=\"item\"><a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a></li>";
 			endif; 
 		endforeach;
 		return $var;
 	}
-
 
 	public static function upvote($post, $uid){
 		global $connection;
@@ -58,7 +91,6 @@ class QNA extends User {
 			return $error[2];
 		}
 		return true;
-
 	}
 
 	public static function downvote($post, $uid){
@@ -134,7 +166,6 @@ class QNA extends User {
 			}
 		}
 		return false;
-
 	}
 
 	public function report(){
@@ -195,8 +226,10 @@ class QNA extends User {
 			$error = ($stmt->errorInfo());
 			echo $error[2];
 		}
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
 
+		$result = array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
+
+		return !empty($result) ? $result->count : false;
 	}
 
 	public static function reports($table, $id=""){
@@ -230,6 +263,14 @@ class QNA extends User {
 
 		$stmt = $connection->query($sql);
 		return $stmt->fetch()[1];
+	}
+
+	public static function unPublish($id){
+		return parent::query("UPDATE `questions` SET status = 2 WHERE id = {$id}");
+	}
+
+	public static function Publish($id){
+		return parent::query("UPDATE `questions` SET status = 1 WHERE id = {$id}");
 	}
 
 }

@@ -35,9 +35,15 @@ switch ($_POST['action']) {
 	case 'post-edit':
 		if(!($post = QNA::find_by_id($_POST['id']))) exit(json_encode(array('status'=>'fail','post_id' => $_POST['id'], 'msg' => 'Post was not found.')));
 
-		$content = trim($_POST['content']);
+		if($post->uid !== USER_ID) {
+			echo(json_encode(array('status'=>'fail','post_id' => $_POST['id'], 'msg' => 'Authentication failed.')));
+			exit;
+		}
 
-		if (empty($content)) exit(json_encode(array('status'=>'fail','post_id' => $_POST['id'], 'msg' => 'Content is empty.')));
+		if (empty(trim($_POST['content']))) {
+			echo(json_encode(array('status'=>'fail','post_id' => $_POST['id'], 'msg' => 'Content is empty.')));
+			exit;
+		}
 
 		if ($QNA->update($_POST)){
 			$edit_date = date("Y-m-d H:i:s");

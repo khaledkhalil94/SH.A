@@ -8,84 +8,121 @@ switch ($section) {
 	case 'eng':
 		$qs = QNA::get_content(1);
 		$Count = count($qs);
-		$eng = "style=\"background-color: #44ff59;\"";
+		$sec = array('1', 'Engineering');
 		break;
 	case 'cs':
 		$qs = QNA::get_content(2);
 		$Count = count($qs);
-		$cs = "style=\"background-color: #44ff59;\"";
+		$sec = array('2','Computer Science');
 		break;
 	case 'md':
 		$qs = QNA::get_content(3);
 		$Count = count($qs);
-		$md = "style=\"background-color: #44ff59;\"";
+		$sec = array('3', 'Medicine');
 		break;
 	default:
 		$qs = QNA::get_content();
 		$Count = count($qs);
-		$css = "style=\"background-color: #44ff59;\"";
+		$sec = array('0', 'All');
 		break;
 }
 //if (!isset($id)) exit("404 NOT FOUND!");
-$heart = "<i style=\"color:red;\" class=\"fa fa-heart fa-5\" title=\"points\" aria-hidden=\"true\"></i>";
-$heartO = "<i style=\"color:red;\" class=\"fa fa-heart-o fa-5\" title=\"points\" aria-hidden=\"true\"></i>";
-$comment = "<i style=\"margin-left: 10px;\" class=\"fa fa-comments-o\" aria-hidden=\"true\"></i>";
 ?>
 <body>
 	<div class="container section">
-	<?php if ($session->is_logged_in()): ?>
-		<div class="sortby">
-			<p>Showing questions from: </p>
-				<nav>
-					<ul class="pager">
-						<li><a <?= isset($css) ? $css : null; ?> href=".">All</a></li>
-						<li><a <?= isset($eng) ? $eng :null;?> href="?section=eng"> Engineering</a></li>
-						<li><a <?= isset($cs) ? $cs : null; ?> href="?section=cs"> Computer Science</a></li>
-						<li><a <?= isset($md) ? $md : null; ?> href="?section=md"> Medicine</a></li>
-					</ul>
-				</nav>
-			</div>
-	<?php endif; ?>
-	<?= msgs(); ?>
-		<h3>Questions</h3>
-		<!-- TODO: Add pagination -->
-		<?php 
-		if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; } else {;
-		foreach ($qs as $q):
-			$length = 150;
-			$subject = ctrim($q->content, $length);
-			if (strlen($q->content) > $length) {
-				$subject .= "... <a href=\"question.php?id={$q->id}\"> Read More</a>";
-			}
-			$user = Student::find_by_id($q->uid) ?: Staff::find_by_id($q->uid);
-			$self = $q->uid === USER_ID ?: false;
-			$commentsCount = count(Comment::get_comments($q->id));
-			$commentsCount = $comment." {$commentsCount}";
-			$votes = QNA::get_votes($q->id);
-			$votes = $votes > 0 ? $heart." {$votes}" : $heartO.$votes;
-			$reports_count = QNA::get_reports("questions", $q->id) ? QNA::get_reports("questions", $q->id)[0]->count : null;
-			$reports_count = $reports_count > 1 ? $reports_count." Reports" : ($reports_count === NULL ? "0 Reports" : "1 Report");
-			?>
-				<div class="jumbotron">
-					<a href="../questions/question.php?id=<?php echo $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
-
-					<span><b><a href="<?= BASE_URL."students/".$user->id; ?>/"><?= $self ? "You" : $user->full_name();?></a></b> asked a question</span>
-
-					<span title="<?= displayDate($q->created, "M d, Y h:m"); ?>" style="border-bottom: dashed 1px black"><?= get_timeago($q->created, "M d, Y");?> </span> in <span><?= array_search($q->faculty_id, $faculties); ?></span>
-					<hr>
-					<p> <?= $subject; ?> </p>
-					<br><br><br><hr>
-					<!-- TODO: add Number of comments/points -->
-					<span><?=$votes;?></span> <span><?= $commentsCount; ?></span>
-					<?php if($session->adminCheck()): ?>
-						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $q->id; ?>"> and <?= $reports_count; ?></a>
-					<?php endif; ?>
+		<?php if ($session->is_logged_in()): ?>
+			<div class="questions sortby">
+				<p style="display:inline;">Show questions from: </p>
+				<div class="ui inline dropdown">
+					<div class="text">
+					<?= $sec[1]; ?>
+					</div>
+					<i class="dropdown icon"></i>
+					<div class="menu">
+						<a href=".">
+							<div class="item <?= $sec[0] == "0" ? "active selected" : null; ?>">
+							All
+							</div>
+						</a>
+						<a href="?section=eng">
+						<div class="item <?= $sec[0] == "1" ? "active selected" : null; ?>">
+							 Engineering</div>
+						</a>
+						<a href="?section=cs">
+							<div class="item <?= $sec[0] == "2" ? "active selected" : null; ?>">
+							 Computer Science
+							</div>
+						</a>
+						<a href="?section=md">
+							<div class="item <?= $sec[0] == "3" ? 'active selected' : null; ?>">
+							Medicine
+							</div>
+						</a>
+					</div>
 				</div>
+					<br>
+					<br>
+					<script>$('.ui.dropdown').dropdown();</script>
+			</div>
+			<a type="button" href="create.php" class="ui green button">Ask a new question</a>
+		<?php endif; ?>
+		<?= msgs(); ?>
+		<hr>
+		<div class="container questions" id="questions">
+			<h3>Questions</h3>
+			<!-- TODO: Add pagination -->
 			<?php 
-	 	endforeach; 
-	 	}?>
-		<a type="button" href="create.php" class="btn btn-default">Ask a new question</a>
-	 	</div>
+			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 
+			} else {
+				foreach ($qs as $q):
+
+					$user = Student::find_by_id($q->uid);
+					$self = $q->uid === USER_ID ?: false;
+					$commentsCount = count(Comment::get_comments($q->id));
+					$votes = QNA::get_votes($q->id);
+					$reports_count = QNA::get_reports("questions", $q->id) ?: null;
+					$img_path = ProfilePicture::get_profile_pic($user);
+					?>
+				 	<div class="ui items">
+				 		<div class="item">
+				 			<div class="ui tiny image">
+				 				<a href="/sha/students/<?= $user->id; ?>/"><img src="<?= $img_path; ?>"></a>
+				 			</div>
+				 			<div class="content">
+				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
+				 				<div class="meta">
+				 					<span style="display:inline;" class="price">Asked by <a href="/sha/students/<?= $user->id; ?>/"><?=$user->full_name();?></a></span>
+				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
+				 				</div>
+				 				<br />
+				 				<div class="extra">
+				 					<span class="likes" title="Likes" style="font-size:medium;">
+					 					<i class="mdi mdi-heart"></i>
+					 					<?= $votes; ?>
+				 					</span>
+				 					<span class="comments" title="Comments">
+					 					<a href="./question.php?id=<?= $q->id; ?>">
+						 					<i class="mdi mdi-comment-multiple-outline"></i>
+						 					<?= $commentsCount; ?>
+					 					</a>
+				 					</span>
+				 					<?php if($session->adminCheck()){ ?>
+				 					<span class="reports" title="Reports" style="font-size:medium;">
+					 					<a href="./question.php?id=<?= $q->id; ?>">
+						 					<i class="mdi mdi-flag"></i>
+						 					<?= $reports_count; ?>
+					 					</a>
+				 					</span>
+				 					<?php } ?>
+				 				</div>
+				 			</div>
+				 		</div>
+				 	</div>
+					<?php 
+			 	endforeach; 
+		 	}?>
+		 </div>
+ 	</div>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
 </html>

@@ -4,7 +4,7 @@ $pageTitle = "Question/Public";
 include (ROOT_PATH . 'inc/head.php');
 $id = sanitize_id($_GET['id']) ?: null;
 
-if(!$q = QNA::find_by_id($id)) {
+if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
 	if ($q = Comment::find_by_id($id)) { 
 		$q = $q->post_id;
@@ -15,101 +15,175 @@ if(!$q = QNA::find_by_id($id)) {
 	}
 }
 
-// if can't find id in the student database (not a student), try to find it in the staff database (staff)
-$user = Student::find_by_id($q->uid);
 
-// questions
-if (isset($_GET['upq'])) $session->message("You must log in to upvote.", "question.php?id={$id}", "warning");
-// comments
-if (isset($_POST['comment'])) $session->message("You must log in to comment.", "", "warning");
-if (isset($_GET['upc'])) $session->message("You must be logged in to upvote.", "question.php?id={$id}", "warning");
-$votes_count = QNA::get_votes($id);
+$votes_count = QNA::get_votes($id) ?: "0";
 
-$post_date = displayDate($q->created, "M d, Y h:m");
-$post_dateAgo = get_timeago($q->created, "M d, Y");
+$post_date = $q->created;
+$post_modified_date = $q->last_modified;
 
-$post_modified_date = displayDate($q->last_modified, "M d, Y h:m");
-$post_modified_dateAgo = get_timeago($q->last_modified, "M d, Y");
+$imgPath = $q->img_path ?: DEF_PIC;
 
-if($q->last_modified > $q->created){
-	$edited = "(edited <span title=\"$post_modified_date\">$post_modified_dateAgo)</span>";
+if($post_modified_date > $post_date){
+	$edited = " (edited <span id='post-date-ago' title=\"$post_modified_date\">$post_modified_date</span>)";
 } else {
 	$edited = "";
 }
 ?>
 <body>
-	<div class="container section">
-		<a type="button" href="." class="btn btn-default">Back</a>
-	<?= msgs(); ?>
-			<div class="row">
-				<div class="col-sm-8 blog-main">
-					<div class="blog-post">
-						<span><b> <?= $user->full_name()?></b> asked a question </span><br>
-						<div class="time" title="<?= $post_date; ?>"> <?= $post_dateAgo; ?><?= $edited; ?></div>
-						<h3 class="blog-post-title"><?= $q->title; ?></h3>
-						<hr>
-						<p style="min-height:320px;"><?= $q->content; ?></p>
+	<div class="container section pub">
+		<?= msgs(); ?>
+		<div class="ui two column grid">
+			<div class="twelve wide column">
+				<div class="blog-post" id="<?= $id; ?>">
+					<div class="ui grid post-header">
+						<div class="two wide column post-avatar">
+							<a href="/sha/students/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $q->img_path; ?>"></a>
+						</div>
+						<div class="nine wide column post-title">
+							<h4><a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h4>
+
+							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span id="post-date-ago"><?= $edited; ?></p>
+							<p class="time"> in <?= $q->fac; ?></p>
+						</div>
+					</div>
+					<br><br>
+					<div class="ui left aligned container" style="min-height:320px;">
+						<div class="ui header">
+							<h3 class="blog-post-title"><?= $q->title; ?></h3>
+						</div>
+						<div class="ui divider"></div>
+						<p><?= $q->content; ?></p>
+					</div>
+
+					<div class="actions">
+						<div class="ui dropdown ">
+							<div class="ui labeled button" tabindex="0">
+								<div class="ui grey button" id="votebtn-pub">
+									<i class="heart icon"></i><span>Like</span>
+								</div>
+								<a class="ui basic grey left pointing label" id="votescount"><?= $votes_count; ?></a>
+							</div>
+							<div class="menu">
+								<div class="ui error message">
+									<p>You must <a href="/sha/login.php">login</a> to like this post.</p>
+								</div>
+							</div>
+							<script>
+								$('.ui.dropdown').dropdown({on: 'click'}).dropdown({'direction':'upward'});
+							</script>
+						</div>
 					</div>
 				</div>
-				<div class="col-sm-3 col-sm-offset-1 blog-sidebar" style="border-left: 1px #e2e2e2 solid;">
-					<div class="sidebar-module sidebar-module-inset">
-						<h4>Related questions</h4>
-						<?= QNA::sidebar_content($q); ?>
+			</div>
+			<div class="four wide column" style="border-left: 1px #e2e2e2 solid;">
+				<div class="sidebar-module sidebar-module-inset">
+					<h4>Related questions</h4>
+					<div class="ui segment">
+						<div class="ui relaxed divided list">
+							<?php foreach(QNA::get_content($q->faculty_id) as $item){ ?>
+								<?php if ($q->id != $item->id){ ?>
+									<div class="item">
+										<div class="content">
+											<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
+										</div>
+									</div>
+								<?php } ?>
+							<?php } ?>
+						</div>
+					</div>
+					<h4>More questions by <a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
+					<div class="ui segment">
+						<div class="ui relaxed divided list">
+							<?php
+							$items = QNA::get_content_by_user($q->uid);
+							if (count($items) < 2) {
+								echo "<p>This user doesn't have any other questions.</p>";
+							} else {
+								foreach($items as $item){ ?>
+									<?php if ($q->id != $item->id){ ?>
+										<div class="item">
+											<div class="content">
+												<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
+											</div>
+										</div>
+									<?php 
+									} 
+								}
+							} ?>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-			<div class="ui labeled button" id="popup" tabindex="0">
-				<div class="ui grey button" id="votebtn">
-					<i class="heart icon"></i><span>Like</span>
-				</div>
-				<a class="ui basic grey left pointing label" id="votescount"><?= $votes_count; ?></a>
-			</div>
-			<div class="ui custom popup top left transition" style="border:red 1px solid;">
-			  You must <a href="/sha/login.php">login</a> to like this post.
-			</div>
-			<script>
-				$('#popup').popup({on: 'click'});
-			
-			</script>
 		<hr>
-		<p><a href="/sha/login.php">Login</a> or <a href="/sha/signup.php">sign up</a> to comment on this post.</p>
-		<h3>Comments: </h3>
-		<?php 
-			$comments = Comment::get_comments($id);
-			if(count($comments) === 0) {
-				echo "There is nothing here yet, be the first to comment!";
-			} else {
-				foreach ($comments as $comment):
-					$votes = Comment::get_votes($comment->id); 
-					$commenter = Student::find_by_id($comment->uid) ?: Staff::find_by_id($comment->uid);
+		<div class="commentz section">
+			<p style="font-size: large;"><a href="/sha/login.php">Login</a> or <a href="/sha/signup.php">sign up</a> to comment on this post.</p><br>
+			<?php $comments = Comment::get_comments($id); ?>
+				<h3>Comments (<?= count($comments) ?: "0"; ?>): </h3>
+			<div id="comments">
+				<?php 
+				if(count($comments) === 0) {
+					echo "There is nothing here yet, be the first to comment!";
+				} else {
+					foreach ($comments as $comment):
+						$votes = Comment::get_votes($comment->id); 
+						$commenter = Student::find_by_id($comment->uid);
 
-					$comment_date = displayDate($comment->created, "M d, Y h:m");
-					$comment_dateAgo = get_timeago($comment->created, "M d, Y");
+						$img_path = ProfilePicture::get_profile_pic(Student::find_by_id($comment->uid));
 
-					$comment_modified_date = displayDate($comment->last_modified, "M d, Y h:m");
-					$comment_modified_dateAgo = get_timeago($comment->last_modified, "M d, Y");
+						$comment_date = $comment->created;
+						$comment_modified_date = $comment->last_modified;
 
-					if($comment->last_modified > $comment->created){
-						$edited = " <span class=\"time\" title=\"$comment_modified_date\">(edited $comment_modified_dateAgo)</span>";
-					} else {
-						$edited = "";
-					}
-				?>
-				<div class="jumbotron" id="<?= $comment->id; ?>">
-					<span><b><a href="<?= BASE_URL."students/".$commenter->id; ?>/"><?= $commenter->full_name();?></a></span></b>
-						 <span>commented</span> 
-						<span title="<?=$comment_date;?>" style="border-bottom: dashed 1px black"> <?=$comment_dateAgo;?></span><?= $edited; ?>
-					<span><?= $comment->id; ?></span>
-					<hr>
-					<p> <?= $comment->content; ?> </p>
-					<hr>
-					<span><?=$votes;?> Points </span>
-					<a type="button" href="?upc&id=<?=$id;?>" class="btn btn-success"> Upvote</a>
-				</div>
-			<?php endforeach;
-		} ?>
+						if($comment->last_modified > $comment->created){
+							$edited = "(edited <span id='editedDate' title=\"$comment_modified_date\">$comment_modified_date</span>)";
+						} else {
+							$edited = "";
+						}
+						?>
+
+						<div class="ui minimal comments">
+							<div class="ui comment padded segment" id="<?= $comment->id; ?>">
+								<a class="avatar" href="/sha/students/<?= $comment->uid; ?>/">
+									<img src="<?= $img_path; ?>">
+								</a>
+								<div class="content">
+									<a class="author" href="<?= BASE_URL."students/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
+									<div class="metadata">
+										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
+									</div>
+									<div class="text">
+										<h4><?= $comment->content; ?></h4>
+									</div>
+
+									<div class="ui dropdown ">
+										<div class="ui labeled button" tabindex="0">
+											<div class="comment-points">
+												<a class="comment-vote-btn-pub">
+													<i class="heart circular icon"></i>
+												</a>
+												<span class="comment-votes-count"><?=$votes;?> </span>
+											</div>
+
+										</div>
+										<div class="menu">
+											<div class="ui error message">
+												<p>You must <a href="/sha/login.php">login</a> to like this comment.</p>
+											</div>
+										</div>
+										<script>
+											$('.ui.dropdown').dropdown({on: 'click'}).dropdown({'direction':'upward'});
+										</script>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+				<?php endforeach;
+				} ?>
+			</div>
+		</div>
 	</div>
-</div>
-<?php include (ROOT_PATH . 'inc/footer.php'); ?>
+	<?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
 </html>

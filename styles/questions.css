@@ -1,0 +1,136 @@
+.blog-post .ui.dropdown {
+	min-width: 0px;
+	/* margin-right: 52px; */
+	padding: 1px 30px;
+	float: right;
+}
+
+.blog-post .dropdown button, .blog-post .dropdown button:hover, .blog-post .dropdown button:active, .blog-post .dropdown button:focus {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.blog-post .dropdown .menu {
+	left: -27px;
+}
+
+.dropdown .menu .item:not(:last-child) {
+	z-index: 3;
+	border-bottom: 1px solid #d4d4d4;
+}
+
+.dropdown .menu .item {
+	padding: 15px 30px !important;
+}
+
+.dropdown .menu .item a {
+	color:black;
+}
+
+.blog-post .post-header h4 {
+	margin-bottom: 0px;
+}
+
+.blog-post .time {
+	margin-bottom:0px;
+}
+
+#comments .comment-vote-btn {
+	margin-right: 2px;
+	opacity: 1;
+}
+
+.comment-points {
+	display: inline-block;
+	margin-right: 10px;
+	margin-top: 8px;
+}
+
+#comments a#edit {
+	color: rgba(114, 114, 236, 0.83);
+}
+
+#comments a#edit:hover {
+	color: #0012ff;
+}
+
+#comments a.time {
+	font-size: inherit;
+}
+
+#comments .comment.segment {
+	padding: 1.5em;
+	box-shadow: 0 0px 10px 0 rgba(34,36,38,.15);
+}
+
+#comments .pointing.dropdown {
+	position:absolute;
+	right: 3%;
+	top: 15%;
+}
+
+#comments .dropdown .menu {
+	left: -37px;
+}
+
+.Actions .dropdown .menu a {
+	color:rgba(0,0,0,.8)!important;
+	padding: 2px 20px;
+}
+
+.comment-vote-btn .heart.circular {
+	cursor: pointer;
+	color:grey;
+}
+.comment-vote-btn .heart.circular:hover {
+	cursor: pointer;
+	color:red;
+}
+
+
+.pub .menu.transition.visible {
+	margin-bottom: 10px;
+}
+
+.comment-vote-btn-pub {
+	color:grey;
+}
+
+.comment-vote-btn-pub:hover {
+	color:red;
+}
+
+.questions.sortby .menu a:not(:last-child) .item {
+	border-bottom: 1px solid rgba(204, 204, 204, 0.47);
+}
+
+.questions .item i.mdi-heart {
+    color: #d23c3c;
+    margin-right: 2px!important;
+}
+
+.questions .item .mdi-comment-multiple-outline {
+	color: #3c3cab;
+}
+
+.questions .ui.items:not(:last-child) {
+	border-bottom: 1px solid #cccccc;
+	padding: 20px 0px;
+	margin: 15px 0;
+	max-width: 90%;
+}
+
+.questions .items .image img {
+	box-shadow: 0px 0px 2px 2px rgba(210, 210, 210, 0.39);
+}
+
+.blog-post h3.blog-post-title {
+    display: inline;
+}
+
+#questions .reports a {
+    color: red;
+}
+
+.reports {
+    margin-top: 25px;
+}

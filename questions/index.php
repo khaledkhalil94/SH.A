@@ -30,7 +30,14 @@ switch ($section) {
 ?>
 <body>
 	<div class="container section">
-		<?php if ($session->is_logged_in()): ?>
+		<div class="ui large search" id="question-search">
+			<div class="ui icon input">
+				<input type="text" placeholder="Search WILL ADD LATER">
+				<i class="search icon"></i>
+			</div>
+			<div class="results"></div>
+		</div>
+		
 			<div class="questions sortby">
 				<p style="display:inline;">Show questions from: </p>
 				<div class="ui inline dropdown">
@@ -64,7 +71,10 @@ switch ($section) {
 					<br>
 					<script>$('.ui.dropdown').dropdown();</script>
 			</div>
-			<a type="button" href="create.php" class="ui green button">Ask a new question</a>
+
+
+		<?php if ($session->is_logged_in()): ?>
+			<a type="button" href="crud/create.php" class="ui green button">Ask a new question</a>
 		<?php endif; ?>
 		<?= msgs(); ?>
 		<hr>
@@ -77,21 +87,22 @@ switch ($section) {
 				foreach ($qs as $q):
 
 					$user = Student::find_by_id($q->uid);
+					if(!$user) continue;
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
 					$reports_count = QNA::get_reports("questions", $q->id) ?: null;
-					$img_path = ProfilePicture::get_profile_pic($user);
+					$img_path = ProfilePicture::get_profile_pic($user) ?: DEF_PIC;
 					?>
 				 	<div class="ui items">
 				 		<div class="item">
 				 			<div class="ui tiny image">
-				 				<a href="/sha/students/<?= $user->id; ?>/"><img src="<?= $img_path; ?>"></a>
+				 				<a href="/sha/user/<?= $user->id; ?>/"><img src="<?= $img_path; ?>"></a>
 				 			</div>
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price">Asked by <a href="/sha/students/<?= $user->id; ?>/"><?=$user->full_name();?></a></span>
+				 					<span style="display:inline;" class="price">Asked by <a href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name();?></a></span>
 				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />

@@ -4,7 +4,7 @@ $search_term = "";
 if (isset($_GET["s"])){
 	$search_term = trim($_GET["s"]);
 	if ($search_term != ""){
-		require_once (ROOT_PATH . "students/info.php");
+		require_once (ROOT_PATH . "user/info.php");
 		$students = get_students_search($search_term);
 
 	}
@@ -21,7 +21,7 @@ $search_term = "";
 if (isset($_GET["s"])){
 	$search_term = trim($_GET["s"]);
 	if ($search_term != ""){
-		require_once ("../students/info.php");
+		require_once ("../user/info.php");
 		$students = get_students_search($search_term);
 
 	}

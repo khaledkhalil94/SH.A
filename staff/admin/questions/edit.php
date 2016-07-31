@@ -55,7 +55,7 @@ if(isset($_POST['submit'])){
 					<div class="panel-heading">Info</div>
 					<div class="panel-body">
 					<?php $author = Student::find_by_id($q->uid) ?: Staff::find_by_id($q->uid); ?>
-						<p><b>Page created by: </b><a href="/sha/students/<?= $author->id; ?>/"><?= $author->full_name(); ?></a></p>
+						<p><b>Page created by: </b><a href="/sha/user/<?= $author->id; ?>/"><?= $author->full_name(); ?></a></p>
 						<p><b>Created on: </b><?= displayDate($q->created, "d-m-Y")." at ".displayDate($q->created, "H:i"); ?></p>
 						<p><b>Last modified on: </b><?= displayDate($q->last_modified, "d-m-Y")." at ".displayDate($q->last_modified, "H:i"); ?> (<?= get_timeago($q->last_modified); ?>)</p>
 						<p><b>Current status: </b><?= $q->status ? $greenIcon : $redIcon; ?></p>

@@ -37,13 +37,12 @@ if($post_modified_date > $post_date){
 				<div class="blog-post" id="<?= $id; ?>">
 					<div class="ui grid post-header">
 						<div class="two wide column post-avatar">
-							<a href="/sha/students/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $q->img_path; ?>"></a>
+							<a href="/sha/user/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $imgPath; ?>"></a>
 						</div>
 						<div class="nine wide column post-title">
-							<h4><a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h4>
-
-							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span id="post-date-ago"><?= $edited; ?></p>
-							<p class="time"> in <?= $q->fac; ?></p>
+							<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
+							<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
+							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <?= $q->fac; ?> <span id="post-date-ago"><?= $edited; ?></span></p>
 						</div>
 					</div>
 					<br><br>
@@ -91,7 +90,7 @@ if($post_modified_date > $post_date){
 							<?php } ?>
 						</div>
 					</div>
-					<h4>More questions by <a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
+					<h4>More questions by <a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
 					<div class="ui segment">
 						<div class="ui relaxed divided list">
 							<?php
@@ -143,11 +142,11 @@ if($post_modified_date > $post_date){
 
 						<div class="ui minimal comments">
 							<div class="ui comment padded segment" id="<?= $comment->id; ?>">
-								<a class="avatar" href="/sha/students/<?= $comment->uid; ?>/">
+								<a class="avatar" href="/sha/user/<?= $comment->uid; ?>/">
 									<img src="<?= $img_path; ?>">
 								</a>
 								<div class="content">
-									<a class="author" href="<?= BASE_URL."students/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
+									<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
 									<div class="metadata">
 										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 									</div>

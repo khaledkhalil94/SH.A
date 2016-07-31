@@ -17,9 +17,11 @@ class QNA extends User {
 		global $connection;
 
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+				login_info.username AS username,
 				faculties.title AS fac, profile_pic.path AS img_path,
 				questions.* FROM `questions`
 				INNER JOIN `students` ON students.id = questions.uid
+				INNER JOIN `login_info` ON login_info.id = questions.uid
 				INNER JOIN `faculties` ON faculties.id = questions.faculty_id
 				LEFT JOIN `profile_pic` ON profile_pic.user_id = questions.uid
 

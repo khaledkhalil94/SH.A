@@ -26,7 +26,7 @@ class StudentInfo extends User {
 			// $session->login($user);
 		 	// $session->message("Thanks for signing up, please update your information");
    			// self::log("signup", $user);
-			// header("Location:".BASE_URL."students/".$user->id."/");
+			// header("Location:".BASE_URL."user/".$user->id."/");
 
 		} else {
 			echo "err<br>";

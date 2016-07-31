@@ -27,21 +27,21 @@ class Comment extends User {
 		global $connection;
 		$sql = "SELECT comments.*,
 				CONCAT(students.firstName, ' ', students.lastName) AS name,
-				profile_pic.path FROM `comments`
+				profile_pic.path AS img_path FROM `comments`
 				INNER JOIN `students` ON comments.uid = students.id
-				INNER JOIN `profile_pic` ON comments.uid = profile_pic.user_id
+				LEFT JOIN `profile_pic` ON comments.uid = profile_pic.user_id
 				WHERE comments.id = {$this->id} 
 				AND comments.status = 1
 				LIMIT 1
 				";
+
 		$stmt = $connection->prepare($sql);
 		if(!$stmt->execute()){
-				$error = ($stmt->errorInfo());
-				$_SESSION['err'] = $error[2];
-				return $error[2];
-			}
-
-		return $stmt->fetch(PDO::FETCH_ASSOC);
+			$error = ($stmt->errorInfo());
+			$_SESSION['err'] = $error[2];
+			return $error[2];
+		}
+		return ($stmt->fetch(PDO::FETCH_OBJ));
 	}
 
 	public static function get_votes($id){
@@ -58,7 +58,8 @@ class Comment extends User {
 	}
 
 
-	public function comment(){
+// THIS SHIT NEEDS TO BE REWORKED
+	public function insert_comment(){
 		global $comment;
 		$_POST = $_POST['comment'];
 		if(isset($_POST['content'])){
@@ -74,15 +75,12 @@ class Comment extends User {
 
 	public function deleteComment(){
 		global $connection;
-		global $session;
-		//if not logged in
-		if(!$session->is_logged_in()) {
 
-			return "You are not logged in!";
 
-		} elseif(USER_ID !== $this->getComment()['uid']){
-			echo "You are not the comment owner!";
-			return false;
+		if(USER_ID !== $this->getComment()->uid){
+			echo json_encode(array('status' => 'fail', 'uid' => $this->getComment()->uid, 'msg' => 'You are not the comment owners!'));
+			exit;
+			//return false;
 		}
 
 		$sql = "DELETE FROM `comments` where id = {$this->id}";

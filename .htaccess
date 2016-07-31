@@ -1,3 +1,3 @@
 RewriteEngine On
-RewriteRule ^students/$ /sha/students/students.php
-RewriteRule ^students/([0-9]+)/$ /sha/students/student.php?id=$1
+RewriteRule ^user/$ /sha/user/students.php
+RewriteRule ^user/([0-9]+)/$ /sha/user/profile.php?id=$1

@@ -50,7 +50,7 @@ if (isset($_GET['dl'])) {
 			$reporter = $report->reporterName; ?>
 			<div class="jumbotron">
 				<div class="blog-post">
-					<div title="<?= $post_date; ?>"><a href="/sha/students/<?=$report->reporter;?>/"><?=$reporter;?></a> reported this post <?= $post_dateAgo; ?></div>
+					<div title="<?= $post_date; ?>"><a href="/sha/user/<?=$report->reporter;?>/"><?=$reporter;?></a> reported this post <?= $post_dateAgo; ?></div>
 					<h3 class="blog-post-title"><?= $report->content; ?></h3>
 					<hr>
 				</div>

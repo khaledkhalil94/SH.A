@@ -26,7 +26,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 	<?php if($staff){ ?>
 		<h3>Messages from the adminstration.</h3>
 	<?php } else { ?>
-		<h3>Your messages with <a href="/sha/students/<?= $user_id; ?>/"><?= $user->full_name(); ?></a></h3>
+		<h3>Your messages with <a href="/sha/user/<?= $user_id; ?>/"><?= $user->full_name(); ?></a></h3>
 	<?php } ?>
 		<?php if(empty($messages)) {
 				echo "There are no messages between you and ".Student::find_by_id($user_id)->full_name()." yet.<br><br>";
@@ -51,7 +51,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 				<?php if($staff){ ?>
 				<p><?= $sender->firstName; ?>
 				<?php } else { ?>
-				<p><?= $self ? "You" : "<a href=\"/sha/students/$sender->id/\">$sender->firstName</a>"; ?>
+				<p><?= $self ? "You" : "<a href=\"/sha/user/$sender->id/\">$sender->firstName</a>"; ?>
 				<?php } ?>
 				 sent </a><a href="inbox.php?msg=<?= $message->id; ?>"><?= $timeAgo; ?></a></p></div>
 				<p><?= $message->subject; ?></p>

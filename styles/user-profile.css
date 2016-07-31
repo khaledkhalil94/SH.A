@@ -1,0 +1,197 @@
+.user-profile .user-links-header .ui.header {
+    display: inline;
+}
+
+.user-links-header button.ui.icon.button {
+    float: right;
+    background-color: #f3f3f3;
+    border: 1px solid #e8e8e8;
+    padding: 3px;
+    margin-top: 1px;
+}
+
+.user-links-header a.ui.icon.button {
+    float: right;
+    background-color: #f3f3f3;
+    border: 1px solid #e8e8e8;
+    padding: 3px;
+    margin-top: 1px;
+}
+
+.user-links-header button.ui.icon.button:active {
+    float: right;
+    background-color: #d2d2d2;
+    border: 1px solid #cecece;
+    padding: 3px;
+    margin-top: 1px;
+}
+
+.user-links-header a.ui.icon.button:active {
+    float: right;
+    background-color: #d2d2d2;
+    border: 1px solid #cecece;
+    padding: 3px;
+    margin-top: 1px;
+}
+
+div#user-extrainfo-list, div#user-links-list {
+    border-top: 1px solid #e6e6e6;
+    padding-top: 10px;
+}
+
+.user-profile .user-links-header .ui.header h4 {
+    display: inline;
+}
+
+.user-profile .five.wide.column.user-info {
+    background-color: #eceff1;
+}
+
+.user-profile .user-info img.ui.small.image {
+    width: 278px;
+    margin: 0 auto;
+    border-radius: 4px;
+}
+
+.user-profile .container * {
+	margin-right: 17px;
+	display: inline;
+}
+
+.user-profile .user-name h3 {
+    margin-bottom: 0px;
+}
+
+.user-info.user-name.user-username {
+    margin-bottom: 35px;
+}
+
+.profile-info .user-interactivity {
+    display: inline-flex;
+    margin-bottom: 30px;
+}
+
+.profile-info .user-follow-btn {
+    padding-left: 25px;
+}
+
+.profile-info.ui.vertical.very.padded.segment {
+    padding-bottom: 20px;
+}
+
+.user-profile .profile-info.segment {
+    border-bottom: none;
+}
+
+.user-profile .ui.bottom.attached.tab {
+    border: none;
+}
+
+.user-profile .ui.top.attached.tabular.menu .active {
+    background-color: #f3f3f3;
+}
+
+.user-info .user-name.user-username {
+    padding-left: 5px;
+}
+
+.profile-info .user-setting {
+    display: inline-block;
+    float: right;
+}
+
+.user-settings .settings-content {
+    margin-left: 40px;
+}
+
+.user-profile .user-setting a {
+    color:black;
+}
+
+.user-settings .settings-list .item {
+    padding: 13px!important;
+}
+
+.user-settings .settings-list a:not(:last-child) .item {
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.user-settings .settings-list .item.active {
+    background-color: #f1f1f1;
+    border-left: 2px solid #007080;
+    font-weight: bold;
+}
+
+.user-settings .settings-list .segment {
+    padding: 0px;
+}
+
+.user-settings .settings-list .item {
+    color: black;
+}
+
+.user-settings .settings-content .header {
+    padding-bottom: 20px;
+    margin: 0px;
+}
+
+.user-settings .grid .segment {
+    margin: 0px;
+}
+
+.user-profile .user-points {
+    margin-top: 10px;
+}
+
+.user-profile .user-points .label {
+    color: #04c704;
+}
+
+.settings-content form .field input[type=text], .settings-content form .field input[type=email] {
+    border: none;
+    border-bottom: 1px solid rgba(28, 83, 183, 0.72);
+    border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.settings-content form .field textarea[type=text] {
+    border: none;
+    border-bottom: 1px solid rgba(28, 83, 183, 0.72);
+    border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    resize: none;
+}
+
+.settings-content form .field input[type=text]:focus, .settings-content form .field input[type=email]:focus {
+    border-color: rgba(47, 110, 224, 0.72);
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.user-settings form .field {
+    width: 85%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.user-settings form .output {
+    display: inline;
+}
+
+.user-settings .user-settings-information form .output {
+    display: inline;
+    vertical-align: -webkit-baseline-middle;
+}
+
+.user-profile a#about-edit {
+    float: right;
+    bottom: 8px;
+}
+
+[data-tooltip][data-inverted]:after {
+}
+
+[data-tooltip][data-inverted]:before {
+}

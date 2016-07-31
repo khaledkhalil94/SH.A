@@ -69,7 +69,7 @@ include_once (ROOT_PATH . "inc/head.php");
 						<td><div class="image"><img src="<?= $message->img_path; ?>" style="width:55px;"></div></td>
 						<td ><ul>
 							<?php if (!$staff){ ?>
-							<li style="list-style:none;"><a href="/sha/students/<?= $senderID ?>/"><?= $message->u_fullname; ?></a></li>
+							<li style="list-style:none;"><a href="/sha/user/<?= $senderID ?>/"><?= $message->u_fullname; ?></a></li>
 							<?php }else{ ?>
 							<li style="list-style:none;">Adminstration</li>
 							<?php } ?>

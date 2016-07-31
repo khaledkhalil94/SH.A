@@ -3,13 +3,13 @@
 		<div class="blog-post" id="<?= $id; ?>">
 			<div class="ui grid post-header">
 				<div class="two wide column post-avatar">
-					<a href="/sha/students/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $imgPath; ?>"></a>
+					<a href="/sha/user/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $imgPath; ?>"></a>
 				</div>
 				<div class="nine wide column post-title">
-					<h4><a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h4>
+					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
+					<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
 					
-					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span id="post-date-ago"><?= $edited; ?></p>
-					<p class="time"> in <?= $q->fac; ?></p>
+					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <?= $q->fac; ?> <?= $edited; ?></p>
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
@@ -27,10 +27,13 @@
 				<?php } ?>
 				<div class="ui header">
 					<h3 class="blog-post-title"><?= $q->title; ?></h3>
-					<div title="Actions" class="ui pointing dropdown">
+					<div title="Actions" class="ui pointing dropdown" id="blog-post-actions">
 						<i class="setting link large icon"></i>
 						<div class="menu">
 							<?php if ($session->is_logged_in() && !$self && !$session->adminCheck()) { ?>
+							<div class="item" id="post_save">
+								<a class="ui a">Save Question</a>
+							</div>
 							<div class="item" id="post_report">
 								<a class="ui a">Report</a>
 							</div>
@@ -38,9 +41,11 @@
 
 							<?php if ($session->userCheck($user) || $session->adminCheck()):
 								if ($session->adminCheck()) { ?>
-							<div style="background-color:#d03c26;" class="item" id="post-edit">
-								<a style="color:white;" class="ui a" href="/sha/staff/admin/questions/edit.php?id=<?= $q->id; ?>">Preview Page</a>
-							</div>
+							<a id="admin-preview" class="item" href="/sha/staff/admin/questions/edit.php?id=<?= $q->id; ?>">
+								<div class="item">
+								Preview Page
+								</div>
+							</a>
 							<?php } ?>
 							<div class="item" id="post-edit">
 								<a class="ui a">Edit</a>
@@ -105,7 +110,7 @@
 					<?php } ?>
 				</div>
 			</div>
-			<h4>More questions by <a href="/sha/students/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
+			<h4>More questions by <a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list">
 					<?php

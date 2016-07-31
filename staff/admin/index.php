@@ -24,7 +24,7 @@ $c_reports = QNA::reports("comments");
       <div class="wrapper">
       <h2>Admin Control Panel</h2>
 			</div>
-      <a href="<?= "students/students.php" ?>"><h3>Browse all students</h3></a>
+      <a href="<?= "user/students.php" ?>"><h3>Browse all students</h3></a>
 <!--       <a href="<?= "staff/professors.php" ?>"><h3>Browse staff</h3></a> -->
       <h3><a href="<?= "questions" ?>">Browse questions.</a></h3>
       <h3><a href="<?= "pages/articles.php" ?>">Browse all articles.</a></h3>

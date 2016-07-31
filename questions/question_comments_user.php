@@ -43,25 +43,26 @@
 
 				<div class="ui minimal comments">
 					<div class="ui comment padded segment" id="<?= $comment->id; ?>">
-						<a class="avatar" href="/sha/students/<?= $comment->uid; ?>/">
+						<a class="avatar" href="/sha/user/<?= $comment->uid; ?>/">
 							<img src="<?= $img_path; ?>">
 						</a>
 						<div class="content">
-							<a class="author" href="<?= BASE_URL."students/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
+							<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
 							<div class="metadata">
 								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 							</div>
 							<div class="text">
 								<h4><?= $comment->content; ?></h4>
 							</div>
+							<div class="ui fitted divider"></div>
 							<?php if($voted){ ?>
 									<div class="comment-points">
-										<a class="comment-vote-btn voted"><i class="heart circular red icon"></i></a>
+										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
 										<span class="comment-votes-count"><?=$votes;?></span>
 									</div>
 							<?php } else { ?>
 									<div class="comment-points">
-										<a class="comment-vote-btn"><i class="heart circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
+										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
 									</div>
 							<?php 
 							} ?>
@@ -79,6 +80,9 @@
 									<?php if (!$self) { ?>
 										<div class="item" id="post_report">
 											<a class="report">Report</a>
+										</div>
+										<div class="item" id="comment_hide">
+											<a class="report">Hide</a>
 										</div>
 									<?php } ?>
 								</div>

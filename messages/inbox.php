@@ -54,9 +54,9 @@ include (ROOT_PATH . "inc/head.php");
 							<h4>Sent by Adminstration</h4>
 					<?php } else { ?>
 						<?php if ($self) { ?>
-							<h4>You Sent to <a href="/sha/students/<?= $message->user_id ?>/"><?= $receiver->full_name(); ?></a></h4>
+							<h4>You Sent to <a href="/sha/user/<?= $message->user_id ?>/"><?= $receiver->full_name(); ?></a></h4>
 						<?php } else { ?>
-							<h4>Sent by <a href="/sha/students/<?= $message->u_id ?>/"><?= $message->u_fullname; ?></a></h4>
+							<h4>Sent by <a href="/sha/user/<?= $message->u_id ?>/"><?= $message->u_fullname; ?></a></h4>
 						<?php } ?>
 					<?php } ?>
 						<div class="time" title="<?= $date; ?>"><?= $timeAgo; ?></div>

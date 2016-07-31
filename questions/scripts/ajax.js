@@ -639,6 +639,7 @@ $(function(){
 		$('#subcomment').show();
 	});
 
+	// undisable the submit button when there's content
 	$("#comment-submit-textarea").keyup(function(){
 		var $this = $(this);
 		var $value = $this.val();
@@ -777,15 +778,20 @@ $(function(){
 		$content = $element.text();
 
 		var $input = "\
-					<div class=\"ui form\">\
-					<div class=\"field\">\
+					<div class=\"ui vertical segment content-form form\">\
+					<div class=\"field\" style=\"clear: none;\">\
 					<textarea id=\"content\" rows=\"2\">"+$content+"</textarea><br />\
+					</div>\
+					</div>";
+		var $controllers =
+					"<div id=\"comment-edit-controllers\">\
 					<button class=\"ui mini green button\" id=\"save\">Save</button>\
 					<button class=\"ui mini button\" id=\"cancel\">Cancel</button>\
-					</div>\
 					</div>";
 
 		$orgContent = $element.replaceWith($input);
+		$commentDOM.find($('.divider')).after($controllers);
+
 		$commentDOM.find('#comment-actions').hide();
 		$commentDOM.find('.comment-points').hide();
 
@@ -829,6 +835,8 @@ $(function(){
 
 					$commentDOM.find('#comment-actions').show();
 					$commentDOM.find('.comment-points').show();
+
+					$commentDOM.find($('#comment-edit-controllers')).remove();
 				}
 			},
 			error: function(xhr, desc, err) {
@@ -847,7 +855,16 @@ $(function(){
 
 		$commentDOM.find('#comment-actions').show();
 		$commentDOM.find('.comment-points').show();
+
+		$commentDOM.find($('#comment-edit-controllers')).remove();
 		return null;
+	});
+});
+
+// comment hide
+$(function(){
+	$('#comment_hide').click(function(){
+		$(this).parents('.comments').hide();
 	});
 });
 
@@ -856,11 +873,11 @@ $.fn.comment = function(DataObject){
 	var $comment = " \
 	<div class=\"ui minimal comments\">\
 		<div class=\"ui comment padded segment\" id=\""+DataObject.id+"\">\
-			<a class=\"avatar\" href=\"/sha/students/"+DataObject.uid+"/\">\
-				<img src=\""+DataObject.path+"\">\
+			<a class=\"avatar\" href=\"/sha/user/"+DataObject.uid+"/\">\
+				<img src=\""+DataObject.img_path+"\">\
 			</a>\
 			<div class=\"content\">\
-				<a class=\"author\" href=\"/sha/students/"+DataObject.uid+"/\">"+DataObject.name+"</a>\
+				<a class=\"author\" href=\"/sha/user/"+DataObject.uid+"/\">"+DataObject.name+"</a>\
 				<div class=\"metadata\">\
 					<span class=\"date\">"+moment(DataObject.created).fromNow()+"</span>\
 				</div>\
@@ -916,3 +933,5 @@ $(function(){
 	// 	$(this).find('#editedDate').text(moment($date).fromNow());
 	// });
 });
+
+$('.ui.dropdown').dropdown();

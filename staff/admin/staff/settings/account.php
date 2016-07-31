@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
 
 	if($userInfo->update()){
 		$session->message("Your information have been updated");
-		//header("Location: " . BASE_URL . "students/".$session->user_id."/");
+		//header("Location: " . BASE_URL . "user/".$session->user_id."/");
 	} else {
 		echo $_SESSION['fail']['sqlerr'];
 	}

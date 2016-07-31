@@ -41,29 +41,33 @@ class User {
 		global $connection;
 		//exit(print_r($_POST));
 		$object = $this->instantiate($_POST);
-		$class = get_called_class();
+
 		$fields = array_keys((array)$object);
 
 		$sql = "UPDATE ".static::$table_name . " SET ".$this->pdoSet($object,$fields,$values)." WHERE id = {$object->id}";
+
 		$stmt = $connection->prepare($sql);
+
 		$res = $stmt->execute($values);
+
 		if(!$res) {
 			//exit($sql);
-			$error = ($stmt->errorInfo());
-			$_SESSION['fail']['sqlerr'] = $error[2];
-			$_SESSION['fail']['sql'] = $sql;
-			//var_dump($res);
-			return false;
+			$error = $stmt->errorInfo();
+			return array('status' => false, 'errMsg' => $error[2]);
+			$_SESSION['err'] = $error[2];
+
+		 } else {
+			return true;
 		 }
-		return true;
 	}
 
-	private function pdoSet($object,$fields, &$values, $source = array()) {
+	public function pdoSet($object,$fields, &$values, $source = array()) {
 	  $set = '';
 	  $values = array();
 	  $array = (array)$object;
 	  if (!$source) $source = &$array;
 	  foreach ($fields as $field) {
+	  	if($field == 'id') continue;
 	    if (isset($source[$field])) {
 	      $set.="`$field`=:$field, ";
 	      $values[$field] = $source[$field];
@@ -209,19 +213,15 @@ class User {
 
 	public static function query($sql){
 		global $connection;
-		global $session;
 		$stmt = $connection->prepare($sql);
 
 		if(!$stmt->execute()){
 			$error = ($stmt->errorInfo());
 			echo $error[2];
-			$session->message( $error[2], ".", "warning");
 			return false;
 		}
 		return true;
 	}
 }
-
-$User = new User();
 
 ?>

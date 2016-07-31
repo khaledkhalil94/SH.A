@@ -21,7 +21,7 @@
 					 <?php if($session->is_logged_in()): ?>
 						
 						<?php if ($session->getLevel() == "student"): ?>
-							<a href="<?= BASE_URL."students/".USER_ID;?>/">Profile</a>
+							<a href="<?= BASE_URL."user/".USER_ID;?>/">Profile</a>
 						<?php endif ?>
 
 
@@ -34,7 +34,7 @@
 					<?php endif; ?>  
 					<?php if($session->is_logged_in() && $session->adminCheck()): ?>
 						<li>
-							<a href="<?= BASE_URL; ?>staff/admin/students/students.php">Students</a>
+							<a href="<?= BASE_URL; ?>staff/admin/user/students.php">Students</a>
 						</li>
 					<li>
 						<a href="<?= BASE_URL; ?>staff/admin/staff/professors.php">Staff</a>

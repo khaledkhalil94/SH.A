@@ -51,7 +51,7 @@ $session->adminLock();
 						<td><?= $student->full_name(); ?></td>
 						<td><?= $faculty; ?></td>
 						<td><?= $dateAgo; ?></td>
-						<td><?= "<a href=" .BASE_URL . "staff/admin/students/student.php?id=" . $student->id . ">View profile</a>"; ?></td>
+						<td><?= "<a href=" .BASE_URL . "staff/admin/user/student.php?id=" . $student->id . ">View profile</a>"; ?></td>
 					</tr>
 				</tbody>
  <?php       }

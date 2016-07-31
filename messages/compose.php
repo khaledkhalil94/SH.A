@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
 
 }
 $messages = Messages::getConvo(USER_ID, $user_id);
-$staff = Staff::find_by_id($user_id) ? true : false;
+$staff = (Student::find_by_id($user_id)->id === 1) ? true : false;
 if ($staff) exit("You can't send a message to this account.");
 
 ?>

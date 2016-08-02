@@ -86,24 +86,24 @@ class Student extends User {
 		return $this->firstName . " " . $this->lastName;
 	}
 
-	public static function upload_pic($data) {
-		global $ProfilePicture;
-		$ProfilePicture->table_name = self::$table_name;
-		$ProfilePicture->upload_pic($data);
-	}
+	// public static function upload_pic($data) {
+	// 	global $Images;
+	// 	$Images->table_name = self::$table_name;
+	// 	$Images->upload_pic($data);
+	// }
 
-	public static function update_pic($data) {
-		global $ProfilePicture;
-		$ProfilePicture->table_name = self::$table_name;
-		$ProfilePicture->id = $_POST['id'];
-		$ProfilePicture->update_pic($data);
-	}
+	// public static function update_pic($data) {
+	// 	global $Images;
+	// 	$Images->table_name = self::$table_name;
+	// 	$Images->id = $_POST['id'];
+	// 	$Images->update_pic($data);
+	// }
 
-	public static function delete_pic() {
-		global $ProfilePicture;
-		$ProfilePicture->table_name = self::$table_name;
-		$ProfilePicture->delete_pic();
-	}
+	// public static function delete_pic() {
+	// 	global $Images;
+	// 	$Images->table_name = self::$table_name;
+	// 	$Images->delete_pic();
+	// }
 
 }
 
@@ -144,10 +144,10 @@ $student = new Student();
 	// }
 
 	// public function display_students($id){
-	// 	global $ProfilePicture;
+	// 	global $Images;
 	// 	$students = self::get_students_by_faculty($id);
  //         foreach ($students as $student) {
- //              $img_path = $ProfilePicture->get_profile_pic($student);
+ //              $img_path = $Images->get_profile_pic($student);
  //              $output = "";
  //                $output .= "<li>";
  //                $output .= "<div class=\"row\">";

@@ -25,7 +25,7 @@ $pageTitle = "Messages";
 
 $message = Messages::getMsgById($msgid);
 $sender = Student::find_by_id($message->sender_id);
-$img_path = ProfilePicture::get_profile_pic($sender);
+$img_path = Images::get_profile_pic($sender);
 $date = displayDate($message->date);
 include (ROOT_PATH . "inc/head.php");
 ?>

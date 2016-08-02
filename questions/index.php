@@ -92,7 +92,7 @@ switch ($section) {
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
 					$reports_count = QNA::get_reports("questions", $q->id) ?: null;
-					$img_path = ProfilePicture::get_profile_pic($user) ?: DEF_PIC;
+					$img_path = Images::get_profile_pic($user) ?: DEF_PIC;
 					?>
 				 	<div class="ui items">
 				 		<div class="item">

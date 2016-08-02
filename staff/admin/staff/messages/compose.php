@@ -49,7 +49,7 @@ $messages = Messages::getConvo($selfId, $user_id);
 			<?php foreach($messages as $message):
 				$sender = $admin ? Staff::find_by_id($selfId) : Student::find_by_id($message->sender_id);
 				$self = $selfId == $sender->id ? true : false;
-				$img_path = $ProfilePicture->get_profile_pic($sender);
+				$img_path = $Images->get_profile_pic($sender);
 				$date = displayDate($message->date);
 ?>
 				<div class="details row">

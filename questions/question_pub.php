@@ -128,7 +128,7 @@ if($post_modified_date > $post_date){
 						$votes = Comment::get_votes($comment->id); 
 						$commenter = Student::find_by_id($comment->uid);
 
-						$img_path = ProfilePicture::get_profile_pic(Student::find_by_id($comment->uid));
+						$img_path = Images::get_profile_pic(Student::find_by_id($comment->uid));
 
 						$comment_date = $comment->created;
 						$comment_modified_date = $comment->last_modified;

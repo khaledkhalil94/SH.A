@@ -9,7 +9,7 @@ if(!$id){
 
 $student = Student::find_by_id($id);
 
-$img = ProfilePicture::get_pic_info($id);
+$img = Images::get_pic_info($id);
 
 if(!$img){
 	exit("User has not set a profile picture.");
@@ -39,9 +39,9 @@ include (ROOT_PATH . "inc/head.php");
 				<p><?= "Picture Name: " . substr(basename($img->path),strlen($id)); ?></p>
 				<p><?= "Picture type: " . $img->type; ?></p>
 				<p><?= "Picture size: " . human_filesize($img->size); ?></p>
-				<form action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+				<form action="<?php echo "editUserInformation.php?id=". $id ?>" method="POST">
 					<input type="submit" name="delete" class="btn btn-danger" value="Delete Picture" />
-					<a class="btn btn-default" href="<?= "editstudent.php?id=".$id; ?>" role="button">Go back</a>
+					<a class="btn btn-default" href="<?= "editUserInformation.php?id=".$id; ?>" role="button">Go back</a>
 				</form>
 			</div>
 	</div>

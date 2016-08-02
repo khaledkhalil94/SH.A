@@ -7,16 +7,30 @@ defined('DB_NAME')   ? null : define('DB_NAME', "sha2");
 defined('BASE_URL')  ? null : define('BASE_URL', "/sha/");
 defined('ROOT_PATH') ? null : define('ROOT_PATH',  $_SERVER["DOCUMENT_ROOT"] . "/sha/");
 defined('DOCROOT')   ? null : define('DOCROOT', __DIR__);
-defined('DEF_PIC')   ? null : define('DEF_PIC', BASE_URL."images/profilepic/pp.png");
+defined('DS')        ? NULL : define('DS', "/");
 
 
-defined('MAX_PIC_SIZE') ? null : define('MAX_PIC_SIZE', 300000);
+defined('DEF_IMG_UP_DIR')  ? null : define('DEF_IMG_UP_DIR', ROOT_PATH . 'photos/');
+
+defined('DEF_PIC_PATH')   ? null : define('DEF_PIC_PATH',  BASE_URL."photos/");
+defined('DEF_PIC')   ? null : define('DEF_PIC',  BASE_URL."images/dpp.png");
+
+// image validation
+// todo later: adjust these settings in the admin panel
+$imgValidation = array(
+	'allowed_ext_C' => array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG),
+	'allowed_ext' => array('gif','jpg','jpeg','png'),
+	'max_size' => 2097152, // 2097152 byte == 2mb
+	'max_width' => 800,
+	'max_height' => 800
+	);
+
 
 require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
 require_once(__DIR__."/User.php");
 require_once(__DIR__."/Student.php");
-require_once(__DIR__.'/ProfilePicture.php');
+require_once(__DIR__.'/Images.php');
 require_once(__DIR__.'/pagination.php');
 require_once(__DIR__.'/StudentInfo.php');
 require_once(__DIR__.'/functions.php');

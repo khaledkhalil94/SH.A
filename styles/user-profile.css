@@ -195,3 +195,12 @@ div#user-extrainfo-list, div#user-links-list {
 
 [data-tooltip][data-inverted]:before {
 }
+
+.user-profile .special.cards .button {padding: 5px;}
+
+.user-profile .user-info .profile-picture-actions {
+    text-align: right;
+    vertical-align: -webkit-baseline-middle;
+    padding-top: 8px;
+    padding-right: 5px;
+}

@@ -126,11 +126,13 @@ class QNA extends User {
 		$sql = "SELECT 1 FROM points
 				WHERE post_id = {$id}
 				AND user_id = {$uid}";
-		$stmt = $connection->prepare($sql);
-		if(!$stmt->execute()){
-			$error = ($stmt->errorInfo());
-			$session->message($error[2], "", "danger");
-		}
+		// $stmt = $connection->prepare($sql);
+		// if(!$stmt->execute()){
+		// 	$error = ($stmt->errorInfo());
+		// 	$session->message($error[2], "", "danger");
+		// }
+		// return $connection->query($sql)->fetch();
+
 		return $connection->query($sql)->fetch();
 	}
 

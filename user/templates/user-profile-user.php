@@ -148,7 +148,7 @@
 				</div>
 
 				<?php if ($self): ?>
-				<a class="btn hide btn-default" href="<?= BASE_URL."user/settings/editstudent.php"?>" role="button">Update your information</a>
+				<a class="btn hide btn-default" href="<?= BASE_URL."user/settings/editUserInformation.php"?>" role="button">Update your information</a>
 				<a class="btn hide btn-default" href="<?= BASE_URL."user/settings/editprivacy.php"?>" role="button">Update your privacy</a>
 				<a class="btn hide btn-default" href="<?= BASE_URL."user/settings/account.php"?>" role="button">Change account settings</a>
 				<?php endif; ?>

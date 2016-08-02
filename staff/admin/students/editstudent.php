@@ -39,10 +39,10 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <?php 
-$img_path = ProfilePicture::get_profile_pic($student);
+$img_path = Images::get_profile_pic($student);
 $has_pic = (bool)$student->has_pic;
-$ProfilePicture->has_pic = $has_pic;
-$ProfilePicture->id = $id;
+$Images->has_pic = $has_pic;
+$Images->id = $id;
  ?>
 <?php // Upload or Change profile picture
 if (isset($_POST['upload'])) {
@@ -50,13 +50,13 @@ if (isset($_POST['upload'])) {
 		echo "Please select a valid photo";
 	} else {
 		$has_pic ? Student::update_pic($_POST) : Student::upload_pic($_POST);
-		$session->message("Profile picture has been updated.", "editstudent.php?id={$id}");
+		$session->message("Profile picture has been updated.", "editUserInformation.php?id={$id}");
 	}
 }
 ?>
 <?php if (isset($_POST['delete'])) { 
 		Student::delete_pic();
-		$session->message("Profile picture has been deleted.", "editstudent.php?id={$id}");
+		$session->message("Profile picture has been deleted.", "editUserInformation.php?id={$id}");
 	   }
 ?>
 <?php
@@ -74,7 +74,7 @@ include (ROOT_PATH . "inc/head.php");
 		 	<div class="image"><img src=<?= $img_path; ?> alt="" style="width:228px;"></div>
 				<br>
 				<a class="btn btn-default" id="chgpic" role="button">Edit picture</a>
-					<form style="display:none;" id="form" enctype="multipart/form-data" action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+					<form style="display:none;" id="form" enctype="multipart/form-data" action="<?php echo "editUserInformation.php?id=". $id ?>" method="POST">
 					    <input type="hidden" name="MAX_FILE_SIZE" value=<?= MAX_PIC_SIZE ?> />
 					    <input name="userfile" type="file" />
 					    <input type="hidden" name="id" value="<?= $student->id ?>" />
@@ -82,7 +82,7 @@ include (ROOT_PATH . "inc/head.php");
 					</form>
 								
 					<?php if($has_pic): ?>
-						<form style="display:none;" id="form" action="<?php echo "editstudent.php?id=". $id ?>" method="POST">
+						<form style="display:none;" id="form" action="<?php echo "editUserInformation.php?id=". $id ?>" method="POST">
 							<input type="submit" name="delete" class="btn btn-danger" value="Delete Picture" />
 						</form>
 						<a class="btn btn-default" id="prwp" href="<?= "previewpic.php?id=".$id; ?>" role="button">Preview picture</a>
@@ -100,7 +100,7 @@ include (ROOT_PATH . "inc/head.php");
 		</div>
 
 		<div class="col-md-6">
-		    <form action="<?= "editstudent.php?id=". $id ?>" method="POST">
+		    <form action="<?= "editUserInformation.php?id=". $id ?>" method="POST">
 				
 		        <div class="form-group">
 		            <label for="firstName">First Name</label>

@@ -25,7 +25,7 @@
 			$reports_count = QNA::get_reports("comments", $comment->id) ? QNA::get_reports("comments", $comment->id)[0]->count : null; 
 			$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
 
-			$img_path = ProfilePicture::get_profile_pic(Student::find_by_id($comment->uid));
+			$img_path = Images::get_profile_pic(Student::find_by_id($comment->uid));
 
 			$comment_date = $comment->created;
 			$comment_edited_date = $comment->last_modified;

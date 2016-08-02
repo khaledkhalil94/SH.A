@@ -62,11 +62,11 @@ include (ROOT_PATH . 'inc/navbar.php');
 <?php endif; ?>
 
 <?php 
-$ProfilePicture = new ProfilePicture($userInfo->type);
-$ProfilePicture->id = $id;
+$Images = new Images($userInfo->type);
+$Images->id = $id;
 
 if($user->has_pic){
-$img_path = ProfilePicture::get_profile_pic($id);
+$img_path = Images::get_profile_pic($id);
 } else {
 	$img_path = BASE_URL."images/profilepic/pp.png";
 }
@@ -85,7 +85,7 @@ $img_path = ProfilePicture::get_profile_pic($id);
 	 					if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$ProfilePicture->upload_pic($id);
+							$Images->upload_pic($id);
 							header("Refresh:0");
 	 					}
 					}
@@ -97,7 +97,7 @@ $img_path = ProfilePicture::get_profile_pic($id);
 			 			if (empty($_FILES['userfile']['name'])) {
 	 						echo "Please select a valid photo";
 	 					} else {
-							$ProfilePicture->update_pic($id);
+							$Images->update_pic($id);
 							header("Refresh:0");
 					}
 				}
@@ -117,7 +117,7 @@ $img_path = ProfilePicture::get_profile_pic($id);
 
 				<form action="<?php echo "updateinfo.php?id=". $id ?>" method="POST">
 				<?php if (isset($_POST['delete'])) { 
-					$ProfilePicture->delete_pic($id);
+					$Images->delete_pic($id);
 					
 					    }?>
 					<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />

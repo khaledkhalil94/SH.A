@@ -41,7 +41,7 @@ include (ROOT_PATH . "inc/head.php");
 					<?php foreach ($messages as $message): 
 					$staff = Staff::find_by_id($message->sender_id) ? true : false;
 					$sender = $staff ? Professor::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
-					$img_path = $ProfilePicture->get_profile_pic($sender);
+					$img_path = $Images->get_profile_pic($sender);
 					$date = displayDate($message->date);
 					$time = get_timeago($message->date);
 					$subject = $message->subject;

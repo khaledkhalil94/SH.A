@@ -45,12 +45,12 @@ class Admin extends User {
 
 	public static function delete($user){
 		global $connection;
-		global $ProfilePicture;
+		global $Images;
 		$connection->query("DELETE FROM login_info WHERE id = {$user->id} LIMIT 1");
 		$connection->query("DELETE FROM students WHERE id = {$user->id} LIMIT 1");
-		$ProfilePicture->id = $user->id;
-		$ProfilePicture->table_name = "profile_pic";
-		$ProfilePicture->delete_pic();
+		$Images->id = $user->id;
+		$Images->table_name = "profile_pic";
+		$Images->delete_pic();
 		return true;
 
 	}

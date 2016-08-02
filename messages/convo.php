@@ -37,7 +37,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 				$sender = $staff ? Staff::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
 				$self = USER_ID == $sender->id ? true : false;
 				if (!$self) Messages::msgSeen($message->user_id, $message->id);
-				$img_path = $ProfilePicture->get_profile_pic($sender);
+				$img_path = $Images->get_profile_pic($sender);
 				$date = displayDate($message->date);
 				$timeAgo = get_timeAgo($message->date);
 ?>

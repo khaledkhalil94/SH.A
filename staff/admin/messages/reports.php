@@ -25,7 +25,7 @@ $session->adminLock();
         <tbody>
           <?php foreach ($reports as $report):
           $sender = Student::find_by_id($report->sender_id);
-          $img_path = $ProfilePicture->get_profile_pic($sender);
+          $img_path = $Images->get_profile_pic($sender);
           $date = displayDate($report->date);
           $time = get_timeago($report->date);
           $subject = $report->subject;

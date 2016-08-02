@@ -37,7 +37,7 @@ $staff = !empty($message->s_id) ? true : false;
 $sender = $staff ? Staff::find_by_id($message->s_id) : Student::find_by_id($message->u_id);
 $self = USER_ID == $sender->id ? true : false;
 $receiver = Student::find_by_id($message->user_id);
-$img_path = $ProfilePicture->get_profile_pic($sender);
+$img_path = $Images->get_profile_pic($sender);
 $date = displayDate($message->date);
 $timeAgo = get_timeAgo($message->date);
 include (ROOT_PATH . "inc/head.php");

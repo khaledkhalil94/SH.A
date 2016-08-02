@@ -8,7 +8,7 @@ if(!$id){
 }
 $studentInfo = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : die("User was not found");
 $student = Student::find_by_id($studentInfo->id);
-$img_path = ProfilePicture::get_profile_pic($student);
+$img_path = Images::get_profile_pic($student);
 $faculty = Student::get_faculty($student->faculty_id);
 $date = displayDate($studentInfo->activity);
 $dateAgo = get_timeago($studentInfo->activity);
@@ -19,7 +19,7 @@ if (empty($studentInfo)){
 	exit;
 } elseif(empty($student)){
 	$session->message("Please update your information");
-	header("Location: " . BASE_URL . "user/settings/editstudent.php?id=".$id);
+	header("Location: " . BASE_URL . "user/settings/editUserInformation.php?id=".$id);
 }
 
 $pageTitle = $studentInfo->id;
@@ -42,7 +42,7 @@ include (ROOT_PATH . "inc/head.php");
 				<?= !empty($faculty) ? "<p>Faculty {$faculty}</p>" : null; ?>
 				<p title="<?= $date; ?>"><?= "Latest Activity: " . $dateAgo; ?></p>
 				<p title="<?= $date; ?>"><?= "Registered on : " . displayDate($studentInfo->register_date, "j/n/Y"); ?></p>
-				<a class="btn btn-default" href="<?= BASE_URL."staff/admin/user/editstudent.php?id=".$id?>" role="button">Change information</a>
+				<a class="btn btn-default" href="<?= BASE_URL."staff/admin/user/editUserInformation.php?id=".$id?>" role="button">Change information</a>
 				<a class="btn btn-default" href="<?= BASE_URL."staff/admin/user/account.php?id=".$id?>" role="button">Change settings</a>
 				<a class="btn btn-default" href="<?= "previewlogs.php?id=".$id ?>" role="button">Preview user logs</a>
 				<a class="btn btn-danger" href="<?= BASE_URL."staff/admin/user/deleteuser.php?id=".$id ?>" role="button">Delete User</a>

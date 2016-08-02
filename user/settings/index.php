@@ -36,7 +36,7 @@ include (ROOT_PATH . "inc/head.php");
 		<div class="ten wide column settings-content">
 			<?php switch ($st) {
 				case 'ui':
-					require('editstudent.php');
+					require('editUserInformation.php');
 					break;
 				case 'up':
 					require('editprivacy.php');
@@ -49,7 +49,7 @@ include (ROOT_PATH . "inc/head.php");
 					break;
 				
 				default:
-					require('editstudent.php');
+					require('editUserInformation.php');
 					break;
 			} ?>
 		</div>

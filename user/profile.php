@@ -48,6 +48,8 @@ $linksP = $user->links_privacy;
 $public = "<i title=\"Public\" class=\"world icon\"></i>";
 $private = "<i title=\"Private\" class=\"lock icon\"></i>";
 
+$has_pic = Images::has_pic($user->id);
+
 $pageTitle = $name;
 include (ROOT_PATH . "inc/head.php");
  ?>

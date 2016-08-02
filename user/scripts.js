@@ -21,7 +21,7 @@ $('.user-profile .tabular.menu .item').tab({
 	}
 });
 
-$('.user-profile .tabular.menu .active').click();
+//$('.user-profile .tabular.menu .active').click();
 
 // time parsing
 $('#user-joined-date').text('Joined ' + moment($('#user-joined-date').text()).fromNow());
@@ -369,3 +369,102 @@ $(function (){
 
 	return null;
 });
+
+$('.special.cards .image').dimmer({
+	on: 'hover',
+	'opacity' : .4
+});
+
+
+$(document).on('click', '#changePicture', function(){
+	$('#myFile').click();
+});
+
+$(document).on('click', '#uploadPicture', function(){
+	$('#myFile').click();
+});
+
+// TODO
+// ADD EFFECTS
+
+$('#myFile').on('change', function(e){
+	var file;
+	file = e.target.files[0];
+
+	var data = new FormData();
+	data.append('file', file);
+
+	 $.ajax({
+			url: '../settings/api/profilePic.php',
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			cache: false,
+		  success: function(data, textStatus){
+		  		console.log(data);
+
+					var $viewBtn = "\
+										<a class=\"ui icon button\" href=\""+ data.path +"\" data-variation=\"mini\" data-content=\"View Picture\" >\
+										<i data-variation=\"mini\" class=\"unhide icon link\"></i>\
+										</a>";
+
+					var $changeBtn = "\
+										<div id=\"changePicture\" class=\"ui small icon button\" data-content=\"Change Picture\" data-variation=\"mini\">\
+										<i class=\"edit icon link\"></i>\
+										</div>";
+
+					var $deleteBtn =	"\
+										<div id=\"deletePicture\" class=\"ui small icon button\" data-content=\"Delete Picture\" data-variation=\"mini\">\
+										<i class=\"trash outline icon link\"></i>";
+
+	  			$('#proflePicture').attr('src', data.path);
+
+
+	  			$('.profile-picture-actions').children().remove();
+
+	  			$('.profile-picture-actions').append($viewBtn,$changeBtn,$deleteBtn);
+
+	  			$('#viewPicture').attr('href', data.path);
+		  },
+
+		  error: function(jqXHR, textStatus, errorThrown){
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+		  }
+	 });
+});
+
+$(document).on('click', '#deletePicture', function(e){
+	
+	 $.ajax({
+			url: '../settings/api/profilePic.php',
+			type: 'post',
+			data: {'action' : 'delete'},
+			dataType: 'json',
+		  success: function(data, textStatus){
+
+				var $upBtn = "\
+									<div id=\"uploadPicture\" class=\"ui small icon button\" data-content=\"Upload Picture\" data-variation=\"mini\">\
+									<i class=\"cloud upload icon link\"></i>\
+									</div>";
+
+		  		if(data.status == 'success'){
+		  			$('#proflePicture').attr('src', data.path);
+
+		  			$('.profile-picture-actions').children().remove();
+		  			$('.profile-picture-actions').append($upBtn);
+		  		}
+	  			
+		  },
+		  error: function(jqXHR, textStatus, errorThrown){
+				// Handle errors here
+				console.log('ERRORS: ' + textStatus);
+		  }
+	 });
+});
+
+$('.ui.icon.button').popup({
+   'position' : 'top right'
+  });

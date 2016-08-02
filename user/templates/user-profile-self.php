@@ -1,10 +1,44 @@
 <div class="user user-profile">
+
+
+
 	<?= msgs(); ?>
 	<div class="ui grid">
 		<div class="five wide column side-bar user-info">
-			<div class="image">
-				<img class="ui small image" src="<?= $img_path;?>" alt="">
-			</div><br>
+			<div class="ui special cards">
+				<div class="card">
+					<div class="image">
+						<div class="ui dimmer">
+							<div class="content">
+								<div id="pp_actions" class="top right profile-picture-actions">
+								<!-- <div class="ui small icon button" data-content="View Picture" data-variation="mini">
+									  <i class="unhide icon link"></i>
+									</div>	 -->
+									<?php if($has_pic){ ?>			
+										<a id="viewPicture" class="ui icon button" href="<?= $img_path;?>" data-variation="mini" data-content="View Picture" >
+										  <i data-variation="mini" class="unhide icon link"></i>
+										</a>
+										<div id="changePicture" class="ui small icon button" data-content="Change Picture" data-variation="mini">
+										  <i class="edit icon link"></i>
+										</div>
+										<div id="deletePicture" class="ui small icon button" data-content="Delete Picture" data-variation="mini">
+										  <i class="trash outline icon link"></i>
+										</div>
+									<?php } else { ?>
+										<div id="uploadPicture" class="ui small icon button" data-content="Upload Picture" data-variation="mini">
+										  <i class="cloud upload icon link"></i>
+										</div>
+									<?php } ?>
+								</div>
+							</div>
+						</div>
+						<img class="ui medium rounded image" id="proflePicture" src="<?= $img_path;?>">
+					</div>
+				</div>
+				<input style="display:none;" type="file" id="myFile">
+			</div>
+
+			<br>
 			<div class="user-name user-username">
 				<h3><?= $name; ?></h3>
 				<a href="<?= BASE_URL."user/{$id}/" ?>">@<?= $username; ?></a>

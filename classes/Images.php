@@ -3,6 +3,7 @@ require_once('init.php');
 
  class Images {
 
+	// todo: make $errMsg array and return multiple errors
 	public $user_id, $id, $path, $error=false, $errMsg;
 
 	public function __construct(){
@@ -25,10 +26,12 @@ require_once('init.php');
 		}
 	}
 
-	public function get_pic_info(){
+	public function get_pic_info($user_id=null){
 		global $connection;
 
-		$sql = "SELECT * FROM profile_pic WHERE user_id = {$this->user_id}";
+		$user_id = $user_id ?: $this->user_id;
+
+		$sql = "SELECT * FROM profile_pic WHERE user_id = {$user_id} LIMIT 1";
 
 		$stmt = $connection->prepare($sql);
 
@@ -103,8 +106,12 @@ require_once('init.php');
 
 		// if true, will use a generated name
 		if($rndmName === false) {
-			// characters allowed (a-z, 0-9, -, _, .)
-			if (!(preg_match("`^[-0-9A-Z_\.]+$`i", $path_parts['filename']))) {
+			// characters allowed (a-z, A-Z, 0-9, -, _, .)
+			$name = $path_parts['filename'];
+			$name = trim(strtolower($name));
+			$name = str_replace(' ', '', $name);
+
+			if (!(preg_match("`^[-0-9A-Z_\.]+$`i", $name))) {
 
 				$this->error = true;
 				$this->errMsg = ('File name is not valid (suspicious characters).');

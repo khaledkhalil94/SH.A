@@ -1,7 +1,4 @@
 <div class="user user-profile">
-
-
-
 	<?= msgs(); ?>
 	<div class="ui grid">
 		<div class="five wide column side-bar user-info">
@@ -11,13 +8,10 @@
 						<div class="ui dimmer">
 							<div class="content">
 								<div id="pp_actions" class="top right profile-picture-actions">
-								<!-- <div class="ui small icon button" data-content="View Picture" data-variation="mini">
-									  <i class="unhide icon link"></i>
-									</div>	 -->
 									<?php if($has_pic){ ?>			
-										<a id="viewPicture" class="ui icon button" href="<?= $img_path;?>" data-variation="mini" data-content="View Picture" >
+										<div id="viewPicture" class="ui icon button" data-variation="mini" data-content="View Picture" >
 										  <i data-variation="mini" class="unhide icon link"></i>
-										</a>
+										</div>
 										<div id="changePicture" class="ui small icon button" data-content="Change Picture" data-variation="mini">
 										  <i class="edit icon link"></i>
 										</div>
@@ -63,7 +57,9 @@
 			<div class="ui segment user-extrainfo">
 				<div class="user-links-header">
 					<div class="ui header"><h4>Personal info</h4></div>
-					<button id="extrainfo-collapse" class="ui icon button extrainfo-collapse"><i id="btn-extrainfo-angle-up" class="angle up icon"></i></button>
+					<button data-variation="mini" title="Minimize" id="extrainfo-collapse" class="ui icon button extrainfo-collapse">
+						<i id="btn-extrainfo-angle-up" class="angle up icon"></i>
+					</button>
 				<?php if($pub){ ?>
 					<a class="ui icon button" href="/sha/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are public" data-inverted="">
 					  <i class="world icon"></i>
@@ -124,11 +120,13 @@
 
 			</div>
 
-		<?php if(!$emptyLinks){ ?>
+			<?php if(!$emptyLinks){ ?>
 			<div class="ui segment user-links">
 				<div class="user-links-header">
 					<div class="ui header"><h4>Links</h4></div>
-					<button id="links-collapse" class="ui icon button links-collapse"><i id="btn-angle-up" class="angle up icon"></i></button>
+					<button title="Minimize" data-variation="mini" id="links-collapse" class="ui icon button links-collapse">
+						<i id="btn-angle-up" class="angle up icon"></i>
+					</button>
 					<?php if($linksP){ ?>
 					<a class="ui icon button" href="/sha/user/settings/?st=up" id="links-edit" data-variation="mini" data-tooltip="Your links are public" data-inverted="">
 					  <i class="world icon"></i>
@@ -173,13 +171,13 @@
 					<?php endif; ?>
 				</div>
 			</div>
-		<?php } ?>
+			<?php } ?>
 		</div>
-		<div class="eleven wide column">
+		<div class="eleven wide column profile-body">
 			<div class="profile-info ui vertical padded segment">
 				<div class="user-setting">
 					<a class="" href="<?= BASE_URL."user/settings/"?>">
-						<div class="ui icon link button">
+						<div title="Edit your settings" class="ui icon link button">
 							<i class="settings big icon"></i>
 						</div>
 					</a>
@@ -203,6 +201,29 @@
 			<div class="ui bottom attached tab segment" data-tab="followers">
 			</div>
 			<div class="ui bottom attached tab segment" data-tab="questions">
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="ui page dimmer">
+	<div class="content">
+		<div class="center">
+			<div id="dimmer-close" class="close-round"><i class="remove icon"></i></div>
+			<div class="ui grid centered image-details">
+				<div class="seven wide column image">
+					<img class="ui medium rounded image" id="pic_details_pp" src="">
+				</div>
+				<div class="seven wide column info">
+					<div class="ui inverted relaxed large divided list">
+						<div id="pic_details_name" class="item"></div>
+						<div id="pic_details_size" class="item"></div>
+						<div id="pic_details_dim" class="item"></div><br>
+						<a id="pic_details_link" title="Download Photo" href="" download="proposed_file_name"><i class="download circular inverted link icon"></i></a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

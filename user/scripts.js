@@ -10,7 +10,7 @@ $( "#links-collapse" ).click(function() {
 	});
 });
 
-
+// api settings for tabs
 $('.user-profile .tabular.menu .item').tab({
 	alwaysRefresh: true,
 	ignoreFirstLoad:false,
@@ -45,12 +45,7 @@ $(function(){
 		var $name = this.name;
 		var $this = $(this);
 
-		console.log($value);
-		console.log($name);
-
-		$element = $this.parents('.field').find('.label');
-		$vis = $element.hasClass('label');
-
+		$output = $this.parents('.field').next().attr('class');
 
 		$.ajax({
 			url: '../settings/api/privacy.php',
@@ -63,7 +58,7 @@ $(function(){
 
 				if(json.status == "success"){ // success
 
-					if(!$vis) $this.parents('.field').after($saved);
+					if($output != 'output') $this.parents('.field').after($saved);
 					
 					setTimeout(function() {
 						$this.parents('.field').next('.output').fadeOut(function(){
@@ -123,7 +118,7 @@ $(function (){
 			$cvalues[this.name] = $(this)[0].defaultValue;
 		});
 
-		console.log($cvalues);
+		//console.log($cvalues);
 
 		var $newValues = {};
 
@@ -133,16 +128,18 @@ $(function (){
 			}
 		});
 
-		console.log($newValues);
+		//console.log($newValues);
 
 		if ($.isEmptyObject($newValues)) {
 			console.log('No fields changed.');
 			return null;
 		}
 
-		$this.parents('form').addClass('loading');
 
 		if($isValid){
+
+			$this.parents('form').addClass('loading');
+
 			$.ajax({
 				url: '../settings/api/information.php',
 				type: 'post',
@@ -372,27 +369,32 @@ $(function (){
 
 $('.special.cards .image').dimmer({
 	on: 'hover',
-	'opacity' : .4
+	'opacity' : .3
 });
 
 
-$(document).on('click', '#changePicture', function(){
+// firing the file upload input
+$(document).on('click', '#changePicture, #uploadPicture', function(){
+
+	$('#profile_err_msg').remove();
 	$('#myFile').click();
 });
 
-$(document).on('click', '#uploadPicture', function(){
-	$('#myFile').click();
-});
-
-// TODO
-// ADD EFFECTS
-
+// upload or change
 $('#myFile').on('change', function(e){
 	var file;
 	file = e.target.files[0];
 
 	var data = new FormData();
 	data.append('file', file);
+
+
+	$('.special.cards .image').dimmer('add content','<div id="temp_loader" class="ui loader"></div>');
+	$('.special.cards .image').dimmer({
+		'closable' : false
+	});
+	
+	$('#pp_actions').toggle();
 
 	 $.ajax({
 			url: '../settings/api/profilePic.php',
@@ -405,10 +407,14 @@ $('#myFile').on('change', function(e){
 		  success: function(data, textStatus){
 		  		console.log(data);
 
+				if(data.status == "success"){
+
+					unDim();
+
 					var $viewBtn = "\
-										<a class=\"ui icon button\" href=\""+ data.path +"\" data-variation=\"mini\" data-content=\"View Picture\" >\
+										<div id=\"viewPicture\" class=\"ui icon button\" data-variation=\"mini\" data-content=\"View Picture\" >\
 										<i data-variation=\"mini\" class=\"unhide icon link\"></i>\
-										</a>";
+										</div>";
 
 					var $changeBtn = "\
 										<div id=\"changePicture\" class=\"ui small icon button\" data-content=\"Change Picture\" data-variation=\"mini\">\
@@ -419,52 +425,163 @@ $('#myFile').on('change', function(e){
 										<div id=\"deletePicture\" class=\"ui small icon button\" data-content=\"Delete Picture\" data-variation=\"mini\">\
 										<i class=\"trash outline icon link\"></i>";
 
-	  			$('#proflePicture').attr('src', data.path);
+					$('#proflePicture').attr('src', data.path);
 
+					$('.profile-picture-actions').children().remove();
 
-	  			$('.profile-picture-actions').children().remove();
+					$('.profile-picture-actions').append($viewBtn,$changeBtn,$deleteBtn);
 
-	  			$('.profile-picture-actions').append($viewBtn,$changeBtn,$deleteBtn);
+					$('#viewPicture').attr('href', data.path);
 
-	  			$('#viewPicture').attr('href', data.path);
+				} else {
+
+					unDim();
+
+					$('#profile_err_msg').remove();
+					$('.profile-body').prepend(errMsg(data.errMsg));
+
+				}
 		  },
 
 		  error: function(jqXHR, textStatus, errorThrown){
-				// Handle errors here
+
+		  		unDim();
+
+				$('#profile_err_msg').remove();
+				$('.profile-body').prepend(errMsg(textStatus));
+
 				console.log('ERRORS: ' + textStatus);
 		  }
 	 });
 });
 
+// delete
 $(document).on('click', '#deletePicture', function(e){
-	
-	 $.ajax({
+
+	$('.special.cards .image').dimmer('add content','<div id="temp_loader" class="ui loader"></div>');
+	$('.special.cards .image').dimmer({
+		'closable' : false
+	});
+	$('#pp_actions').toggle();
+
+
+	$.ajax({
 			url: '../settings/api/profilePic.php',
 			type: 'post',
 			data: {'action' : 'delete'},
 			dataType: 'json',
 		  success: function(data, textStatus){
 
-				var $upBtn = "\
-									<div id=\"uploadPicture\" class=\"ui small icon button\" data-content=\"Upload Picture\" data-variation=\"mini\">\
-									<i class=\"cloud upload icon link\"></i>\
-									</div>";
-
 		  		if(data.status == 'success'){
-		  			$('#proflePicture').attr('src', data.path);
 
-		  			$('.profile-picture-actions').children().remove();
-		  			$('.profile-picture-actions').append($upBtn);
-		  		}
+					unDim();
+
+					var $upBtn = "\
+										<div id=\"uploadPicture\" class=\"ui small icon button\" data-content=\"Upload Picture\" data-variation=\"mini\">\
+										<i class=\"cloud upload icon link\"></i>\
+										</div>";
+
+			  		if(data.status == 'success'){
+			  			$('#proflePicture').attr('src', data.path);
+
+			  			$('.profile-picture-actions').children().remove();
+			  			$('.profile-picture-actions').append($upBtn);
+			  		}
+			  	} else {
+
+					unDim();
+
+					$('#profile_err_msg').remove();
+					$('.profile-body').prepend(errMsg(data.errMsg));
+
+			  	}
 	  			
 		  },
 		  error: function(jqXHR, textStatus, errorThrown){
-				// Handle errors here
+
+				unDim();
+
+				$('#profile_err_msg').remove();
+				$('.profile-body').prepend(errMsg(textStatus));
+
 				console.log('ERRORS: ' + textStatus);
 		  }
-	 });
+	});
+});
+
+function errMsg(msg){
+	var $errMsg = "\
+						<div id=\"profile_err_msg\" class=\"ui negative message\">\
+						<i class=\"close icon\"></i>\
+						<div class=\"header\">\
+						Error uploading picture\
+						</div>\
+						<p>"+ msg +"\</p>\
+						</div>";
+
+	return $errMsg;
+}
+
+function unDim(){
+
+	$('#temp_loader').remove();
+	$('.special.cards .image').dimmer('toggle');
+	$('#pp_actions').toggle();
+
+	$('.special.cards .image').dimmer({
+		'closable' : true,
+		'on' : 'hover'
+	});
+}
+
+$(document).on('click', '.message .close', function() {
+	$(this).closest('.message').transition('fade');
+});
+
+$(document).on('click', '#viewPicture', function(e){
+	e.preventDefault();
+	$('.page.dimmer:first').dimmer('toggle');
+
+});
+
+$('#dimmer-close').click(function(){
+	console.log("??");
+	$('.page.dimmer:first').dimmer('hide');
+
 });
 
 $('.ui.icon.button').popup({
-   'position' : 'top right'
-  });
+	'position' : 'top right'
+});
+
+$('.page.dimmer:first').dimmer({
+	onShow : function(){
+	 $.ajax({
+			url: '../settings/api/profilePic.php',
+			type: 'get',
+			data: {'action' : 'get_pic_info', 'id' : userID},
+			dataType: 'json',
+		  success: function(data, textStatus){
+		  		if(typeof(data) == 'object'){
+		  			$('#pic_details_name').html('Name: '+data.name+'.'+data.extension);
+		  			$('#pic_details_size').html('Size: '+data.size);
+		  			$('#pic_details_dim').html('Dimensions: '+data.width+' x '+data.height);
+		  			$('#pic_details_link').attr('href', data.path);
+		  			$('#pic_details_link').attr('download', data.name+'.'+data.extension);
+		  			$('#pic_details_pp').attr('src', data.path);
+		  		}
+
+		  },
+
+		  error: function(jqXHR, textStatus, errorThrown){
+
+		  		unDim();
+
+				$('#profile_err_msg').remove();
+				$('.profile-body').prepend(errMsg(textStatus));
+
+				console.log('ERRORS: ' + textStatus);
+		  }
+	 });
+	}
+});

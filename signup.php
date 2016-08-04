@@ -1,58 +1,77 @@
 <?php
 require_once ("classes/init.php");
 $pageTitle = "Sign Up";
-if($session->is_logged_in()) header('Location:index.php');
-
-
-if (isset($_POST['submit'])) {
-    if (empty($_POST['username'])) {
-        exit("Username and password can't be empty");
-    } else {
-        $_POST['id'] = mt_rand(10000,20000);
-        if($user = StudentInfo::create_student()){
-            $session->login($user);
-            //StudentInfo::log("signup", $user);
-            redirect_to_D("welcome.php");
-            require_once("welcome.php");
-            exit;
-        }
-    }
-}
+if($session->is_logged_in()) redirect_to_D('/sha');
 
 ?>
 
 <?php
 require(ROOT_PATH . 'inc/head.php'); 
- ?>
-
-</pre>
+?>
 <body>
-  <div class="main">
-    <div class="container">
-    <?= msgs(); ?>
-      <div class="form">
-        <form action="signup.php" method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" name="username" value="" />
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" name="password" value="" />
-            </div>
-            <div class="form-group">
-                <label for="email">email</label>
-                <input type="email" class="form-control" name="email" value="" />
-            </div>
-            <br>
-            <br>
-            <!-- <input type="hidden" name="token" value="" /> -->
-            <input type="submit" name="submit" value="Create" />
+	<div class="main signup-page">
+		<div class="container">
+			<?= msgs(); ?>
+			<div class="ui raised very padded segment sign-up">
+				<div class="ui compact warning message">
+					<div class="header">
+					<i class="warning icon"></i>
+						It is recommended to not enter any sensitive or personal information.
+					</div>
+				</div><hr>
 
-        </form>
-      </div>
-    </div>
-  </div>
-<?php include (ROOT_PATH . 'inc/footer.php') ?>
+				<div class="ui sign-up form">
+
+					<form class="signup-form" method="POST">
+
+						<div class="field username">
+							<label>Username</label>
+							<input type="text" name="username" placeholder="Username" />
+						</div>
+
+						<div class="field-status username-status">
+						</div>
+							<p class="form-note">Username will be unique to your account - can be changed later.</p>
+
+						<div class="field">
+							<label>E-mail</label>
+							<input type="email" name="email" placeholder="E-mail" />
+						</div>
+
+						<div class="field-status email-status">
+						</div>
+
+
+						<div class="field">
+							<label>Password</label>
+							<input type="password" name="password" placeholder="Password" />
+						</div>
+
+						<div class="field">
+							<label>re-enter Password</label>
+							<input type="password" name="repassword" placeholder="Password" />
+						</div>
+
+						<br>
+						<br>
+						 <button class="ui button green submit" type="submit">Sign up</button>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="/sha/scripts/auth/signup.auth.js"></script>
+	<?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

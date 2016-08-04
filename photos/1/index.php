@@ -1,0 +1,1 @@
+<?php header("Location: /sha/404.php"); ?>

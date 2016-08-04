@@ -2,13 +2,8 @@
 require_once('init.php');
 class Session {
 
-	private $logged_in=false;
-	private $level;
-	public $user_id;
-	public $username;
-	public $msg;
-	public $msgType;
-
+	private $logged_in=false, $level;
+	public $user_id, $username, $msg, $msgType;
 
 	function __construct(){
 		session_start();
@@ -24,6 +19,7 @@ class Session {
 	public function is_logged_in(){
 		return $this->logged_in;
 	}
+	
 	private function check_login(){
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];

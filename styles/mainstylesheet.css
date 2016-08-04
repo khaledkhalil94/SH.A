@@ -126,35 +126,6 @@ ul.nav.navbar-nav {
   border-bottom: 1px solid #e8e8e8;
 }
 
-/*google colors, personal signature*/
-.dropdown ul li:nth-child(1) {
-  border-right: 2px #0089fa solid;
-}
-
-.dropdown ul li:nth-child(2) {
-  border-right: 2px #ff002b solid;
-}
-
-.dropdown ul li:nth-child(3) {
-  border-right: 2px #ffa900 solid;
-}
-
-.dropdown ul li:nth-child(4) {
- border-right: 2px #00a753 solid;
-}
-
-.dropdown ul li:nth-child(5) {
-  border-right: 2px #0089fa solid;
-}
-
-.dropdown ul li:nth-child(6) {
- border-right: 2px #ff002b solid;
-}
-
-.dropdown ul li:nth-child(7) {
-  border-right: 2px #ffa900 solid;
-}
-
 .dropdown ul li a:hover {
   color: black;
   background-color: inherit;
@@ -324,10 +295,6 @@ ul.nav.navbar-nav {
 
   }
 
-.section h2 {
-    /* text-align: center; */
-}
-
 
 .logs .row {
     background-color: #CCCCCC;
@@ -350,5 +317,48 @@ ul.nav.navbar-nav {
     margin-top: 30px;
 }
 
-.container {
+form .field {
+    width: 90%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+form .output {
+    display: inline;
+}
+
+.user-settings-information form .output {
+    display: inline;
+    vertical-align: -webkit-baseline-middle;
+}
+
+.sign-up form .field-status {
+    display: inline-block;
+}
+
+.ui.form .field .prompt.label {
+    float: left;
+    background-color: #ea5a5a!important;
+    color: #ffffff!important;
+}
+
+.sign-up form .field-status * {
+    top: 6px!important;
+    left: 5px!important;
+}
+
+.ui.raised.very.padded.segment.sign-up {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.signup-page .field.username {
+    margin-bottom: 0px;
+}
+
+p.form-note {
+    font-size: smaller;
+    opacity: .8;
+    color: #8a8a8a;
+    margin-left: 5px;
 }

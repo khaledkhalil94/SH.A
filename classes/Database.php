@@ -15,6 +15,38 @@ class Database {
 		}
 	}
 
+	/**
+	* Inserts a row into a table after escaping it's values
+	*
+	* @param string => table name
+	* @param object => the data to be inserted
+	*
+	* @return boolean true | string
+	*
+	*/
+	public function insert_data($db, $data){
+		global $connection;
+
+		$fields = [];
+		$params = [];
+		$values = [];
+		foreach ($data as $k => $v) {
+			$fields[] = '`'.$k.'`';
+			$params[] = ':'.$k;
+			$values[":".$k] = $v;
+		}
+
+		$sql = "INSERT INTO `{$db}` (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $params) . ")";
+
+		$stmt = $connection->prepare($sql);
+		if(!$stmt->execute($values)){
+			$error = $stmt->errorInfo();
+			return $error[2];
+		}
+
+		return true;
+	}
+
 	
 }
 

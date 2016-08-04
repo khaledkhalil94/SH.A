@@ -3,8 +3,7 @@ require_once ("../classes/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
-
-$user = Student::get_user_info($id);
+$user = $student->get_user_info($id);
 
 if(!$user){
 	$session->message("Page was not found!", BASE_URL, 'danger');
@@ -50,17 +49,27 @@ $private = "<i title=\"Private\" class=\"lock icon\"></i>";
 
 $has_pic = Images::has_pic($user->id);
 
+//$pic = Images::get_pic_info($id);
+
 $pageTitle = $name;
 include (ROOT_PATH . "inc/head.php");
  ?>
+ <script>var userID = <?= $id ?>;</script>
 <div class="container section">
 <?php 
+
 if($session->is_logged_in() && !$self){
+
 	require('templates/user-profile-user.php');
-} else if($self) {
+
+} elseif($self) {
+
 	require_once('templates/user-profile-self.php');
+
 } else {
+
 	require_once('templates/user-profile-pub.php');
+
 }?>
 </div>
 <script src="../scripts.js"></script>

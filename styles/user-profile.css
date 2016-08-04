@@ -190,17 +190,50 @@ div#user-extrainfo-list, div#user-links-list {
     bottom: 8px;
 }
 
-[data-tooltip][data-inverted]:after {
+.user-profile .special.cards .button {
+    padding: 5px;
 }
-
-[data-tooltip][data-inverted]:before {
-}
-
-.user-profile .special.cards .button {padding: 5px;}
 
 .user-profile .user-info .profile-picture-actions {
     text-align: right;
     vertical-align: -webkit-baseline-middle;
     padding-top: 8px;
     padding-right: 5px;
+}
+
+.ui.page.dimmer .center .ui.image.details {
+    /* text-align: -webkit-center; */
+}
+
+.ui.page.dimmer .center .info {
+    margin-top: 15px;
+    /* margin-left: 7%; */
+    text-align: left;
+    right: 42px;
+}
+
+.ui.page.dimmer .center .ui.image {
+    /* text-align: -webkit-right; */
+    border: 1px solid rgb(107, 107, 107);
+}
+
+.ui.grid.centered.image-details {
+    background-color: rgba(0, 0, 0, 0.23);
+    width: 40%;
+    margin: 0 auto;
+}
+
+.ui.dimmer .center .close-round {
+    width: 40%;
+    margin: 0 auto;
+    text-align: right;
+    cursor: pointer;
+}
+
+.dimmer i.inverted.link.icon {
+    background-color: #404040!important;
+}
+
+.ui.page.dimmer .center .image-details .image {
+    right: 19px;
 }

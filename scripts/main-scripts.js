@@ -3,7 +3,6 @@ $(function(){
 	// $('#post-date').text(moment($('#post-date').text()).fromNow());
 	// $('#post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
 
-
 	$('.comments').each(function(index, value) {
 		$date = $(this).find('#commentDate').text();
 		$(this).find('#commentDate').text(moment($date).fromNow());
@@ -18,3 +17,4 @@ $(function(){
 		$(this).find('#post-date').text(moment($date).fromNow());
 	});
 });
+

@@ -7,5 +7,3 @@ unset($_SESSION['fail']);
 echo "</pre>";
 
 ?>
-
-<!-- {"faculty_id":"1","has_pic":"1","acc_vis":"1"} -->

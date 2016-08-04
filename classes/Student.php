@@ -4,7 +4,9 @@ require_once('init.php');
 class Student extends User {
 	
 	protected static $table_name="students";
-	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$gender,$about,$website,$skype,$twitter,$github,$facebook;
+	public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$gender,$about,$website,$skype,$twitter,$github,$facebook,
+
+	$error=false, $errMsg;
 
 	protected static $db_fields = array();
 
@@ -28,17 +30,24 @@ class Student extends User {
 
 		if(!$stmt->execute()){
 			$error = $stmt->errorInfo();
-			$_SESSION['err'] = $error[2];
-			return $error[2];
+			$this->error = true;
+			$errMsg = $error[2];
+			return false;
 		}
 
 		$obj = $stmt->fetch(PDO::FETCH_OBJ);
 
 		if(empty($obj)){
+			$this->error = true;
+			$errMsg = "Error fetching user details from the database.";
 			return false;
 		}
 
-		if(!is_object($obj)) die($obj);
+		if(!is_object($obj)){
+			$this->error = true;
+			$errMsg = $obj;
+			return false;
+		}
 
 		$obj->img_path = $obj->img_path ?: DEF_PIC; 
 

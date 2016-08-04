@@ -16,19 +16,10 @@
 					<li>
 						<a href="<?= BASE_URL; ?>">Home</a>
 					</li>
-					<li>
-
 					 <?php if($session->is_logged_in()): ?>
-						
-						<?php if ($session->getLevel() == "student"): ?>
-							<a href="<?= BASE_URL."user/".USER_ID;?>/">Profile</a>
-						<?php endif ?>
-
-
-						<?php if ($session->getLevel() == "staff"): ?>
-							<a href="<?= BASE_URL."staff/professor.php?id=".USER_ID;?>">Profile</a>
-						<?php endif ?>
-
+					<li>
+				
+						<a href="<?= BASE_URL."user/".USER_ID;?>/">Profile</a>
 
 					</li>
 					<?php endif; ?>  

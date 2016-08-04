@@ -29,6 +29,9 @@
 	<script type='text/javascript' src="<?= BASE_URL; ?>styles/Semantic-UI-CSS-master/semantic.min.js"></script>
 	<script type='text/javascript' src="<?= BASE_URL; ?>scripts/moment.js"></script>
 	<script type='text/javascript' src="<?= BASE_URL; ?>scripts/main-scripts.js"></script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url='/sha/err.php?javascript=no'">
+    </noscript>
 </head>
 <?php require_once("header.php"); ?>
 <?php require_once("navbar.php"); ?>

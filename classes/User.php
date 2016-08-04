@@ -2,6 +2,7 @@
 require_once('init.php');
 class User {
 
+
 	public static function authenticate($username="", $password=""){
 		global $connection;
 		$sql = "SELECT * FROM ". static::$table_name."
@@ -141,10 +142,6 @@ class User {
 		}
 	}
 
-	// first, create an empty assoc array $attributes
-	// iterate through every db_field using a foreach loop
-	// in each step, assign the key to the array to the value fields
-	// for example, $attributes[username] = $this->username = ~the inserted value.
 	
 	public function attributes(&$values){
 		$attributes = array();
@@ -183,23 +180,6 @@ class User {
 		$res = $connection->query($sql);
 		return $res->fetch()[0];
 
-	}
-
-	public static function get_faculty($id){
-		global $connection;
-
-		$sql = "SELECT name FROM faculties
-				WHERE id = {$id} 
-				LIMIT 1";
-
-		$stmt = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
-		if($stmt){
-			return ucwords(str_replace("_", " ", $stmt['name']));
-		}
-		if(!$stmt) {
-			$error = ($connection->errorInfo());
-			echo $error[2];
-		}
 	}
 	
 	public function full_name() {

@@ -58,47 +58,49 @@ if (isset($_POST['submit'])) {
 </div>
 
 <script>
-	$('.ui.form')
-	.form({
-		fields: {
-			username: {
-				identifier: 'username',
-				rules: [
-				{
-					type   : 'empty',
-					prompt : 'Username can\'t be empty'
-				},
-				{
-					type   : 'minLength[3]',
-					prompt : 'Username must be between 3 and 10 characters'
-				},
-				{
-					type   : 'maxLength[10]',
-					prompt : 'Username must be between 3 and 10 characters'
-				}
-				]
+$('.ui.form').form({
+	fields: {
+		username: {
+			identifier: 'username',
+			rules: [
+			{
+				type   : 'empty',
+				prompt : 'Username can\'t be empty.'
 			},
-			repassword: {
-				identifier: 'repassword',
-				rules: [
-				{
-					type   : 'match[password]',
-					prompt : 'Re-Password doesn\'t match the password'
-				}
-				]
+			{
+				type   : 'minLength[4]',
+				prompt : 'Username must be between 3 and 10 characters.'
 			},
-			email: {
-				identifier: 'email',
-				rules: [
-				{
-					type   : 'email',
-					prompt : 'E-mail is not valid'
-				}]
+			{
+				type   : 'maxLength[15]',
+				prompt : 'Username must be between 3 and 10 characters.'
+			},
+			{
+				type   : 'regExp[/^[a-zA-Z0-9_]{4,15}$/]',
+				prompt : 'Username may only contain alphanumeric characters or \'_\''
 			}
+			]
 		},
-			inline : true,
-			duration: '15',
-			on     : 'change'
-		})
-	;
+		repassword: {
+			identifier: 'repassword',
+			rules: [
+			{
+				type   : 'match[password]',
+				prompt : 'Passwords don\'t match.'
+			}
+			]
+		},
+		email: {
+			identifier: 'email',
+			rules: [
+			{
+				type   : 'email',
+				prompt : 'E-mail is not valid.'
+			}]
+		}
+	},
+		inline : true,
+		duration: '15',
+		on     : 'change'
+	});
 </script>

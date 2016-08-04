@@ -15,7 +15,7 @@ class StudentInfo extends User {
 	public static function create_student(){
 		global $connection;
 		global $session;
-		global $StudentInfo;
+
 		$user = self::create_user();
 		//if(!$user) return false;
 		$sql = "INSERT INTO students (`id`) VALUES ('{$user->id}')";

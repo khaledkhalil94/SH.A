@@ -1,49 +1,8 @@
 <?php
 
 $session->userLock($user);
-
-
-
-
-$img_path = Images::get_profile_pic($user);
-$has_pic = (bool)$user->has_pic;
-$Images->has_pic = $has_pic;
-$Images->id = $id;
  ?>
-			<div class="hide">
-				<?php // Upload or Change profile picture
-					if (isset($_POST['upload'])) {
-							if (empty($_FILES['userfile']['name'])) {
-								echo "Please select a valid photo";
-							} else {
-								$has_pic ? Student::update_pic($_POST) : Student::upload_pic($_POST);
-							$session->message("Your profile picute has been changed successfully.",  USER_URL);
-							}
-					}
-				?>
-						<div class="image"><img src=<?= $img_path; ?> alt="" style="width:228px;"></div>
-				 <p>Change your profile picture</p> 
 
-				<form enctype="multipart/form-data" action="<?php echo "editUserInformation.php?id=". $id ?>" method="POST">
-					<input type="hidden" name="MAX_FILE_SIZE" value=<?= MAX_PIC_SIZE ?> />
-					<input name="userfile" type="file" />
-					<input type="hidden" name="id" value="<?= $student->id ?>" />
-					<input type="submit" name="upload" value="Upload" />
-				</form>
-				<br>
-				
-				<?php //Delete profile picture
-				 if($has_pic):
-				  ?>
-					<form action="<?php echo "editUserInformation.php?id=". $id ?>" method="POST">
-					<?php if (isset($_POST['delete'])) { 
-							Student::delete_pic();
-							header("Refresh:0");
-						   }?>
-						<input type="submit" name="delete" class="btn btn-secondary" value="Delete Picture" />
-					</form>
-				<?php endif; ?>
-			</div>
 
 <div class="ui segment user-settings-information">
 	<div class="ui dividing header">
@@ -85,7 +44,6 @@ $Images->id = $id;
 		</form>
 	</div>
 </div>
-
 <script>
 
 $('.ui.form')
@@ -105,6 +63,10 @@ $('.ui.form')
 			{
 				type   : 'maxLength[10]',
 				prompt : 'First name must be between 3 and 10 characters'
+			},
+			{
+				type   : 'regExp[/^[a-zA-Z0-9^\._-]{3,10}$/]',
+				prompt : 'Name is not valid'
 			}
 			]
 		},
@@ -119,6 +81,10 @@ $('.ui.form')
 			{
 				type   : 'maxLength[10]',
 				prompt : 'Last name must be between 3 and 10 characters'
+			},
+			{
+				type   : 'regExp[/^[a-zA-Z0-9^\._-]{3,10}$/]',
+				prompt : 'Last name is not valid'
 			}
 			]
 		},
@@ -131,7 +97,7 @@ $('.ui.form')
 				prompt : 'Phone Number must be a number'
 			},
 			{
-				type   : 'minLength[10]',
+				type   : 'minLength[8]',
 				prompt : 'Phone Number is not valid'
 			},
 			{
@@ -161,7 +127,8 @@ $('.ui.form')
 		address: {
 			identifier: 'address',
 			optional:true
-		}
+		},
+
 	},
 	inline : true,
 	duration: '15',

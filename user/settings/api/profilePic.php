@@ -1,6 +1,7 @@
 <?php 
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 
+//sleep(2);
 // delete action
 if(isset($_POST['action']) && $_POST['action'] == 'delete') {
 
@@ -12,11 +13,19 @@ if(isset($_POST['action']) && $_POST['action'] == 'delete') {
 
 	} else {
 
-		die(json_encode(array('status' => 'success', 'errMsg' => $image->errMsg)));
+		die(json_encode(array('status' => 'fail', 'errMsg' => $image->errMsg)));
 
 	}
 		
+}
 
+if(isset($_GET['action'])) {
+
+	$info = Images::get_pic_info($_GET['id']);
+
+	$info->size = human_filesize($info->size);
+	echo json_encode((array)$info);
+	exit;
 }
 
 

@@ -10,11 +10,13 @@
 				<h3><?= $name; ?></h3>
 				<a href="<?= BASE_URL."user/{$id}/" ?>">@<?= $username; ?></a>
 			</div>
+			<?php if(!empty($about)): ?>
 			<div class="ui segment">
 				<div class="user-info">
-					<div class="user-info-about">BIO/ABOUT</div>
+					<div class="user-info-about"><?= $about; ?></div>
 				</div>
 			</div>
+			<?php endif; ?>
 		</div>
 		<div class="eleven wide column">
 					<div class="ui message warning">

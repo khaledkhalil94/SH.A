@@ -317,7 +317,7 @@ ul.nav.navbar-nav {
     margin-top: 30px;
 }
 
-form .field {
+.signup-page form .field {
     width: 90%;
     margin-right: 10px;
     display: inline-block;
@@ -337,7 +337,8 @@ form .output {
 }
 
 .ui.form .field .prompt.label {
-    float: left;
+    position: absolute;
+    left: 4px;
     background-color: #ea5a5a!important;
     color: #ffffff!important;
 }
@@ -347,7 +348,7 @@ form .output {
     left: 5px!important;
 }
 
-.ui.raised.very.padded.segment.sign-up {
+.ui.raised.segment.sign-up, .ui.raised.segment.log-in {
     width: 70%;
     margin: 0 auto;
 }
@@ -361,4 +362,17 @@ p.form-note {
     opacity: .8;
     color: #8a8a8a;
     margin-left: 5px;
+}
+
+.welcome-page i.check.icon {
+    margin-right: 0px;
+}
+
+.signup-page, .login-page .ui.center {
+    /* text-align: center; */
+}
+
+.signup-page, .login-page .center p {
+    margin-top: 5px;
+    font-size: medium;
 }

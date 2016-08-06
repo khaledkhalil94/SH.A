@@ -5,49 +5,40 @@ if($session->is_logged_in()){
  header('Location:index.php');
 }
 
-if (isset($_POST['submit'])){
-	  $username = trim(strtolower($_POST['Username']));
-    $password = trim(strtolower($_POST['password']));
-    
-
-    $found_user = StudentInfo::authenticate($username, $password);
-
-
-    if ($found_user) {
-    	//success
-      $StudentInfo->log("login", $found_user);
-      $session->login($found_user);
-      $session->message('You have logged in successfully.', "/sha");
-    } else {
-      $session->message("Username or Password is wrong!", "", "danger");
-    }
-}
-
-
 require(ROOT_PATH . 'inc/head.php'); 
 
-  ?>
+	?>
 </pre>
 <body>
-  <div class="main">
-    <div class="container">
-  <?= msgs(); ?>
-      <div class="form">
-        <form action="login.php" method="post" >
-          <div class="form-group">
-            <label for="Username">Username</label>
-            <input type="id" class="form-control" id="Username" name="Username" placeholder="ID">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password">
-          </div>
-            <br>
-          <button type="submit" name="submit" class="btn btn-default">Log in</button>
-        </form>
-      </div>
-    </div>
-  </div>
+	<div class="main login-page">
+		<div class="container">
+	<?= msgs(); ?>
+		<div class="ui raised very padded segment log-in">
+				<div class="ui message">
+					<div class="header">
+						Log in to your account.
+					</div>
+				</div>
+				<hr id="login-hr">
+
+				<div class="ui login form">
+					<form class="login-form" method="post">
+						<div class="field username">
+							<label>Username</label>
+							<input type="text" id="username" name="username" placeholder="Username">
+						</div>
+						<div class="field username">
+							<label>Password</label>
+							<input type="password" id="exampleInputPassword1" name="password" placeholder="Password">
+						</div>
+							<br>
+							<button class="ui button green submit" type="submit">Log in</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="/sha/scripts/auth/signin.auth.js"></script>
 <?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

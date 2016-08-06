@@ -5,6 +5,7 @@ include (ROOT_PATH . 'inc/head.php');
 <body>
 	<div class="container section">
 	<?= msgs(); ?>
+	404 NOT FOUND
 	</div>
 	</body>
 

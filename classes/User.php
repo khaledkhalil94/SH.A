@@ -3,19 +3,6 @@ require_once('init.php');
 class User {
 
 
-	public static function authenticate($username="", $password=""){
-		global $connection;
-		$sql = "SELECT * FROM ". static::$table_name."
-				WHERE username = ?
-				AND password = ?
-				LIMIT 1";
-
-		$found_user = $connection->prepare($sql);
-		$found_user->bindParam(1, $username);
-		$found_user->bindParam(2, $password);
-		$found_user->execute();
-		return $found_user->fetch(PDO::FETCH_OBJ);
-	}
 
 // To be removed
 	public static function find_by_id($id, $msql=""){
@@ -127,21 +114,6 @@ class User {
 				// $session->message("Username is already taken, please choose another one.", "", "danger");
 		}
 	}
-
-	public static function delete($id){
-		global $connection;
-		$sql = "DELETE FROM ".static::$table_name." where id = {$id}";
-
-		$stmt = $connection->prepare($sql);
-		//exit($sql);
-		if($stmt->execute()){
-			return true;
-		} else {
-			$error = ($stmt->errorInfo());
-			echo $error[2];
-		}
-	}
-
 	
 	public function attributes(&$values){
 		$attributes = array();
@@ -155,42 +127,14 @@ class User {
 		return $attributes;
 	}
 
-	public function validate_username($value){
-		$value = trim($value);
-		if (isset($value) && $value !== ""){
-			return $value;
-		} else {
-			exit("Username can't be empty");
-		}
-	}
-
-	public function validate_password($value){
-		if (empty($value)){
-			exit("Password can't be empty");
-		} elseif(strlen($value) < 2) {
-			exit("Password must be at least 2 characters long");
-		}
-		return $value;
-	}
-
 	public static function get_count($msql=""){
 		global $connection;
 		$sql = "SELECT count(*) FROM ".static::$table_name;
 		if(!empty($msql)) $sql .= $msql;
 		$res = $connection->query($sql);
 		return $res->fetch()[0];
-
 	}
 	
-	public function full_name() {
-		return $this->firstName . " " . $this->lastName;
-	}
-
-	public static function get_users($rpp,$offset){
-		$sql = "SELECT * FROM ".static::$table_name." LIMIT {$rpp} OFFSET {$offset}";
-		return self::find_by_sql($sql);
-	}
-
 	public static function query($sql){
 		global $connection;
 		$stmt = $connection->prepare($sql);

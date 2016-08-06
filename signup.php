@@ -18,10 +18,10 @@ require(ROOT_PATH . 'inc/head.php');
 					<i class="warning icon"></i>
 						It is recommended to not enter any sensitive or personal information.
 					</div>
-				</div><hr>
+				</div>
+				<hr id="signup-hr">
 
 				<div class="ui sign-up form">
-
 					<form class="signup-form" method="POST">
 
 						<div class="field username">
@@ -33,7 +33,7 @@ require(ROOT_PATH . 'inc/head.php');
 						</div>
 							<p class="form-note">Username will be unique to your account - can be changed later.</p>
 
-						<div class="field">
+						<div class="field email">
 							<label>E-mail</label>
 							<input type="email" name="email" placeholder="E-mail" />
 						</div>
@@ -42,12 +42,12 @@ require(ROOT_PATH . 'inc/head.php');
 						</div>
 
 
-						<div class="field">
+						<div class="field password">
 							<label>Password</label>
 							<input type="password" name="password" placeholder="Password" />
 						</div>
 
-						<div class="field">
+						<div class="field repassword">
 							<label>re-enter Password</label>
 							<input type="password" name="repassword" placeholder="Password" />
 						</div>

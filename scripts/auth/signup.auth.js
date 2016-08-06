@@ -2,6 +2,7 @@ $(function(){
 
 var $username, $email;
 var _form = $('.signup-form');
+var $neg;
 
 _form.form({
 	fields: {
@@ -48,6 +49,10 @@ _form.form({
 			identifier: 'email',
 			rules: [
 				{
+					type   : 'empty',
+					prompt : 'Email can\'t be empty.'
+				},
+				{
 					type   : 'email',
 					prompt : 'E-mail is not valid.'
 				}
@@ -60,7 +65,7 @@ _form.form({
 	delay : 400,
 	on     : 'blur',
 	keyboardShortcuts : false,
-	revalidate : false,
+	reValidate : false,
 
 	onValid : function(){
 		if(this[0].name == 'username' || this[0].name == 'email'){
@@ -86,7 +91,7 @@ _form.form({
 			}
 
 			$.ajax({
-				url: 'api/_auth.api.php',
+				url: 'ajax/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action' : 'signup_form_check', 'name' : $name, 'value' : $value},
@@ -140,24 +145,62 @@ _form.form({
 		event.stopPropagation();
 		event.preventDefault();
 
+		_form.find('.error').removeClass('error').find('.prompt').remove();
+		
 		if($username !== false && $email !== false){
 			$values = _form.form('get values');
-
-			console.log($values);
+			_form.parents('.form.sign-up').addClass('loading');
 
 			$.ajax({
-				url: 'api/_auth.api.php',
+				url: 'ajax/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action': 'signup', 'values' : $values},
 
 				success: function(data, status) {
-
 					console.log(data);
 
+					if(data.data){ // success
+						data = data.data;
 
+						_form.parents('.form.sign-up').removeClass('loading');
+						$('.ui.compact.warning.message').remove();
+						$('#signup-hr').remove();
+						_form.parents('.form.sign-up').load('ajax/inc/signup-success.php', data.id,
+							function( response, status, xhr ) {
+								if ( status == "error" ) {
+									console.log(status);
+									console.log(xhr);
+								}
+							});
+						_form.remove();
+
+					window.setTimeout(function(){
+						window.location = "/sha";
+					}, 4000)
+
+
+					} else if(data.errors) { // failure
+
+						var errors = data.errors;
+
+						console.log(errors);
+
+						_form.parents('.form.sign-up').removeClass('loading');
+						
+						$.each(errors, function(k, v){
+							$('.'+k+'-status').children().remove();
+							console.log(v);
+							_form.form('add prompt', k, v);
+
+						});
+						return;
+
+					}
+					
 				},
 				error: function(xhr, desc, err) {
+					_form.parents('.form.sign-up').removeClass('loading');
 					console.log(xhr);
 					console.log("Details: " + desc + "\nError:" + err);
 				}
@@ -170,5 +213,4 @@ _form.form({
 	}
 
 	});
-
 });

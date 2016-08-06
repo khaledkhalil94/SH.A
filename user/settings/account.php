@@ -1,20 +1,12 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
-$id = $session->user_id;
+$id = USER_ID;
 
 
-$studentInfo = StudentInfo::find_by_id($id);
-$session->userLock($studentInfo);
+$user = Student::get_user_info($id);
+$session->userLock($user);
 
-if (isset($_POST['submit'])) {
-
-	if($studentInfo->update()){
-		$session->message("Your information have been updated", USER_URL);
-	} else {
-		$session->message($_SESSION['fail']['sqlerr'], USER_URL);
-	}
-}
 
  ?>
 
@@ -23,31 +15,30 @@ if (isset($_POST['submit'])) {
 		Update your account settings
 	</div>
 	<div class="ui segment vertical">
-		<form class="ui form" action="<?php echo "account.php" ?>" method="POST">
+		<form class="ui form" action="<?= "account.php" ?>" method="POST">
 			<div class="field">
 				<label for="username">Username</label>
-				<input type="text" name="username" value="<?php echo $studentInfo->username ?>"/>
+				<input type="text" name="username" value="<?= $user->username ?>"/>
 			</div>
 
 			<div class="field">
 				<label for="password">Current Password</label>
-				<input type="text" name="cupassword" value="<?php echo $studentInfo->password ?>" />
+				<input type="text" name="cupassword" value="" />
 			</div>
 
 			<div class="field">
 				<label for="password">Password</label>
-				<input type="text" name="password" value="<?php echo $studentInfo->password ?>" />
+				<input type="text" name="password" value="" />
 			</div>
 
 			<div class="field">
 				<label for="password">Re-enter your Password</label>
-				<input type="text" name="repassword" value="<?php echo $studentInfo->password ?>" />
+				<input type="text" name="repassword" value="" />
 			</div>
 
 			<div class="field">
 				<label for="email">email</label>
-				<input type="email" name="email" value="<?php echo $studentInfo->email ?>" />
-				<input type="hidden" name="id" value="<?php echo $studentInfo->id ?>" />
+				<input type="email" name="email" value="<?= $user->email ?>" />
 			</div>
 
 

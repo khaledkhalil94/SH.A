@@ -1,4 +1,4 @@
-.main .container {background-color: white;padding: 60px;}
+.main .container {background-color: white;padding: 60px;min-height: 550px;}
 
 .container.section {
     background-color: white;

@@ -21,37 +21,41 @@ if(isset($_POST['submit'])){
 <body>
 	<div class="container section">
 	<?= msgs(); ?>
-	<h3>Create a new question</h3>
-		<form class="ui form" action="" method="POST">
-			<div class="field">
-				<label>Title</label>
-				<input type="text" name="title" placeholder="Title">
+	
+		<div class="ui raised very padded segment">
+			<h3>Create a new question</h3>
+				<form class="ui form" action="" method="POST">
+					<div class="field">
+						<label>Title</label>
+						<input type="text" name="title" placeholder="Title">
 
-			</div>
-				<div class="field">
-					<label for="content">Content</label>
-					<textarea name="content" rows="7"></textarea>
-				</div>
-				<div class="field">
-					<label>Select section</label>
-					<div class="ui selection dropdown">
-					<input type="hidden" name="faculty_id">
-						<i class="dropdown icon"></i>
-						<div class="default text"></div>
-						<div class="menu">
-							<div class="item" data-value="4">General</div>
-							<div class="item" data-value="1">Engineering</div>
-							<div class="item" data-value="2">Computer Science</div>
-							<div class="item" data-value="3">Medicine</div>
-						</div>
 					</div>
-				</div>
-			<br>
-			<br>
-			<button type="submit" name="submit" class="ui button green">Submit</button>
-			<a type="button" href="../" class="ui button ">Cancel</a>
-		<div class="ui error message"></div>
-		</form>
+						<div class="field">
+							<label for="content">Content</label>
+							<textarea name="content" rows="7"></textarea>
+						</div>
+						<div class="field">
+							<label>Select section</label>
+							<div class="ui selection dropdown">
+							<input type="hidden" name="faculty_id">
+								<i class="dropdown icon"></i>
+								<div class="default text"></div>
+								<div class="menu">
+									<div class="item" data-value="4">General</div>
+									<div class="item" data-value="1">Engineering</div>
+									<div class="item" data-value="2">Computer Science</div>
+									<div class="item" data-value="3">Medicine</div>
+								</div>
+							</div>
+						</div>
+					<br>
+					<br>
+					<button type="submit" name="submit" class="ui button green">Submit</button>
+					<a type="button" href="../" class="ui button ">Cancel</a>
+				<div class="ui error message"></div>
+				</form>
+		</div>
+
 	</div>
 	<script src='../scripts/create_script.js'></script>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>

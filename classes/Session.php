@@ -1,21 +1,58 @@
 <?php 
-require_once('init.php');
+require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
 class Session {
 
-	private $logged_in=false, $level;
-	public $user_id, $username, $msg, $msgType;
+	/**
+	 * @var boolean $logged_in logged in status
+	 */
+	private $logged_in=false;
+
+	/**
+	 * @var int $user_id
+	 */
+	public $user_id;
+
+	/**
+	 * @var sting $username
+	 */
+	public $username;
+
+	/**
+	 * @var string $msg message stored in session
+	 */
+	public $msg;
+
+	/**
+	 * @var string $msgType type of the message(succes, error..)
+	 */
+	public $msgType;
+
 
 	function __construct(){
-		session_start();
+
+		if (session_id() == '') session_start();
+
 		$this->check_login();
-		if(isset($this->user_id)){
+
+		if($this->logged_in){
+
+			// define user_id constant
 			define("USER_ID", $this->user_id);
+
+			// update user activity
 			if (USER_ID != 1 ) $this->updateActivity(USER_ID);		
 		}
+
 		// to avoid errors when not logged in
 		defined('USER_ID') ? USER_ID : define('USER_ID', "");
+
 	}
 
+	/**
+	 * checks if logged in or not
+	 *
+	 * @return boolean
+	 */
 	public function is_logged_in(){
 		return $this->logged_in;
 	}
@@ -24,7 +61,6 @@ class Session {
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];
 			$this->username = $_SESSION['username'];
-			$this->level = $_SESSION['level'];
 			$this->logged_in = true;
 		} else {
 			unset($this->user_id);
@@ -33,38 +69,90 @@ class Session {
 
 	}
 
-	public function login_by_id($id){
-		global $connection;
-		$sql = "SELECT * FROM login_info WHERE id = {$id}";
-		$stmt = $connection->prepare($sql);
-		
-		$stmt->execute();
-		$user = $stmt->fetch(PDO::FETCH_OBJ);
-		$this->login($user);
+	/**
+	 * writes logged user details into the session file
+	 *	
+	 * @param object: user detals
+	 *
+	 * @return boolean
+	 */
+	public function login($user){
+
+		// if already logged in
+		if ($this->logged_in) return false;
+
+		// if data is not an object
+		if(!is_object($user)) return false;
+
+		// if data is empty
+		if(empty($user->id)) return false;
+
+		// generate a new SID
+		session_regenerate_id(true);
+
+		// write into the session file
+		$this->user_id = $_SESSION['user_id'] = $user->id;
+		$this->username = $_SESSION['username'] = $user->username;
+		$this->ual = $_SESSION['ual'] = $user->ual;
+		$this->logged_in = true;
+
+		defined('USER_ID') ? null : define('USER_ID', $this->user_id);
+
+		return true;
+
 	}
 
-	public function login($user){
-		if($user){
-			$this->user_id = $_SESSION['user_id'] = $user->id;
-			$this->username = $_SESSION['username'] = $user->username;
-			$this->type = $_SESSION['level'] = $user->type;
-			$this->level = true;
-			defined('USER_ID') ? null : define('USER_ID', $this->user_id);
+	/**
+	 * boow guess what happens here ?
+	 */
+	public function logout(){
+
+		unset($_SESSION['user_id']);
+		unset($this);
+
+		session_destroy();
+
+		$this->logged_in = false;
+	}
+
+	/**
+	 * sets a key and value in the session
+	 *
+	 * @param mixed $key
+	 * @param mixed $value
+	 */
+	public static function set($key, $value)
+	{
+		$_SESSION[$key] = $value;
+	}
+
+	/**
+	 * sets a key and value in the session
+	 *
+	 * @param mixed $key
+	 *
+	 * @return mixed $value | boolean false (if doesn't exist)
+	 */
+	public static function get($key)
+	{
+		if (isset($_SESSION[$key])) {
+			return $_SESSION[$key];
+		} else {
+			return false;
 		}
 	}
 
-	private function updateActivity($id){
+	
+	/**
+	 * updates user activity field in the database
+	 *
+	 * @param int user_id
+	 */
+	private function updateActivity($user_id){
 		global $connection;
-		$sql = "UPDATE `login_info` SET activity = CURRENT_TIMESTAMP WHERE id = {$id}";
-		$connection->query($sql);
-	}
 
-	public function logout(){
-		unset($_SESSION['user_id']);
-		unset($this->user_id);
-		unset($this->username);
-		session_destroy();
-		$this->logged_in = false;
+		$sql = "UPDATE `login_info` SET activity = CURRENT_TIMESTAMP WHERE id = {$user_id}";
+		$connection->query($sql);
 	}
 
 	public function message($msg, $location=null, $msgType="success"){
@@ -77,10 +165,10 @@ class Session {
 
 	public function displayMsg(){
 		 if(isset($_SESSION['msg'])){
-		 	$this->msg = $_SESSION['msg'];
-		 	$this->msgType = $_SESSION['msgType'];
+			$this->msg = $_SESSION['msg'];
+			$this->msgType = $_SESSION['msgType'];
 		 } else {
-		 	return false;
+			return false;
 		 }
 		unset($_SESSION['msg']);
 		unset($_SESSION['msgType']);
@@ -90,9 +178,6 @@ class Session {
 		return $msgInfo;
 	}
 
-	public function getLevel(){
-		return $this->level;
-	}
 
 	public function adminLock(){
 		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){

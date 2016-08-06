@@ -1,5 +1,5 @@
 <?php 
-require_once('init.php');
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
 class Database {
 
 	protected static $db_fields = array('firstName', 'lastName', 'id');
@@ -28,18 +28,18 @@ class Database {
 		global $connection;
 
 		$fields = [];
-		$params = [];
 		$values = [];
+		$params = [];
 		foreach ($data as $k => $v) {
 			$fields[] = '`'.$k.'`';
-			$params[] = ':'.$k;
-			$values[":".$k] = $v;
+			$values[] = ':'.$k;
+			$params[":".$k] = $v;
 		}
 
-		$sql = "INSERT INTO `{$db}` (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $params) . ")";
+		$sql = "INSERT INTO `{$db}` (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")";
 
 		$stmt = $connection->prepare($sql);
-		if(!$stmt->execute($values)){
+		if(!$stmt->execute($params)){
 			$error = $stmt->errorInfo();
 			return $error[2];
 		}

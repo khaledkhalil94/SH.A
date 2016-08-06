@@ -86,13 +86,13 @@ switch ($section) {
 			} else {
 				foreach ($qs as $q):
 
-					$user = Student::find_by_id($q->uid);
+					$user = $student->get_user_info($q->uid);
 					if(!$user) continue;
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
 					$reports_count = QNA::get_reports("questions", $q->id) ?: null;
-					$img_path = Images::get_profile_pic($user) ?: DEF_PIC;
+					$img_path = $user->img_path ?: DEF_PIC;
 					?>
 				 	<div class="ui items">
 				 		<div class="item">
@@ -102,7 +102,7 @@ switch ($section) {
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price">Asked by <a href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name();?></a></span>
+				 					<span style="display:inline;" class="price">Asked by <a href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name;?></a></span>
 				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />

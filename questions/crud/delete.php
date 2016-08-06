@@ -29,7 +29,7 @@ switch ($_POST['delete']['action']) {
 
 		if(!$post) exit(json_encode(array('status' => 'fail', 'id' => $_POST['delete']['id'], 'msg' => 'Post was not found!')));
 
-		if ( USER_ID !== $post->uid || !$session->adminCheck()) exit(json_encode(array('status' => 'fail', 'id' => $_POST['delete']['id'], 'msg' => 'You are not the post owner!')));
+		if ( USER_ID !== $post->uid && !$session->adminCheck()) exit(json_encode(array('status' => 'fail', 'id' => $_POST['delete']['id'], 'msg' => 'You are not the post owner!')));
 
 		if(QNA::delete($post)){
 			exit(json_encode(array('status' => 'success', 'id' => $_POST['delete']['id'], 'msg' => 'Post has been deleted')));

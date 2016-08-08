@@ -54,41 +54,41 @@ class Student extends User {
 		return $obj;
 	}
 
-	public static function update_user_privacy($data){
-		global $connection;
+	// public static function update_user_privacy($data){
+	// 	global $connection;
 
-		// sanitizing the data to be injected safely into the database
-		$data = array_map("sanitize_id", $data);
+	// 	// sanitizing the data to be injected safely into the database
+	// 	$data = array_map("sanitize_id", $data);
 
-		$array = array_keys($data);
-		$set = '';
-		foreach ($array as $field) {
+	// 	$array = array_keys($data);
+	// 	$set = '';
+	// 	foreach ($array as $field) {
 
-			if($field == 'submit') continue;
+	// 		if($field == 'submit') continue;
 
-			if (isset($data[$field])) {
-				$set.="`$field`=$data[$field], ";
-			}
-		}
+	// 		if (isset($data[$field])) {
+	// 			$set.="`$field`=$data[$field], ";
+	// 		}
+	// 	}
 
-		$set = substr($set, 0, -2); 
+	// 	$set = substr($set, 0, -2); 
 
 
-		$sql = "UPDATE `user_privacy` SET {$set} WHERE user_id = ".USER_ID;
+	// 	$sql = "UPDATE `user_privacy` SET {$set} WHERE user_id = ".USER_ID;
 
-		$stmt = $connection->prepare($sql);
+	// 	$stmt = $connection->prepare($sql);
 
-		if($stmt->execute()){
+	// 	if($stmt->execute()){
 
-			return true;
+	// 		return true;
 
-		} else {
+	// 	} else {
 
-			$error = $stmt->errorInfo();
-			return $error[2];
+	// 		$error = $stmt->errorInfo();
+	// 		return $error[2];
 
-		}
-	}
+	// 	}
+	// }
 
 }
 

@@ -147,9 +147,9 @@ div#user-extrainfo-list, div#user-links-list {
     color: #04c704;
 }
 
-.settings-content form .field input[type=text], .settings-content form .field input[type=email] {
+.settings-content form .field input[type=text], .settings-content form .field input[type=email], .settings-content form .field input[type=password] {
     border: none;
-    border-bottom: 1px solid rgba(28, 83, 183, 0.72);
+    border-bottom: 1px solid rgba(63, 106, 202, 0.74);
     border-radius: 5px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -173,7 +173,7 @@ div#user-extrainfo-list, div#user-links-list {
 .user-settings form .field {
     width: 85%;
     margin-right: 10px;
-    display: inline-block;
+    /* display: inline-block; */
 }
 
 .user-settings form .output {

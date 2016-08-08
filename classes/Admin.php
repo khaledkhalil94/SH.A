@@ -19,29 +19,6 @@ class Admin extends User {
 		$user = self::create_user();
 	}	
 
-	// public function create(){
-	// 	global $connection;
-	// 	$id = intval($_POST['id']);
-	// 	if(!$id){
-	// 		exit("ID must be number");
-	// 	}
-	// 	$sql = "INSERT INTO `login_info` (`id`, `username`, `password`, `email`, `type`) VALUES ('{$id}','{$_POST['username']}','{$_POST['password']}','{$_POST['email']}','{$_POST['type']}')";
-	// 	$stmt = $connection->prepare($sql);
-	// 	if($stmt->execute()){
-	// 		$sql = "INSERT INTO students (`id`) VALUES ('{$_POST['id']}')";
-	// 		$stmt = $connection->prepare($sql);
-			
-	// 		if(!$stmt->execute()){
-	// 			$error = $stmt->errorInfo();
-	// 			echo "error: ".$error[2];
-	// 		}
-	// 	} else{
-	// 		$error = $stmt->errorInfo();
-	// 		if($error[1] == 1062){
-	// 			echo "User ID already exists in the database";
-	// 		}
-	// 	}
-	// }
 
 	public static function delete($user){
 		global $connection;

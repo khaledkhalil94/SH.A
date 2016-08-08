@@ -21,12 +21,15 @@ function msgs(){
 	}
 }
 
+// converts an integer to a readable file size
+// source: SO
 function human_filesize($bytes, $decimals = 2) {
 	$sz = 'BKMGTP';
 	$factor = floor((strlen($bytes) - 1) / 3);
 	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $sz[(int)$factor];
 }
 
+// TBR
 function get_timeago( $ptime ){
 
 	$etime = time() - strtotime($ptime);
@@ -110,5 +113,17 @@ function BackBtn(){
 
 function sanitize_id($id){
 	return (int)filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+}
+
+// deletes a directory with files and folders inside
+// source: SO
+function rm_dir($dir) {
+    foreach(scandir($dir) as $file) {
+        if ('.' === $file || '..' === $file) continue;
+        if (is_dir("$dir/$file")) rmdir_recursive("$dir/$file");
+        else unlink("$dir/$file");
+    }
+
+    return rmdir($dir) ?: false;
 }
 ?>

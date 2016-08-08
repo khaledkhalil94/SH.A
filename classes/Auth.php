@@ -71,7 +71,7 @@ Class Auth {
 		}
 
 		// match the user's password with the hashed one
-		$pw_match = password_verify($password, $user->password);
+		$pw_match = self::password_check($username, $password);
 
 		// passwords don't match or username doesn't exist
 		if(!is_object($user) || !$pw_match){
@@ -80,24 +80,40 @@ Class Auth {
 			return false;
 		}
 
-		if(!$this->error); // if no errors
-
+		if($this->error) return false; 
+		
 		// success, log the user in
-		return $session->login($user);
+		$session->login($user);
+
+		return true;
 	}
 
 
 	/**
-	* gets user details from the database by username
+	* gets user details from the database by username or email or id
 	*
 	* @return object:user details | null
 	*/
-	public static function getUserDetails($username){
+	public static function getUserDetails($input){
 		global $connection;
-		$sql = "SELECT * FROM `login_info` WHERE username = :username";
+
+		// if the input is email
+		if(filter_var($input, FILTER_VALIDATE_EMAIL)){
+			$inputType = "email";
+
+		// if the input is id
+		} elseif(is_numeric($input)) {
+			$inputType = "id";
+		} else {
+
+		// input is username
+			$inputType = "username";
+		}
+
+		$sql = "SELECT * FROM `login_info` WHERE {$inputType} = :input";
 		$stmt = $connection->prepare($sql);
-		
-		$stmt->bindValue(':username', $username, PDO::PARAM_STR);
+
+		$stmt->bindValue(':input', $input, PDO::PARAM_STR);
 
 		if(!$stmt->execute()){
 			$error = $stmt->errorInfo();
@@ -132,6 +148,7 @@ Class Auth {
 		$data['id'] = $id;
 
 		$data_Org = $data;
+		$data_Org['ual'] = 1;
 
 		// hashing the password
 		$pw = $data_Org['password'];
@@ -188,37 +205,43 @@ Class Auth {
 
 	/**
 	* Process and validate data from a signup form
+	* 
+	* @param array $data (default null)
 	*
 	* @return array:user-data | false
 	*
 	*/
-	private function processData(){
+	public function processData($data=null){
 
-		$data = $this->props['values'];
+		$data = $data ?: $this->props['values'];
 				
 
 		// trim and lower case all the data fields
 		$data_p = array_map('strtolower',  array_map('trim', $data));
-		$un = $data_p['username']; $em = $data_p['email']; $pw1 = $data_p['password']; $pw2 = $data_p['repassword'];
 
 		// check for empty or already registered fields
 		foreach ($data_p as $k => $v) {
 
-			if($v == ''){
 			if($k == 'repassword') continue;
+
+			if($v == ''){
 				$this->error = true;
 				$this->errMsg[$k] = "{$k} can't be empty";
 				
 			}
 
 			if($k == 'password') continue;
-			if($k == 'repassword') continue;
+			
 			if(!$this->form_check($k, $v)){
 				$this->error = true;
 				$this->errMsg[$k] = "{$k} is already taken";
 				
 			}
 		}
+
+		if($this->error) return false;
+
+		$un = $data_p['username']; $em = $data_p['email']; $pw1 = $data_p['password']; $pw2 = $data_p['repassword'];
 
 		// check unsername length
 		if (strlen($un) > 15){
@@ -237,7 +260,7 @@ Class Auth {
 			$this->errMsg['username'] = "Username may only contain alphanumeric characters or '_'";
 		}
 
-		// check username allowed characters
+		// validate email
 		if(!filter_var($em, FILTER_VALIDATE_EMAIL)){
 			$this->error = true;
 			$this->errMsg['email'] = "email is not valid";
@@ -267,11 +290,11 @@ Class Auth {
 	/**
 	* Checks the database with field and value
 	*
-	* @param string => field name
-	* @param string => field value
-	* @param string (optional) => database name
+	* @param string field name
+	* @param string field value
+	* @param string database name 
 	*
-	* @return boolean
+	* @return boolean true if values doesn't exist | false if it exists
 	*
 	*/
 	public static function form_check($field, $value, $db='login_info'){
@@ -287,6 +310,23 @@ Class Auth {
 	}
 
 
+	public static function password_check($input, $pw){
+
+		if(empty($input) || empty($pw)){
+			die("Data is invalid");
+		}
+
+		$user = self::getUserDetails($input);
+
+		if(!is_object($user)){
+			die("User was not found!");
+		}
+
+		$current_pw = $user->password;
+
+
+		return password_verify($pw, $current_pw);
+	}
 }
 
 

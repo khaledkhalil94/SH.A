@@ -15,7 +15,7 @@ switch ($_POST['action']) {
 		$auth->RegisterNewUser();
 		break;
 		
-	case 'signup_form_check':
+	case 'form_check':
 		$name = $_POST['name'];
 		$value = $_POST['value'];
 
@@ -36,6 +36,7 @@ switch ($_POST['action']) {
 		} else {
 			echo json_encode($auth->errMsg);
 		}
+		break;
 
 	default:
 		break;

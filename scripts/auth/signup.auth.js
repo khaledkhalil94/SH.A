@@ -94,7 +94,7 @@ _form.form({
 				url: 'ajax/_auth.php',
 				type: 'post',
 				dataType: 'json',
-				data: {'action' : 'signup_form_check', 'name' : $name, 'value' : $value},
+				data: {'action' : 'form_check', 'name' : $name, 'value' : $value},
 
 				success: function(data, status) {
 
@@ -158,7 +158,6 @@ _form.form({
 				data: {'action': 'signup', 'values' : $values},
 
 				success: function(data, status) {
-					console.log(data);
 
 					if(data.data){ // success
 						data = data.data;
@@ -174,9 +173,9 @@ _form.form({
 								}
 							});
 						_form.remove();
-
+					console.log('registered');
 					window.setTimeout(function(){
-						window.location = "/sha";
+						window.location = "/sha/";
 					}, 4000)
 
 

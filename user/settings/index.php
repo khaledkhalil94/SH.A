@@ -30,26 +30,32 @@ include (ROOT_PATH . "inc/head.php");
 					<a href="?st=us">
 						<div class="item <?= $st == 'us' ? 'active' : null; ?>">Change Settings</div>
 					</a>
+					<a href="?st=dl">
+						<div style="background-color:#980505; color:white;" class="item <?= $st == 'dl' ? 'active' : null; ?>">Delete account</div>
+					</a>
 				</div>
 			</div>
 		</div>
 		<div class="ten wide column settings-content">
 			<?php switch ($st) {
 				case 'ui':
-					require('editUserInformation.php');
+					require('../inc/editUserInformation.php');
 					break;
 				case 'up':
-					require('editprivacy.php');
+					require('../inc/editprivacy.php');
 					break;
 				case 'us':
-					require('account.php');
+					require('../inc/account.php');
 					break;
 				case 'li':
-					require('editlinks.php');
+					require('../inc/editlinks.php');
+					break;
+				case 'dl':
+					require('../inc/delete.php');
 					break;
 				
 				default:
-					require('editUserInformation.php');
+					require('../inc/editUserInformation.php');
 					break;
 			} ?>
 		</div>

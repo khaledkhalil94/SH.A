@@ -59,7 +59,7 @@ _form.form({
 
 					window.setTimeout(function(){
 						window.location = "/sha";
-					}, 3000)
+					}, 2000)
 
 
 				} else { // failure
@@ -69,15 +69,8 @@ _form.form({
 					console.log(error);
 
 					_form.parents('.form.login').removeClass('loading');
-					$('.ui.message').remove();
-					$('#login-hr').remove();
-
-					_form.parents('.form.login').load('ajax/inc/login-failure.php', 'msg='+error);
-					_form.remove();
-
-					window.setTimeout(function(){
-						window.location = "/sha";
-					}, 6000)
+					$('.ui.message').addClass('negative');
+					$('.ui.message .header').text(error);
 
 				}
 				

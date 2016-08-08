@@ -312,7 +312,7 @@ ul.nav.navbar-nav {
 }
 
 .message {
- text-align: center;
+ /* text-align: center; */
     margin: auto;
     margin-top: 30px;
 }

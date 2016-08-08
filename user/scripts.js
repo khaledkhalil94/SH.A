@@ -48,15 +48,15 @@ $(function(){
 		$output = $this.parents('.field').next().attr('class');
 
 		$.ajax({
-			url: '../settings/api/privacy.php',
+			url: '/sha/ajax/_account.php',
 			type: 'post',
-			data: {'submit': 'submit', [$name] : $value},
+			dataType : 'json',
+			data: {'action': 'privacy_update', [$name] : $value},
 
 			success: function(data, status) {
-				json = $.parseJSON(data);
-				console.log(json);
+				console.log(data);
 
-				if(json.status == "success"){ // success
+				if(data == "1"){ // success
 
 					if($output != 'output') $this.parents('.field').after($saved);
 					
@@ -94,278 +94,173 @@ $(function(){
 });
 
 // information update settings
-$(function (){
-	$('.settings-content .user-settings-information .ui.form .update ').click(function(e){
 
-		e.preventDefault();
+$('.settings-content .user-settings-information, .user-settings-links, .user-settings form ').submit(function(e){
 
-		var $isValid = $('.ui.form').form('is valid');
-		//console.log($isValid);
+	e.preventDefault();
+	event.stopImmediatePropagation();
 
-		var $values = $('.ui.form').form('get values');
-		var $this = $(this);
+	// get url querystring
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	for(var i = 0; i < hashes.length; i++)
+	{
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
 
-		var $inputs = $('form .field :input');
+	action = (vars.st == 'us') ? 'update_settings' : 'update_info';
 
 
-		var $cvalues = {};
-		$inputs.each(function(i, v) {
-			if(v.name == 'gender') {
-				var $def = ($('option[selected]').val());
-				$cvalues[v.name] = $def;
-				return;
-			}
-			$cvalues[this.name] = $(this)[0].defaultValue;
-		});
+	var $isValid = $('.ui.form').form('is valid');
+	//console.log($isValid);
 
-		//console.log($cvalues);
+	var $values = $('.ui.form').form('get values');
+	var $this = $(this);
+	var _form = $this;
 
-		var $newValues = {};
 
-		$.each($values, function (index, value) {
-			if(value != $cvalues[index]){
-				$newValues[index] = value;
-			}
-		});
+	var $inputs = $('form .field :input');
 
-		//console.log($newValues);
 
-		if ($.isEmptyObject($newValues)) {
-			console.log('No fields changed.');
-			return null;
+	var $cvalues = {};
+	$inputs.each(function(i, v) {
+		if(v.name == 'gender') {
+			var $def = ($('option[selected]').val());
+			$cvalues[v.name] = $def;
+			return;
 		}
+		$cvalues[this.name] = $(this)[0].defaultValue;
+	});
 
+	//console.log($cvalues);
 
-		if($isValid){
+	var $newValues = {};
 
-			$this.parents('form').addClass('loading');
-
-			$.ajax({
-				url: '../settings/api/information.php',
-				type: 'post',
-				data: {'submit': {'values' : $newValues}},
-
-				success: function(data, status) {
-					json = $.parseJSON(data);
-					console.log(json);
-
-					if(json.status == "success"){ // success
-
-						$this.parents('form').removeClass('loading');
-
-						var $saved = "\
-								<div class=\"output\">\
-									<div id=\"input-saved\" class=\"ui green label\">\
-										<i class=\"check icon\"></i>Saved\
-									</div>\
-								</div>";
-
-						$.each($newValues, function(i, v) {
-
-							$('form').find('.'+i+' :input').css({"background-color": "#dcffdc"});
-							$('.ui.segment.user-settings-information').css({"border-color": '#30ad00'});
-
-
-							$vis = $('form').find('.'+i).next().hasClass('output');
-
-							if(!$vis) $('form').find('.'+i).after($saved);
-							
-
-						});
-
-						setTimeout(function() {
-							$.each($newValues, function(i, v) {
-
-								$('form').find('.field').next('.output').fadeOut(function(){
-									this.remove();
-								});
-
-							});
-						}, 2000 );
-
-						return true;
-						
-					} else { // failure
-
-						
-						//if(!$vis) $this.parents('.field').after($error);
-						
-						$this.parents('form').removeClass('loading');
-
-						var $error = "\
-									<div class=\"output\">\
-										<div id=\"input-saved\" class=\"ui red label\">\
-											<i class=\"remove icon\"></i>Error!\
-										</div>\
-									</div>";
-
-						$.each($newValues, function(i, v) {
-							$('form').find('.'+i+' :input').css({"background-color": "#f3bbbb"});
-							
-
-							$vis = $('form').find('.'+i).next().hasClass('output');
-
-							if(!$vis) $('form').find('.'+i).after($error);
-							
-						});
-
-						setTimeout(function() {
-							$.each($newValues, function(i, v) {
-								$('form').find('.field').next('.output').fadeOut(function(){
-									this.remove();
-								});
-							});
-						}, 3500 );
-
-						return false;
-					}
-				},
-				error: function(xhr, desc, err) {
-					console.log(xhr);
-					console.log("Details: " + desc + "\nError:" + err);
-				}
-			}); // end ajax call
+	$.each($values, function (index, value) {
+		if(value != $cvalues[index]){
+			$newValues[index] = value;
 		}
 	});
 
-	return null;
-});
+	//$s_Values = $.extend($cvalues, $newValues);
+	console.log($newValues);
+	//console.log($s_Values);
 
-// links update settings
-$(function (){
-	$('.settings-content .user-settings-links .ui.form .update ').click(function(e){
-
-		e.preventDefault();
-
-		var $isValid = $('.ui.form').form('is valid');
-		//console.log($isValid);
-
-		var $values = $('.ui.form').form('get values');
-		var $this = $(this);
-
-		var $inputs = $('form .field :input');
+	if ($.isEmptyObject($newValues)) {
+		console.log('No fields changed.');
+		return null;
+	}
 
 
-		var $cvalues = {};
-		$inputs.each(function(i, v) {
-			if(v.name == 'gender') {
-				var $def = ($('option[selected]').val());
-				$cvalues[v.name] = $def;
-				return;
-			}
-			$cvalues[this.name] = $(this)[0].defaultValue;
-		});
+	if($isValid){
+		_form.find('.output').remove();
+		_form.addClass('loading');
 
-		console.log($cvalues);
+		$.ajax({
+			url: '/sha/ajax/_account.php',
+			type: 'post',
+			dataType: 'json',
+			data: {'action': action, 'values' : $newValues},
 
-		var $newValues = {};
+			success: function(data, status) {
 
-		$.each($values, function (index, value) {
-			if(value != $cvalues[index]){
-				$newValues[index] = value;
-			}
-		});
+				//console.log(data);
 
-		console.log($newValues);
+				if(data == "1"){ // success
 
-		if ($.isEmptyObject($newValues)) {
-			console.log('No fields changed.');
-			return null;
-		}
+					_form.removeClass('loading');
 
-		$this.parents('form').addClass('loading');
+					var $saved = "\
+							<div class=\"output error\">\
+								<div id=\"input-saved\" class=\"ui green label\">\
+									<i class=\"check icon\"></i>Saved\
+								</div>\
+							</div>";
 
-		if($isValid){
-			$.ajax({
-				url: '../settings/api/information.php',
-				type: 'post',
-				data: {'submit': {'values' : $newValues}},
+					$.each($newValues, function(i, v) {
 
-				success: function(data, status) {
-					json = $.parseJSON(data);
-					console.log(json);
+						if(i == 'old_password') return;
 
-					if(json.status == "success"){ // success
+						_form.find('.'+i+' :input').css({"background-color": "#dcffdc"});
+						_form.parents('.ui.segment').css({"border-color": '#30ad00'});
 
-						$this.parents('form').removeClass('loading');
 
-						var $saved = "\
-								<div class=\"output\">\
-									<div id=\"input-saved\" class=\"ui green label\">\
-										<i class=\"check icon\"></i>Saved\
-									</div>\
-								</div>";
+						$vis = _form.find('.'+i).next().hasClass('output');
 
+						if(!$vis) _form.find('.'+i).after($saved);
+						
+
+					});
+					console.log($newValues);
+
+					setTimeout(function() {
 						$.each($newValues, function(i, v) {
-
-							$('form').find('.'+i+' :input').css({"background-color": "#dcffdc"});
-							$('.ui.segment.user-settings-information').css({"border-color": '#30ad00'});
-
-
-							$vis = $('form').find('.'+i).next().hasClass('output');
-
-							if(!$vis) $('form').find('.'+i).after($saved);
-							
+							_form.find('.field').next('.output').fadeOut(function(){
+								this.remove();
+							});
 
 						});
+					}, 2000 );
 
-						setTimeout(function() {
-							$.each($newValues, function(i, v) {
+					//$newValues = '';
+					return true;
+					
+				} else { // failure
 
-								$('form').find('.field').next('.output').fadeOut(function(){
-									this.remove();
-								});
+					_form.removeClass('loading');
 
-							});
-						}, 2000 );
-
-						return true;
-						
-					} else { // failure
-
-						
-						//if(!$vis) $this.parents('.field').after($error);
-						
-						$this.parents('form').removeClass('loading');
-
-						var $error = "\
-									<div class=\"output\">\
-										<div id=\"input-saved\" class=\"ui red label\">\
-											<i class=\"remove icon\"></i>Error!\
-										</div>\
-									</div>";
-
-						$.each($newValues, function(i, v) {
-							$('form').find('.'+i+' :input').css({"background-color": "#f3bbbb"});
-							
-
-							$vis = $('form').find('.'+i).next().hasClass('output');
-
-							if(!$vis) $('form').find('.'+i).after($error);
-
-						});
-
-						setTimeout(function() {
-							$.each($newValues, function(i, v) {
-								$('form').find('.field').next('.output').fadeOut(function(){
-									this.remove();
-								});
-							});
-						}, 3500 );
-
-						return false;
+					function $error(v){
+						$err = "<div class=\"output\">\
+							<div id=\"input-saved\" class=\"ui pointing red label\">\
+								"+v+"</div>\
+							</div>";
+						return $err;
 					}
-				},
-				error: function(xhr, desc, err) {
-					console.log(xhr);
-					console.log("Details: " + desc + "\nError:" + err);
-				}
-			}); // end ajax call
-		}
-	});
 
+					$.each(data, function(i, v) {
+
+					console.log(i);
+						_form.find('.'+i+' :input').css({"background-color": "#f3bbbb"});
+						
+
+						$vis = _form.find('.'+i).next().hasClass('output');
+
+						if(!$vis) _form.find('.'+i).after($error(v));
+						
+					});
+
+					setTimeout(function() {
+						$.each($newValues, function(i, v) {
+							_form.find('.field').next('.output').fadeOut(function(){
+								this.remove();
+							});
+						});
+					}, 3500 );
+
+
+
+					return false;
+				}
+			},
+			error: function(xhr, desc, err) {
+				_form.removeClass('loading');
+				console.log(err);
+				console.log(desc);
+			}
+		}); // end ajax call
+	}
 	return null;
 });
+
+
+// delete
+$(function(){
+	$('#acc_del').click(function(){
+		$('.ui.delete.segment').load('/sha/ajax/inc/account-delete.php');
+	})
+})
 
 $('.special.cards .image').dimmer({
 	on: 'hover',
@@ -405,25 +300,25 @@ $('#myFile').on('change', function(e){
 			contentType: false,
 			cache: false,
 		  success: function(data, textStatus){
-		  		console.log(data);
+				console.log(data);
 
 				if(data.status == "success"){
 
 					unDim();
 
 					var $viewBtn = "\
-										<div id=\"viewPicture\" class=\"ui icon button\" data-variation=\"mini\" data-content=\"View Picture\" >\
-										<i data-variation=\"mini\" class=\"unhide icon link\"></i>\
-										</div>";
+						<div id=\"viewPicture\" class=\"ui icon button\" data-variation=\"mini\" data-content=\"View Picture\" >\
+						<i data-variation=\"mini\" class=\"unhide icon link\"></i>\
+						</div>";
 
 					var $changeBtn = "\
-										<div id=\"changePicture\" class=\"ui small icon button\" data-content=\"Change Picture\" data-variation=\"mini\">\
-										<i class=\"edit icon link\"></i>\
-										</div>";
+						<div id=\"changePicture\" class=\"ui small icon button\" data-content=\"Change Picture\" data-variation=\"mini\">\
+						<i class=\"edit icon link\"></i>\
+						</div>";
 
-					var $deleteBtn =	"\
-										<div id=\"deletePicture\" class=\"ui small icon button\" data-content=\"Delete Picture\" data-variation=\"mini\">\
-										<i class=\"trash outline icon link\"></i>";
+					var $deleteBtn = "\
+						<div id=\"deletePicture\" class=\"ui small icon button\" data-content=\"Delete Picture\" data-variation=\"mini\">\
+						<i class=\"trash outline icon link\"></i>";
 
 					$('#proflePicture').attr('src', data.path);
 
@@ -445,7 +340,7 @@ $('#myFile').on('change', function(e){
 
 		  error: function(jqXHR, textStatus, errorThrown){
 
-		  		unDim();
+				unDim();
 
 				$('#profile_err_msg').remove();
 				$('.profile-body').prepend(errMsg(textStatus));
@@ -472,30 +367,30 @@ $(document).on('click', '#deletePicture', function(e){
 			dataType: 'json',
 		  success: function(data, textStatus){
 
-		  		if(data.status == 'success'){
+				if(data.status == 'success'){
 
 					unDim();
 
 					var $upBtn = "\
-										<div id=\"uploadPicture\" class=\"ui small icon button\" data-content=\"Upload Picture\" data-variation=\"mini\">\
-										<i class=\"cloud upload icon link\"></i>\
-										</div>";
+						<div id=\"uploadPicture\" class=\"ui small icon button\" data-content=\"Upload Picture\" data-variation=\"mini\">\
+						<i class=\"cloud upload icon link\"></i>\
+						</div>";
 
-			  		if(data.status == 'success'){
-			  			$('#proflePicture').attr('src', data.path);
+					if(data.status == 'success'){
+						$('#proflePicture').attr('src', data.path);
 
-			  			$('.profile-picture-actions').children().remove();
-			  			$('.profile-picture-actions').append($upBtn);
-			  		}
-			  	} else {
+						$('.profile-picture-actions').children().remove();
+						$('.profile-picture-actions').append($upBtn);
+					}
+				} else {
 
 					unDim();
 
 					$('#profile_err_msg').remove();
 					$('.profile-body').prepend(errMsg(data.errMsg));
 
-			  	}
-	  			
+				}
+				
 		  },
 		  error: function(jqXHR, textStatus, errorThrown){
 
@@ -511,13 +406,13 @@ $(document).on('click', '#deletePicture', function(e){
 
 function errMsg(msg){
 	var $errMsg = "\
-						<div id=\"profile_err_msg\" class=\"ui negative message\">\
-						<i class=\"close icon\"></i>\
-						<div class=\"header\">\
-						Error uploading picture\
-						</div>\
-						<p>"+ msg +"\</p>\
-						</div>";
+		<div id=\"profile_err_msg\" class=\"ui negative message\">\
+		<i class=\"close icon\"></i>\
+		<div class=\"header\">\
+		Error uploading picture\
+		</div>\
+		<p>"+ msg +"\</p>\
+		</div>";
 
 	return $errMsg;
 }
@@ -562,20 +457,20 @@ $('.page.dimmer:first').dimmer({
 			data: {'action' : 'get_pic_info', 'id' : userID},
 			dataType: 'json',
 		  success: function(data, textStatus){
-		  		if(typeof(data) == 'object'){
-		  			$('#pic_details_name').html('Name: '+data.name+'.'+data.extension);
-		  			$('#pic_details_size').html('Size: '+data.size);
-		  			$('#pic_details_dim').html('Dimensions: '+data.width+' x '+data.height);
-		  			$('#pic_details_link').attr('href', data.path);
-		  			$('#pic_details_link').attr('download', data.name+'.'+data.extension);
-		  			$('#pic_details_pp').attr('src', data.path);
-		  		}
+				if(typeof(data) == 'object'){
+					$('#pic_details_name').html('Name: '+data.name+'.'+data.extension);
+					$('#pic_details_size').html('Size: '+data.size);
+					$('#pic_details_dim').html('Dimensions: '+data.width+' x '+data.height);
+					$('#pic_details_link').attr('href', data.path);
+					$('#pic_details_link').attr('download', data.name+'.'+data.extension);
+					$('#pic_details_pp').attr('src', data.path);
+				}
 
 		  },
 
 		  error: function(jqXHR, textStatus, errorThrown){
 
-		  		unDim();
+				unDim();
 
 				$('#profile_err_msg').remove();
 				$('.profile-body').prepend(errMsg(textStatus));

@@ -13,6 +13,11 @@ class Session {
 	public $user_id;
 
 	/**
+	 * @var int $ual user access level
+	 */
+	public $ual;
+
+	/**
 	 * @var sting $username
 	 */
 	public $username;
@@ -30,7 +35,7 @@ class Session {
 
 	function __construct(){
 
-		if (session_id() == '') session_start();
+		session_start();
 
 		$this->check_login();
 

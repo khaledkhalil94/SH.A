@@ -177,12 +177,11 @@
 			<div class="profile-info ui vertical padded segment">
 				<div class="user-setting">
 					<a class="" href="<?= BASE_URL."user/settings/"?>">
-						<div title="Edit your settings" class="ui icon link button">
+						<div title="Edit your settings" data-variation="mini" class="ui icon link button">
 							<i class="settings big icon"></i>
 						</div>
 					</a>
 				</div>
-
 			</div>
 
 			<div class="ui top attached tabular menu">

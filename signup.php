@@ -61,7 +61,7 @@ require(ROOT_PATH . 'inc/head.php');
 			</div>
 		</div>
 	</div>
-<script src="/sha/scripts/auth/signup.auth.js"></script>
+<script src="/sha/scripts/auth/auth.js"></script>
 	<?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

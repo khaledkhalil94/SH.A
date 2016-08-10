@@ -26,19 +26,21 @@ require(ROOT_PATH . 'inc/head.php');
 						<div class="field username">
 							<label>Username</label>
 							<input type="text" id="username" name="username" placeholder="Username">
+							<p class="note">You can login with your username, email or id.</p>
 						</div>
 						<div class="field username">
 							<label>Password</label>
-							<input type="password" id="exampleInputPassword1" name="password" placeholder="Password">
+							<input type="password" name="password" placeholder="Password">
 						</div>
 							<br>
 							<button class="ui button green submit" type="submit">Log in</button>
+						<input type="hidden" name="auth_token" value="<?= Token::generateToken(); ?>" />
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-<script src="/sha/scripts/auth/signin.auth.js"></script>
+<script src="/sha/scripts/auth/auth.js"></script>
 <?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

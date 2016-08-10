@@ -40,101 +40,10 @@ $session->userLock($user);
 				  <option value="female" <?= $user->gender == "female" ? "selected" : null; ?> >Female</option>
 				</select>
 			</div><br>
+			<input type="hidden" name="auth_token" value="<?= Token::generateToken(); ?>" />
 			<input class="ui update green button" type="submit" value="Save" />
 		</form>
 	</div>
 </div>
-<script>
-
-$('.ui.form')
-.form({
-	fields: {
-		firstName: {
-			identifier: 'firstName',
-			rules: [
-			{
-				type   : 'empty',
-				prompt : 'Please enter your name'
-			},
-			{
-				type   : 'minLength[3]',
-				prompt : 'First name must be between 3 and 10 characters'
-			},
-			{
-				type   : 'maxLength[10]',
-				prompt : 'First name must be between 3 and 10 characters'
-			},
-			{
-				type   : 'regExp[/^[a-zA-Z0-9^\._-]{3,10}$/]',
-				prompt : 'Name is not valid'
-			}
-			]
-		},
-		lastName: {
-			identifier: 'lastName',
-			optional: true,
-			rules: [
-			{
-				type   : 'minLength[3]',
-				prompt : 'Last name must be between 3 and 10 characters'
-			},
-			{
-				type   : 'maxLength[10]',
-				prompt : 'Last name must be between 3 and 10 characters'
-			},
-			{
-				type   : 'regExp[/^[a-zA-Z0-9^\._-]{3,10}$/]',
-				prompt : 'Last name is not valid'
-			}
-			]
-		},
-		phoneNumber: {
-			identifier: 'phoneNumber',
-			optional   : true,
-			rules: [
-			{
-				type   : 'number',
-				prompt : 'Phone Number must be a number'
-			},
-			{
-				type   : 'minLength[8]',
-				prompt : 'Phone Number is not valid'
-			},
-			{
-				type   : 'maxLength[16]',
-				prompt : 'Phone Number is not valid'
-			}
-			]
-		},
-		gender: {
-			identifier: 'gender',
-			rules: [
-			{
-				type   : 'empty',
-				prompt : 'Please select a gender'
-			}
-			]
-		},
-		about: {
-			identifier: 'about',
-			rules: [
-			{
-				type   : 'maxLength[60]',
-				prompt : 'That\'s too long!'
-			}
-			]
-		},
-		address: {
-			identifier: 'address',
-			optional:true
-		},
-
-	},
-	inline : true,
-	duration: '15',
-	keyboardShortcuts : false,
-	on     : 'blur'
-
-});
-
+<script src="/sha/scripts/auth/forms-vald.js">
 </script>

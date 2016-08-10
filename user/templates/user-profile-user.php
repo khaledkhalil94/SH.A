@@ -135,6 +135,18 @@
 			<?php } ?>
 		</div>
 		<div class="eleven wide column profile-body">
+			<div class="user-interactions">
+
+			</div>
+			<div class="profile-info ui vertical padded segment">
+				<div class="user-interactions">
+					<button class="ui button green">Follow</button>
+					<button class="ui button basic">Send message</button>
+					<div title="Report" style="float:right;" data-variation="mini" class="ui icon link button">
+						<i class="flag icon" title="report"></i>
+					</div>
+				</div>
+			</div>
 			<div class="ui top attached tabular menu">
 				<a class="item active" data-tab="activity">Activity</a>
 				<a class="item" data-tab="pics">Pictures (5)</a>

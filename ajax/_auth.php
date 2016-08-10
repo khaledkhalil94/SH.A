@@ -30,8 +30,10 @@ switch ($_POST['action']) {
 		break;
 
 	case 'login':
+		session_regenerate_id(true);
+		
 		$auth = new Auth();
-		if($auth->login()){
+		if($auth->login() === true){
 			echo "1";
 		} else {
 			echo json_encode($auth->errMsg);

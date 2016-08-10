@@ -28,12 +28,17 @@ class User {
 
 		$con = $connection;
 		
-		// generate a new SID
-		session_regenerate_id(true);
-
 		// check for empty values
 		if(empty($email) || empty($pw)) {
 			$this->errors[] = "Email and Password can't be empty";
+			return false;
+		}
+
+
+		// check token validation
+		if(!Token::validateToken($data['auth_token'])){
+			$this->error = true;
+			$this->errors[] = "Token is not valid.";
 			return false;
 		}
 
@@ -165,6 +170,13 @@ class User {
 		if(!is_array($data)) return false;
 		//print_r($data); exit;
 		$id = $user_id;
+
+		// check token validation
+		if(!Token::validateToken($data['auth_token'])){
+			$this->error = true;
+			$this->errors[] = "Token is not valid.";
+			return false;
+		}
 
 		// check if old password is passed
 		if(!isset($data['old_password'])) {

@@ -39,6 +39,7 @@ if (strtolower(basename($_SERVER['HTTP_REFERER'])) != '?st=dl' ) {
 		<label for="password">Password</label>
 		<input type="password" id="password" value="" />
 	</div>
+	<input type="hidden" name="auth_token" value="<?= Token::generateToken(); ?>" />
 	<br><hr>
 	<input type="submit" class="ui button red" value="Delete" />
 	<a type="button" class="ui button basic" href="<?= USER_URL; ?>">Cancel</a>

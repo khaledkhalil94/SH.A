@@ -47,6 +47,14 @@ Class Auth {
 	*/
 	public function login(){
 		global $session;
+		$this->props = $this->props['values'];
+
+		// check token validation
+		if(!Token::validateToken($this->props['auth_token'])){
+			$this->error = true;
+			$this->errMsg = "Token is not valid.";
+			return false;
+		}
 
 		$username = trim($this->props['username']);
 		$password = trim($this->props['password']);
@@ -81,7 +89,7 @@ Class Auth {
 		}
 
 		if($this->error) return false; 
-		
+
 		// success, log the user in
 		$session->login($user);
 

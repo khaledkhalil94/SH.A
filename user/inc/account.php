@@ -40,7 +40,7 @@ $session->userLock($user);
 				<label for="password">Re-enter your Password</label>
 				<input type="password" name="repassword" value="" />
 			</div>
-
+			<input type="hidden" name="auth_token" value="<?= Token::generateToken(); ?>" />
 			<br>
 			<input class="ui update green button" type="submit" value="Save" />
 			<a type="button" class="ui button basic" href="<?= USER_URL; ?>">Cancel</a>
@@ -48,59 +48,5 @@ $session->userLock($user);
 	</div>
 </div>
 
-<script>
-$('.ui.form').form({
-	fields: {
-		username: {
-			identifier: 'username',
-			rules: [
-			{
-				type   : 'empty',
-				prompt : 'Username can\'t be empty.'
-			},
-			{
-				type   : 'minLength[4]',
-				prompt : 'Username must be between 3 and 10 characters.'
-			},
-			{
-				type   : 'maxLength[15]',
-				prompt : 'Username must be between 3 and 10 characters.'
-			},
-			{
-				type   : 'regExp[/^[a-zA-Z0-9_]{4,15}$/]',
-				prompt : 'Username may only contain alphanumeric characters or \'_\''
-			}
-			]
-		},
-		old_password: {
-			identifier: 'old_password',
-			rules: [
-			{
-				type   : 'empty',
-				prompt : 'Enter your current password to update settings.'
-			}
-			]
-		},
-		repassword: {
-			identifier: 'repassword',
-			rules: [
-			{
-				type   : 'match[password]',
-				prompt : 'Passwords don\'t match.'
-			}
-			]
-		},
-		email: {
-			identifier: 'email',
-			rules: [
-			{
-				type   : 'email',
-				prompt : 'E-mail is not valid.'
-			}]
-		}
-	},
-		inline : true,
-		duration: '15',
-		on     : 'change'
-	});
+<script src="/sha/scripts/auth/forms-vald.js">
 </script>

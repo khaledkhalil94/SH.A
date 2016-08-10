@@ -9,6 +9,8 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 	header('Location:404.php');
 }
 
+// generate a new SID to avoid session fixation
+session_regenerate_id(true);
 
 switch ($_POST['action']) {
 
@@ -37,9 +39,16 @@ switch ($_POST['action']) {
 
 		$data = $_POST['values'];
 		unset($_POST);
-		//print_r($data); exit;
+
+		// check token validation
+		if(!Token::validateToken($data['auth_token'])){
+			 die(json_encode("Token is not valid."));
+		}
+		unset($data['auth_token']);
+
 		// check maximum length
 		foreach ($data as $k => $v) {
+
 			if(strlen($v) > 30) die(json_encode('Input is too long.'));
 		}
 
@@ -103,7 +112,7 @@ switch ($_POST['action']) {
 
 		} else {
 			
-			echo json_encode($user->errors);
+			echo json_encode($database->errors);
 		}
 
 		break;

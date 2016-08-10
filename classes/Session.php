@@ -67,9 +67,6 @@ class Session {
 			$this->user_id = $_SESSION['user_id'];
 			$this->username = $_SESSION['username'];
 			$this->logged_in = true;
-		} else {
-			unset($this->user_id);
-			$this->logged_in = false;
 		}
 
 	}
@@ -102,7 +99,7 @@ class Session {
 		$this->logged_in = true;
 
 		defined('USER_ID') ? null : define('USER_ID', $this->user_id);
-
+		//echo $_SESSION['username']; exit;
 		return true;
 
 	}
@@ -132,7 +129,7 @@ class Session {
 	}
 
 	/**
-	 * sets a key and value in the session
+	 * gets a value from the session by key
 	 *
 	 * @param mixed $key
 	 *

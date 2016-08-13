@@ -1,23 +1,15 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 $user_id = sanitize_id($_GET['pm']);
-if($user = Student::find_by_id($user_id)){
-	$staff = false;
-} elseif ($user = Staff::find_by_id($user_id)) {
-	$staff = true;
-} else {
-	$session->message("User was not found.", "/sha/404.php", "danger");
-} 
 
+$user = $student->get_user_info($user_id);
+
+$staff = $user->ual == 1 ? true : false;
 if (USER_ID == $user_id) $session->message("Why are you viewing messages with yourself ?!", ".", "info");
 
 $pageTitle = "Conversations";
 include_once (ROOT_PATH . "inc/head.php");
 $messages = Messages::getConvo(USER_ID, $user_id);
-// echo "<pre>";
-// print_r($messages);
-// echo "</pre>";
-// exit;
 ?>
 
 <div class="main">
@@ -26,7 +18,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 	<?php if($staff){ ?>
 		<h3>Messages from the adminstration.</h3>
 	<?php } else { ?>
-		<h3>Your messages with <a href="/sha/user/<?= $user_id; ?>/"><?= $user->full_name(); ?></a></h3>
+		<h3>Your messages with <a href="/sha/user/<?= $user_id; ?>/"><?= $user->full_name; ?></a></h3>
 	<?php } ?>
 		<?php if(empty($messages)) {
 				echo "There are no messages between you and ".Student::find_by_id($user_id)->full_name()." yet.<br><br>";
@@ -34,12 +26,13 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 			}
 			echo "<a class=\"btn btn-success\" href=\"compose.php?to=$user_id\">Reply</a>";
 			foreach($messages as $message):
-				$sender = $staff ? Staff::find_by_id($message->sender_id) : Student::find_by_id($message->sender_id);
+				$sender = $student->get_user_info($message->sender_id);
 				$self = USER_ID == $sender->id ? true : false;
 				if (!$self) Messages::msgSeen($message->user_id, $message->id);
-				$img_path = $Images->get_profile_pic($sender);
+				$img_path = $sender->img_path;
 				$date = displayDate($message->date);
 				$timeAgo = get_timeAgo($message->date);
+
 ?>
 				<div class="details row">
 				<hr>
@@ -53,7 +46,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 				<?php } else { ?>
 				<p><?= $self ? "You" : "<a href=\"/sha/user/$sender->id/\">$sender->firstName</a>"; ?>
 				<?php } ?>
-				 sent </a><a href="inbox.php?msg=<?= $message->id; ?>"><?= $timeAgo; ?></a></p></div>
+				 sent </a><a href="message.php?msg=<?= $message->id; ?>"><?= $timeAgo; ?></a></p></div>
 				<p><?= $message->subject; ?></p>
 				<a class="btn btn-danger" style="float:right;" href="?dl=<?= $message->id ?>">Delete</a>
 				</div>

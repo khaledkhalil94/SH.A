@@ -2,7 +2,7 @@
 require_once ("classes/init.php");
 $pageTitle = "Log In";
 if($session->is_logged_in()){
- header('Location:index.php');
+ Redirect::redirectTo();
 }
 
 require(ROOT_PATH . 'inc/head.php'); 

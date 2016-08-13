@@ -2,6 +2,7 @@
 require_once ("classes/init.php");
 $pageTitle = "Home Page";
 include (ROOT_PATH . "inc/head.php"); 
+
 ?>
 <body>
   <div class="main">

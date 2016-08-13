@@ -1,16 +1,16 @@
 <?php
 require_once ("../../classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+$session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
 $id = $session->user_id;
 if(!$id){
 	echo "User was not found!";
-	redirect_to_D("/sha", 20);
+	Redirect::redirectTo("/sha", 20);
 }
 
 if (isset($_GET["dl"])) {
 	$msgid = $_GET["dl"];
 	if(Messages::deleteMsg($msgid)){
-		redirect_to_D(basename(__FILE__));
+		Redirect::redirectTo(basename(__FILE__));
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+$session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
 $user_id = $session->user_id;
 $session->adminLock();
 
@@ -18,7 +18,7 @@ if (isset($_GET["aprv"])) {
 	Messages::unReport($msgid);
 }
 
-if(!isset($_GET['msg'])) redirect_to_D("./reports.php");
+if(!isset($_GET['msg'])) Redirect::redirectTo("./reports.php");
 
 $msgid = $_GET['msg'];
 $pageTitle = "Messages";

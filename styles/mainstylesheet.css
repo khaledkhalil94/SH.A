@@ -383,3 +383,7 @@ p.form-note {
     margin-left: 5px;
     color: #8e8e8e;
 }
+
+.hidden {
+    display: none!important;
+}

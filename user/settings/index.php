@@ -1,6 +1,6 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+$session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
 $id = $session->user_id;
 
 

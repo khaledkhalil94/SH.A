@@ -1,5 +1,6 @@
 <?php 
 require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
+
 class Session {
 
 	/**
@@ -36,7 +37,6 @@ class Session {
 	function __construct(){
 
 		session_start();
-
 		$this->check_login();
 
 		if($this->logged_in){
@@ -162,7 +162,7 @@ class Session {
 			$_SESSION['msg'] = $msg;
 			$_SESSION['msgType'] = $msgType;
 		}
-		redirect_to_D($location);
+		Redirect::redirectTo($location);
 	}
 
 	public function displayMsg(){
@@ -205,14 +205,14 @@ class Session {
 				return true;
 			} else {
 				echo ("You can't view this page.");
-				redirect_to_D("/sha", 2);
+				Redirect::redirectTo("/sha", 2);
 				return false;
 			}
 		} elseif ($this->adminCheck()){
 			return true;
 		} else {
 			echo ("User was not found.");
-			redirect_to_D("/sha", 2);
+			Redirect::redirectTo("/sha", 2);
 		}
 	}
 

@@ -1,7 +1,7 @@
 <?php 
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
 
-if(!$session->is_logged_in()) redirect_to_D('/sha');
+if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
 
 //Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {

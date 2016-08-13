@@ -26,9 +26,11 @@
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/mainstylesheet.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/questions.css"/>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/user-profile.css"/>
+	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/msg.styles.css"/>
 	<script type='text/javascript' src="<?= BASE_URL; ?>styles/Semantic-UI-CSS-master/semantic.min.js"></script>
 	<script type='text/javascript' src="<?= BASE_URL; ?>scripts/moment.js"></script>
 	<script type='text/javascript' src="<?= BASE_URL; ?>scripts/main-scripts.js"></script>
+	<script type='text/javascript' src="<?= BASE_URL; ?>scripts/msgsjs.js"></script>
     <noscript>
         <meta http-equiv="refresh" content="0; url='/sha/err.php?javascript=no'">
     </noscript>

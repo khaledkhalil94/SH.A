@@ -4,7 +4,7 @@ $session->adminLock();
 $msg = $session->displayMsg();
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 if(!$id){
-	redirect_to_D("/sha", 2);
+	Redirect::redirectTo("/sha", 2);
 }
 $User = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : Staff::find_by_id($id);
 $student = Student::find_by_id($User->id);
@@ -12,10 +12,10 @@ $student = Student::find_by_id($User->id);
 if (isset($_GET["clall"]) && $_GET["clall"] == "1") {
 	Admin::deletelogs($id);
 	$session->message("All logs have been deleted.");
-	redirect_to_D(basename(__FILE__)."?id={$id}");
+	Redirect::redirectTo(basename(__FILE__)."?id={$id}");
 } elseif (isset($_GET["dellog"])) {
 	Admin::deletelog($_GET["dellog"]);
-	redirect_to_D(basename(__FILE__)."?id={$id}");
+	Redirect::redirectTo(basename(__FILE__)."?id={$id}");
 }
 
 $pageTitle = "Preview Logs";

@@ -26,7 +26,6 @@ switch ($section) {
 		$sec = array('0', 'All');
 		break;
 }
-//if (!isset($id)) exit("404 NOT FOUND!");
 ?>
 <body>
 	<div class="container section">

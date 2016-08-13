@@ -4,7 +4,7 @@ $session->adminLock();
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if(!$id){
-	redirect_to_D("/sha", 2);
+	Redirect::redirectTo("/sha", 2);
 }
 
 $student = Student::find_by_id($id);

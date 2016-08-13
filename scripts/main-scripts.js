@@ -18,3 +18,4 @@ $(function(){
 	});
 });
 
+$('.ui.dropdown').dropdown();

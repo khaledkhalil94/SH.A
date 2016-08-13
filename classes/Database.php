@@ -130,8 +130,50 @@ class Database {
 			return true;
 		 }
 	}
-	
+
+
+	/**
+	* checks a table and return whether a row exists or not
+	*
+	* @param $table string
+	* @param $where string
+	* @param $rule string
+	*
+	* @return boolean
+	*
+	*/
+	public static function row_exists($table, $where, $rule){
+		global $connection;
+
+		$sql = "SELECT 1 FROM `{$table}` WHERE $where = $rule";
+
+		return $connection->query($sql)->fetch();
+
+	}
+
+
+	/**
+	* checks a table and return whether a row exists or not
+	*
+	* @param $sql string
+	*
+	* @return boolean true | array of errors
+	*
+	*/
+	public static function xcute($sql){
+		global $connection;
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			return $error;
+		}
+
+		return true;
+	}
 }
+	
 
 $database = new Database();
 

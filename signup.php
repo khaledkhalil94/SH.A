@@ -1,7 +1,7 @@
 <?php
 require_once ("classes/init.php");
 $pageTitle = "Sign Up";
-if($session->is_logged_in()) redirect_to_D('/sha');
+if($session->is_logged_in()) Redirect::redirectTo('/sha');
 
 ?>
 

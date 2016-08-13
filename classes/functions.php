@@ -1,12 +1,14 @@
 <?php 
 require_once('init.php');
 
-function redirect_to_D($location = NULL, $delay="0") {
-	if ($location != NULL) {
-		header("refresh:{$delay};url={$location}");
-		exit;
-	}
-}
+// TBR
+// function redirect_to_D($location = NULL, $delay="0") {
+// 	if ($location != NULL) {
+// 		header("refresh:{$delay};url={$location}");
+// 		exit;
+// 	}
+// }
+
 function msgs(){
 	global $session;
   	$msg = $session->displayMsg();
@@ -125,5 +127,13 @@ function rm_dir($dir) {
     }
 
     return rmdir($dir) ?: false;
+}
+
+
+function printX($array){
+	echo "<pre>";
+	print_r($array);
+	echo "</pre>";
+	exit;
 }
 ?>

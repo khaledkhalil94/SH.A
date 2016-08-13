@@ -4,7 +4,7 @@ $session->adminLock();
 $id =sanitize_id($_GET['id']) ?: null;
 
 if(!$id){
-	redirect_to_D("/sha", 2);
+	Redirect::redirectTo("/sha", 2);
 }
 $studentInfo = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : die("User was not found");
 $student = Student::find_by_id($studentInfo->id);

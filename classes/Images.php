@@ -12,6 +12,7 @@ require_once('init.php');
 
 	public static function get_profile_pic($user){
 		global $connection;
+
 		if (!$user->has_pic) return BASE_URL."images/profilepic/pp.png";
 
 		$sql = "SELECT `path` FROM profile_pic WHERE user_id = {$user->id}";
@@ -49,11 +50,8 @@ require_once('init.php');
 
 	// checks if the user has a profile picture or not
 	public static function has_pic($user_id){
-		global $connection;
-
-		$sql = "SELECT 1 FROM `profile_pic` WHERE user_id = $user_id";
-
-		return $connection->query($sql)->fetch();
+		
+		return Database::row_exists('profile_pic', 'user_id', $user_id);
 
 	}
 

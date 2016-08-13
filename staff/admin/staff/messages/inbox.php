@@ -1,10 +1,10 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
-$session->is_logged_in() ? true : redirect_to_D("/sha/signup.php");
+$session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
 $user_id = $session->user_id;
 if(!$user_id){
 	echo "User was not found!";
-	redirect_to_D("/sha", 20);
+	Redirect::redirectTo("/sha", 20);
 }
 
 if (isset($_GET["dl"])) {
@@ -19,7 +19,7 @@ if (isset($_GET["dl"])) {
 if (isset($_GET["un"])) {
 	$msgid = $_GET["un"];
 	if(Messages::msgUnSee($user_id, $msgid)){
-		redirect_to_D("../messages");
+		Redirect::redirectTo("../messages");
 		exit;
 	}
 }
@@ -29,7 +29,7 @@ if (isset($_GET["report"])) {
 	if (Messages::Report($msgid)) $session->message("Message has been reported to the admin.", "../messages");
 }
 
-if(!isset($_GET['msg'])) redirect_to_D("../messages");
+if(!isset($_GET['msg'])) Redirect::redirectTo("../messages");
 
 $msgid = $_GET['msg'];
 $studentInfo = StudentInfo::find_by_id($user_id);

@@ -18,7 +18,8 @@ class Student extends User {
 	public function get_user_info($id){
 		global $connection;
 
-		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.email, info.register_date AS joined, privacy.*, pic.path AS img_path
+		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.email, info.ual AS ual,
+				info.register_date AS joined, privacy.*, pic.path AS img_path
 				FROM `students`
 				RIGHT JOIN `login_info` AS info ON students.id = info.id 
 				INNER JOIN `user_privacy` AS privacy ON students.id = privacy.user_id

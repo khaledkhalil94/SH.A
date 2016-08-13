@@ -1,0 +1,69 @@
+.messages a.item.teal.active {
+    color: purple!important;
+    border-left: 1px solid purple;
+    border-color: purple;
+}
+
+.messages .ui.selectable.table tbody tr:hover {
+    background: rgba(0,0,0,.05)!important;
+}
+
+.messages .ui.selectable.table tbody tr.negative:hover {
+    background: #ffe7e7!important;
+}
+
+.messages .msg-image {
+    position: absolute;
+}
+
+.messages .msg-main {
+    margin-left: 10%;
+}
+
+.messages .msg-user_info h4 {
+    margin-bottom: 0px;
+}
+
+.messages .msg-body {
+    margin-top: 2%;
+}
+
+.messages div#blog-post-actions {
+    position: absolute;
+    /* float: right; */
+    margin-top: -2%;
+    right: 23%;
+}
+
+.messages div#msg-actions {
+    right: 24%;
+    margin-top: -32px;
+    position: absolute;
+}
+
+.messages .msg-main .menu {
+    margin-left: -77px;
+}
+
+.messages td.msg-remove.center.aligned {
+    vertical-align: middle;
+    color: #8a8a8a;
+}
+
+.messages .msg-center.center {
+    text-align: center;
+    margin-bottom: 20px;
+    position: absolute;
+    right: 5%;
+    margin-top: -55px;
+    z-index: 55;
+}
+
+.messages .msg-center.center li {
+    display: list-item;
+    margin: 5px;
+}
+
+span#msg-undo {
+    cursor: pointer;
+}

@@ -9,7 +9,7 @@ if(!$q = QNA::get_question($id)) {
 	if ($q = Comment::find_by_id($id)) { 
 		$q = $q->post_id;
 		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
-		redirect_to_D("question.php?id={$q}#{$id}");
+		Redirect::redirectTo("question.php?id={$q}#{$id}");
 	} else {
 		$session->message("Page was not found!", "/sha/404.php", "warning");
 	}

@@ -53,7 +53,8 @@ if (defined('BASE_URL') && defined('USER_ID')) {
 
 $faculties = array("Engineering" => 1, "Computer Science" => 2, "Medicine" => 3);
 
-	$greenIcon = "<i style=\"color:green;\" class=\"fa fa-circle status-published\"></i>";
-	$greyIcon = "<i style=\"color:grey;\" class=\"fa fa-circle status-published\"></i>";
-	$redIcon = "<i style=\"color:red;\" class=\"fa fa-circle status-published\"></i>";
+$greenIcon = "<i style=\"color:green;\" class=\"fa fa-circle status-published\"></i>";
+$greyIcon = "<i style=\"color:grey;\" class=\"fa fa-circle status-published\"></i>";
+$redIcon = "<i style=\"color:red;\" class=\"fa fa-circle status-published\"></i>";
+
 ?>

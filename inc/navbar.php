@@ -39,7 +39,7 @@
 					</li>
 					<?php if($session->is_logged_in()): ?>
 					<li>
-						<a href="<?= BASE_URL; ?>messages">Inbox<?= " <span class=\"label label-danger\">". Messages::getMsgsCount(USER_ID) ."</span>";  ?></a>
+						<a href="<?= BASE_URL; ?>messages">Inbox<?= " <span class=\"label label-danger\"></span>";  ?></a>
 					</li>
 					<?php endif; ?>  
 					<?php if(!$session->is_logged_in()): ?>

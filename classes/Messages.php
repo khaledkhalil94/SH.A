@@ -1,31 +1,65 @@
 <?php 
 require_once('init.php');
 
-class Messages extends User {
+class Messages {
 	
-	protected static $table_name="messages";
-	public $id, $user_id, $title, $sender_id, $subject, $date;
-	//protected static ;
-	protected static $db_fields = array();
 
-	public function __construct(){
-		global $db_fields;
-		self::$db_fields = array_keys((array)$this);
-	}
+	public static function sendMsg($data){
+		global $database;
 
-	// send a new message via POST request
-	public static function sendMsg(){
-		global $session;
-		$msg = parent::instantiate($_POST);
-		if($msg->create()){
-			$session->message("Message has been sent successfully.", ".");
+		$token = $data['token'];
+		$send_by = $data['send_by'];
+		$send_to = $data['send_to'];
+		$value = $data['value'];
+
+		if(strlen($value) <= 0 ){
+			die("Message can't be empty");
 		}
 
-		unset($this->sender_id);
+		if(!Token::validateToken($token)){
+			die("Token value is invalid");
+		}
+
+		if($send_by !== USER_ID){
+			die("Authentication error!");
+		}
+
+		$blocks = User::blocked_by_user($send_to);
+		$blocked = [];
+
+		foreach ($blocks as $k => $v) {
+			$blocked[] = $v['blocked_id'];
+		}
+
+		//printX($blocked); exit;
+		if(in_array($send_by, $blocked)){
+			return "You can't send messages to this user";
+		}
+
+		$data = array(
+			'user_id' => $send_to,
+			'sender_id' => $send_by,
+			'subject' => $value
+			);
+
+		$insertion = $database->insert_data('messages', $data);
+
+		if($insertion === true){
+			die(json_encode(array(
+
+				'status' => '1',
+				'msg_id' => $database->lastId
+
+				)));
+
+		} else {
+			die(json_encode($database->errors));
+		}
+
 	}
 
 	// get all visible messages by user id
-	public static function getMsgs($id){
+	public static function getMsgs($user_id){
 		global $connection;
 		$sql = "SELECT 
 				profile_pic.path AS img_path,
@@ -35,9 +69,12 @@ class Messages extends User {
 				LEFT JOIN `students` ON messages.sender_id = students.id
 				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
 				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
-				WHERE messages.user_id = {$id} AND deleted = 0 
-				ORDER BY seen ASC, Date DESC";
+				WHERE messages.user_id = :user_id AND deleted = 0 
+				ORDER BY Date DESC";
+
 		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
 		if (!$stmt->execute()) {
 			echo $stmt->errorInfo()[2];
 		}
@@ -45,7 +82,7 @@ class Messages extends User {
 	}
 
 	// get all visible messages by user id
-	public static function getDeletedMsgs($id){
+	public static function getDeletedMsgs($user_id){
 		global $connection;
 		$sql = "SELECT 
 				profile_pic.path AS img_path,
@@ -55,24 +92,57 @@ class Messages extends User {
 				LEFT JOIN `students` ON messages.sender_id = students.id
 				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
 				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
-				WHERE messages.user_id = {$id} AND deleted = 1 
+				WHERE messages.user_id = :user_id AND deleted = 1 
 				ORDER BY Date DESC";
+
 		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
 		if (!$stmt->execute()) {
 			echo $stmt->errorInfo()[2];
 		}
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	// get all messages sent by user
+	public static function getSentMsgs($user_id){
+		global $connection;
+
+		$sql = "SELECT 
+				profile_pic.path AS img_path,
+				students.firstName AS u_fullname,
+				info.ual AS ual,
+				messages.id, messages.user_id, messages.date, messages.subject
+				FROM `messages` 
+				LEFT JOIN `students` ON messages.user_id = students.id
+				LEFT JOIN `login_info` AS info ON messages.user_id = info.id
+				LEFT JOIN `profile_pic` ON messages.user_id = profile_pic.user_id
+				WHERE messages.sender_id = :user_id
+				ORDER BY Date DESC";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+		if (!$stmt->execute()) {
+			echo $stmt->errorInfo()[2];
+		}
+
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	// get a single message by it's id
 	public static function getMsg($id){
 		global $connection;
-		$sql = "SELECT profile_pic.path AS img_path, students.id AS u_id,
-				CONCAT(students.firstName) AS u_fullname,
+		$sql = "SELECT profile_pic.path AS img_path, sender.id AS u_id,
+				info.ual AS ual,
+				sender.firstName AS u_name,
+				receiver.firstName AS r_name,
 				messages.* FROM `messages` 
-				LEFT JOIN `students` ON messages.sender_id = students.id
+				LEFT JOIN `students` AS sender ON messages.sender_id = sender.id
+				LEFT JOIN `students` AS receiver ON messages.user_id = receiver.id
+				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
 				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
-				WHERE messages.id = {$id} AND deleted = 0";
+				WHERE messages.id = {$id}";
 		$stmt = $connection->prepare($sql);
 		if (!$stmt->execute()) {
 			echo $stmt->errorInfo()[2];
@@ -105,11 +175,19 @@ class Messages extends User {
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
-	// deletes a messages 
+	// deletes a messages permanently
 	public static function deleteMsg($id){
-		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id}";
+		global $connection;
 
-		return Database::xcute($sql);
+		$user_id = USER_ID;
+
+		$sql = "DELETE FROM `messages` WHERE id = :id AND user_id = $user_id LIMIT 1";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+		return $stmt->execute();
+
 	}
 
 	// hides a messages
@@ -130,24 +208,28 @@ class Messages extends User {
 		return Database::xcute($sql);
 	}
 
-	// get count of unread messages by user id
-	public static function getMsgsCount($id){
-		global $connection;
-		$msql = " WHERE user_id = {$id} AND deleted = 0 AND seen = 0";
-		return parent::get_count($msql);
-	}
+	// // get count of unread messages by user id
+	// public static function getMsgsCount($id){
+	// 	global $connection;
+	// 	$msql = " WHERE user_id = {$id} AND deleted = 0 AND seen = 0";
+	// 	return User::get_count($msql);
+	// }
 
-	public static function getMsgsCountBySender($id){
-		global $connection;
-		$msql = " WHERE sender_id = {$id} AND deleted = 0 AND seen = 0";
-		return parent::get_count($msql);
-	}
+	// public static function getMsgsCountBySender($id){
+	// 	global $connection;
+	// 	$msql = " WHERE sender_id = {$id} AND deleted = 0 AND seen = 0";
+	// 	return User::get_count($msql);
+	// }
 
 	// checks if the message is read or not
 	public static function isSeen($id){
 		global $connection;
-		$sql = "SELECT seen FROM `messages` WHERE id = {$id} AND deleted = 0";
-		$stmt = $connection->query($sql);
+		$sql = "SELECT seen FROM `messages` WHERE id = :id";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+		$stmt->execute();
+
 		$res = $stmt->fetch()[0];
 		return $res == 1 ? true : false;
 	}
@@ -170,52 +252,71 @@ class Messages extends User {
 	// marks a message as seen once the user opens it
 	public static function msgSeen($user_id, $id){
 		global $connection;
-		$sql = "UPDATE `messages` SET seen = 1 WHERE id = {$id} AND user_id = {$user_id} LIMIT 1";
-		$res = $connection->exec($sql);
-		return (bool)$res ? true : false;
+		$sql = "UPDATE `messages` SET seen = 1 WHERE id = :id AND user_id = :user_id LIMIT 1";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+		$stmt->execute();
 	}
 
 	// marks a message as unread
-	public static function msgUnSee($id){
-		exit("as");
+	public static function msgUnRead($id){
 		global $connection;
-		$sql = "UPDATE `messages` SET seen = 0 WHERE id = {$id} LIMIT 1";
+
+		$sql = "UPDATE `messages` SET seen = 0 WHERE id = :id LIMIT 1";
 		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
 		if (!$stmt->execute()) {
-			echo $stmt->errorInfo()[2];
-			exit;
+			return $stmt->errorInfo()[2];
 		}
-		exit("asd");
-		return parent::query($sql); exit;
-		$res = $connection->exec($sql);
-		return (bool)$res ? true : false;
+
+		return true;
 	}
 
 	public static function displayMessages($messages, $sec='inbox'){
+
+		$send = $sec == 'sent' ? true : false;
+
 		$html = '';
 
 		if(empty($messages)) {
-			$html = "There are no messages";
-			return $html;
+			$empty = true;
 		}
 
 		$html .= "<table class='ui selectable table'>";
 		$html .= "<thead>";
 		$html .= "<tr>";
+
+		if($send){
+		$html .= "<th class='four wide'>To</th>";
+		} else {
 		$html .= "<th class='four wide'>From</th>";
+		}
+
 		$html .= "<th class='eight wide'>Message</th>";
 
 		if($sec == 'archive'){
-			$html .= "<th class='two wide'>Move to inbox</th>";
+			$html .= "<th class='two wide'>unHide</th>";
+			$html .= "<th style=\"text-align: center;\" class='two wide'>Delete</th>";
+		} elseif(!$send) {
+			$html .= "<th style=\"text-align: center;\" class='two wide'>Hide</th>";
 		}
 
-		$html .= "<th class='two wide'>Delete</th>";
 		$html .= "</tr>";
 		$html .= "</thead>";
 		$html .= "<tbody class='messages-list'>";
 
 		foreach ($messages as $message):
-			$senderID = $message->sender_id;
+
+			if($send){
+				$senderID = $message->user_id;
+			} else {
+				$senderID = $message->sender_id;
+			}
+
 			$staff = $message->ual == 1 ? true : false;
 			$date = displayDate($message->date);
 			$time = get_timeago($message->date);
@@ -224,35 +325,30 @@ class Messages extends User {
 			$isSeen = self::isSeen($message->id);
 
 			$html .= "<tr class='message-row ";
-			if(!$isSeen) $html .= "unread";
-			$html .= "' id='msgid-$message->id' msg-id='$message->id'";
+
+			if(!$isSeen && !$send) $html .= "unread active";
+
 			if($staff) {
-			$html .= " class=' negative'";
+			$html .= " negative";
 			}
+
+			$html .= "' id='msgid-$message->id' msg-id='$message->id'";
+
+
 			$html .= ">";
 			$html .= "<td>";
 			$html .= "<div class='ui grid'>";
 			$html .= "<div class='four wide column'>";
-			if ($staff){
-			$html .= "<img class='ui avatar image' src=' $message->img_path '>";
-			 } else { 
-			$html .= "<a href='/sha/user/ $senderID /'><img class='ui avatar image' src=' $message->img_path '></a>";
-			 } 
+			$html .= "<a href='/sha/user/$senderID/'><img class='ui avatar image' src=' $message->img_path '></a>";
 			$html .= "</div>";
 			$html .= "<div class='ten wide column'>";
-			if ($staff){ 
-			$html .= "<span>Admin</span>";
-			} else { 
 			$html .= "<a href='/sha/user/$senderID'> $message->u_fullname </a>";
-			}
 			$html .= "<br><div class='time' title=' $date; '> $time </div>";
 			$html .="</div>";
 			$html .="</td>";
 			$html .= "<td class='msg-content selectable'>";
 			$html .= "<a style='color:black;text-decoration: none;' href='?msg=$message->id'>";
-			if($message->sender_id === USER_ID) {
-			$html .= "<i style='color: grey; font-size: small;' class='fa fa-reply' aria-hidden='true'></i>";
-			 }
+
 			$html .= $subject;
 			$html .="</a>";
 
@@ -263,15 +359,18 @@ class Messages extends User {
 				$html .="</td>";
 			}
 
-			$html .="<td class='msg-remove center aligned'>";
-		
-			if($sec == 'archive'){
-				$html .= "<i title='Permanently delete message' class='remove large link icon' id='msg_remove'></i>";
-			} else {
-				$html .= "<i title='archive message' class='remove large link icon' id='msg_arch'></i>";
-			}
+			if(!$send){
+				$html .="<td class='msg-remove center aligned'>";
+			
+				if($sec == 'archive'){
+					$html .= "<i title='Permanently delete message' class='remove large link icon' id='msg_remove'></i>";
+				} else {
+					$html .= "<i title='Hide message' class='remove large link icon' id='msg_arch'></i>";
+				}
 
-			$html .="</td>";
+				$html .="</td>";
+			}
+			
 			$html .="</tr>";
 
 		endforeach;

@@ -57,6 +57,75 @@ switch ($_POST['action']) {
 
 		} else {
 			
+			echo json_encode($action);
+		}
+
+		break;
+
+	case 'msg_send':
+		
+		$data = $_POST;
+		unset($_POST);
+		$action = Messages::sendMsg($data);
+
+		if($action === true){ // delete success
+
+			echo json_encode(array('status' => '1', 'msgID' => $msg_id));
+
+		} else {
+			
+			echo json_encode($action);
+		}
+
+		break;
+
+	case 'msg_unread':
+		
+		$msg_id = $_POST['msgID'];
+		$action = Messages::msgUnRead($msg_id);
+
+		if($action === true){ // delete success
+
+			echo json_encode(array('status' => '1', 'msgID' => $msg_id));
+
+		} else {
+			
+			echo $action[2];
+		}
+
+		break;
+
+	case 'msg_block':
+		
+		$msg_id = $_POST['msgID'];
+		$message = Messages::getMsg($msg_id);
+
+		$userID = $message->sender_id;
+
+		$action = User::block($userID);
+
+		if($action === true){ // delete success
+
+			echo json_encode(array('status' => '1'));
+
+		} else {
+			echo json_encode($action);
+		}
+
+		break;
+
+	case 'unblock':
+		
+		$userID = $_POST['msgID'];
+
+		$action = User::unBlock($userID);
+
+		if($action === true){ // delete success
+
+			echo json_encode(array('status' => '1'));
+
+		} else {
+			
 			echo $action[2];
 		}
 

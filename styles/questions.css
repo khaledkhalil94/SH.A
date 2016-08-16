@@ -176,3 +176,7 @@
     color: #7b7b7b;
     font-weight: 600;
 }
+
+.message-list .message-row .message-details .time a {
+    color: inherit;
+}

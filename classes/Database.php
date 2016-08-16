@@ -10,26 +10,31 @@ require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
 class Database {
 
 	/**
-	 *	@var object database pdo connection
+	 * @var object database pdo connection
 	 *
 	 */
 	private $connection;
 
 	/**
-	 *	@var int number of rows affected
+	 * @var int number of rows affected
 	 *
 	 */
 	public $rowCount;
 
 	/**
-	 *@var boolean $error error status
+	 * @var boolean $error error status
 	 */
 	public $error=false;
 
 	/**
-	 *@var array of errors
+	 * @var array of errors
 	 */
 	public $errors = [];
+
+	/**
+	 * @var int id of last executed query
+	 */
+	public $lastId;
 
 
 	function __construct() {
@@ -70,9 +75,12 @@ class Database {
 		$stmt = $this->connection->prepare($sql);
 		if(!$stmt->execute($params)){
 			$error = $stmt->errorInfo();
-			return $error[2];
+			$this->error = true;
+			$this->errors[] = $error;
+			return false;
 		}
 
+		$this->lastId = $this->connection->lastInsertId();
 		return true;
 	}
 
@@ -142,12 +150,22 @@ class Database {
 	* @return boolean
 	*
 	*/
-	public static function row_exists($table, $where, $rule){
-		global $connection;
+	public function row_exists($table, $where, $rule){
 
-		$sql = "SELECT 1 FROM `{$table}` WHERE $where = $rule";
+		$sql = "SELECT 1 FROM `{$table}` WHERE $where = ?";
 
-		return $connection->query($sql)->fetch();
+		$stmt = $this->connection->prepare($sql);
+		
+		$stmt->bindParam(1, $rule);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			return $error;
+		}
+
+		$exists = (bool)$stmt->fetch();
+
+		return $exists;
 
 	}
 

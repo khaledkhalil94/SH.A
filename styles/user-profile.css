@@ -162,6 +162,7 @@ div#user-extrainfo-list, div#user-links-list {
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
     resize: none;
+    padding-bottom: 0px;
 }
 
 .settings-content form .field input[type=text]:focus, .settings-content form .field input[type=email]:focus {

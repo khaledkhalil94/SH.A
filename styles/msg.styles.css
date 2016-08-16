@@ -67,3 +67,76 @@
 span#msg-undo {
     cursor: pointer;
 }
+
+.messages .message.reply textarea {
+    border: none;
+    border-bottom: 1px solid #c0bce4;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.messages .message.reply.ui.segment {
+    box-shadow: none;
+    width: 80%;
+}
+
+.message-list .message-row .message-details p {
+    margin-bottom: 0px;
+}
+
+.message-list .message-row .message-details .time {
+    font-size: smaller;
+    color: #b1b1b1;
+}
+
+.message-list .message-row .message-details .time:hover {
+    text-decoration: underline;
+}
+
+.message-list .message-row img.ui.avatar.image {
+}
+
+.message-list .message-image {
+    position: absolute;
+}
+
+.message-list .message-details {
+    margin-left: 75px;
+}
+
+.message-list .message-image img.ui.image {
+    width: 55px;
+}
+
+.message-list .message-row i.ui.icon {
+    position: absolute;
+    right: 16px;
+    top: 31px;
+}
+
+.messages .msg-main .msg-body .content {
+    min-height: 220px;
+    white-space: pre-line;
+}
+
+.messages #msg_msg i.archive.icon {
+    font-size: 22px;
+}
+
+.messages #msg_msg {
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+
+.messages .messages-list tr.unread.active {
+    background: #d9ffd9!important;
+}
+
+.block-list .content .username {
+    color: #9c9c9c;
+}
+
+.messages .block-list .item {
+    padding: 10px 0;
+}

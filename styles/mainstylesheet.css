@@ -311,10 +311,12 @@ ul.nav.navbar-nav {
     font-size: large;
 }
 
-.message {
- /* text-align: center; */
-    margin: auto;
-    margin-top: 30px;
+.message-list .message.message-row {
+ padding: 0px;
+ position: relative;
+ padding: 15px;
+ /* margin: auto; */
+ /* margin-top: 30px; */
 }
 
 .signup-page form .field {

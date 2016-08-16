@@ -33,6 +33,9 @@ include_once (ROOT_PATH . "inc/head.php");
 				<a class="item <?= $sh == 'inb' ? 'teal active' : null; ?>" href="?sh=inb">
 					Inbox
 				</a>
+				<a class="item <?= $sh == 'st' ? 'teal active' : null; ?>" href="?sh=st">
+					Sent
+				</a>
 				<a class="item <?= $sh == 'tr' ? 'teal active' : null; ?>" href="?sh=tr">
 					Archive
 				</a>
@@ -48,16 +51,22 @@ include_once (ROOT_PATH . "inc/head.php");
 					$messages = Messages::getMsgs(USER_ID);
 					echo Messages::displayMessages($messages, 'inbox');
 					break;
+
 				case 'tr':
 					$messages = Messages::getDeletedMsgs(USER_ID);
 					echo Messages::displayMessages($messages, 'archive');
 					break;
+
+				case 'st':
+					$messages = Messages::getSentMsgs(USER_ID);
+					echo Messages::displayMessages($messages, 'sent');
+					break;
+
 				case 'blc':
 					require('blocked.php');
 					break;
 				
 				default:
-					require('inbox.php');
 					break;
 			} ?>
 		</div>

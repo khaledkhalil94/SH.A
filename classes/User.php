@@ -301,6 +301,121 @@ class User {
 		return true;
 	}
 
+	/**
+	 * adds a user to blocklist
+	 *
+	 * @param int @user_id
+	 * 
+	 * @return boolean
+	 */
+	public static function block($user_id){
+		global $database;
+		global $connection;
+
+		$self = USER_ID;
+
+		// first check if the user is already blocked
+		$sql = "SELECT 1 FROM `block_list` WHERE user_id = :self AND blocked_id = :blocked";
+
+		$stmt = $connection->prepare($sql);
+		
+		$stmt->bindValue(':self', $self, PDO::PARAM_INT);
+		$stmt->bindValue(':blocked', $user_id, PDO::PARAM_INT);
+
+		$stmt->execute();
+
+		$exists = (bool)$stmt->fetch();
+
+		if($exists) return "You have already blocked this user.";
+
+		$data = array(
+			'user_id' => $self,
+			'blocked_id' => $user_id
+			);
+
+		$insert = $database->insert_data('block_list', $data);
+		
+		if($insert === true) {
+			return true;
+		} else {
+			return array_shift($database->errors);
+		}
+	}
+
+	/**
+	 * remove a user from blocklist
+	 *
+	 * @param int @user_id
+	 * 
+	 * @return boolean
+	 */
+	public static function unBlock($user_id){
+		global $connection;
+
+		$self = USER_ID;
+
+		$sql = "DELETE FROM `block_list` WHERE user_id = $self AND blocked_id = :user_id";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+
+			return $error[2];
+		}
+
+		return true;
+	}
+
+	/**
+	 * gets an array of block list by user
+	 *
+	 * @param int @user_id
+	 * 
+	 * @return array
+	 */
+	public static function blocked_by_user($user_id){
+		global $connection;
+
+		$sql = "SELECT block_list.blocked_id FROM `block_list` WHERE user_id = ?";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(1, $user_id, PDO::PARAM_INT);
+
+		$stmt->execute();
+
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function get_blocks($user_id){
+		global $connection;
+
+		$sql = "SELECT block_list.*, info.username AS username, info.id AS uid,
+		CONCAT(users.firstName, ' ', users.lastName) AS full_name,
+		pics.path FROM `block_list`
+
+		INNER JOIN `students` AS users ON block_list.blocked_id = users.id
+		INNER JOIN `login_info` AS info ON block_list.blocked_id = info.id
+		INNER JOIN `profile_pic` AS pics ON block_list.blocked_id = pics.user_id
+		
+		WHERE block_list.user_id = :user_id";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+		if(!$stmt->execute()){
+			$error = ($stmt->errorInfo());
+
+			$this->error = true;
+			$this->errors = $error[2];
+			return $error[2];
+		}
+
+		$blocked = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+		return $blocked;
+	}
 
 	// TBR
 	public static function find_by_id($id, $msql=""){

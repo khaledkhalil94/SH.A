@@ -1,10 +1,11 @@
+// moves a message from inbox to archive
 $(function(){
 
 	var pending = [];
 	var tid = [];
-	var delay = 4000;
+	var delay = 8000;
 
-	$('.messages #msg_arch').click(function(event){
+	$('.messages .messages-list #msg_arch').click(function(event){
 		event.stopImmediatePropagation();
 
 		$p = $(this).closest('.message-row');
@@ -20,35 +21,26 @@ $(function(){
 		$('#msgs-msg').show();
 		$('#msgs-msg').append($msg);
 		
+
+		msg_ajax('msg_hide', msg_id);
+
+
 		pending.push(msg_id);
-		$.each(pending, function(k, v){
 
-			// fadeout the side messages
-			$('.message#'+v).delay(delay).fadeOut(350);
+		$('.message#'+v).delay(delay).fadeOut(350);
 
-			// confirm the deletion after delay
-			t = window.setTimeout(function(){
-				msg_ajax('msg_hide', v);
-			}, delay);
-
-			pending.splice(0, 1)
-		});
-
-		tid[msg_id] = t;
 	});
+
 
 	// on undo click
 	$(document).on('click', 'span#msg-undo', function(){
-		$uid = $(this).parents('li').attr('id');
-		
-		t = tid[$uid];
+		uid = $(this).parents('li').attr('id');
 
-		$('#msgid-'+$uid).toggle();
+		msg_ajax('msg_unhide', uid);
+
+		$('#msgid-'+uid).toggle();
 		$(this).closest('li.message').remove();
 
-		window.clearTimeout(t);
-
-		delete tid[$uid];
 	});
 });
 
@@ -85,8 +77,224 @@ $(function(){
 	});
 });
 
+// sends a message
+$(function(){
+	var working = false;
+
+	$('#send_msg').submit(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+
+		_form = $(this);
+
+		if(working) return;
+
+		working = true;
 
 
+		value = $('#msg_context').val();
+		token = $('#msg_token').val();
+		send_to = $('#send_to').val();
+		send_by = $('#send_by').val();
+
+		if(value.length <= 0){
+			console.log("msg can't be empty");
+			return false;
+		}
+		_form.addClass('loading');
+
+		$.ajax({
+			url: '/sha/ajax/_messages.php',
+			type: 'post',
+			dataType: 'json',
+			data: {'action': 'msg_send', 'value' : value, 'token' : token, 'send_to' : send_to, 'send_by' : send_by},
+
+			success: function(data, status) {
+
+				if(data.status == "1"){ // success
+
+					_form.parent().load('/sha/ajax/inc/msg-send-success.php');
+
+				} else { // failure
+					console.log(data);
+					_form.removeClass('loading');
+					_form.parent().load('/sha/ajax/inc/msg-send-fail.php', 'msg='+data);
+
+				}
+				
+			},
+			error: function(xhr, desc, err) {
+				_form.removeClass('loading');
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		});
+
+		return false;
+	});
+});
+
+// moves a message from inbox to archive
+$(function(){
+	$('.messages .msg-main .msg-user_info #msg_arch').click(function(event){
+		event.stopImmediatePropagation();
+
+		msg_id = getUrlVars();
+		msg_id = msg_id.msg;
+
+		$('.dropdown').dropdown('hide');
+
+		$.ajax({
+			url: '/sha/ajax/_messages.php',
+			type: 'post',
+			dataType: 'json',
+			data: {'action': 'msg_hide', 'msgID' : msg_id},
+
+			success: function(data, status) {
+
+				if(data.status == "1"){ // success
+					$dp = "\
+						<div class='item' id='msg_unarch'>\
+							<a class='ui a'>unArchive</a>\
+						</div>\
+						<div class='item' id='post-edit'>\
+							<a class='ui a'>Delete</a>\
+						</div>";
+
+					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
+					$('#msg_msg').load('/sha/ajax/inc/msg-arch-success.php');
+
+					$arch = "<i title=\"This message is archived\" class=\"archive icon\"></i>";
+					$('.messages .msg-user_info div.time').after($arch);
+
+					$('.msg-main .menu').children().remove();
+					$('.msg-main .menu').append($dp);
+
+				} else { // failure
+					return data;
+				}
+				
+			},
+			error: function(xhr, desc, err) {
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		});
+	});
+});
+
+// move a message from the archive to inbox
+$(function(){
+	$(document).on('click', '.messages .msg-main .msg-user_info #msg_unarch', function(event){
+		event.stopImmediatePropagation();
+
+		msg_id = getUrlVars();
+		msg_id = msg_id.msg;
+		
+		msg_ajax('msg_unhide', msg_id);
+
+		location = '/sha/messages/?sh=inb';
+		window.location.replace(location);
+	});
+});
+
+// marks a message as unread
+$(function(){
+	$(document).on('click', '.messages .msg-main .msg-user_info #msg_unread', function(event){
+		event.stopImmediatePropagation();
+
+		msg_id = getUrlVars();
+		msg_id = msg_id.msg;
+		
+		msg_ajax('msg_unread', msg_id);
+
+		var url = '/sha/messages/';
+		window.location = url;
+	});
+});
+
+// blocks a user
+$(function(){
+	$('.messages .msg-main .msg-user_info #msg_block').click(function(event){
+		event.stopImmediatePropagation();
+
+		msg_id = getUrlVars();
+		msg_id = msg_id.msg;
+		$msg_v = false;
+
+		$('.dropdown').dropdown('hide');
+
+		$.ajax({
+			url: '/sha/ajax/_messages.php',
+			type: 'post',
+			dataType: 'json',
+			data: {'action': 'msg_block', 'msgID' : msg_id},
+
+			success: function(data, status) {
+
+				$msg = $('#msg_msg');
+				if($msg.length) $msg.remove();
+					
+				if(data.status == "1"){ // success
+
+					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
+					$('#msg_msg').load('/sha/ajax/inc/user-block-success.php');
+
+				} else { // failure
+
+					
+					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
+					$('#msg_msg').load('/sha/ajax/inc/user-block-fail.php', 'msg='+data);
+				}
+				
+			},
+			error: function(xhr, desc, err) {
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		});
+
+
+	});
+});
+
+// unblock a user
+$(function(){
+	$('.messages #user_unblock').click(function(){
+
+		_this = $(this);
+		uid = _this.closest('.item').attr('user-id');
+
+	$.ajax({
+		url: '/sha/ajax/_messages.php',
+		type: 'post',
+		dataType: 'json',
+		data: {'action': 'unblock', 'msgID' : uid},
+
+		success: function(data, status) {
+
+			if(data.status == "1"){ // success
+
+				_this.closest('.item').fadeOut(250, function(){
+
+					this.remove();
+				});
+
+			} else { // failure
+				return data;
+			}
+			
+		},
+		error: function(xhr, desc, err) {
+			console.log(xhr);
+			console.log("Details: " + desc + "\nError:" + err);
+		}
+	});
+	});
+});
+
+
+// function for different ajax calls
 function msg_ajax(action, msgID){
 	$.ajax({
 		url: '/sha/ajax/_messages.php',
@@ -97,11 +305,8 @@ function msg_ajax(action, msgID){
 		success: function(data, status) {
 
 			if(data == "1"){ // success
-				
-
 			} else { // failure
-
-
+				return data;
 			}
 			
 		},
@@ -111,4 +316,9 @@ function msg_ajax(action, msgID){
 		}
 	});
 }
+
+
+
+
+
 

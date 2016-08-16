@@ -76,8 +76,13 @@ function displayDate($dat, $format=""){
 	return $date;
 }
 
-function ctrim($content, $lenght){
-	if (strlen($content) > $lenght) $content = substr($content, 0, $lenght);
+function ctrim($content, $lenght, $dots=false){
+	if (strlen($content) > $lenght) {
+		$content = substr($content, 0, $lenght);
+		if($dots){
+			$content .= "...";
+		}
+	}
 	return $content;
 }
 

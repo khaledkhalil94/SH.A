@@ -1,8 +1,8 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
 //if (!isset($_GET['to'])) exit("404");
-$user_id = $_GET['to'];
-if (USER_ID == $_GET['to']) $session->message("You can't send a message to yourself.", ".");
+$user_id = sanitize_id($_GET['to']);
+if (USER_ID == $user_id) $session->message("You can't send a message to yourself.", ".");
 
 $pageTitle = "Send a message";
 include_once (ROOT_PATH . "inc/head.php");
@@ -17,7 +17,8 @@ if (isset($_POST['submit'])) {
 
 }
 $messages = Messages::getConvo(USER_ID, $user_id);
-$staff = (Student::find_by_id($user_id)->id === 1) ? true : false;
+$user = Student::get_user_info($user_id);
+$staff = ($user->ual === 1) ? true : false;
 if ($staff) exit("You can't send a message to this account.");
 
 ?>
@@ -28,7 +29,7 @@ if ($staff) exit("You can't send a message to this account.");
 			<form action="compose.php?to=<?= $user_id ?>" method="POST">
 				<div class="form-group">
 					<label for="title">Sending to</label>
-					<input class="form-control" id="disabledInput" type="text" value="<?= Student::find_by_id($user_id)->full_name(); ?>" disabled>
+					<input class="form-control" id="disabledInput" type="text" value="@<?= $user->username; ?>" disabled>
 				</div>
 				<div class="form-group">
 					<label for="title">Title</label>

@@ -470,14 +470,6 @@ class User {
 		return $attributes;
 	}
 
-	public static function get_count($msql=""){
-		global $connection;
-		$sql = "SELECT count(*) FROM ".static::$table_name;
-		if(!empty($msql)) $sql .= $msql;
-		$res = $connection->query($sql);
-		return $res->fetch()[0];
-	}
-	
 	public static function query($sql){
 		global $connection;
 		$stmt = $connection->prepare($sql);

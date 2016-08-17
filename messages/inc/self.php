@@ -7,7 +7,7 @@
 
 					<h4>Sent to <a href="/sha/user/<?= $message->user_id ?>/"><?= $message->r_name; ?></a></h4>
 
-				<div class="time" title="<?= $date; ?>"><?= $timeAgo; ?></div>
+				<div class="time" id="s_msg_date" title="<?= $date; ?>"><?= $date; ?></div>
 
 			</div>
 			<hr>

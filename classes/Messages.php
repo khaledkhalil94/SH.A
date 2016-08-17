@@ -208,18 +208,18 @@ class Messages {
 		return Database::xcute($sql);
 	}
 
-	// // get count of unread messages by user id
-	// public static function getMsgsCount($id){
-	// 	global $connection;
-	// 	$msql = " WHERE user_id = {$id} AND deleted = 0 AND seen = 0";
-	// 	return User::get_count($msql);
-	// }
+	// get count of unread messages by user id
+	public static function getMsgsCount(){
+		global $connection;
 
-	// public static function getMsgsCountBySender($id){
-	// 	global $connection;
-	// 	$msql = " WHERE sender_id = {$id} AND deleted = 0 AND seen = 0";
-	// 	return User::get_count($msql);
-	// }
+		$user_id = USER_ID;
+
+		$sql = "SELECT COUNT(*) FROM `messages` WHERE user_id = {$user_id}
+				AND deleted = 0 AND seen = 0";
+		
+		$res = $connection->query($sql);
+		return $res->fetch()[0];
+	}
 
 	// checks if the message is read or not
 	public static function isSeen($id){
@@ -299,7 +299,7 @@ class Messages {
 		$html .= "<th class='eight wide'>Message</th>";
 
 		if($sec == 'archive'){
-			$html .= "<th class='two wide'>unHide</th>";
+			$html .= "<th class='two wide unhide'>unHide</th>";
 			$html .= "<th style=\"text-align: center;\" class='two wide'>Delete</th>";
 		} elseif(!$send) {
 			$html .= "<th style=\"text-align: center;\" class='two wide'>Hide</th>";
@@ -318,8 +318,7 @@ class Messages {
 			}
 
 			$staff = $message->ual == 1 ? true : false;
-			$date = displayDate($message->date);
-			$time = get_timeago($message->date);
+			$date = $message->date;
 			$subject = $message->subject;
 			if (strlen($subject) > 100) $subject = substr($subject, 0, 102)."...";
 			$isSeen = self::isSeen($message->id);
@@ -343,7 +342,7 @@ class Messages {
 			$html .= "</div>";
 			$html .= "<div class='ten wide column'>";
 			$html .= "<a href='/sha/user/$senderID'> $message->u_fullname </a>";
-			$html .= "<br><div class='time' title=' $date; '> $time </div>";
+			$html .= "<br><div class='time' id='msg_date' title='$date'>$date</div>";
 			$html .="</div>";
 			$html .="</td>";
 			$html .= "<td class='msg-content selectable'>";

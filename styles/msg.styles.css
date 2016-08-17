@@ -140,3 +140,10 @@ span#msg-undo {
 .messages .block-list .item {
     padding: 10px 0;
 }
+
+.section.messages .table .unhide {
+    text-align: center;
+}
+
+
+th.two.wide.unhide {}

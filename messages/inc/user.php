@@ -5,7 +5,7 @@
 	<div class="msg-main">
 		<div class="msg-user_info">
 				<h4>Sent by <a href="/sha/user/<?= $message->u_id ?>/"><?= $message->u_name; ?></a></h4>
-			<div class="time" title="<?= $date; ?>"><?= $timeAgo; ?></div>
+			<div class="time" id="s_msg_date" title="<?= $date; ?>"><?= $date; ?></div>
 			<?php if($arch){ ?>
 			<i title="This message is archived" class="archive icon"></i>
 			<?php } ?>

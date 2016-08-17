@@ -317,8 +317,14 @@ function msg_ajax(action, msgID){
 	});
 }
 
+$(function(){
+	$('.messages-list tr').each(function() {
+		$dateE = $(this).find('#msg_date');
 
+		$dateE.text(moment($dateE.text()).fromNow());
+	});
+});
 
-
-
-
+$(function(){
+	$('#s_msg_date').text(moment($('#s_msg_date').text()).fromNow());
+});

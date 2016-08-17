@@ -19,10 +19,8 @@ Messages::msgSeen(USER_ID, $msgid);
 $self = USER_ID == $message->u_id ? true : false;
 $arch = $message->deleted == 1 ? true : false;
 $staff = $message->ual == 1 ? true : false;
-$receiver = Student::find_by_id($message->user_id);
 $img_path = $message->img_path;
-$date = displayDate($message->date);
-$timeAgo = get_timeAgo($message->date);
+$date = $message->date;
 include (ROOT_PATH . "inc/head.php");
 ?>
 <div class="container section messages">

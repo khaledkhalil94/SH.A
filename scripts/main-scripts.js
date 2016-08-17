@@ -1,9 +1,6 @@
 $(function(){
 
-	// $('#post-date').text(moment($('#post-date').text()).fromNow());
-	// $('#post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
-
-	$('.comments').each(function(index, value) {
+	$('.comments').each(function() {
 		$date = $(this).find('#commentDate').text();
 		$(this).find('#commentDate').text(moment($date).fromNow());
 

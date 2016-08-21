@@ -1,5 +1,5 @@
 <?php 
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 
 
 if (!$session->is_logged_in()) exit(json_encode(array('status' => 'fail', 'msg' => 'You are not logged in!')));

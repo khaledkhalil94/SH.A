@@ -8,7 +8,7 @@ class Messages {
 		global $database;
 
 		$token = $data['token'];
-		$send_by = $data['send_by'];
+		$send_by = USER_ID;
 		$send_to = $data['send_to'];
 		$value = $data['value'];
 
@@ -20,9 +20,6 @@ class Messages {
 			die("Token value is invalid");
 		}
 
-		if($send_by !== USER_ID){
-			die("Authentication error!");
-		}
 
 		$blocks = User::blocked_by_user($send_to);
 		$blocked = [];

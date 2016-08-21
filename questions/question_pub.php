@@ -6,7 +6,7 @@ $id = sanitize_id($_GET['id']) ?: null;
 
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
-	if ($q = Comment::find_by_id($id)) { 
+	if ($q = Comment::get_user_info($id)) { 
 		$q = $q->post_id;
 		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
 		Redirect::redirectTo("question.php?id={$q}#{$id}");
@@ -126,9 +126,9 @@ if($post_modified_date > $post_date){
 				} else {
 					foreach ($comments as $comment):
 						$votes = Comment::get_votes($comment->id); 
-						$commenter = Student::find_by_id($comment->uid);
+						$commenter = Student::get_user_info($comment->uid);
 
-						$img_path = Images::get_profile_pic(Student::find_by_id($comment->uid));
+						$img_path = Images::get_profile_pic(Student::get_user_info($comment->uid));
 
 						$comment_date = $comment->created;
 						$comment_modified_date = $comment->last_modified;
@@ -146,7 +146,7 @@ if($post_modified_date > $post_date){
 									<img src="<?= $img_path; ?>">
 								</a>
 								<div class="content">
-									<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
+									<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name;?></a>
 									<div class="metadata">
 										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 									</div>

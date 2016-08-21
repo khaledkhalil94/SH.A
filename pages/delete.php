@@ -1,5 +1,6 @@
-<?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+ <?php
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+$sec = "pages";
 include (ROOT_PATH . 'inc/head.php');
 $session->adminLock();
 $id = $_GET['id'];

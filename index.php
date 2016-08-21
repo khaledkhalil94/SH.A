@@ -1,6 +1,7 @@
 <?php
-require_once ("classes/init.php");
+require_once ("src/init.php");
 $pageTitle = "Home Page";
+$sec = "index";
 include (ROOT_PATH . "inc/head.php"); 
 
 ?>

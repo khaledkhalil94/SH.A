@@ -145,5 +145,28 @@ span#msg-undo {
     text-align: center;
 }
 
+a.ui.basic.label.msg_compose {
+    position: relative;
+    top: -32px;
+    margin-right: 0px;
+}
 
-th.two.wide.unhide {}
+.ui.search>.results .result .image {
+    float: left;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.ui.search>.results .result .image+.content {
+    margin-top: 10px;
+    margin-left: 40px;
+}
+
+.ui.search>.results .result {
+    padding: 8px;
+}
+
+.ui.search>.results {
+    width: 30%;
+}

@@ -1,10 +1,10 @@
 <?php
-require_once ("classes/init.php");
+require_once ("src/init.php");
 $pageTitle = "Log In";
 if($session->is_logged_in()){
  Redirect::redirectTo();
 }
-
+$sec = "login";
 require(ROOT_PATH . 'inc/head.php'); 
 
 	?>

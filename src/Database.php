@@ -1,5 +1,5 @@
-<?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
+ <?php 
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 /**
  * Database class, opens the connection to the database 

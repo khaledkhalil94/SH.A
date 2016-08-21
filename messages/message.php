@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 if(!$session->is_logged_in()) Redirect::redirectTo("/sha/signup.php");
 
@@ -21,6 +21,7 @@ $arch = $message->deleted == 1 ? true : false;
 $staff = $message->ual == 1 ? true : false;
 $img_path = $message->img_path;
 $date = $message->date;
+$sec = "messages";
 include (ROOT_PATH . "inc/head.php");
 ?>
 <div class="container section messages">

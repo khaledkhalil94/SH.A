@@ -95,7 +95,6 @@ $(function(){
 		value = $('#msg_context').val();
 		token = $('#msg_token').val();
 		send_to = $('#send_to').val();
-		send_by = $('#send_by').val();
 
 		if(value.length <= 0){
 			console.log("msg can't be empty");
@@ -107,7 +106,7 @@ $(function(){
 			url: '/sha/ajax/_messages.php',
 			type: 'post',
 			dataType: 'json',
-			data: {'action': 'msg_send', 'value' : value, 'token' : token, 'send_to' : send_to, 'send_by' : send_by},
+			data: {'action': 'msg_send', 'value' : value, 'token' : token, 'send_to' : send_to},
 
 			success: function(data, status) {
 
@@ -130,7 +129,7 @@ $(function(){
 			}
 		});
 
-		return false;
+		return;
 	});
 });
 
@@ -293,7 +292,6 @@ $(function(){
 	});
 });
 
-
 // function for different ajax calls
 function msg_ajax(action, msgID){
 	$.ajax({
@@ -328,3 +326,181 @@ $(function(){
 $(function(){
 	$('#s_msg_date').text(moment($('#s_msg_date').text()).fromNow());
 });
+
+
+$(function(){
+	var hasLabel = false;
+	var user;
+
+	function label(user){
+		var label =
+				"<a href='/sha/user/"+ user.id +"' class='ui image label'>\
+				<img src='"+ user.image +"'>\
+				"+ user.title +"\
+				<i class='delete icon'></i>\
+				</a>";
+				
+		return label;
+	}
+
+	_search = $('.ui.search');
+
+	_search.search({
+		minCharacters : 2,
+		apiSettings   : {
+			url: '/sha/ajax/_messages.php?un={query}'
+			},
+		onSelect : function(result){
+
+			if(hasLabel) return;
+
+			user = result;
+			console.log(user);
+			_search.search('cancel query');
+
+			input = $(this).find('input')[0];
+
+			$(input).before(label(user));
+			console.log(user.id);
+
+			$(input).attr('type', 'hidden');
+			$(input).next().toggle();
+
+			hasLabel = true;
+		}
+	  });
+
+	$(document).on('click', '#msg_sendto .delete.icon', function(e){
+		e.preventDefault();
+
+		$(this).parent().remove();
+		$(input).attr('type', 'text');
+		$(input).attr('value', '');
+		$(input).next().toggle();
+		hasLabel = false;
+	});
+});
+
+
+
+$(function(){
+
+	_form = $('#msg_compose');
+
+	_form.form({
+		on: 'submit',
+		inline: true,
+		fields: {
+		  send_to: {
+			identifier  : 'send_to',
+			rules: [
+			  {
+				type   : 'empty',
+				prompt : 'Search for a user'
+			  }
+			]
+		  },
+		  content: {
+			identifier  : 'content',
+			rules: [
+			  {
+				type   : 'empty',
+				prompt : 'Subject can\'t be empty.'
+			  }
+			]
+		  }
+		}
+	  });
+
+	var working = false;
+
+
+	_form.submit(function(e){
+		e.preventDefault();
+		e.stopPropagation();
+
+		valid = _form.form('is valid');
+		if(!valid){
+			console.log('form is not valid'); 
+			return;
+		}
+
+		if(working) return;
+		working = true;
+
+		user = $('.ui.search').search('get result');
+		content = $('#msg_context').val();
+		token = $('#msg_token').val();
+
+		if(!user) {
+
+			_form.form('add prompt', 'send_to', 'No user was selected.');
+
+			console.log('No user was selected.');
+			working = false;
+			return false;
+		}
+
+		if(content.length <= 0){
+			console.log("msg can't be empty");
+			working = false;
+			return false;
+		}
+
+		_form.addClass('loading');
+
+		$.ajax({
+			url: '/sha/ajax/_messages.php',
+			type: 'post',
+			dataType: 'json',
+			data: {'action': 'msg_send', 'value' : content, 'token' : token, 'send_to' : user.id},
+
+			success: function(data, status) {
+
+				if(data.status == "1"){ // success
+
+					_form.parent().load('/sha/ajax/inc/msg-send-success.php');
+
+				} else { // failure
+					console.log(data);
+					_form.removeClass('loading');
+					_form.parent().load('/sha/ajax/inc/msg-send-fail.php', 'msg='+data);
+
+				}
+				
+			},
+			error: function(xhr, desc, err) {
+				_form.removeClass('loading');
+				console.log(xhr);
+				console.log("Details: " + desc + "\nError:" + err);
+			}
+		});
+
+		return;
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

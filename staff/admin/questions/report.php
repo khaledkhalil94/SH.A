@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 include (ROOT_PATH . 'inc/head.php');
 $session->adminLock();
 $id = sanitize_id($_GET['id']) ?: null;

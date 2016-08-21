@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 sleep(.6);
 if (!isset($_POST['report'])) exit("Something went wrong!");
 

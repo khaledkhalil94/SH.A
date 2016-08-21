@@ -1,5 +1,5 @@
 <?php 
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 $user = new User();
 $blocked = $user->get_blocks(USER_ID);

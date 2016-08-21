@@ -20,12 +20,12 @@
 		foreach ($comments as $comment):
 			$voted = QNA::has_voted($comment->id, USER_ID);
 			$votes = Comment::get_votes($comment->id); 
-			$commenter = Student::find_by_id($comment->uid);
+			$commenter = Student::get_user_info($comment->uid);
 			$self = $comment->uid === USER_ID;
 			$reports_count = QNA::get_reports("comments", $comment->id) ? QNA::get_reports("comments", $comment->id)[0]->count : null; 
 			$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
 
-			$img_path = Images::get_profile_pic(Student::find_by_id($comment->uid));
+			$img_path = $commenter->img_path;
 
 			$comment_date = $comment->created;
 			$comment_edited_date = $comment->last_modified;
@@ -43,11 +43,11 @@
 
 				<div class="ui minimal comments">
 					<div class="ui comment padded segment" id="<?= $comment->id; ?>">
-						<a class="avatar" href="/sha/user/<?= $comment->uid; ?>/">
-							<img src="<?= $img_path; ?>">
+						<a class="" href="/sha/user/<?= $comment->uid; ?>/">
+							<img class="" src="<?= $img_path; ?>">
 						</a>
 						<div class="content">
-							<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name();?></a>
+							<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name;?></a>
 							<div class="metadata">
 								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 							</div>

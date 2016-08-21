@@ -1,5 +1,5 @@
 <?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
 
@@ -7,6 +7,25 @@ if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
 
 	Redirect::redirectTo('404');
+}
+
+if(isset($_GET['un'])){
+
+	$name = $_GET['un'];
+
+	$users = User::users_search($name);
+
+	$results = [];
+
+
+	foreach ($users as $k => $v) {
+
+		$users[$k]['title'] = '@'.$v['title'];
+		$results[] = $users[$k];
+		
+	}
+
+	die(json_encode(['results' => $results]));
 }
 
 switch ($_POST['action']) {
@@ -135,3 +154,4 @@ switch ($_POST['action']) {
 		exit;
 		break;
 }
+

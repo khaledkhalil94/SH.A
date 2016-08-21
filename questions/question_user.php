@@ -5,7 +5,7 @@ $id = sanitize_id($_GET['id']) ?: null;
 
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
-	if ($q = Comment::find_by_id($id)) { 
+	if ($q = Comment::get_user_info($id)) { 
 		$q = $q->post_id;
 		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
 		Redirect::redirectTo("question.php?id={$q}#{$id}");
@@ -16,7 +16,7 @@ if(!$q = QNA::get_question($id)) {
 
 //if($q->status == 0 && !$session->adminCheck()) $session->message("Page was not found!", "/sha/404.php", "warning");
 
-$user = Student::find_by_id($q->uid);
+$user = Student::get_user_info($q->uid);
 
 if (!($session->userCheck($user) || $session->adminCheck()) && ($q->status == "2")){
 	$session->message("Page was not found!", "/sha/404.php", "warning");
@@ -48,7 +48,7 @@ var $postID = <?= $_GET['id'];?>;
 var $userID = <?= USER_ID;?>;
 </script>
 <body>
-	<div class="container section">
+	<div class="question-page container section">
 		<?= msgs(); ?>
 
 		<?php require_once('question_body_user.php'); ?>

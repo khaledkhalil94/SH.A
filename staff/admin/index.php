@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 $pageTitle = "Admin Control Panel";
 $session->adminLock();
 $allCount = Faculty::articles_count();
@@ -16,6 +16,7 @@ $c_reports = QNA::reports("comments");
 ?>
 <body>
   <?php
+  $sec = "users";
   include (ROOT_PATH . 'inc/head.php'); 
   ?>
 

@@ -458,17 +458,17 @@ class User {
 		return array_key_exists($attribute, $object_vars);
 	}
 	
-	public function attributes(&$values){
-		$attributes = array();
-		$values = array();
-		foreach (static::$db_fields as $field) {
-			if(property_exists($this, $field)){
-				$attributes[$field] = $this->$field;
-				$values[":".$field] = $this->$field;
-			}
-		}
-		return $attributes;
-	}
+	// public function attributes(&$values){
+	// 	$attributes = array();
+	// 	$values = array();
+	// 	foreach (static::$db_fields as $field) {
+	// 		if(property_exists($this, $field)){
+	// 			$attributes[$field] = $this->$field;
+	// 			$values[":".$field] = $this->$field;
+	// 		}
+	// 	}
+	// 	return $attributes;
+	// }
 
 	public static function query($sql){
 		global $connection;
@@ -480,6 +480,42 @@ class User {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * searches for a user in the database by username or id
+	 *
+	 * @param mixed $name
+	 * 
+	 * @return array
+	 */
+	public static function users_search($name){
+		global $connection;
+
+		$id = is_numeric($name) ? 'id' : 'username';
+
+		if($id == 'username'){
+			if($name[0] == '@'){
+				$name = substr($name, 1);
+			}
+		}
+
+		$sql = "SELECT info.username AS title, info.id AS id, pic.path AS image FROM `login_info` AS info
+		LEFT JOIN `profile_pic` AS pic ON info.id = pic.user_id
+		WHERE info.{$id} LIKE ? LIMIT 4";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(1, "%{$name}%");
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+
+			die($error[2]);
+		}
+
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		return $results;
 	}
 }
 

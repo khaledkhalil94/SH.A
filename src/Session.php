@@ -1,5 +1,5 @@
 <?php 
-require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/classes/init.php');
+require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 class Session {
 
@@ -45,7 +45,7 @@ class Session {
 			define("USER_ID", $this->user_id);
 
 			// update user activity
-			if (USER_ID != 1 ) $this->updateActivity(USER_ID);		
+			if (USER_ID != 1 ) $this->updateActivity(USER_ID);
 		}
 
 		// to avoid errors when not logged in

@@ -1,6 +1,7 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 $pageTitle = "Students";
+$sec = "questions";
 include (ROOT_PATH . 'inc/head.php');
 $section = isset($_GET['section']) ? $_GET['section'] : "";
 $selected = "style=\"background-color: #44ff59;\"";

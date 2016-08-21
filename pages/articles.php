@@ -1,5 +1,6 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+$sec = "pages";
 $pageTitle = "Students";
 include (ROOT_PATH . 'inc/head.php');
 if (!isset($_GET['id'])) exit("404 NOT FOUND!");

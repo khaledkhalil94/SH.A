@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 if(!$session->is_logged_in()) Redirect::redirectTo("/sha/signup.php");
 
 if (isset($_GET['msg'])) {
@@ -11,15 +11,12 @@ if (isset($_GET['pm'])) {
 	require_once('convo.php');
 	exit;
 }
-if (isset($_GET["dl"])) {
-	$msgid = $_GET["dl"];
-	if(Messages::deleteMsg(USER_ID, $msgid)){
-		Redirect::redirectTo(basename(__FILE__));
-	}
-}
+
+
 
 $sh = isset($_GET['sh']) ? $_GET['sh'] : 'inb';
 $pageTitle = "Messages";
+$sec = "messages";
 include_once (ROOT_PATH . "inc/head.php");
 ?>
 <div class="container section messages">
@@ -30,6 +27,9 @@ include_once (ROOT_PATH . "inc/head.php");
 	<div class="ui grid">
 		<div class="four wide column">
 			<div class="ui vertical menu">
+				<a class="item <?= $sh == 'compose' ? 'teal active' : null; ?>" href="?sh=compose">
+					Send a new message
+				</a>
 				<a class="item <?= $sh == 'inb' ? 'teal active' : null; ?>" href="?sh=inb">
 					Inbox
 				</a>
@@ -46,7 +46,13 @@ include_once (ROOT_PATH . "inc/head.php");
 		</div>
 		<div class="twelve wide column">
 			<?php 
+
+
 			switch ($sh) {
+				case 'compose':
+					require_once('compose.php');
+					break;
+
 				case 'inb':
 					$messages = Messages::getMsgs(USER_ID);
 					echo Messages::displayMessages($messages, 'inbox');

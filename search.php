@@ -1,5 +1,5 @@
 <?php
-require_once ("classes/init.php");
+require_once ("src/init.php");
 $search_term = "";
 if (isset($_GET["s"])){
 	$search_term = trim($_GET["s"]);

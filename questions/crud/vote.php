@@ -1,5 +1,5 @@
 <?php 
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 // TO BE IMPROVED
 if (!isset($_POST['vote'])) $session->message("Page was not found!", "/sha/templates/404.php", "danger");
 

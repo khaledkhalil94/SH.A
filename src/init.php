@@ -45,7 +45,9 @@ require_once(__DIR__.'/QNA.php');
 
 spl_autoload_register('autoloader');
 
+if($session->is_logged_in()){
 $msgCount = Messages::getMsgsCount();
+}
 
 if (defined('BASE_URL') && defined('USER_ID')) {
 	define('USER_URL', BASE_URL."user/".USER_ID."/");

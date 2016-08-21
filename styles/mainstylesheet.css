@@ -389,3 +389,29 @@ p.form-note {
 .hidden {
     display: none!important;
 }
+
+.ui.menu .menu.elements {
+    margin: 0 auto;
+}
+
+.ui.stackable.menu {
+    background-color: rgb(47, 83, 121);
+    height: 50px;
+    margin: 0px;
+}
+
+.ui.menu .elements a.item {
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.ui.menu .elements a.active.item {
+    background: #1e4165;
+    border-radius: 5px;
+}
+
+.ui.menu .elements a.item:hover {
+    color: white;
+    background: #274667;
+}

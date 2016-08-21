@@ -13,8 +13,10 @@
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
-				<div class="ui negative message reports">
-					<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $id; ?>">This post has been reported <?= $reports_count; ?></a>
+				<div class="report-message">
+					<div class="ui negative compact message reports">
+						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $id; ?>">This post has been reported <?= $reports_count; ?></a>
+					</div>
 				</div>
 			<?php } ?>
 			<br>

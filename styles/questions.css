@@ -180,3 +180,21 @@
 .message-list .message-row .message-details .time a {
     color: inherit;
 }
+
+#comments .comments a img {
+    width: 58px;
+    height: auto;
+    float: left;
+    margin-right: 11px;
+    border-radius: 10%;
+}
+
+.question-page .report-message {
+    text-align: center;
+}
+
+
+
+.question-page .blog-post img.ui.avatar {
+    border-radius: 5px;
+}

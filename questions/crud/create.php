@@ -1,5 +1,6 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+$sec = "questions";
 include (ROOT_PATH . 'inc/head.php');
 if (!$session->is_logged_in()) $session->message("You must log in to submit a new question.", "", "danger");
 

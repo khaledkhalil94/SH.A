@@ -1,5 +1,5 @@
 <?php
-require_once ("../classes/init.php");
+require_once ("../src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
@@ -52,6 +52,7 @@ $has_pic = Images::has_pic($user->id);
 //$pic = Images::get_pic_info($id);
 
 $pageTitle = $name;
+$sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
  ?>
  <script>var userID = <?= $id ?>;</script>

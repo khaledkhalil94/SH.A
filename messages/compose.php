@@ -1,11 +1,8 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 //if (!isset($_GET['to'])) exit("404");
-$user_id = sanitize_id($_GET['to']);
+$user_id = isset($_GET['to']) ? sanitize_id($_GET['to']) : null;
 if (USER_ID == $user_id) $session->message("You can't send a message to yourself.", ".");
-
-$pageTitle = "Send a message";
-include_once (ROOT_PATH . "inc/head.php");
 
 if (isset($_POST['submit'])) {
 	if (!empty(trim($_POST['subject']))) {
@@ -16,42 +13,30 @@ if (isset($_POST['submit'])) {
 	}
 
 }
-$messages = Messages::getConvo(USER_ID, $user_id);
-$user = Student::get_user_info($user_id);
-$staff = ($user->ual === 1) ? true : false;
-if ($staff) exit("You can't send a message to this account.");
 
 ?>
 
-<div class="main">
-	<div class="container">
-		<div class="form">
-			<form action="compose.php?to=<?= $user_id ?>" method="POST">
-				<div class="form-group">
-					<label for="title">Sending to</label>
-					<input class="form-control" id="disabledInput" type="text" value="@<?= $user->username; ?>" disabled>
-				</div>
-				<div class="form-group">
-					<label for="title">Title</label>
-					<input type="text" class="form-control" name="title" value="" />
-				</div>
-				<div class="form-group">
-					<label for="subject">Subject</label>
-					<textarea type="text" class="form-control" name="subject" value="" /></textarea >
-					<input type="hidden" name="user_id" value="<?= $user_id; ?>" />
-					<input type="hidden" name="sender_id" value="<?= USER_ID; ?>" />
-				</div>
-				<br>
-				<br>
-				<!-- <input type="hidden" name="token" value="" /> -->
-				<input class="btn btn-success" type="submit" name="submit" value="Send" />
-				<a class="btn btn-default" href="<?= "."; ?>" role="button">Cancel</a>
 
-			</form>
+
+<div class="ui segment">
+	<form class="ui form" id="msg_compose" action="#">
+		<div class="field">
+			<label>Send to</label>
+			<div class="ui search">
+				<div class="ui icon input" id="msg_sendto">
+					<input name="send_to" class="prompt" type="text" placeholder="Search by username or ID">
+					<i class="search icon"></i>
+				</div>
+				<div class="results"></div>
+			</div>
 		</div>
-	</div>
+		<div class="field">
+			<label>Message</label>
+			<textarea name="content" id="msg_context" rows="2"></textarea>
+		</div>
+		<input type="hidden" name="token" id="msg_token" value="<?= Token::generateToken(); ?>">
+		<br>
+		<button class="ui button green basic" type="submit">Send</button>
+	</form>
 </div>
 
-<?php
-include (ROOT_PATH . 'inc/footer.php');
-?>

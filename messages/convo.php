@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/classes/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 $user_id = sanitize_id($_GET['pm']);
 
 $user = $student->get_user_info($user_id);
@@ -9,6 +9,7 @@ $staff = $user->ual == 1 ? true : false;
 if (USER_ID == $user_id) Redirect::redirectTo();
 
 $pageTitle = "Conversations";
+$sec = "messages";
 include_once (ROOT_PATH . "inc/head.php");
 $messages = Messages::getConvo(USER_ID, $user_id);
 

@@ -1,5 +1,5 @@
 <?php
-require_once ("../../classes/init.php");
+require_once ("../../src/init.php");
 
 // if (!isset($session->user_id)) {
 // 	header("Location: " . BASE_URL . "index.php");

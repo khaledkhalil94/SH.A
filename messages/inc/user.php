@@ -56,7 +56,6 @@
 			<textarea id="msg_context" rows="4" placeholder="Say something to <?= $message->u_name; ?>!"></textarea>
 		</div>
 		<input id="msg_token" type="hidden" value="<?= Token::generateToken(); ?>">
-		<input id="send_by" type="hidden" value="<?= USER_ID ?>">
 		<input id="send_to" type="hidden" value="<?= $message->u_id ?>">
 		<button class="ui button green" type="submit">Send</button>
 	</form>

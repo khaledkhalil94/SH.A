@@ -29,12 +29,9 @@ $imgValidation = array(
 require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
 require_once(__DIR__."/User.php");
-require_once(__DIR__."/Student.php");
 require_once(__DIR__.'/Images.php');
-require_once(__DIR__.'/pagination.php');
-require_once(__DIR__.'/StudentInfo.php');
+require_once(__DIR__.'/Student.php');
 require_once(__DIR__.'/functions.php');
-require_once(__DIR__.'/Faculty.php');
 require_once(__DIR__.'/Comment.php');
 require_once(__DIR__.'/QNA.php');
 
@@ -59,5 +56,25 @@ $faculties = array("Engineering" => 1, "Computer Science" => 2, "Medicine" => 3)
 $greenIcon = "<i style=\"color:green;\" class=\"fa fa-circle status-published\"></i>";
 $greyIcon = "<i style=\"color:grey;\" class=\"fa fa-circle status-published\"></i>";
 $redIcon = "<i style=\"color:red;\" class=\"fa fa-circle status-published\"></i>";
+
+
+// define table names
+
+define('TABLE_COMMENTS', 'comments');
+define('TABLE_USERS', 'students');
+define('TABLE_PROFILE_PICS', 'profile_pic');
+define('TABLE_POINTS', 'points');
+define('TABLE_INFO', 'login_info');
+define('TABLE_PRIVACY', 'user_privacy');
+define('TABLE_QUESTIONS', 'questions');
+define('TABLE_REPORTS', 'reports');
+define('TABLE_MESSAGES', 'messages');
+
+
+
+
+
+
+
 
 ?>

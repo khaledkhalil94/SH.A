@@ -8,8 +8,8 @@
 	<div class="field">
 		<textarea name="content" id="comment-submit-textarea" rows="2" placeholder="Add a new comment.."></textarea>
 	</div>
-	<input type="hidden" name="post_id" class="form-control" value="<?= $id; ?>" >
-	<input type="hidden" name="uid" class="form-control" value="<?= USER_ID; ?>" >
+	<input type="hidden" name="post_id" value="<?= $id; ?>" >
+	<input type="hidden" name="comment_token" value="<?= Token::generateToken(); ?>" >
 	<button name="comment" id="subcomment" style="display:none;" class="ui blue submit disabled icon button">Submit</button>
 </form>
 <hr>
@@ -20,12 +20,9 @@
 		foreach ($comments as $comment):
 			$voted = QNA::has_voted($comment->id, USER_ID);
 			$votes = Comment::get_votes($comment->id); 
-			$commenter = Student::get_user_info($comment->uid);
 			$self = $comment->uid === USER_ID;
-			$reports_count = QNA::get_reports("comments", $comment->id) ? QNA::get_reports("comments", $comment->id)[0]->count : null; 
+			$reports_count = count(QNA::get_reports('comments', $comment->id));
 			$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
-
-			$img_path = $commenter->img_path;
 
 			$comment_date = $comment->created;
 			$comment_edited_date = $comment->last_modified;
@@ -42,12 +39,12 @@
 				<?php } ?>
 
 				<div class="ui minimal comments">
-					<div class="ui comment padded segment" id="<?= $comment->id; ?>">
+					<div class="ui comment padded segment" comment-id="<?= $comment->id; ?>">
 						<a class="" href="/sha/user/<?= $comment->uid; ?>/">
-							<img class="" src="<?= $img_path; ?>">
+							<img class="" src="<?= $comment->path; ?>">
 						</a>
 						<div class="content">
-							<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name;?></a>
+							<a class="author" href="<?= BASE_URL."user/".$comment->uid; ?>/"><?= $comment->fullname;?></a>
 							<div class="metadata">
 								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 							</div>
@@ -186,7 +183,7 @@
 
 
 <div class="ui small modal report">
-	<div class="ui segment">
+	<div class="ui segment report-model">
 		<div class="header">
 			<h3>REPORT</h3>
 		</div>
@@ -198,7 +195,7 @@
 				</div>
 				<br>
 			</div>
-			<div title="THIS SHIT IS BUGGED, I WILL FIX IT LATER" class="ui toggle checkbox">
+			<div class="ui toggle checkbox">
 				<input type="checkbox" name="public" class="hidden" tabindex="0">
 				<label>Add message</label>
 			</div>

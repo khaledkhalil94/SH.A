@@ -34,7 +34,7 @@ $(function(){
 			$values = _form.form('get values');
 
 			$.ajax({
-				url: 'ajax/_auth.php',
+				url: 'controllers/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				//data: {'action': 'login', 'username' : $username, 'password' : $password},
@@ -47,7 +47,7 @@ $(function(){
 						_form.parents('.form.login').removeClass('loading');
 						$('.ui.message').remove();
 						$('#login-hr').remove();
-						_form.parents('.form.login').load('ajax/inc/login-success.php', $username,
+						_form.parents('.form.login').load('controllers/inc/login-success.php', $username,
 							function( response, status, xhr ) {
 								if ( status == "error" ) {
 									console.log(status);
@@ -181,7 +181,7 @@ $(function(){
 				}
 
 				$.ajax({
-					url: 'ajax/_auth.php',
+					url: 'controllers/_auth.php',
 					type: 'post',
 					dataType: 'json',
 					data: {'action' : 'form_check', 'name' : $name, 'value' : $value},
@@ -242,7 +242,7 @@ $(function(){
 				_form.parents('.form.sign-up').addClass('loading');
 
 				$.ajax({
-					url: 'ajax/_auth.php',
+					url: 'controllers/_auth.php',
 					type: 'post',
 					dataType: 'json',
 					data: {'action': 'signup', 'values' : $values},
@@ -255,7 +255,7 @@ $(function(){
 							_form.parents('.form.sign-up').removeClass('loading');
 							$('.ui.compact.warning.message').remove();
 							$('#signup-hr').remove();
-							_form.parents('.form.sign-up').load('ajax/inc/signup-success.php', data.id,
+							_form.parents('.form.sign-up').load('controllers/inc/signup-success.php', data.id,
 								function( response, status, xhr ) {
 									if ( status == "error" ) {
 										console.log(status);

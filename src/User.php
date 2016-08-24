@@ -79,15 +79,15 @@ class User {
 
 
 		// delete from login_info
-		$sql1 = "DELETE FROM `login_info` WHERE id = {$user->id} LIMIT 1";
+		$sql1 = "DELETE FROM ". TABLE_INFO ." WHERE id = {$user->id} LIMIT 1";
 		$queries[] = $con->prepare($sql1);
 
 		// delete from users
-		$sql2 = "DELETE FROM `students` WHERE id = {$user->id} LIMIT 1";
+		$sql2 = "DELETE FROM ". TABLE_USERS ." WHERE id = {$user->id} LIMIT 1";
 		$queries[] = $con->prepare($sql2);
 
 		// delete from user_privacy
-		$sql3 = "DELETE FROM `user_privacy` WHERE user_id = {$user->id} LIMIT 1";
+		$sql3 = "DELETE FROM ". TABLE_PRIVACY ." WHERE user_id = {$user->id} LIMIT 1";
 		$queries[] = $con->prepare($sql3);
 
 		// being transaction and stop auto commit
@@ -125,27 +125,27 @@ class User {
 			// delete from remaining tables 
 
 			// delete pictures
-			$sql = "DELETE FROM `profile_pic` WHERE user_id = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_PROFILE_PICS ." WHERE user_id = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// delete questions
-			$sql = "DELETE FROM `questions` WHERE uid = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_QUESTIONS ." WHERE uid = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// delete comments
-			$sql = "DELETE FROM `comments` WHERE uid = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_COMMENTS ." WHERE uid = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// delete points
-			$sql = "DELETE FROM `points` WHERE user_id = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_POINTS ." WHERE user_id = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// delete reports
-			$sql = "DELETE FROM `reports` WHERE reporter = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_REPORTS ." WHERE reporter = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// delete messages
-			$sql = "DELETE FROM `messages` WHERE user_id OR sender_id = {$user->id} LIMIT 1";
+			$sql = "DELETE FROM ". TABLE_MESSAGES ." WHERE user_id OR sender_id = {$user->id} LIMIT 1";
 			$con->exec($sql);
 
 			// confirm the actions

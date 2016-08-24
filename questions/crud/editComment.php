@@ -1,8 +1,5 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
-//include (ROOT_PATH . 'inc/head.php');
-//$session->adminLock();
-//$id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if(!isset($_POST['data'])) exit(json_encode(array('status'=>'fail','comment_id' => $_POST['id'], 'msg' => 'No data was received.')));
 

@@ -3,106 +3,161 @@ require_once('init.php');
 /**
 * 
 */
-class Comment extends User {
-	public $id, $post_id, $uid, $content, $created, $last_modified, $status="1";
-	protected static $table_name="comments";
-	protected static $db_fields = array();
+class Comment {
 
-	public function __construct(){
-		global $db_fields;
-		self::$db_fields = array_keys((array)$this);
+
+	/**
+     * inserts a new comment
+     *
+     * @param $data array
+	 *
+     * @return int(id)|string(error)
+     */
+	public static function new_comment($data){
+		global $database;
+
+		$PostID = $data['post_id'];
+		$content = $data['content'];
+		$token = $data['token'];
+
+		if(empty(trim($content))){
+			die("Comment can't be empty");
+		}
+
+		if(!is_object(QNA::get_question($PostID))){
+			die("Error! Post was not found.");
+		}
+
+		if(!Token::validateToken($token)){
+			die("Error! Please try again later");
+		}
+
+		unset($data['token']);
+		$data['uid'] = USER_ID;
+
+		$insert = $database->insert_data(TABLE_COMMENTS, $data);
+
+		if($insert === true && $database->error === false) { // success
+
+			return (int)$database->lastId;
+
+		} else {
+
+			return array_shift($database->errors);
+
+		}
 	}
 
-	public static function get_comments($id){
+	
+	/**
+	 * get post comments
+	 *
+	 * @param $postID int
+	 *
+	 * @return object
+	 */
+	public static function get_comments($postID){
 		global $connection;
-		$sql = "SELECT * FROM `comments`
-				WHERE comments.post_id = {$id} AND comments.status = 1
+
+		$sql = "SELECT comments.*, users.id AS uid, CONCAT(users.firstName, ' ', users.lastName) AS fullname,
+				pics.path AS path FROM ". TABLE_COMMENTS ." AS comments
+				INNER JOIN ". TABLE_USERS ." AS users ON users.id = comments.uid
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = comments.uid
+				WHERE comments.post_id = {$postID} AND comments.status = 1
 				ORDER BY created DESC
 				";
-		$stmt = $connection->query($sql);
+
+		$stmt = $connection->prepare($sql);
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+
+			die($error[2]);
+		}
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
-	public function getComment() {
+
+	/**
+	 * get one comment
+	 *
+	 * @param $id int
+	 *
+	 * @return array|string
+	 */
+	public static function getComment($id) {
 		global $connection;
+
 		$sql = "SELECT comments.*,
 				CONCAT(students.firstName, ' ', students.lastName) AS name,
-				profile_pic.path AS img_path FROM `comments`
-				INNER JOIN `students` ON comments.uid = students.id
-				LEFT JOIN `profile_pic` ON comments.uid = profile_pic.user_id
-				WHERE comments.id = {$this->id} 
+				pics.path AS img_path FROM ". TABLE_COMMENTS ." AS comments
+				INNER JOIN ". TABLE_USERS ." AS students ON comments.uid = students.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON comments.uid = pics.user_id
+				WHERE comments.id = {$id} 
 				AND comments.status = 1
-				LIMIT 1
-				";
+				LIMIT 1";
 
 		$stmt = $connection->prepare($sql);
+
 		if(!$stmt->execute()){
-			$error = ($stmt->errorInfo());
-			$_SESSION['err'] = $error[2];
+			$error = $stmt->errorInfo();
 			return $error[2];
 		}
-		return ($stmt->fetch(PDO::FETCH_OBJ));
+
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
+
+	/**
+	 * get count of votes on one comment
+	 *
+	 * @param $id int
+	 *
+	 * @return array|string
+	 */
 	public static function get_votes($id){
 		global $connection;
-		$sql = "SELECT SUM(points.votes) AS count from `points`
-				INNER JOIN `comments` ON points.post_id = comments.id
+
+		$sql = "SELECT SUM(points.votes) AS count from ". TABLE_POINTS ." AS points
+				INNER JOIN ". TABLE_COMMENTS ." AS comments ON points.post_id = comments.id
 				WHERE comments.id = {$id}";
+
 		$stmt = $connection->prepare($sql);
 		if(!$stmt->execute()){
-				$error = ($stmt->errorInfo());
+				$error = $stmt->errorInfo();
 				echo $error[2];
 			}
 		return $connection->query($sql)->fetch()['count'];
 	}
 
 
-// THIS SHIT NEEDS TO BE REWORKED
-	public function insert_comment(){
-		global $comment;
-		$_POST = $_POST['comment'];
-		if(isset($_POST['content'])){
-			if (!empty(trim($_POST['content']))) {
-				// random id number for the comment
-				$_POST['id'] = mt_rand(400000,500000);
-				return $comment->create_user();
-			} else {
-				return "Comment can't be empty.";
-			}
-		}
-	}
-
-	public function deleteComment(){
+	/**
+	 * delete a comment
+	 *
+	 * @param $id int
+	 *
+	 * @return boolean|string
+	 */
+	public static function deleteComment($CommentID){
 		global $connection;
 
+		// delete comment from the comments table
+		$sql = "DELETE FROM ". TABLE_COMMENTS ." where id = {$CommentID}";
+		$connection->exec($sql);
 
-		if(USER_ID !== $this->getComment()->uid){
-			echo json_encode(array('status' => 'fail', 'uid' => $this->getComment()->uid, 'msg' => 'You are not the comment owners!'));
-			exit;
-			//return false;
-		}
+		// delete comment points
+		$sql = "DELETE FROM ". TABLE_POINTS ." where post_id = {$CommentID}";
+		$connection->exec($sql);
 
-		$sql = "DELETE FROM `comments` where id = {$this->id}";
+		// delete comment reports
+		$sql = "DELETE FROM ". TABLE_REPORTS ." where post_id = {$CommentID}";
+		$connection->exec($sql);
 
-		$stmt = $connection->prepare($sql);
-		if($stmt->execute()){
-			return array('status'=>'success','message'=>'Comment has been deleted successfully.');
-		} else {
-			$error = ($stmt->errorInfo());
-			echo $error[2];
-			return false;
-		}
+		return true;
+
 	}
 
 	public static function delete_comments($comments){
-		global $session;
 		global $connection;
-		//if not logged in
-		if(!$session->is_logged_in()) {
-			$session->message("You must login to upvote.", "", "warning");
-			return false;
-		}
 
 		while ($comments) {
 			$comment = array_shift($comments);
@@ -113,13 +168,26 @@ class Comment extends User {
 
 	}
 
-	public static function report($id){
-		global $connection;
-		global $session;
-		$sql = "UPDATE ".static::$table_name." SET report = 1
-				WHERE id = {$id} LIMIT 1";
-		if ($connection->query($sql)) $session->message("Comment has been reported.", "question.php?id={$id}", "success");
+
+	/**
+	 * edit a comment
+	 *
+	 * @param $id int
+	 *
+	 * @return array|string
+	 */
+	public static function edit_comment($commentID, $content){
+		global $database;
+
+		$update = $database->update_data(TABLE_COMMENTS, 'content', $content, 'id', $commentID);
+
+		if($update !== true || $database->error){
+			return array_shift($database->errors);
+		}
+
+		return true;
 	}
+
 
 	public function get_reports(){
 		global $connection;

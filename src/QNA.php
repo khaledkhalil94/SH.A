@@ -4,14 +4,7 @@ require_once('init.php');
 * 
 */
 class QNA extends User {
-	public $id, $faculty_id, $uid, $title, $content, $created, $last_modified, $status="1";
-	protected static $table_name="questions";
-	protected static $db_fields = array();
 
-	public function __construct(){
-		global $db_fields;
-		self::$db_fields = array_keys((array)$this);
-	}
 
 	public static function get_question($id){
 		global $connection;
@@ -34,7 +27,8 @@ class QNA extends User {
 			echo $error[2];
 		}
 
-		return array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
+		//return array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
+		return $stmt->fetch(PDO::FETCH_OBJ);
 		
 	}
 
@@ -74,39 +68,21 @@ class QNA extends User {
 		return $var;
 	}
 
-	public static function upvote($post, $uid){
-		global $connection;
-		global $session;
+	public static function upvote($PostID, $uid){
+		global $database;
 
-		//if not logged in
-		if(!$session->is_logged_in()) {
-			$session->message("You must login to upvote.", "question.php?id={$post->id}", "warning");
-			return false;
-		}
+		$data = ['post_id' => $PostID, 'user_id' => $uid];
+		$insert = $database->insert_data(TABLE_POINTS, $data);
 
-		$sql = "INSERT INTO `points` (post_id, user_id) 
-		VALUES ({$post->id}, {$uid})";
-		$stmt = $connection->prepare($sql);
+		return $insert;
 
-		if(!$stmt->execute()){
-			$error = ($stmt->errorInfo());
-			return $error[2];
-		}
-		return true;
 	}
 
-	public static function downvote($post, $uid){
+	public static function downvote($PostID, $uid){
 		global $connection;
-		global $session;
-
-		//if not logged in
-		if(!$session->is_logged_in()) {
-			$session->message("You must login to downvote.", "question.php?id={$post->id}", "warning");
-			return false;
-		}
 
 		$sql = "DELETE FROM `points`
-				WHERE post_id = {$post->id}
+				WHERE post_id = {$PostID}
 				AND user_id = {$uid}
 				LIMIT 1";
 
@@ -126,14 +102,8 @@ class QNA extends User {
 		$sql = "SELECT 1 FROM points
 				WHERE post_id = {$id}
 				AND user_id = {$uid}";
-		// $stmt = $connection->prepare($sql);
-		// if(!$stmt->execute()){
-		// 	$error = ($stmt->errorInfo());
-		// 	$session->message($error[2], "", "danger");
-		// }
-		// return $connection->query($sql)->fetch();
 
-		return $connection->query($sql)->fetch();
+		return (bool)$connection->query($sql)->fetch();
 	}
 
 	public static function get_votes($id){
@@ -172,57 +142,39 @@ class QNA extends User {
 		return false;
 	}
 
-	public function report(){
-		global $connection;
-		global $session;
+	/**
+	 * report a post/comment
+	 *
+	 * @param int $CommentID
+	 * @param string $content
+	 * @param int $user_id
+	 *
+	 * @return boolean|string
+	 */
+	public function report($CommentID, $content, $user_id){
+		global $database;
 
-		$_POST = $_POST['report'];
+		$data = ['post_id' => $CommentID, 'content' => $content, 'reporter' => $user_id];
 
-		if(!$session->is_logged_in())  exit("You must login to report.");
+		$report = $database->insert_data(TABLE_REPORTS, $data);
 
-		if ($_POST['uid'] !== USER_ID) exit("Error, wrong uid");
+		if($report === true){
 
-		$this->uid = USER_ID;
-		$this->post_id = sanitize_id($_POST['post_id']);
-
-		if(isset($_POST['content'])){
-			$this->content = trim($_POST['content']);
-			if (empty($this->content)) $this->content = "";
-		}
-
-		$_SESSION['this'] = $this;
-
-		$sql = "INSERT INTO `reports`
-				(post_id, reporter, content, date) 
-				VALUES ('{$this->post_id}','{$this->uid}', ? ,CURRENT_TIME)";
-
-		$stmt = $connection->prepare($sql);
-		$stmt->bindParam(1, $this->content);
-
-		//return $stmt->execute();
-
-		if($stmt->execute() == false){
-			$error = $stmt->errorInfo();
-			return json_encode(array('status' => 'fail', 'errKey' => $error[1], 'errMsg' =>  $error[2]));
+			return true;
 		} else {
-			return json_encode(array('status' => 'success'));
+
+			return array_shift($database->errors);
 		}
 	}
 
-	public function get_reports($table="", $post_id=""){
+	public function get_reports($table="", $PostID){
 		global $connection;
 
-		//$sql = "SELECT $table.id as q_id, $table.title as q_title, $table.status as q_status, $table.content as q_content, $table.uid as q_uid,
-		$sql = "SELECT $table.*,
-				CONCAT(students.firstName, ' ', students.lastName) AS reporterName,
-				reports.* "; 
-		if (!empty($post_id)) $sql .= ", (SELECT count(*) FROM `reports` WHERE reports.post_id = {$post_id}) as count ";
-		$sql .="FROM `reports`
+		$sql = "SELECT CONCAT(students.firstName, ' ', students.lastName) AS reporterName,
+				reports.* FROM `reports`
 				INNER JOIN `$table` ON reports.post_id = $table.id 
-				INNER JOIN `students` ON reports.reporter = students.id ";
-				if (!empty($post_id)) {
-					$sql .= "WHERE reports.post_id = {$post_id} ";
-				}
+				INNER JOIN `students` ON reports.reporter = students.id 
+				WHERE reports.post_id = {$PostID}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -231,8 +183,9 @@ class QNA extends User {
 			echo $error[2];
 		}
 
-		$result = array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
+		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
+		return $result;
 		return !empty($result) ? $result->count : false;
 	}
 

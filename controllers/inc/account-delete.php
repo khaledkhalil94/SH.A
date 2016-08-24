@@ -55,7 +55,7 @@ $('#confirm-acc-del').submit(function(e){
 	$pw = $('#password').val();
 
 	$.ajax({
-		url: '/sha/ajax/_account.php',
+		url: '/sha/controllers/_account.php',
 		type: 'post',
 		dataType: 'json',
 		data: {'action' : 'delete_acc', 'email' : $email, 'password' : $pw},

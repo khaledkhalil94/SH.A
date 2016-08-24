@@ -6,7 +6,7 @@ if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
 //Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
 
-	header('Location:404.php');
+	Redirect::redirectTo('404');
 }
 
 // generate a new SID to avoid session fixation

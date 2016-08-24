@@ -48,7 +48,7 @@ $(function(){
 		$output = $this.parents('.field').next().attr('class');
 
 		$.ajax({
-			url: '/sha/ajax/_account.php',
+			url: '/sha/controllers/_account.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action': 'privacy_update', [$name] : $value},
@@ -159,7 +159,7 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 		_form.addClass('loading');
 
 		$.ajax({
-			url: '/sha/ajax/_account.php',
+			url: '/sha/controllers/_account.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': action, 'values' : $newValues},
@@ -258,7 +258,7 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 // delete
 $(function(){
 	$('#acc_del').click(function(){
-		$('.ui.delete.segment').load('/sha/ajax/inc/account-delete.php');
+		$('.ui.delete.segment').load('/sha/controllers/inc/account-delete.php');
 	})
 })
 

@@ -37,7 +37,7 @@ if($q->last_modified > $q->created){
 	$edited = "";
 }
 $isReported = QNA::reports("questions", $id);
-$reports_count = QNA::get_reports("questions", $id) ?: null; 
+$reports_count = count(QNA::get_reports("questions", $id)) ?: null; 
 $reports_count = $reports_count > 1 ? $reports_count." times." : ($reports_count === NULL ? NULL : "1 time.");
 include (ROOT_PATH . 'inc/head.php');
 $name = $q->full_name;

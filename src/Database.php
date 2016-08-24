@@ -89,12 +89,14 @@ class Database {
 	* Updates a row in a table after escaping it's values
 	*
 	* @param $table string => table name
-	* @param $fields array => array of field elements
-	* @param $vlaues array => array of values
+	* @param $fields mixed
+	* @param $vlaues mixed
 	* @param $where string
 	* @param $rule string (default user_id)
 	*
-	* @return boolean true | string
+	* fields and values can either be a string of element or array of elements
+	*
+	* @return boolean
 	*
 	*/
 	public function update_data($table, $fields, $values, $where, $rule=USER_ID){
@@ -104,23 +106,33 @@ class Database {
 			$this->errors[] = "Fields count doesn't match values count.";
 			return false;
 		}
+		//$fields = ['asdf', 'asdfz', 'assad2'];
+		//$values = ['123', '456', '789'];
 
 		$set = '';
 		$r_values = []; // values to be escaped when executing
-		$source = array_combine($fields, $values);
 
-	  foreach ($fields as $field) {
+		if(count($fields) == 1){
 
-		if (isset($source[$field])) {
-		  $set.="`$field`=:$field, ";
+			$set.="`$fields`=:$fields";
+			$r_values[$fields] = $values;
 
-		  $r_values[$field] = $source[$field];
+		} else {
 
+			$source = array_combine($fields, $values);
+			foreach ($fields as $field) {
+
+				if (isset($source[$field])) {
+					$set.="`$field`=:$field, ";
+
+					$r_values[$field] = $source[$field];
+
+				}
+			}
+
+			// remove the last coma from the set
+			$set = substr($set, 0, -2); 
 		}
-	  }
-
-		// remove the last coma from the set
-		$set = substr($set, 0, -2); 
 
 		$sql = "UPDATE `{$table}` SET $set WHERE {$where} = {$rule}";
 
@@ -128,11 +140,12 @@ class Database {
 		$res = $stmt->execute($r_values);
 
 		if(!$res) {
-			//exit($sql);
 			$error = $stmt->errorInfo();
 
 			$this->error = true;
 			$this->errors[] = $error[2];
+
+			return false;
 
 		 } else {
 			return true;
@@ -171,17 +184,16 @@ class Database {
 
 
 	/**
-	* checks a table and return whether a row exists or not
+	* execute a query string
 	*
 	* @param $sql string
 	*
-	* @return boolean true | array of errors
+	* @return boolean|string
 	*
 	*/
-	public static function xcute($sql){
-		global $connection;
+	public function xcute($sql){
 
-		$stmt = $connection->prepare($sql);
+		$stmt = $this->connection->prepare($sql);
 
 		if(!$stmt->execute()){
 			$error = $stmt->errorInfo();

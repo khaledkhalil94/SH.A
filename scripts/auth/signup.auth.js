@@ -91,7 +91,7 @@ _form.form({
 			}
 
 			$.ajax({
-				url: 'ajax/_auth.php',
+				url: 'controllers/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action' : 'form_check', 'name' : $name, 'value' : $value},
@@ -152,7 +152,7 @@ _form.form({
 			_form.parents('.form.sign-up').addClass('loading');
 
 			$.ajax({
-				url: 'ajax/_auth.php',
+				url: 'controllers/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action': 'signup', 'values' : $values},

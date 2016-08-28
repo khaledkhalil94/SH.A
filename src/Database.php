@@ -106,33 +106,24 @@ class Database {
 			$this->errors[] = "Fields count doesn't match values count.";
 			return false;
 		}
-		//$fields = ['asdf', 'asdfz', 'assad2'];
-		//$values = ['123', '456', '789'];
 
 		$set = '';
 		$r_values = []; // values to be escaped when executing
 
-		if(count($fields) == 1){
 
-			$set.="`$fields`=:$fields";
-			$r_values[$fields] = $values;
+		$source = array_combine($fields, $values);
+		foreach ($fields as $field) {
 
-		} else {
+			if (isset($source[$field])) {
+				$set.="`$field`=:$field, ";
 
-			$source = array_combine($fields, $values);
-			foreach ($fields as $field) {
+				$r_values[$field] = $source[$field];
 
-				if (isset($source[$field])) {
-					$set.="`$field`=:$field, ";
-
-					$r_values[$field] = $source[$field];
-
-				}
 			}
-
-			// remove the last coma from the set
-			$set = substr($set, 0, -2); 
 		}
+
+		// remove the last coma from the set
+		$set = substr($set, 0, -2); 
 
 		$sql = "UPDATE `{$table}` SET $set WHERE {$where} = {$rule}";
 

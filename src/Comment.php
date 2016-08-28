@@ -156,18 +156,6 @@ class Comment {
 
 	}
 
-	public static function delete_comments($comments){
-		global $connection;
-
-		while ($comments) {
-			$comment = array_shift($comments);
-			parent::query("DELETE FROM `points` WHERE post_id = {$comment->id}");
-			parent::delete($comment->id);
-		}
-		return true;
-
-	}
-
 
 	/**
 	 * edit a comment
@@ -179,7 +167,7 @@ class Comment {
 	public static function edit_comment($commentID, $content){
 		global $database;
 
-		$update = $database->update_data(TABLE_COMMENTS, 'content', $content, 'id', $commentID);
+		$update = $database->update_data(TABLE_COMMENTS, ['content'], [$content], 'id', $commentID);
 
 		if($update !== true || $database->error){
 			return array_shift($database->errors);

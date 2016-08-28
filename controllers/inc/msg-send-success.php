@@ -7,12 +7,14 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
       header('Location:404.php');
 }
 
+
+$id = $_GET['id'];
 ?>
 
 <div class="ui center" style="text-align:center;">
 	<i class="check massive green circle icon"></i>
 	<br><br>
 	<div class="header">
-		<h2>Your message has been sent.</h2>
+		<h2><a href="/sha/questions/question.php?id=<?= $id ?>">Your questions</a> has been submitted.</h2>
 	</div>
 </div>

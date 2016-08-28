@@ -5,20 +5,62 @@ require_once('init.php');
 */
 class QNA extends User {
 
+	public $PostID;
 
-	public static function get_question($id){
+	public function __construct($PostID=null){
+		$this->PostID = (int)$PostID;
+	}
+
+	/**
+	 * create a new question
+	 *
+	 * @param $title string
+	 * @param $content string
+	 * @param $section int
+	 *
+	 * @return int|array
+	 */
+	public function create($data){
+		global $database;
+
+		//$data = ['title' => $title, 'content' => $content, 'section' => $section, 'uid' => USER_ID];
+		$data['uid'] = USER_ID;
+
+		$insert = $database->insert_data(TABLE_QUESTIONS, $data);
+
+		if($insert === true){
+
+			$PostID = $this->PostID = $database->lastId;
+
+			return (int)$PostID;
+
+		} else {
+
+			return array_shift($database->errors)[2];
+		}
+	}
+
+	/**
+	 * get a question but it's id
+	 *
+	 * @param $PostID int
+	 *
+	 * @return object
+	 */
+	public static function get_question($PostID){
 		global $connection;
 
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
-				login_info.username AS username,
-				faculties.title AS fac, profile_pic.path AS img_path,
-				questions.* FROM `questions`
-				INNER JOIN `students` ON students.id = questions.uid
-				INNER JOIN `login_info` ON login_info.id = questions.uid
-				INNER JOIN `faculties` ON faculties.id = questions.faculty_id
-				LEFT JOIN `profile_pic` ON profile_pic.user_id = questions.uid
+				info.username AS username,
+				sections.title AS fac, pics.path AS img_path,
+				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
-				WHERE questions.id = {$id} AND questions.status != 0";
+				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
+				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
+
+				WHERE questions.id = {$PostID}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -27,47 +69,68 @@ class QNA extends User {
 			echo $error[2];
 		}
 
-		//return array_shift($stmt->fetchAll(PDO::FETCH_OBJ));
 		return $stmt->fetch(PDO::FETCH_OBJ);
+	}
+
+	/**
+	 * get all questions
+	 *
+	 *
+	 * @return object
+	 */
+	public function get_questions($section=""){
+		global $connection;
+
+		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+				info.username AS username,
+				sections.title AS fac, pics.path AS img_path,
+				section.acronym AS acr, section.id AS fid, section.title AS fac,
+				questions.* FROM ". TABLE_QUESTIONS ." AS questions
+
+				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
+				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
+				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section";
+
+		if(!empty($section)) $sql .= " WHERE section.id = '$section' AND questions.status != 0";
+
+		$sql .= " ORDER BY created DESC";
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			return $error[2];
+		}
+
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	/**
+	 * get all sections
+	 *
+	 *
+	 * @return array
+	 */
+	public function get_sections(){
+		global $connection;
+
+		$sql = "SELECT * FROM ".TABLE_SECTIONS."";
+
+		$sections = $connection->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 		
+		return $sections;
 	}
 
-	public static function get_content($faculty_id=""){
-		global $connection;
-		$sql = "SELECT * FROM `questions` 
-				WHERE status != 0 ";
-				if (!empty($faculty_id)) {
-				 $sql .= "AND faculty_id = $faculty_id ";
-				}
-		$sql .= "ORDER BY created DESC
-				";
-		$stmt = $connection->query($sql);
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
-	}
-
-	public static function get_content_by_user($uid){
-		global $connection;
-		$sql = "SELECT * FROM `questions` 
-				WHERE status = 1
-				AND uid = {$uid}
-				ORDER BY created DESC
-				";
-		$stmt = $connection->query($sql);
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
-	}
-
-	public static function sidebar_content($q){
-		$articles = self::get_content($q->faculty_id);
-
-		$var = "";
-		foreach ($articles as $article): 
-			if ($article->id != $q->id): 
-				$var .= "<li class=\"item\"><a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a></li>";
-			endif; 
-		endforeach;
-		return $var;
-	}
-
+	/**
+	 * upvote a post/comment
+	 *
+	 * @param $PostID int
+	 * @param $uid int
+	 *
+	 * @return boolean
+	 */
 	public static function upvote($PostID, $uid){
 		global $database;
 
@@ -75,9 +138,16 @@ class QNA extends User {
 		$insert = $database->insert_data(TABLE_POINTS, $data);
 
 		return $insert;
-
 	}
 
+	/**
+	 * upvote a post/comment
+	 *
+	 * @param $PostID int
+	 * @param $uid int
+	 *
+	 * @return boolean
+	 */
 	public static function downvote($PostID, $uid){
 		global $connection;
 
@@ -95,51 +165,97 @@ class QNA extends User {
 		return true;
 	}
 
-	public static function has_voted($id, $uid){
+	/**
+	 * check if user has voted on a post/comment
+	 *
+	 * @param $PostID int
+	 * @param $uid int
+	 *
+	 * @return boolean
+	 */
+	public static function has_voted($PostID, $uid){
 		global $connection;
-		global $session;
 
-		$sql = "SELECT 1 FROM points
-				WHERE post_id = {$id}
+		$sql = "SELECT 1 FROM ". TABLE_POINTS ."
+				WHERE post_id = {$PostID}
 				AND user_id = {$uid}";
 
 		return (bool)$connection->query($sql)->fetch();
 	}
 
-	public static function get_votes($id){
+	/**
+	 * get total votes on a post/comment
+	 *
+	 * @param $PostID int
+	 *
+	 * @return string
+	 */
+	public static function get_votes($PostID){
 		global $connection;
-		$sql = "SELECT SUM(points.votes) AS count from `points`
-				INNER JOIN `questions` ON points.post_id = questions.id
-				WHERE questions.id = {$id}";
+		$sql = "SELECT SUM(points.votes) AS count from ". TABLE_POINTS ." AS points
+				INNER JOIN ". TABLE_QUESTIONS ." AS questions ON points.post_id = questions.id
+				WHERE questions.id = {$PostID}";
 				$stmt = $connection->prepare($sql);
 		if(!$stmt->execute()){
 				$error = ($stmt->errorInfo());
-				echo $error[2];
+				return $error[2];
 			}
 		return $connection->query($sql)->fetch()['count'];
 	}
 
-	public static function delete($post){
-		global $session;
+	/**
+	 * get comments posted on a question
+	 *
+	 * @return array
+	 */
+	public function get_comments(){
+		return Comment::get_comments($this->PostID);
+	}
 
-		//if not logged in
-		$author =  Student::find_by_id($post->uid);
-		if(!$session->is_logged_in()) {
-			$session->message("You must login to delete.", "", "warning");
-			return false;
-		} elseif(USER_ID == $author->id || $session->adminCheck()){ // if logged user is the post's user or an admin
-			$comments = Comment::get_comments($post->id);
-			if (
-				Comment::delete_comments($comments) &&
-				parent::query("DELETE FROM `points` WHERE post_id = {$post->id}") &&
-				parent::query("UPDATE `questions` SET status = 0 WHERE id = {$post->id}") // hides the post
-				//parent::delete($post->id) // deletes the post
-				){
+	/**
+	 * delete a question
+	 *
+	 * @return boolean
+	 */
+	public function delete(){
+		global $connection;
 
-				return true;
-			}
+		$comments = $this->get_comments();
+
+		while ($comments) {
+			$comment = array_shift($comments);
+			Comment::deleteComment($comment->id);
 		}
-		return false;
+
+		// delete question points
+		$sql = "DELETE FROM ". TABLE_POINTS ." WHERE post_id = {$this->PostID}";
+		$connection->exec($sql);
+
+		// delete the question
+		$sql = "UPDATE ". TABLE_QUESTIONS ." SET status = 0 WHERE id = {$this->PostID}";
+		$connection->exec($sql);
+
+		return true;
+
+	}
+
+	/**
+	 * edit a question
+	 *
+	 * @param $content string
+	 *
+	 * @return array|string
+	 */
+	public function edit_question($content){
+		global $database;
+
+		$update = $database->update_data(TABLE_QUESTIONS, 'content', $content, 'id', $this->PostID);
+
+		if($update !== true || $database->error){
+			return array_shift($database->errors);
+		}
+
+		return true;
 	}
 
 	/**
@@ -167,26 +283,113 @@ class QNA extends User {
 		}
 	}
 
-	public function get_reports($table="", $PostID){
+	/**
+	 * get total reports on a post/comment
+	 *
+	 * @param $table string
+	 * @param $PostID int
+	 *
+	 * @return boolean|string
+	 */
+	public function get_reports($table, $PostID){
 		global $connection;
 
 		$sql = "SELECT CONCAT(students.firstName, ' ', students.lastName) AS reporterName,
 				reports.* FROM `reports`
 				INNER JOIN `$table` ON reports.post_id = $table.id 
-				INNER JOIN `students` ON reports.reporter = students.id 
+				INNER JOIN ". TABLE_USERS ." AS students ON reports.reporter = students.id 
 				WHERE reports.post_id = {$PostID}";
 
 		$stmt = $connection->prepare($sql);
 
 		if(!$stmt->execute()){
 			$error = ($stmt->errorInfo());
-			echo $error[2];
+			return $error[2];
 		}
 
 		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-		return $result;
-		return !empty($result) ? $result->count : false;
+		return !empty($result) ? $result : false;
+	}
+
+	/**
+	 * makes a question public
+	 *
+	 * @param $PostID int
+	 *
+	 * @return boolean|string
+	 */
+	public static function Publish($PostID){
+		global $database;
+
+		$fields = 'status';
+		$values = 1;
+
+		$update = $database->update_data(TABLE_QUESTIONS, $fields, $values, 'id', $PostID);
+
+		if($update === true){
+			return true;
+		} else {
+			return array_shift($database->errors);
+		}
+	}
+
+	/**
+	 * makes a question private
+	 *
+	 * @param $PostID int
+	 *
+	 * @return boolean|string
+	 */
+	public static function unPublish($PostID){
+		global $database;
+
+		$fields = 'status';
+		$values = 2;
+
+		$update = $database->update_data(TABLE_QUESTIONS, $fields, $values, 'id', $PostID);
+
+		if($update === true){
+			return true;
+		} else {
+			return array_shift($database->errors);
+		}
+	}
+
+	public static function get_content($section=""){
+		global $connection;
+		$sql = "SELECT * FROM `questions` 
+				WHERE status = 1 ";
+				if (!empty($section)) {
+				 $sql .= "AND section = $section ";
+				}
+		$sql .= "ORDER BY created DESC
+				";
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public static function get_content_by_user($uid){
+		global $connection;
+		$sql = "SELECT * FROM `questions` 
+				WHERE status = 1
+				AND uid = {$uid}
+				ORDER BY created DESC
+				";
+		$stmt = $connection->query($sql);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public static function sidebar_content($q){
+		$articles = self::get_content($q->section);
+
+		$var = "";
+		foreach ($articles as $article): 
+			if ($article->id != $q->id): 
+				$var .= "<li class=\"item\"><a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a></li>";
+			endif; 
+		endforeach;
+		return $var;
 	}
 
 	public static function reports($table, $id=""){
@@ -207,12 +410,6 @@ class QNA extends User {
 		return $array;
 	}
 
-	public static function delete_report($id){
-		global $connection;
-		$sql = "DELETE FROM `reports` WHERE id = {$id}";
-		return parent::query($sql);
-	}
-
 	public static function did_report($post_id, $uid){
 		global $connection;
 
@@ -221,15 +418,6 @@ class QNA extends User {
 		$stmt = $connection->query($sql);
 		return $stmt->fetch()[1];
 	}
-
-	public static function unPublish($id){
-		return parent::query("UPDATE `questions` SET status = 2 WHERE id = {$id}");
-	}
-
-	public static function Publish($id){
-		return parent::query("UPDATE `questions` SET status = 1 WHERE id = {$id}");
-	}
-
 }
 $QNA = new QNA();
  ?>

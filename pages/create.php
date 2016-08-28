@@ -33,7 +33,7 @@ if(isset($_POST['submit'])){
 			<input type="hidden" name="author" class="form-control" value="staff" >
 			<br>
 			<p><b>Choose department</b></p>
-			<select class="form-control" name="faculty_id">
+			<select class="form-control" name="section">
 				<option value="0">Public</option>
 				<option value="1">Engineering</option>
 				<option value="2">Computer Science</option>

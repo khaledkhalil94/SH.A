@@ -9,7 +9,7 @@ if(!$id){
 $studentInfo = StudentInfo::find_by_id($id) ? StudentInfo::find_by_id($id) : die("User was not found");
 $student = Student::find_by_id($studentInfo->id);
 $img_path = Images::get_profile_pic($student);
-$faculty = Student::get_faculty($student->faculty_id);
+$faculty = Student::get_faculty($student->section);
 $date = displayDate($studentInfo->activity);
 $dateAgo = get_timeago($studentInfo->activity);
 

@@ -6,7 +6,7 @@ $id = sanitize_id($_GET['id']) ?: null;
 
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
-	if ($q = Comment::get_user_info($id)) { 
+	if ($q = Comment::getComment($id)) { 
 		$q = $q->post_id;
 		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
 		Redirect::redirectTo("question.php?id={$q}#{$id}");
@@ -15,6 +15,7 @@ if(!$q = QNA::get_question($id)) {
 	}
 }
 
+if($q->status != 1 && !($session->adminCheck() || $session->userCheck($q->uid))) Redirect::redirectTo('404');
 
 $votes_count = QNA::get_votes($id) ?: "0";
 
@@ -79,7 +80,7 @@ if($post_modified_date > $post_date){
 					<h4>Related questions</h4>
 					<div class="ui segment">
 						<div class="ui relaxed divided list">
-							<?php foreach(QNA::get_content($q->faculty_id) as $item){ ?>
+							<?php foreach(QNA::get_content($q->section) as $item){ ?>
 								<?php if ($q->id != $item->id){ ?>
 									<div class="item">
 										<div class="content">

@@ -11,21 +11,21 @@ $student = Student::find_by_id($id);
 
 if (isset($_POST['submit'])) {
 
-	    switch ($_POST['faculty_id']) {
+	    switch ($_POST['section']) {
 	    	case 'Engineering':
-	    		$_POST['faculty_id'] = "1";
+	    		$_POST['section'] = "1";
 	    		break;
 
 	    	case 'Computer Science':
-	    		$_POST['faculty_id'] = "2";
+	    		$_POST['section'] = "2";
 	    		break;    
 
 	    	case 'Medicine':
-	    		$_POST['faculty_id'] = "3";
+	    		$_POST['section'] = "3";
 	    		break;
 	    
 	    	default:
-	    		$_POST['faculty_id'] = "0";
+	    		$_POST['section'] = "0";
 	    		break;
 	    }
 
@@ -125,10 +125,10 @@ include (ROOT_PATH . "inc/head.php");
 		        </div>
 
 		        <label for="phoneNumber">Select your faculty</label>
-		        <select class="form-control" name="faculty_id">
-				  <option <?= ($student->faculty_id == "1") ? "selected" : null; ?>>Engineering</option>
-				  <option <?= ($student->faculty_id == "2") ? "selected" : null; ?>>Computer Science</option>
-				  <option <?= ($student->faculty_id == "3") ? "selected" : null; ?>>Medicine</option>
+		        <select class="form-control" name="section">
+				  <option <?= ($student->section == "1") ? "selected" : null; ?>>Engineering</option>
+				  <option <?= ($student->section == "2") ? "selected" : null; ?>>Computer Science</option>
+				  <option <?= ($student->section == "3") ? "selected" : null; ?>>Medicine</option>
 				</select>
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />

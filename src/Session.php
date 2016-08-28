@@ -217,8 +217,16 @@ class Session {
 	}
 
 	public function userCheck($user){
-		if($user){
+		if(is_object($user)){
 			if($this->is_logged_in() && $this->user_id === $user->id){
+				return true;
+			} elseif($this->adminCheck()){
+				return true;
+			} else {
+				return false;
+			}
+		} elseif(is_numeric($user)){
+			if($this->is_logged_in() && $this->user_id === $user){
 				return true;
 			} elseif($this->adminCheck()){
 				return true;

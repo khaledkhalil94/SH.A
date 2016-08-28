@@ -29,6 +29,7 @@ if(isset($_POST['action'])){
 
 switch ($action) {
 	case 'new_comment':
+
 		$insert = Comment::new_comment($data);
 
 		if(is_int($insert)){
@@ -43,7 +44,7 @@ switch ($action) {
 
 	case 'get_comment':
 
-		$id = $data['id'];
+		$id = sanitize_id($data['id']);
 
 		$comment = Comment::getComment($id);
 
@@ -59,7 +60,7 @@ switch ($action) {
 	
 	case 'upvote':
 
-		$PostID = $data['comment_id'];
+		$PostID =sanitize_id($data['comment_id']);
 
 		// check if comment exists
 		if(!Comment::getComment($PostID)){
@@ -86,14 +87,14 @@ switch ($action) {
 
 	case 'downvote':
 
-		$PostID = $data['comment_id'];
+		$PostID = sanitize_id($data['comment_id']);
 
 		// check if comment exists
 		if(!Comment::getComment($PostID)){
 			die(json_encode(['status' => false, 'err' => 'Comment was not found.']));
 		}
 
-		// check if user has already upvoted the comment
+		// check if user has not upvoted the comment
 		$voted = QNA::has_voted($PostID, USER_ID);
 		if(!$voted){
 			die(json_encode(['status' => false, 'err' => 'Can\'t downvote this comment, try again later.']));
@@ -146,25 +147,47 @@ switch ($action) {
 		break;
 
 	case 'report':
-		$CommentID = sanitize_id($data['post_id']);
+		$PostID = sanitize_id($data['post_id']);
 		$content = $data['content'];
 		$user_id = USER_ID;
 
-		$comment = Comment::getComment($CommentID);
+		if($data['type'] == 'post'){
 
-		if(!is_array($comment)) die(json_encode(['status' => false, 'id' => $CommentID, 'err' => 'Comment was not found.']));
+			$post = QNA::get_question($PostID);
 
-		$report = QNA::report($CommentID, $content, $user_id);
+			if(!is_object($post)) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Post was not found.']));
 
-		if($report === true){
-			die(json_encode(['status' => true, 'id' => $CommentID]));
-		} else {
-			if($report[1] == 1062) {
+			$report = QNA::report($PostID, $content, $user_id);
 
-				die(json_encode(['status' => false, 'id' => $CommentID, 'err' => 1062]));
+			if($report === true){
+				die(json_encode(['status' => true, 'id' => $PostID]));
 			} else {
-				
-				die(json_encode(['status' => false, 'id' => $CommentID, 'err' => $report[2]]));
+				if($report[1] == 1062) {
+
+					die(json_encode(['status' => false, 'id' => $PostID, 'err' => 1062]));
+				} else {
+					
+					die(json_encode(['status' => false, 'id' => $PostID, 'err' => $report[2]]));
+				}
+			}
+		} else {
+
+			$comment = Comment::getComment($PostID);
+
+			if(!is_array($comment)) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Comment was not found.']));
+
+			$report = QNA::report($PostID, $content, $user_id);
+
+			if($report === true){
+				die(json_encode(['status' => true, 'id' => $PostID]));
+			} else {
+				if($report[1] == 1062) {
+
+					die(json_encode(['status' => false, 'id' => $PostID, 'err' => 1062]));
+				} else {
+					
+					die(json_encode(['status' => false, 'id' => $PostID, 'err' => $report[2]]));
+				}
 			}
 		}
 		break;

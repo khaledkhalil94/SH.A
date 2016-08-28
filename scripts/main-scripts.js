@@ -10,7 +10,6 @@ $(function(){
 
 	$('#questions .items').each(function(index, value) {
 		$date = $(this).find('#post-date').text();
-		console.log(index + moment($date).fromNow());
 		$(this).find('#post-date').text(moment($date).fromNow());
 	});
 });

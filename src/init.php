@@ -69,6 +69,7 @@ define('TABLE_PRIVACY', 'user_privacy');
 define('TABLE_QUESTIONS', 'questions');
 define('TABLE_REPORTS', 'reports');
 define('TABLE_MESSAGES', 'messages');
+define('TABLE_SECTIONS', 'sections');
 
 
 

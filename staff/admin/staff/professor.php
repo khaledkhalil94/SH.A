@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
 }
 $staff = Staff::find_by_id($id);
 
-// $faculty = $user->get_faculty($user->faculty_id);
+// $faculty = $user->get_faculty($user->section);
 // $faculty = ucwords(str_replace("_", " ", $faculty));
 
 

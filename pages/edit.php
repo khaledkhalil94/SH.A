@@ -35,11 +35,11 @@ if(isset($_POST['submit'])){
 			<input type="hidden" name="id" class="form-control" value="<?= $id; ?>" >
 			<?php if($content->type != "main"): ?>
 			<p><b>Choose department</b></p>
-			<select class="form-control" name="faculty_id">
-				<option <?= ($content->faculty_id == "0") ? "selected" : null; ?> value="0">Public</option>
-				<option <?= ($content->faculty_id == "1") ? "selected" : null; ?> value="1">Engineering</option>
-				<option <?= ($content->faculty_id == "2") ? "selected" : null; ?> value="2">Computer Science</option>
-				<option <?= ($content->faculty_id == "3") ? "selected" : null; ?> value="3">Medicine</option>
+			<select class="form-control" name="section">
+				<option <?= ($content->section == "0") ? "selected" : null; ?> value="0">Public</option>
+				<option <?= ($content->section == "1") ? "selected" : null; ?> value="1">Engineering</option>
+				<option <?= ($content->section == "2") ? "selected" : null; ?> value="2">Computer Science</option>
+				<option <?= ($content->section == "3") ? "selected" : null; ?> value="3">Medicine</option>
 			</select>
 			<br>
 				<p><b>Choose Article Type</b></p>

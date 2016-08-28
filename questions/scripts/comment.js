@@ -81,9 +81,10 @@ $(function(){
 
 	$('#subcomment').on('click', function(e){
 		e.preventDefault();
-		var $btn = $(this);
 		var $content = $('textarea').val();
 		token = $("input[name='comment_token']").val();
+
+		$id = $('.blog-post').attr('id');
 
 	 	$('.commentz form').addClass("loading");
 
@@ -94,7 +95,7 @@ $(function(){
 		 	data: {
 					'action': 'new_comment', 
 					'content':$content,
-					'post_id':$postID,
+					'post_id':$id,
 					'token':token
 				 	},
 
@@ -216,11 +217,11 @@ $(function(){
 		var $Post = (_this.parents('.blog-post').length) ? true : false;
 
 		if($Post){ 
-
+			$type = 'post';
 			$element = _this.closest('.blog-post');
 			$postID = $element.attr('id');
 		} else { 
-
+			$type = 'comment';
 			$element = _this.closest('.comment');
 			$postID = $element.attr('comment-id');
 		}
@@ -228,11 +229,11 @@ $(function(){
 		$('.ui.modal.report').modal("setting", {
 			onHidden: function () {
 				$('#report-cancel').click();
-				console.log($orgDOM);
-				if (typeof($orgDOM) !== 'undefined' && !app) {
+
+				if (typeof($orgDOM) !== 'undefined' && !appd) {
 					$('.modal.report .message').replaceWith($orgDOM);
 					$('.modal.report .actions').append($reportConfirm);
-					app = true;
+					appd = true;
 				}
 			}
 		}).modal("show");
@@ -257,7 +258,7 @@ $(function(){
 	$(document).on('click', '#report-confirm', function(e){
 
 		var $newContent = $('#modalForm textarea').val();
-		app = false;
+		appd = false;
 		// ADD class="ui segment loading" instead of the loader
 		$loader = 
 				"<div class=\"ui container segment\" style=\"margin:40px 0px;\">\
@@ -277,6 +278,7 @@ $(function(){
 			dataType : 'json',
 			data: {
 					'action':'report',
+					'type' : $type,
 					'content':$newContent,
 					'post_id':$postID
 				},
@@ -488,10 +490,10 @@ $(function(){
 			success: function(data, status) {
 
 				if(data.status == true) {
-					var $editedDOM = '(edited <span id="editedDate" title="'+data.edit_date+'">'+moment(data.edit_date).fromNow()+'</span>)';
+					var $editedDOM = '(edited <span id="editedDate">A few seconds ago</span>)';
 
 					if($commentDOM.find('#editedDate').length > 0){
-						$commentDOM.find('#editedDate').text(moment(data.edit_date).fromNow())
+						$postDOM.find('#editedDate').text('A few seconds ago');
 					} else {
 						$commentDOM.find('.metadata').append($editedDOM);
 					}
@@ -505,8 +507,6 @@ $(function(){
 			},
 			error: function(xhr, desc, err) {
 				$('#cancel').click();
-
-				console.log(data);
 				working = false;
 			}
 		}); // end ajax call

@@ -4,7 +4,7 @@ require_once('init.php');
 class Student extends User {
 	
 	protected static $table_name="students";
-	//public $firstName,$lastName,$id,$address,$phoneNumber,$faculty_id,$has_pic,$gender,$about,$website,$skype,$twitter,$github,$facebook,
+	//public $firstName,$lastName,$id,$address,$phoneNumber,$section,$has_pic,$gender,$about,$website,$skype,$twitter,$github,$facebook,
 
 	public $error=false, $errMsg;
 

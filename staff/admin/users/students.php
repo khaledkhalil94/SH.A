@@ -39,8 +39,8 @@ $session->adminLock();
 				 foreach ($students as $student) {
 					$num++;
 						if (StudentInfo::find_by_id($student->id)) {
-							//$faculty = Student::get_faculty($student->faculty_id);
-							$faculty = array_search($student->faculty_id, $faculties);
+							//$faculty = Student::get_faculty($student->section);
+							$faculty = array_search($student->section, $faculties);
 							$img_path = $Images->get_profile_pic($student);
 							$dateAgo = get_timeago(StudentInfo::find_by_id($student->id)->activity);
 ?>

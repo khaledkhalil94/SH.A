@@ -25,7 +25,7 @@ $limit = 2;
 					<div class="sidebar-module sidebar-module-inset">
 					<?php if($article->type == "article") { ?>
 						<h4>Other Articles in <?= ucwords(str_replace("_", " ", $article->fac_name)); ?></h4>
-						<?= Faculty::sidebar_content($article->id, $article->faculty_id) ?: "There's nothing here!"; ?>
+						<?= Faculty::sidebar_content($article->id, $article->section) ?: "There's nothing here!"; ?>
 						<hr>
 						<h4>News</h4>
 						<?= Faculty::sidebar_news(); ?>

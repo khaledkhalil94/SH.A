@@ -21,7 +21,7 @@
 			$voted = QNA::has_voted($comment->id, USER_ID);
 			$votes = Comment::get_votes($comment->id); 
 			$self = $comment->uid === USER_ID;
-			$reports_count = count(QNA::get_reports('comments', $comment->id));
+			$reports_count = QNA::get_reports("comments", $comment->id) ? count(QNA::get_reports("comments", $comment->id)) : null; 
 			$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
 
 			$comment_date = $comment->created;
@@ -39,7 +39,7 @@
 				<?php } ?>
 
 				<div class="ui minimal comments">
-					<div class="ui comment padded segment" comment-id="<?= $comment->id; ?>">
+					<div class="ui comment padded segment" id="<?= $comment->id; ?>" comment-id="<?= $comment->id; ?>">
 						<a class="" href="/sha/user/<?= $comment->uid; ?>/">
 							<img class="" src="<?= $comment->path; ?>">
 						</a>

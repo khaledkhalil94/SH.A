@@ -104,7 +104,6 @@ switch ($_POST['action']) {
 		$fields = array_keys($data);
 		$values = array_values($data);
 
-
 		$update = $database->update_data("user_privacy", $fields, $values, "user_id");
 		if($update === true){ // update success
 

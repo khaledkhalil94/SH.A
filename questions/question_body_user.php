@@ -100,7 +100,7 @@
 			<h4>Related questions</h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list">
-					<?php foreach(QNA::get_content($q->faculty_id) as $item){ ?>
+					<?php foreach(QNA::get_content($q->section) as $item){ ?>
 						<?php if ($q->id != $item->id){ ?>
 							<div class="item">
 								<div class="content">

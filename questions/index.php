@@ -3,30 +3,25 @@ require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 $pageTitle = "Students";
 $sec = "questions";
 include (ROOT_PATH . 'inc/head.php');
-$section = isset($_GET['section']) ? $_GET['section'] : "";
-$selected = "style=\"background-color: #44ff59;\"";
-switch ($section) {
-	case 'eng':
-		$qs = QNA::get_content(1);
-		$Count = count($qs);
-		$sec = array('1', 'Engineering');
-		break;
-	case 'cs':
-		$qs = QNA::get_content(2);
-		$Count = count($qs);
-		$sec = array('2','Computer Science');
-		break;
-	case 'md':
-		$qs = QNA::get_content(3);
-		$Count = count($qs);
-		$sec = array('3', 'Medicine');
-		break;
-	default:
-		$qs = QNA::get_content();
-		$Count = count($qs);
-		$sec = array('0', 'All');
-		break;
+$sec = isset($_GET['section']) ? $_GET['section'] : "";
+
+$sections = $QNA->get_sections();
+//$qs = $QNA->get_questions($section);
+
+foreach ($sections as $s) {
+	switch ($s['acronym']) {
+		case $sec:
+			$qs = $QNA->get_questions($s['id']);
+			$sec_name = $s['title'];
+			break 2; // breaks out of the two casses (foreach and switch)
+		
+		default:
+			$qs = $QNA->get_questions();
+			$sec_name = 'All';
+			break;
+	}
 }
+
 ?>
 <body>
 	<div class="container section">
@@ -42,7 +37,7 @@ switch ($section) {
 				<p style="display:inline;">Show questions from: </p>
 				<div class="ui inline dropdown">
 					<div class="text">
-					<?= $sec[1]; ?>
+					<?= $sec_name ?>
 					</div>
 					<i class="dropdown icon"></i>
 					<div class="menu">
@@ -51,20 +46,13 @@ switch ($section) {
 							All
 							</div>
 						</a>
-						<a href="?section=eng">
-						<div class="item <?= $sec[0] == "1" ? "active selected" : null; ?>">
-							 Engineering</div>
-						</a>
-						<a href="?section=cs">
-							<div class="item <?= $sec[0] == "2" ? "active selected" : null; ?>">
-							 Computer Science
+					<?php foreach($sections AS $section): ?>
+						<a href="?section=<?= $section['acronym'] ?>">
+							<div class="item <?= $section['acronym'] == $sec ? "active selected" : null; ?>">
+							<?= $section['title']; ?>
 							</div>
 						</a>
-						<a href="?section=md">
-							<div class="item <?= $sec[0] == "3" ? 'active selected' : null; ?>">
-							Medicine
-							</div>
-						</a>
+					<?php endforeach; ?>
 					</div>
 				</div>
 					<br>
@@ -74,7 +62,7 @@ switch ($section) {
 
 
 		<?php if ($session->is_logged_in()): ?>
-			<a type="button" href="crud/create.php" class="ui green button">Ask a new question</a>
+			<a type="button" href="./new" class="ui green button">Ask a new question</a>
 		<?php endif; ?>
 		<?= msgs(); ?>
 		<hr>
@@ -88,10 +76,11 @@ switch ($section) {
 
 					$user = $student->get_user_info($q->uid);
 					if(!$user) continue;
+					if(($q->status != 1) && ($q->uid != USER_ID)) continue;
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
-					$reports_count = QNA::get_reports("questions", $q->id) ?: null;
+					$reports_count = QNA::get_reports("questions", $q->id) ? count(QNA::get_reports("questions", $q->id)) : null;
 					$img_path = $user->img_path ?: DEF_PIC;
 					?>
 				 	<div class="ui items">
@@ -117,7 +106,7 @@ switch ($section) {
 						 					<?= $commentsCount; ?>
 					 					</a>
 				 					</span>
-				 					<?php if($session->adminCheck()){ ?>
+				 					<?php if($session->adminCheck() && $reports_count >= 1){ ?>
 				 					<span class="reports" title="Reports" style="font-size:medium;">
 					 					<a href="./question.php?id=<?= $q->id; ?>">
 						 					<i class="mdi mdi-flag"></i>

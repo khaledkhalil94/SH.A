@@ -20,21 +20,21 @@ if (isset($_POST['submit'])) {
 	    $user->lastName = $_POST['lastName'];
 	    $user->bio = $_POST['bio'];
 
-	    switch ($_POST['faculty_id']) {
+	    switch ($_POST['section']) {
 	    	case 'Engineering':
-	    		$user->faculty_id = "1";
+	    		$user->section = "1";
 	    		break;
 
 	    	case 'Computer Science':
-	    		$user->faculty_id = "2";
+	    		$user->section = "2";
 	    		break;    
 
 	    	case 'Medicine':
-	    		$user->faculty_id = "3";
+	    		$user->section = "3";
 	    		break;
 	    
 	    	default:
-	    		$user->faculty_id = "0";
+	    		$user->section = "0";
 	    		break;
 	    }
 
@@ -144,10 +144,10 @@ $img_path = Images::get_profile_pic($id);
 		        </div>
 
 		        <label for="phoneNumber">Select your faculty</label>
-		        <select class="form-control" name="faculty_id">
-				  <option <?php if ($user->faculty_id == "1") {echo "selected";} ?>>Engineering</option>
-				  <option <?php if ($user->faculty_id == "2") {echo "selected";} ?> >Computer Science</option>
-				  <option <?php if ($user->faculty_id == "3") {echo "selected";} ?>>Medicine</option>
+		        <select class="form-control" name="section">
+				  <option <?php if ($user->section == "1") {echo "selected";} ?>>Engineering</option>
+				  <option <?php if ($user->section == "2") {echo "selected";} ?> >Computer Science</option>
+				  <option <?php if ($user->section == "3") {echo "selected";} ?>>Medicine</option>
 				</select>
 				<br>
 		        <input type="submit" class="btn btn-primary" name="submit" value="Update" />

@@ -61,7 +61,8 @@ include (ROOT_PATH . "inc/head.php");
 		</div>
 	</div>
 </div>
-<script src="../scripts.js"></script>
+<script src="<?= BASE_URL ?>scripts/user-src.js"></script>
+<script src="<?= BASE_URL ?>scripts/user-settings-vlads.js"></script>
 <?php
 include (ROOT_PATH . 'inc/footer.php');
 ?>

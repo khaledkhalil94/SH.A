@@ -191,18 +191,20 @@ class Messages {
 	public static function hideMsg($id){
 
 		// TODO: check if message is already hidden or not
-
+		global $database;
+		
 		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id}";
 
-		return Database::xcute($sql);
+		return $database->xcute($sql);
 	}
 
 	// unHides a messages
 	public static function unHideMsg($id){
-
+		global $database;
+		
 		$sql = "UPDATE `messages` SET deleted = 0 WHERE id = {$id}";
 
-		return Database::xcute($sql);
+		return $database->xcute($sql);
 	}
 
 	// get count of unread messages by user id

@@ -6,7 +6,6 @@ include (ROOT_PATH . 'inc/head.php');
 $sec = isset($_GET['section']) ? $_GET['section'] : "";
 
 $sections = $QNA->get_sections();
-//$qs = $QNA->get_questions($section);
 
 foreach ($sections as $s) {
 	switch ($s['acronym']) {
@@ -42,7 +41,7 @@ foreach ($sections as $s) {
 					<i class="dropdown icon"></i>
 					<div class="menu">
 						<a href=".">
-							<div class="item <?= $sec[0] == "0" ? "active selected" : null; ?>">
+							<div class="item <?= $sec == "" ? "active selected" : null; ?>">
 							All
 							</div>
 						</a>

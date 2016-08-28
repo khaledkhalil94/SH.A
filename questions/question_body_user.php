@@ -9,7 +9,7 @@
 					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
 					<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
 					
-					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <?= $q->fac; ?> <?= $edited; ?></p>
+					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
@@ -23,7 +23,6 @@
 			<div class="ui left aligned container" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
-					<i class="close icon"></i>
 					This post is unPublished, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
 				</div>
 				<?php } ?>
@@ -75,7 +74,7 @@
 				<p><?= $q->content; ?></p>
 			</div>
 
-
+<hr><br>
 			<div class="actions">
 				<?php if($voted){ ?>
 				<div class="ui labeled button" tabindex="0">
@@ -99,13 +98,14 @@
 		<div class="sidebar-module sidebar-module-inset">
 			<h4>Related questions</h4>
 			<div class="ui segment">
-				<div class="ui relaxed divided list">
-					<?php foreach(QNA::get_content($q->section) as $item){ ?>
+				<div class="ui relaxed divided list" id="sidebar-content">
+					<?php foreach($QNA->get_questions($q->section, true, 5) as $item){ ?>
 						<?php if ($q->id != $item->id){ ?>
 							<div class="item">
 								<div class="content">
 									<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 								</div>
+								<span id="sidebar-date"><?= $item->created; ?></span>
 							</div>
 						<?php } ?>
 					<?php } ?>
@@ -113,9 +113,9 @@
 			</div>
 			<h4>More questions by <a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
 			<div class="ui segment">
-				<div class="ui relaxed divided list">
+				<div class="ui relaxed divided list" id="sidebar-content">
 					<?php
-					$items = QNA::get_content_by_user($q->uid);
+					$items = $QNA->get_posts_by_user($q->uid);
 					if (count($items) < 2) {
 						echo "<p>This user doesn't have any other questions.</p>";
 					} else {
@@ -125,6 +125,7 @@
 							<div class="content">
 								<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 							</div>
+							<span id="sidebar-date"><?= $item->created; ?></span>
 						</div>
 					<?php 
 							} 

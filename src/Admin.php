@@ -158,6 +158,24 @@ class Admin extends User {
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
+	public static function reports($table, $id=""){
+		global $connection;
+
+		$sql = "SELECT DISTINCT reports.post_id FROM reports
+				INNER JOIN `{$table}` ON reports.post_id = {$table}.id ";
+		if (!empty($id)) {
+			$sql .= "WHERE post_id = {$id}";
+			return $connection->query($sql)->fetch();
+		}
+		$array = array();
+		$stmt = $connection->prepare($sql);
+		$stmt->execute();
+		while ($row = $stmt->fetch()) {
+			$array[] = $row[0];
+		}
+		return $array;
+	}	
+
 }
 
 ?>

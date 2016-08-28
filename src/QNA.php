@@ -2,6 +2,8 @@
 require_once('init.php');
 /**
 * 
+* handles all the actions for the question page, questions
+*
 */
 class QNA extends User {
 
@@ -52,7 +54,7 @@ class QNA extends User {
 
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
 				info.username AS username,
-				sections.title AS fac, pics.path AS img_path,
+				sections.title AS fac, sections.acronym AS acr, pics.path AS img_path,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
 				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
@@ -78,7 +80,7 @@ class QNA extends User {
 	 *
 	 * @return object
 	 */
-	public function get_questions($section=""){
+	public function get_questions($section="", $limit=true, $count=10, $order='CREATED DESC'){
 		global $connection;
 
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
@@ -95,7 +97,9 @@ class QNA extends User {
 
 		if(!empty($section)) $sql .= " WHERE section.id = '$section' AND questions.status != 0";
 
-		$sql .= " ORDER BY created DESC";
+		$sql .= " ORDER BY {$order}";
+
+		if($limit) $sql .= " LIMIT {$count}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -236,7 +240,6 @@ class QNA extends User {
 		$connection->exec($sql);
 
 		return true;
-
 	}
 
 	/**
@@ -322,8 +325,8 @@ class QNA extends User {
 	public static function Publish($PostID){
 		global $database;
 
-		$fields = 'status';
-		$values = 1;
+		$fields = ['status'];
+		$values = [1];
 
 		$update = $database->update_data(TABLE_QUESTIONS, $fields, $values, 'id', $PostID);
 
@@ -344,8 +347,8 @@ class QNA extends User {
 	public static function unPublish($PostID){
 		global $database;
 
-		$fields = 'status';
-		$values = 2;
+		$fields = ['status'];
+		$values = [2];
 
 		$update = $database->update_data(TABLE_QUESTIONS, $fields, $values, 'id', $PostID);
 
@@ -356,22 +359,17 @@ class QNA extends User {
 		}
 	}
 
-	public static function get_content($section=""){
+	/**
+	 * get all posts by a user id
+	 *
+	 * @param $uid int
+	 *
+	 * @return object
+	 */
+	public function get_posts_by_user($uid){
 		global $connection;
-		$sql = "SELECT * FROM `questions` 
-				WHERE status = 1 ";
-				if (!empty($section)) {
-				 $sql .= "AND section = $section ";
-				}
-		$sql .= "ORDER BY created DESC
-				";
-		$stmt = $connection->query($sql);
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
-	}
-
-	public static function get_content_by_user($uid){
-		global $connection;
-		$sql = "SELECT * FROM `questions` 
+		
+		$sql = "SELECT * FROM ". TABLE_QUESTIONS ."
 				WHERE status = 1
 				AND uid = {$uid}
 				ORDER BY created DESC
@@ -380,44 +378,6 @@ class QNA extends User {
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
-	public static function sidebar_content($q){
-		$articles = self::get_content($q->section);
-
-		$var = "";
-		foreach ($articles as $article): 
-			if ($article->id != $q->id): 
-				$var .= "<li class=\"item\"><a href=\"question.php?id={$article->id}\"><p>{$article->title}</p></a></li>";
-			endif; 
-		endforeach;
-		return $var;
-	}
-
-	public static function reports($table, $id=""){
-		global $connection;
-
-		$sql = "SELECT DISTINCT reports.post_id FROM reports
-				INNER JOIN `{$table}` ON reports.post_id = {$table}.id ";
-		if (!empty($id)) {
-			$sql .= "WHERE post_id = {$id}";
-			return $connection->query($sql)->fetch();
-		}
-		$array = array();
-		$stmt = $connection->prepare($sql);
-		$stmt->execute();
-		while ($row = $stmt->fetch()) {
-			$array[] = $row[0];
-		}
-		return $array;
-	}
-
-	public static function did_report($post_id, $uid){
-		global $connection;
-
-		$sql = "SELECT 1 FROM `reports` WHERE post_id = {$post_id} AND reporter = {$uid}";
-
-		$stmt = $connection->query($sql);
-		return $stmt->fetch()[1];
-	}
 }
 $QNA = new QNA();
  ?>

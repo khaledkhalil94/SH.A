@@ -49,7 +49,7 @@ $sections = $QNA->get_sections();
 		</div>
 
 	</div>
-	<script src='../scripts/create_script.js'></script>
+	<script src='<?= BASE_URL ?>scripts/q_create.js'></script>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
 </html>

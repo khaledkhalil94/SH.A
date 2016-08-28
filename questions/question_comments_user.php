@@ -1,6 +1,3 @@
-<br>
-<br>
-<br>
 <?php $comments = Comment::get_comments($id); ?>
 
 <h3>Comments (<span id="commentscount"><?= count($comments); ?></span>): </h3>

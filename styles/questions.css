@@ -198,3 +198,16 @@
 .question-page .blog-post img.ui.avatar {
     border-radius: 5px;
 }
+
+#sidebar-content .item .content {
+    display: inline-table;
+}
+
+#sidebar-content #sidebar-date {
+    font-size: smaller;
+    color: #afafaf;
+}
+
+.ui.vertical.segment.title-form.form {
+    border-bottom: none;
+}

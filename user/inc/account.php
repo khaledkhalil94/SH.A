@@ -47,6 +47,3 @@ $session->userLock($user);
 		</form>
 	</div>
 </div>
-
-<script src="/sha/scripts/auth/forms-vald.js">
-</script>

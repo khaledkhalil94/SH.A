@@ -14,6 +14,22 @@ $(function(){
 	});
 });
 
+
+//parsing and displaying times
+$(function(){
+
+	// question date in the question page
+	$('#post-date').text(moment($('#post-date').text()).fromNow());
+	$('#post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
+
+	// question date in the sidebar
+	$('#sidebar-content .item').each(function(index, value) {
+		$date = $(this).find('#sidebar-date').text();
+		$(this).find('#sidebar-date').text(moment($date).fromNow());
+	});
+});
+
+
 $('.ui.dropdown').dropdown();
 
 function getUrlVars(){

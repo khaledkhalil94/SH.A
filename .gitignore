@@ -6,3 +6,5 @@ inc/navbar-old.php
 scripts/node_modules/
 scripts/dist/
 scripts/lib/
+scripts/gulpfile.js
+scripts/package.json

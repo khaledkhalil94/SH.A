@@ -1,19 +1,18 @@
-#!/usr/bin/env node
-
 'use strict';
 var gulp = require('gulp');
 var minify = require('gulp-minify');
  
 
 gulp.task('compress', function() {
-  gulp.src('lib/*.js')
+  gulp.src('./*.js')
     .pipe(minify({
         ext:{
-            src:'-debug.js',
-            min:'.js'
+            src:'.src.js',
+            min:'.min.js'
         },
         exclude: ['tasks'],
-        ignoreFiles: ['.combo.js', '-min.js']
+        noSource: true,
+        ignoreFiles: ['.combo.js', '-min.js', 'gulpfile.js']
     }))
     .pipe(gulp.dest('dist'))
 });

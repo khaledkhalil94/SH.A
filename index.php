@@ -6,17 +6,19 @@ include (ROOT_PATH . "inc/head.php");
 
 ?>
 <body>
-  <div class="main">
-    <div class="content">
+	<div class="container section">
+		<div class="content">
 
-      <?= msgs(); ?>
-      <?php include (ROOT_PATH . 'inc/body/carousel.php') ?>
-      <div class="row">
-        <?php include (ROOT_PATH . 'inc/body/newsticker.php') ?>
-        <?php include (ROOT_PATH . 'inc/body/accordion.php') ?>
-      </div>
-    </div>
-  </div>
-  <?php include (ROOT_PATH . 'inc/footer.php') ?>
+			<?= msgs(); ?>
+			<?php include (ROOT_PATH . 'inc/body/carousel.php') ?>
+			<br>
+			<br>
+			<br>
+			<div class="ui icon button">
+				<i class="add icon"></i>
+			</div>
+		</div>
+	</div>
+	<?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

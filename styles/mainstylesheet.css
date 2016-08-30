@@ -415,3 +415,7 @@ p.form-note {
     color: white;
     background: #274667;
 }
+
+.ui.popup.wide.top.center.transition.visible {
+    top: 237px!important;
+}

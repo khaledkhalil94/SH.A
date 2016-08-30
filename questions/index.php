@@ -90,7 +90,7 @@ foreach ($sections as $s) {
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price">Asked by <a href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name;?></a></span>
+				 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $user->id; ?>" href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name;?></a></span>
 				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />

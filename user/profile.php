@@ -73,7 +73,7 @@ if($session->is_logged_in() && !$self){
 
 }?>
 </div>
-<script src="/sha/user/scripts.js"></script>
+<script src="/sha/scripts/user-src.js"></script>
 <?php
 include (ROOT_PATH . 'inc/footer.php');
 ?>

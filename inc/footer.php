@@ -22,13 +22,7 @@
                 </li>
                 <li><i class="fa fa-phone" title="Phone"></i>
                   <p>19644</p>
-                  <!--popover activation-->
-                  <script>
-                    $(document).ready(function(){
-                      $('.btn').popover(); 
-                    });
-                  </script>
-                  <button class="btn btn-info btn-xs" data-html="true" data-placement="right" data-toggle="popover" data-trigger="focus" data-content="<ul><li>01005600067</li> <li>01005600068</li> <li>01005600069</li>">More</button>
+                 <button class="btn btn-info btn-xs" data-html="true" data-placement="right" data-toggle="popover" data-trigger="focus" data-content="<ul><li>01005600067</li> <li>01005600068</li> <li>01005600069</li>">More</button>
                 </li>
                 <li><i class="fa fa-fax" title="Fax"></i>
                   <p>+202 26870887</p>

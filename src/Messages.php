@@ -340,7 +340,7 @@ class Messages {
 			$html .= "<a href='/sha/user/$senderID/'><img class='ui avatar image' src=' $message->img_path '></a>";
 			$html .= "</div>";
 			$html .= "<div class='ten wide column'>";
-			$html .= "<a href='/sha/user/$senderID'> $message->u_fullname </a>";
+			$html .= "<a class='user-title' user-id='$senderID' href='/sha/user/$senderID'> $message->u_fullname </a>";
 			$html .= "<br><div class='time' id='msg_date' title='$date'>$date</div>";
 			$html .="</div>";
 			$html .="</td>";

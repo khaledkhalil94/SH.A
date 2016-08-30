@@ -101,8 +101,8 @@ switch ($_POST['action']) {
 		$data = $_POST;
 		unset($_POST);
 
-		$fields = array_keys($data);
-		$values = array_values($data);
+		$fields = [$data['fields']];
+		$values = [$data['values']];
 
 		$update = $database->update_data("user_privacy", $fields, $values, "user_id");
 		if($update === true){ // update success
@@ -115,7 +115,6 @@ switch ($_POST['action']) {
 		}
 
 		break;
-	
 
 	default:
 		break;

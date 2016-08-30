@@ -1,5 +1,5 @@
 <?php $comments = Comment::get_comments($id); ?>
-
+<br>
 <h3>Comments (<span id="commentscount"><?= count($comments); ?></span>): </h3>
 <form class="ui reply form" action="">
 	<div class="field">
@@ -41,7 +41,7 @@
 							<img class="" src="<?= $comment->path; ?>">
 						</a>
 						<div class="content">
-							<a class="author" href="<?= BASE_URL."user/".$comment->uid; ?>/"><?= $comment->fullname;?></a>
+							<a class="author user-title" user-id="<?= $user->id; ?>" href="<?= BASE_URL."user/".$comment->uid; ?>/"><?= $comment->fullname;?></a>
 							<div class="metadata">
 								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 							</div>

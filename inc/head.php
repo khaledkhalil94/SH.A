@@ -9,9 +9,6 @@
 
 	<link rel="shortcut icon" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg" type="image/vnd.microsoft.icon" />
 	<script src="<?= BASE_URL; ?>scripts/jquery-1.11.3.min.js"></script>
-	<script src="<?= BASE_URL; ?>scripts/bootstrap-3.3.5.min.js"></script>
-	<script type='text/javascript' src='<?= BASE_URL; ?>scripts/carousel.js'></script>
-	<script type='text/javascript' src='<?= BASE_URL; ?>scripts/jquery.bootstrap.newsbox.min.js'></script>
  	<link rel="stylesheet" href="<?= BASE_URL; ?>styles/bootstrap-3.3.5/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/bootstrap-theme.min.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/carousel.css" />

@@ -517,6 +517,21 @@ class User {
 
 		return $results;
 	}
+
+	public static function get_user_points($userID){
+		global $connection;
+
+		$sql = "SELECT COUNT(*) AS count FROM ".TABLE_POINTS." AS points
+				LEFT JOIN ". TABLE_COMMENTS ." AS comments ON points.post_id = comments.id
+				LEFT JOIN ". TABLE_QUESTIONS ."  AS questions ON points.post_id = questions.id
+				WHERE questions.uid = {$userID} OR comments.uid = {$userID}";
+
+		$stmt = $connection->query($sql);
+
+		$results = $stmt->fetch()['count'];
+
+		return $results;
+	}
 }
 
 ?>

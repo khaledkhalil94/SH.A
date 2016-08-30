@@ -127,9 +127,9 @@ if($post_modified_date > $post_date){
 				} else {
 					foreach ($comments as $comment):
 						$votes = Comment::get_votes($comment->id); 
-						$commenter = Student::get_user_info($comment->uid);
+						$commenter = User::get_user_info($comment->uid);
 
-						$img_path = Images::get_profile_pic(Student::get_user_info($comment->uid));
+						$img_path = Images::get_profile_pic(User::get_user_info($comment->uid));
 
 						$comment_date = $comment->created;
 						$comment_modified_date = $comment->last_modified;

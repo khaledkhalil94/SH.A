@@ -3,7 +3,6 @@ require_once('init.php');
 
 class User {
 
-
 	/**
 	 *@var boolean $error error status
 	 */
@@ -14,6 +13,52 @@ class User {
 	 */
 	public $errors = [];
 
+	/**
+	 * get all user info from the database
+	 *
+	 * @param int @userID
+	 * 
+	 * @return object
+	 */
+	public function get_user_info($userID){
+		global $connection;
+
+		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.email, info.ual AS ual,
+				info.register_date AS joined, privacy.*, pic.path AS img_path
+				FROM `students`
+				RIGHT JOIN `login_info` AS info ON students.id = info.id 
+				INNER JOIN `user_privacy` AS privacy ON students.id = privacy.user_id
+				LEFT JOIN `profile_pic` AS pic ON students.id = pic.user_id
+				WHERE students.id = {$userID} LIMIT 1";
+
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			$this->error = true;
+			$errMsg = $error[2];
+			return false;
+		}
+
+		$obj = $stmt->fetch(PDO::FETCH_OBJ);
+
+		if(empty($obj)){
+			$this->error = true;
+			$errMsg = "Error fetching user details from the database.";
+			return false;
+		}
+
+		if(!is_object($obj)){
+			$this->error = true;
+			$errMsg = $obj;
+			return false;
+		}
+
+		$obj->img_path = $obj->img_path ?: DEF_PIC; 
+
+		return $obj;
+	}
 
 	/**
 	 * deletes a user entirely from the database along with local files
@@ -378,14 +423,20 @@ class User {
 	public static function blocked_by_user($user_id){
 		global $connection;
 
-		$sql = "SELECT block_list.blocked_id FROM `block_list` WHERE user_id = ?";
+		$sql = "SELECT block_list.blocked_id FROM ". TABLE_BLOCKS ." AS block_list WHERE user_id = ?";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(1, $user_id, PDO::PARAM_INT);
 
 		$stmt->execute();
 
-		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$blocked = [];
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$blocked[] = array_shift($row);
+		}
+
+		return $blocked;
 	}
 
 	public function get_blocks($user_id){
@@ -415,71 +466,6 @@ class User {
 		$blocked = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 		return $blocked;
-	}
-
-	// TBR
-	public static function find_by_id($id, $msql=""){
-		$sql = "SELECT * FROM " .static::$table_name." WHERE id={$id}";
-		if(!empty($msql)) $sql .= $msql;
-		$found = static::find_by_sql($sql);
-		return !empty($found) ? array_shift($found) : false;
-	}
-
-
-	// TBR
-	public static function find_by_sql($sql=""){
-		global $connection;
-
-		$result = $connection->prepare($sql);
-		$result->execute();
-		$object_array = array();
-		while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-			$object_array[] = static::instantiate($row);
-		}
-		return $object_array;
-	}
-
-
-	protected static function instantiate($data){
-		$object = new static;
-
-		foreach ($data as $attribute => $value) {
-			if ($object->has_attribute($attribute)) {
-				$object->$attribute = trim($value);
-			}
-		}
-
-		return $object;
-	}
-
-	private function has_attribute($attribute){
-		$object_vars = get_object_vars($this);
-
-		return array_key_exists($attribute, $object_vars);
-	}
-	
-	// public function attributes(&$values){
-	// 	$attributes = array();
-	// 	$values = array();
-	// 	foreach (static::$db_fields as $field) {
-	// 		if(property_exists($this, $field)){
-	// 			$attributes[$field] = $this->$field;
-	// 			$values[":".$field] = $this->$field;
-	// 		}
-	// 	}
-	// 	return $attributes;
-	// }
-
-	public static function query($sql){
-		global $connection;
-		$stmt = $connection->prepare($sql);
-
-		if(!$stmt->execute()){
-			$error = ($stmt->errorInfo());
-			echo $error[2];
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -518,6 +504,13 @@ class User {
 		return $results;
 	}
 
+	/**
+	 * get user total points from posts and comments
+	 *
+	 * @param int $name
+	 * 
+	 * @return string
+	 */
 	public static function get_user_points($userID){
 		global $connection;
 
@@ -530,8 +523,85 @@ class User {
 
 		$results = $stmt->fetch()['count'];
 
+		$results = $results + 1;
 		return $results;
+	}
+
+	/**
+	 * follow a user
+	 *
+	 * @param int $userID
+	 * 
+	 * @return boolean|string
+	 */
+	public static function follow($userID){
+		global $database;
+
+		// if user is blocked
+		$blocked = self::blocked_by_user($userID);
+
+		if(in_array(USER_ID, $blocked)){
+			return "You can't follow this user";
+		}
+
+		$data = ['user_id' => $userID, 'follower_id' => USER_ID];
+
+		$insert = $database->insert_data(TABLE_FOLLOWING, $data);
+
+		if($insert !== true){
+
+			$errors = $database->errors;
+
+			if($errors[1] == 1062){
+				return "You're already following this user";
+			} else {
+				return $errors[2];
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * unfollow a user
+	 *
+	 * @param int $userID
+	 * 
+	 * @return boolean
+	 */
+	public static function unfollow($userID){
+		global $connection;
+
+		$sql = "DELETE FROM ". TABLE_FOLLOWING ." WHERE user_id = {$userID} and follower_id = ". USER_ID ." LIMIT 1";
+
+		$delete = $connection->exec($sql);
+
+		if($delete == 1){
+			return true;
+		}
+		return false;
+
+	}
+
+	/**
+	 * check if a user is following another user
+	 *
+	 * @param int $userID
+	 * 
+	 * @return boolean
+	 */
+	public static function is_flw($uid, $userID){
+		global $connection;
+
+		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$uid} AND follower_id = {$userID}";
+
+		$stmt = $connection->query($sql);
+
+		return (bool)$stmt->fetch();
 	}
 }
 
 ?>
+
+
+

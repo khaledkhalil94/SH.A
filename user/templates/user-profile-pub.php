@@ -22,13 +22,11 @@
 					<div class="ui message warning">
 						<p>You must <a href="/sha/login.php">login</a> or <a href="/sha/signup.php">signup</a> to view the full profile.</p>
 					</div>
-
 			<div class="ui top attached tabular menu">
 				<a class="item active" data-tab="questions">Questions (3)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="questions">
 			</div>
 		</div>
-
 	</div>
 </div>

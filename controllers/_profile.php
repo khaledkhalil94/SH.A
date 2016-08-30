@@ -12,12 +12,48 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 
 switch ($_POST['action']) {
 
+	// follow a user
+	case 'follow':
+
+		$userID = $_POST['id'];
+
+		$follow = User::follow($userID);
+
+		if($follow === true){
+
+			die(json_encode(['status' => true]));
+		} else {
+			
+			die(json_encode(['status' => false, 'err' => $follow]));
+		}
+
+		break;
+
+	// unfollow a user
+	case 'unfollow':
+
+		$userID = $_POST['id'];
+
+		$unfollow = User::unfollow($userID);
+
+		if($unfollow === true){
+
+			die(json_encode(['status' => true]));
+		} else {
+			
+			die(json_encode(['status' => false]));
+		}
+
+		break;
+
 	// get user profile card
 	case 'profile_card':
 
 		$uid = $_POST['id'];
-		$user = Student::get_user_info($uid);
+		$user = User::get_user_info($uid);
 
+		if(!is_object($user)) die("User was not found.");
+		
 		$html = 
 			"<div class='ui card'>
 			<div class='image'>

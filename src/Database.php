@@ -73,10 +73,11 @@ class Database {
 		$sql = "INSERT INTO `{$table}` (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")";
 
 		$stmt = $this->connection->prepare($sql);
+
 		if(!$stmt->execute($params)){
 			$error = $stmt->errorInfo();
 			$this->error = true;
-			$this->errors[] = $error;
+			$this->errors = $error;
 			return false;
 		}
 

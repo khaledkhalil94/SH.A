@@ -12,11 +12,6 @@ include (ROOT_PATH . "inc/head.php");
 			<?= msgs(); ?>
 			<?php include (ROOT_PATH . 'inc/body/carousel.php') ?>
 			<br>
-			<br>
-			<br>
-			<div class="ui icon button">
-				<i class="add icon"></i>
-			</div>
 		</div>
 	</div>
 	<?php include (ROOT_PATH . 'inc/footer.php') ?>

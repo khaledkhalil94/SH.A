@@ -37,10 +37,10 @@
 				<h3><?= $name; ?></h3>
 				<a href="<?= BASE_URL."user/{$id}/" ?>">@<?= $username; ?></a>
 			</div>
-			<div class="user-points">
-				<a class="ui label">
-					<i class="thumbs outline up icon"></i>
-					+ 114
+			<div class='user-points'>
+				<a class='ui label' style='color:#04c704;' title='Total Points'>
+					<i class='thumbs outline up icon'></i>
+					<?= User::get_user_points($id); ?>
 				</a>
 			</div>
 			<div class="ui segment">

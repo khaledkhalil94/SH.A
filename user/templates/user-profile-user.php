@@ -25,10 +25,10 @@
 				<h3><?= $name; ?></h3>
 				<a href="<?= BASE_URL."user/{$id}/" ?>">@<?= $username; ?></a>
 			</div>
-			<div class="user-points">
-				<a class="ui label">
-					<i class="thumbs outline up icon"></i>
-					+ 114
+			<div class='user-points'>
+				<a class='ui label' style='color:#04c704;' title='Total Points'>
+					<i class='thumbs outline up icon'></i>
+					<?= User::get_user_points($id); ?>
 				</a>
 			</div>
 			<?php if(!empty($about)): ?>
@@ -140,7 +140,11 @@
 			</div>
 			<div class="profile-info ui vertical padded segment">
 				<div class="user-interactions">
-					<button class="ui button green">Follow</button>
+				<?php if(User::is_flw($id, USER_ID)){ ?>
+					<button class="ui button blue following" user-id="<?= $id ?>" id="user_unflw">Following</button>
+				<?php } else { ?>
+					<button class="ui button green" user-id="<?= $id ?>" id="user_flw">Follow</button>
+				<?php } ?>
 					<button class="ui button basic">Send message</button>
 					<div title="Report" style="float:right;" data-variation="mini" class="ui icon link button">
 						<i class="flag icon" title="report"></i>

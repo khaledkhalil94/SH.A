@@ -4,7 +4,7 @@ $session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
 $id = $session->user_id;
 
 
-$user = Student::get_user_info($id);
+$user = User::get_user_info($id);
 $session->userLock($user);
 
 $st = isset($_GET['st']) ? $_GET['st'] : 'ui';

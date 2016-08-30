@@ -16,7 +16,7 @@ if(!$q = QNA::get_question($id)) {
 
 if($q->status != 1 && !($session->adminCheck() || $session->userCheck($q->uid))) Redirect::redirectTo('404');
 
-$user = Student::get_user_info($q->uid);
+$user = User::get_user_info($q->uid);
 
 $self = $q->uid === USER_ID;
 

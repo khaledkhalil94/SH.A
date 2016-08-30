@@ -3,7 +3,7 @@ require_once ("../src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
-$user = $student->get_user_info($id);
+$user = User::get_user_info($id);
 
 if(!$user){
 	$session->message("Page was not found!", BASE_URL, 'danger');

@@ -73,7 +73,7 @@ foreach ($sections as $s) {
 			} else {
 				foreach ($qs as $q):
 
-					$user = $student->get_user_info($q->uid);
+					$user = User::get_user_info($q->uid);
 					if(!$user) continue;
 					if(($q->status != 1) && ($q->uid != USER_ID)) continue;
 					$self = $q->uid === USER_ID ?: false;

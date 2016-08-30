@@ -20,13 +20,7 @@ class Messages {
 			die("Token value is invalid");
 		}
 
-
-		$blocks = User::blocked_by_user($send_to);
-		$blocked = [];
-
-		foreach ($blocks as $k => $v) {
-			$blocked[] = $v['blocked_id'];
-		}
+		$blocked = User::blocked_by_user($send_to);
 
 		//printX($blocked); exit;
 		if(in_array($send_by, $blocked)){

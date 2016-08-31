@@ -1,8 +1,6 @@
 <?php 
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
-if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
-
 //Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
 
@@ -53,7 +51,7 @@ switch ($_POST['action']) {
 		$user = User::get_user_info($uid);
 
 		if(!is_object($user)) die("User was not found.");
-		
+
 		$html = 
 			"<div class='ui card'>
 			<div class='image'>
@@ -62,20 +60,23 @@ switch ($_POST['action']) {
 			<div class='content'>
 			<h3 class='header'>{$user->full_name}</h3>
 			<div class='meta'>
-			<span class='date'><a href='".BASE_URL."user/{$user->id}'>@{$user->username}</a></span>
+				<span class='username'><a href='".BASE_URL."user/{$user->id}'>@{$user->username}</a></span>
+				<div class='user-points'>
+					<a class='ui label' style='color:#04c704;' title='Total Points'>
+					<i class='thumbs outline up icon'></i>
+					". User::get_user_points($uid) ."
+					</a>
+				</div>
 			</div>
-			<div class='description'>
-			<div class='user-points'>
-			<a class='ui label' style='color:#04c704;' title='Total Points'>
-			<i class='thumbs outline up icon'></i>
-			". User::get_user_points($uid) ."
-			</a>
-			</div>
-			</div>
-			</div>
-			<button class='ui button green'>Follow</button>
-			<button class='ui button red'>unFollow</button>
 			</div>";
+			if(!$session->is_logged_in()){
+				$html .= "<a href='/sha/login.php' class='ui button green'>Follow</a>";
+			} elseif(User::is_flw($uid, USER_ID) !== true){
+				$html .= "<button id='user_flw' user-id='{$uid}' class='ui button green'>Follow</button>";
+			} else { 
+				$html .= "<button id='user_unflw' user-id='{$uid}' class='ui button red'>Following</button>";
+			}
+		$html .= "</div>";
 		die($html);
 		break;
 

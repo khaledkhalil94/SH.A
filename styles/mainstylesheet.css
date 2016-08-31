@@ -419,3 +419,22 @@ p.form-note {
 .ui.popup.wide.top.center.transition.visible {
     top: 237px!important;
 }
+
+.ui.card .image {}
+
+.ui.popup.wide.bottom.left {
+    width: 0px;
+}
+
+.ui.card h3.header {
+    margin-bottom: 0px;
+}
+
+.ui.card .meta .user-points {
+    display: inline;
+    float: right;
+}
+
+.ui.card .meta .user-points i.thumbs.outline.up.icon {
+    margin-right: 4px;
+}

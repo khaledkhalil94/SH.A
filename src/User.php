@@ -586,14 +586,17 @@ class User {
 	/**
 	 * check if a user is following another user
 	 *
-	 * @param int $userID
+	 * @param int $uid 
+	 * @param int $follower_id
 	 * 
 	 * @return boolean
 	 */
-	public static function is_flw($uid, $userID){
+	public static function is_flw($userID, $follower_id){
 		global $connection;
 
-		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$uid} AND follower_id = {$userID}";
+		if(!$follower_id) return true; // if not logged in
+		
+		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$userID} AND follower_id = {$follower_id}";
 
 		$stmt = $connection->query($sql);
 

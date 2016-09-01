@@ -238,3 +238,11 @@ div#user-extrainfo-list, div#user-links-list {
 .ui.page.dimmer .center .image-details .image {
     right: 19px;
 }
+
+.user-profile .tab-questions p.status i.circle.icon {
+    vertical-align: -webkit-baseline-middle;
+}
+
+.user-profile .tab-questions {
+    margin-top: 15px;
+}

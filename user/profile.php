@@ -3,10 +3,11 @@ require_once ("../src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
-$user = User::get_user_info($id);
+$user = new User();
+$user = $user->get_user_info($id);
 
 if(!$user){
-	$session->message("Page was not found!", BASE_URL, 'danger');
+	$session->message("User was not found!", BASE_URL, 'danger');
 }
 
 $img_path = $user->img_path;
@@ -47,15 +48,14 @@ $linksP = $user->links_privacy;
 $public = "<i title=\"Public\" class=\"world icon\"></i>";
 $private = "<i title=\"Private\" class=\"lock icon\"></i>";
 
-$has_pic = Images::has_pic($user->id);
+$has_pic = Images::has_pic($id);
 
-//$pic = Images::get_pic_info($id);
+$q_count = count($QNA->get_questions_by_user($id));
 
 $pageTitle = $name;
 $sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
  ?>
- <script>var userID = <?= $id ?>;</script>
 <div class="container section">
 <?php 
 

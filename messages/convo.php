@@ -2,7 +2,7 @@
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 $user_id = sanitize_id($_GET['pm']);
 
-$user = $student->get_user_info($user_id);
+$user = User::get_user_info($user_id);
 if(!$user) Redirect::redirectTo('404');
 
 $staff = $user->ual == 1 ? true : false;
@@ -28,7 +28,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 			}
 
 			foreach($messages as $message):
-				$sender = $student->get_user_info($message->sender_id);
+				$sender = User::get_user_info($message->sender_id);
 				$self = USER_ID == $sender->id ? true : false;
 				if (!$self) Messages::msgSeen($message->user_id, $message->id);
 				$img_path = $sender->img_path;

@@ -1,4 +1,4 @@
-<div class="user user-profile">
+<div class="user user-profile" user-id="<?= $id ?>">
 	<?= msgs(); ?>
 	<div class="ui grid">
 		<div class="five wide column side-bar user-info">
@@ -153,14 +153,11 @@
 			</div>
 			<div class="ui top attached tabular menu">
 				<a class="item active" data-tab="activity">Activity</a>
-				<a class="item" data-tab="pics">Pictures (5)</a>
 				<a class="item" data-tab="following">1206 . Following</a>
 				<a class="item" data-tab="followers">2164 . Followers</a>
-				<a class="item" data-tab="questions">Questions (3)</a>
+				<a class="item" data-tab="questions">Questions (<?= $q_count ?>)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="activity">
-			</div>
-			<div class="ui bottom attached tab segment" data-tab="pics">
 			</div>
 			<div class="ui bottom attached tab segment" data-tab="following">
 			</div>

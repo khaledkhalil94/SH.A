@@ -30,7 +30,6 @@ require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
 require_once(__DIR__."/User.php");
 require_once(__DIR__.'/Images.php');
-require_once(__DIR__.'/Student.php');
 require_once(__DIR__.'/functions.php');
 require_once(__DIR__.'/Comment.php');
 require_once(__DIR__.'/QNA.php');

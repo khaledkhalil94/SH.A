@@ -544,6 +544,8 @@ class User {
 			return "You can't follow this user";
 		}
 
+		if($userID == USER_ID) return "You can't follow yourself.";
+		
 		$data = ['user_id' => $userID, 'follower_id' => USER_ID];
 
 		$insert = $database->insert_data(TABLE_FOLLOWING, $data);
@@ -580,7 +582,6 @@ class User {
 			return true;
 		}
 		return false;
-
 	}
 
 	/**
@@ -602,9 +603,14 @@ class User {
 
 		return (bool)$stmt->fetch();
 	}
+
 }
 
 ?>
+
+
+
+
 
 
 

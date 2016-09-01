@@ -23,7 +23,7 @@
 			<div class="ui left aligned container" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
-					This post is unPublished, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
+					This post is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
 				</div>
 				<?php } ?>
 				<div class="ui header">

@@ -71,6 +71,7 @@ switch ($_POST['action']) {
 			</div>";
 			if(!$session->is_logged_in()){
 				$html .= "<a href='/sha/login.php' class='ui button green'>Follow</a>";
+			} elseif($uid === USER_ID){
 			} elseif(User::is_flw($uid, USER_ID) !== true){
 				$html .= "<button id='user_flw' user-id='{$uid}' class='ui button green'>Follow</button>";
 			} else { 

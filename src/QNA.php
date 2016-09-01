@@ -112,6 +112,41 @@ class QNA extends User {
 	}
 
 	/**
+	 * get all questions by a user
+	 *
+	 *
+	 * @return object
+	 */
+	public function get_questions_by_user($UserID, $limit=true, $count=10, $order='CREATED DESC'){
+		global $connection;
+
+		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+				info.username AS username, sections.title AS fac,
+				section.acronym AS acr, section.id AS fid, section.title AS fac,
+				questions.* FROM ". TABLE_QUESTIONS ." AS questions
+
+				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
+				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
+				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section
+
+				WHERE uid = {$UserID} AND questions.status != 0";
+
+		$sql .= " ORDER BY {$order}";
+
+		if($limit) $sql .= " LIMIT {$count}";
+
+		$stmt = $connection->prepare($sql);
+
+		if(!$stmt->execute()){
+			$error = $stmt->errorInfo();
+			return $error[2];
+		}
+
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	/**
 	 * get all sections
 	 *
 	 *

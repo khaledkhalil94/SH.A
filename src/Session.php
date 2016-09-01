@@ -16,7 +16,7 @@ class Session {
 	/**
 	 * @var int $ual user access level
 	 */
-	public $ual;
+	private $ual;
 
 	/**
 	 * @var sting $username
@@ -66,6 +66,7 @@ class Session {
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];
 			$this->username = $_SESSION['username'];
+			$this->ual = $_SESSION['ual'];
 			$this->logged_in = true;
 		}
 
@@ -190,7 +191,7 @@ class Session {
 		}
 	}
 	public function adminCheck(){
-		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){
+		if($this->is_logged_in() && $this->ual == "1"){
 			return true;
 		} else {
 			return false;
@@ -219,8 +220,6 @@ class Session {
 	public function userCheck($user){
 		if(is_object($user)){
 			if($this->is_logged_in() && $this->user_id === $user->id){
-				return true;
-			} elseif($this->adminCheck()){
 				return true;
 			} else {
 				return false;

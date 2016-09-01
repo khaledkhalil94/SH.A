@@ -189,6 +189,47 @@ switch ($action) {
 		}
 
 		break;
+
+	case 'save':
+
+		$PostID = sanitize_id($data['id']);
+
+		// check if question exists
+		$question = QNA::get_question($PostID);
+		if(!is_object($question)){
+			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
+		}
+
+		$QNA = new QNA($PostID);
+		$save = $QNA->save_post();
+
+		if($save === true){
+			die(json_encode(['status' => true]));
+		} else {
+			die(json_encode(['status' => false, 'err' => $save]));
+		}
+
+		break;
+
+	case 'unsave':
+
+		$PostID = sanitize_id($data['id']);
+
+		// check if question exists
+		$question = QNA::get_question($PostID);
+		if(!is_object($question)){
+			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
+		}
+
+		$save = QNA::remove_saved($PostID);
+
+		if($save === true){
+			die(json_encode(['status' => true]));
+		} else {
+			die(json_encode(['status' => false, 'err' => $save]));
+		}
+
+		break;
 }
 
 

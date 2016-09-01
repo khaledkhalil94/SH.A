@@ -31,7 +31,7 @@
 					<div title="Actions" class="ui pointing dropdown" id="blog-post-actions">
 						<i class="setting link large icon"></i>
 						<div class="menu">
-							<?php if ($session->is_logged_in() && !$self && !$session->adminCheck()) { ?>
+							<?php if ($session->is_logged_in() && !$self) { ?>
 							<div class="item" id="post_save">
 								<a class="ui a">Save Question</a>
 							</div>

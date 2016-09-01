@@ -49,7 +49,7 @@ class QNA extends User {
 	 *
 	 * @return object
 	 */
-	public static function get_question($PostID){
+	public function get_question($PostID){
 		global $connection;
 
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
@@ -411,6 +411,81 @@ class QNA extends User {
 				";
 		$stmt = $connection->query($sql);
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	/**
+	 * save a post/comment
+	 *
+	 *
+	 * @return mixed
+	 */
+	public function save_post(){
+		global $database;
+
+		$data = ['post_id' => $this->PostID, 'user_id' => USER_ID];
+
+		$insert = $database->insert_data(TABLE_SAVED, $data);
+
+		if($insert == true){
+
+			return true;
+		} elseif($database->errors[1] == 1062) { // duplicate
+
+			return "You have already saved this post.";
+		} else {
+
+			return $database->errors[2];
+		}
+	}
+
+	/**
+	 * get saved posts
+	 *
+	 * @param int $UserID
+	 * 
+	 * @return array
+	 */
+	public function get_saved($UserID){
+		global $connection;
+
+		$sql = "SELECT saved.post_id FROM ". TABLE_SAVED ." WHERE user_id = {$UserID}";
+
+		$stmt =  $connection->query($sql);
+
+		$ids = [];
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$ids[] = $row[0];
+		}
+
+		$posts = [];
+
+		foreach ($ids as $id) {
+			$posts[] = $this->get_question($id);
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * remove a saved post
+	 *
+	 * @param int $PostID
+	 * 
+	 * @return boolean
+	 */
+	public static function remove_saved($PostID){
+		global $connection;
+
+		$sql = "SELECT * FROM ". TABLE_SAVED ." WHERE post_id = {$PostID}";
+		$row = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
+
+		if(USER_ID !== $row['user_id']) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
+
+
+		$sql = "DELETE FROM ". TABLE_SAVED ." WHERE post_id = {$PostID} LIMIT 1";
+		$stmt =  $connection->exec($sql);
+
+		return true;	
 	}
 
 }

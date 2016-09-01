@@ -71,6 +71,7 @@ define('TABLE_MESSAGES', 'messages');
 define('TABLE_SECTIONS', 'sections');
 define('TABLE_FOLLOWING', 'following');
 define('TABLE_BLOCKS', 'block_list');
+define('TABLE_SAVED', 'saved');
 
 
 

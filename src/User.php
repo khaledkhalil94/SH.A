@@ -604,6 +604,86 @@ class User {
 		return (bool)$stmt->fetch();
 	}
 
+	/**
+	 * get following users
+	 *
+	 * @param int $UserID
+	 * 
+	 * @return array
+	 */
+	public function get_flwing($UserID){
+		global $connection;
+
+		$sql = "SELECT following.user_id FROM ". TABLE_FOLLOWING ." AS following WHERE follower_id = {$UserID}";
+		
+		$stmt =  $connection->query($sql);
+
+		$ids = [];
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$ids[] = $row[0];
+		}
+
+		$users = [];
+
+		foreach ($ids as $id) {
+			$users[] = $this->get_user_info($id);
+		}
+
+		return $users;
+	}
+
+	/**
+	 * get followers
+	 *
+	 * @param int $UserID
+	 * 
+	 * @return array
+	 */
+	public function get_flwers($UserID){
+		global $connection;
+
+		$sql = "SELECT following.follower_id FROM ". TABLE_FOLLOWING ." AS following WHERE user_id = {$UserID}";
+
+		$stmt =  $connection->query($sql);
+
+		$ids = [];
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$ids[] = $row[0];
+		}
+
+		$users = [];
+
+		foreach ($ids as $id) {
+			$users[] = $this->get_user_info($id);
+		}
+
+		return $users;
+	}
+
+	/**
+	 * check if two users are following each other (friends)
+	 *
+	 * @param int $uid
+	 * @param int $UserID
+	 * 
+	 * @return boolean
+	 */
+	public function is_friend($uid, $UserID){
+		global $connection;
+
+		$sql = "SELECT 1 FROM `following` WHERE user_id = {$uid} AND follower_id = {$UserID}";
+		$q1 = (bool)$connection->query($sql)->fetch();
+
+		$sql = "SELECT 1 FROM `following` WHERE user_id = {$UserID} AND follower_id = {$uid}";
+		$q2 = (bool)$connection->query($sql)->fetch();
+
+		if($q1 && $q2){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
 
 ?>

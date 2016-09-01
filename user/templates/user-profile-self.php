@@ -185,8 +185,8 @@
 			</div>
 			<div class="ui top attached tabular menu">
 				<a class="item active" data-tab="activity">Activity</a>
-				<a class="item" data-tab="following">1206 . Following</a>
-				<a class="item" data-tab="followers">2164 . Followers</a>
+				<a class="item" data-tab="following">Following (<?= $following_count ?>)</a>
+				<a class="item" data-tab="followers">Followers (<?= $followers_count ?>)</a>
 				<a class="item" data-tab="questions">Questions (<?= $q_count ?>)</a>
 				<a class="item" data-tab="saved">Saved</a>
 			</div>

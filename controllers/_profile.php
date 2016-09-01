@@ -48,19 +48,30 @@ switch ($_POST['action']) {
 	case 'profile_card':
 
 		$uid = $_POST['id'];
-		$user = User::get_user_info($uid);
+
+		$userq = new User();
+		$user = $userq->get_user_info($uid);
+
+		$logged = $session->is_logged_in();
 
 		if(!is_object($user)) die("User was not found.");
 
+		if($logged){
+			$is_frnd = $userq->is_friend($uid, USER_ID);
+		}
+
 		$html = 
 			"<div class='ui card'>
-			<div class='image'>
-			<img class='ui image small' src='{$user->img_path}'>
-			</div>
+			<a class='image' href='".BASE_URL."user/{$user->id}/'>
+				<img src='$user->img_path'>
+			</a>
 			<div class='content'>
-			<h3 class='header'>{$user->full_name}</h3>
-			<div class='meta'>
-				<span class='username'><a href='".BASE_URL."user/{$user->id}'>@{$user->username}</a></span>
+			<h3 class='header'>{$user->full_name}";
+			if($logged && $is_frnd){
+				$html .= "<i title='You and $user->firstName are friends' class='mdi mdi-account-multiple' style='color: #1ed02d; margin-left:5px;'></i>";
+			}
+			$html .= "</h3><div class='meta'>
+				<span class='username'><a href='".BASE_URL."user/{$user->id}/'>@{$user->username}</a></span>
 				<div class='user-points'>
 					<a class='ui label' style='color:#04c704;' title='Total Points'>
 					<i class='thumbs outline up icon'></i>
@@ -69,7 +80,7 @@ switch ($_POST['action']) {
 				</div>
 			</div>
 			</div>";
-			if(!$session->is_logged_in()){
+			if(!$logged){
 				$html .= "<a href='/sha/login.php' class='ui button green'>Follow</a>";
 			} elseif($uid === USER_ID){
 			} elseif(User::is_flw($uid, USER_ID) !== true){

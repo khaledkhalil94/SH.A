@@ -1,10 +1,10 @@
 <?php
-require_once ("../src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
-$user = new User();
-$user = $user->get_user_info($id);
+$userg = new User();
+$user = $userg->get_user_info($id);
 
 if(!$user){
 	$session->message("User was not found!", BASE_URL, 'danger');
@@ -51,6 +51,12 @@ $private = "<i title=\"Private\" class=\"lock icon\"></i>";
 $has_pic = Images::has_pic($id);
 
 $q_count = count($QNA->get_questions_by_user($id));
+
+$following = $userg->get_flwing($id);
+$following_count = count($following);
+
+$followers = $userg->get_flwers($id);
+$followers_count = count($followers);
 
 $pageTitle = $name;
 $sec = 'profile';

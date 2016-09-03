@@ -28,11 +28,12 @@ $imgValidation = array(
 
 require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
+require_once(__DIR__.'/QNA.php');
 require_once(__DIR__."/User.php");
 require_once(__DIR__.'/Images.php');
 require_once(__DIR__.'/functions.php');
 require_once(__DIR__.'/Comment.php');
-require_once(__DIR__.'/QNA.php');
+require_once(__DIR__.'/Post.php');
 
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";
@@ -72,6 +73,7 @@ define('TABLE_SECTIONS', 'sections');
 define('TABLE_FOLLOWING', 'following');
 define('TABLE_BLOCKS', 'block_list');
 define('TABLE_SAVED', 'saved');
+define('TABLE_ACTIVITY', 'activity');
 
 
 

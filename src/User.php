@@ -25,10 +25,12 @@ class User {
 
 		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.email, info.ual AS ual,
 				info.register_date AS joined, privacy.*, pic.path AS img_path
-				FROM `students`
-				RIGHT JOIN `login_info` AS info ON students.id = info.id 
-				INNER JOIN `user_privacy` AS privacy ON students.id = privacy.user_id
-				LEFT JOIN `profile_pic` AS pic ON students.id = pic.user_id
+				FROM ". TABLE_USERS ." AS students
+
+				RIGHT JOIN ". TABLE_INFO ." AS info ON students.id = info.id 
+				INNER JOIN ". TABLE_PRIVACY ." AS privacy ON students.id = privacy.user_id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON students.id = pic.user_id
+
 				WHERE students.id = {$userID} LIMIT 1";
 
 
@@ -360,7 +362,7 @@ class User {
 		$self = USER_ID;
 
 		// first check if the user is already blocked
-		$sql = "SELECT 1 FROM `block_list` WHERE user_id = :self AND blocked_id = :blocked";
+		$sql = "SELECT 1 FROM ". TABLE_BLOCKS ." WHERE user_id = :self AND blocked_id = :blocked";
 
 		$stmt = $connection->prepare($sql);
 		
@@ -378,7 +380,7 @@ class User {
 			'blocked_id' => $user_id
 			);
 
-		$insert = $database->insert_data('block_list', $data);
+		$insert = $database->insert_data(TABLE_BLOCKS, $data);
 		
 		if($insert === true) {
 			return true;
@@ -399,7 +401,7 @@ class User {
 
 		$self = USER_ID;
 
-		$sql = "DELETE FROM `block_list` WHERE user_id = $self AND blocked_id = :user_id";
+		$sql = "DELETE FROM ". TABLE_BLOCKS ." WHERE user_id = $self AND blocked_id = :user_id";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
@@ -444,11 +446,11 @@ class User {
 
 		$sql = "SELECT block_list.*, info.username AS username, info.id AS uid,
 		CONCAT(users.firstName, ' ', users.lastName) AS full_name,
-		pics.path FROM `block_list`
+		pics.path FROM ". TABLE_BLOCKS ." AS block_list
 
-		INNER JOIN `students` AS users ON block_list.blocked_id = users.id
-		INNER JOIN `login_info` AS info ON block_list.blocked_id = info.id
-		INNER JOIN `profile_pic` AS pics ON block_list.blocked_id = pics.user_id
+		INNER JOIN ". TABLE_USERS ." AS users ON block_list.blocked_id = users.id
+		INNER JOIN ". TABLE_INFO ." AS info ON block_list.blocked_id = info.id
+		INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON block_list.blocked_id = pics.user_id
 		
 		WHERE block_list.user_id = :user_id";
 

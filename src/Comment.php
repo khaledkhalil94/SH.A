@@ -3,7 +3,7 @@ require_once('init.php');
 /**
 * 
 */
-class Comment {
+class Comment extends QNA {
 
 
 	/**
@@ -48,7 +48,6 @@ class Comment {
 		}
 	}
 
-	
 	/**
 	 * get post comments
 	 *
@@ -75,7 +74,6 @@ class Comment {
 		}
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
-
 
 	/**
 	 * get one comment
@@ -106,7 +104,6 @@ class Comment {
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
-
 	/**
 	 * get count of votes on one comment
 	 *
@@ -128,7 +125,6 @@ class Comment {
 			}
 		return $connection->query($sql)->fetch()['count'];
 	}
-
 
 	/**
 	 * delete a comment
@@ -153,9 +149,7 @@ class Comment {
 		$connection->exec($sql);
 
 		return true;
-
 	}
-
 
 	/**
 	 * edit a comment
@@ -176,7 +170,6 @@ class Comment {
 		return true;
 	}
 
-
 	public function get_reports(){
 		global $connection;
 
@@ -192,9 +185,10 @@ class Comment {
 			echo $error[2];
 		}
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
-
 	}
 
 }
+
+
 $comment = new Comment();
  ?>

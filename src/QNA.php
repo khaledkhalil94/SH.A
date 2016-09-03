@@ -5,7 +5,7 @@ require_once('init.php');
 * handles all the actions for the question page, questions
 *
 */
-class QNA extends User {
+class QNA {
 
 	public $PostID;
 
@@ -76,7 +76,6 @@ class QNA extends User {
 
 	/**
 	 * get all questions
-	 *
 	 *
 	 * @return object
 	 */
@@ -247,7 +246,7 @@ class QNA extends User {
 	 *
 	 * @return array
 	 */
-	public function get_comments(){
+	public function get_Qcomments(){
 		return Comment::get_comments($this->PostID);
 	}
 
@@ -259,7 +258,7 @@ class QNA extends User {
 	public function delete(){
 		global $connection;
 
-		$comments = $this->get_comments();
+		$comments = $this->get_Qcomments();
 
 		while ($comments) {
 			$comment = array_shift($comments);

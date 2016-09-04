@@ -7,7 +7,10 @@
 	<meta name="author" content="Khaled Khalil">
 	<title><?= isset($pageTitle) ? $pageTitle : "Sha"; ?></title>
 
-	<link rel="shortcut icon" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg" type="image/vnd.microsoft.icon" />
+	<link rel="shortcut icon" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg">
+	<link rel="icon" type="image/png" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg" sizes="192x192">
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg">
+
 	<script src="<?= BASE_URL; ?>scripts/jquery-1.11.3.min.js"></script>
  	<link rel="stylesheet" href="<?= BASE_URL; ?>styles/bootstrap-3.3.5/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/bootstrap-theme.min.css" />

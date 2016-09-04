@@ -9,6 +9,8 @@ class QNA {
 
 	public $PostID;
 
+	static $table = TABLE_QUESTIONS;
+
 	public function __construct($PostID=null){
 		$this->PostID = (int)$PostID;
 	}
@@ -230,15 +232,18 @@ class QNA {
 	 */
 	public static function get_votes($PostID){
 		global $connection;
+		
 		$sql = "SELECT SUM(points.votes) AS count from ". TABLE_POINTS ." AS points
-				INNER JOIN ". TABLE_QUESTIONS ." AS questions ON points.post_id = questions.id
-				WHERE questions.id = {$PostID}";
-				$stmt = $connection->prepare($sql);
+				WHERE points.post_id = :post_id";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->bindParam(':post_id', $PostID, PDO::PARAM_INT);
+
 		if(!$stmt->execute()){
 				$error = ($stmt->errorInfo());
 				return $error[2];
 			}
-		return $connection->query($sql)->fetch()['count'];
+		return $stmt->fetch()['count'];
 	}
 
 	/**
@@ -246,8 +251,11 @@ class QNA {
 	 *
 	 * @return array
 	 */
-	public function get_Qcomments(){
-		return Comment::get_comments($this->PostID);
+	public function get_Qcomments($id=''){
+
+		if(empty($id)) $id = $this->PostID;
+
+		return Comment::get_comments($id);
 	}
 
 	/**
@@ -257,6 +265,8 @@ class QNA {
 	 */
 	public function delete(){
 		global $connection;
+
+		$table = static::$table;
 
 		$comments = $this->get_Qcomments();
 
@@ -270,9 +280,8 @@ class QNA {
 		$connection->exec($sql);
 
 		// delete the question
-		$sql = "UPDATE ". TABLE_QUESTIONS ." SET status = 0 WHERE id = {$this->PostID}";
+		$sql = "UPDATE {$table} SET status = 0 WHERE id = {$this->PostID}";
 		$connection->exec($sql);
-
 		return true;
 	}
 
@@ -488,5 +497,5 @@ class QNA {
 	}
 
 }
-$QNA = new QNA();
+
  ?>

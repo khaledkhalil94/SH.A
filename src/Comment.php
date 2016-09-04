@@ -189,6 +189,4 @@ class Comment extends QNA {
 
 }
 
-
-$comment = new Comment();
- ?>
+?>

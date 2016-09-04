@@ -4,20 +4,40 @@ require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 $PostID = sanitize_id($_GET['post_id']);
 if(!$PostID) Redirect::redirectTo();
 
+$post = new Post();
 $post = $post->get_post($PostID);
 if(!is_object($post)) Redirect::redirectTo();
 
 $self_p = $post->user_id === $post->poster_id ? true : false;
+
+$self = $post->user_id === USER_ID ? true : false;
+
+if(USER_ID){
+	$voted = QNA::has_voted($PostID, USER_ID);
+}
+
+$votes_count = QNA::get_votes($PostID) ?: "0";
+
 
 include (ROOT_PATH . "inc/head.php");
 ?>
 
 <body>
 	<div class="user-feed post container section">
-		<div class="feed-post ui segment" id="<?= $post->id; ?>">
+		<div class="feed-post ui segment" id="post-page" post-id="<?= $post->id; ?>">
+			<?php if ($self): ?>
+			<div title="Actions" class="ui pointing dropdown" id="post-actions">
+				<i class="setting link large icon"></i>
+				<div class="menu">
+					<div class="item" id="post-delete">
+						<a class="ui a">Delete</a>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>	
 			<div class="ui grid post-header">
 				<div class="three wide column post-avatar">
-					<a href="/sha/user/<?= $post->id; ?>/"><img class="ui avatar tiny image" src="<?= $post->img_path ?>"></a>
+					<a href="/sha/user/<?= $post->r_id; ?>/"><img class="ui avatar tiny image" src="<?= $post->img_path ?>"></a>
 				</div>
 				<div class="thirteen wide column post-title">
 
@@ -25,7 +45,7 @@ include (ROOT_PATH . "inc/head.php");
 					<div class="meta">
 
 						<span class="post-header">
-							<p><a href="/sha/user/<?= $post->id; ?>/"><?= $post->firstName;?> </a></p>
+							<p><a href="/sha/user/<?= $post->r_id; ?>/"><?= $post->firstName;?> </a></p>
 						</span> 
 
 						<span id="post-date" class="time" title="<?=$post->date;?>"><?= $post->date;?></span>
@@ -33,11 +53,11 @@ include (ROOT_PATH . "inc/head.php");
 				<?php } else { ?>
 					<div class="meta">
 						<span class="post-header" style="margin-bottom: -5px;">
-							<p><a href="/sha/user/<?= $post->id; ?>/"><?= $post->firstName;?></a></p>
+							<p><a href="/sha/user/<?= $post->r_id; ?>/"><?= $post->firstName;?></a></p>
 
 							<p>
-								<i style="font-size: x-large;" class="mdi mdi-menu-right"></i>
-								<a href="/sha/user/<?= $post->id; ?>/">@<?= $post->user_id; ?></a>
+								<i class="mdi mdi-menu-right"></i>
+								<a href="/sha/user/<?= $post->uid; ?>/"><?= $post->r_fn; ?></a>
 							</p>
 						</span> 
 
@@ -54,11 +74,47 @@ include (ROOT_PATH . "inc/head.php");
 						<p><?= $post->content; ?></p>
 					</div>
 				</div>
-			</div><br><hr>
+			</div>
+			<br><br>
+			<div class="actions">
+				<?php if(!$session->is_logged_in()){  ?>
+				<div class="ui dropdown ">
+					<div class="ui labeled button" tabindex="0">
+						<div class="ui grey button" id="votebtn-pub">
+							<i class="heart icon"></i><span>Like</span>
+						</div>
+						<a class="ui basic grey left pointing label" id="votescount"><?= $votes_count; ?></a>
+					</div>
+					<div class="menu">
+						<div class="ui error message">
+							<p>You must <a href="/sha/login.php">login</a> to like this post.</p>
+						</div>
+					</div>
+					<script>
+						$('.ui.dropdown').dropdown({on: 'click'}).dropdown({'direction':'upward'});
+					</script>
+				</div>
+				<?php } elseif($voted){ ?>
+				<div class="ui labeled button" tabindex="0">
+					<div class="ui red button voted" id="votebtn">
+						<i class="heart icon"></i><span>unLike</span>
+					</div>
+					<a class="ui basic red left pointing label" id="votescount"><?= $votes_count; ?></a>
+				</div>
+				<?php } else {?>
+				<div class="ui labeled button" tabindex="0">
+					<div class="ui grey button" id="votebtn">
+						<i class="heart icon"></i><span>Like</span>
+					</div>
+					<a class="ui basic grey left pointing label" id="votescount"><?= $votes_count; ?></a>
+				</div>
+				<?php } ?>
+			</div>
+			<br><hr>
 			<div class="ui comments">
 				<div class="comment">
 					<a class="avatar">
-						<img src="/images/avatar/small/matt.jpg">
+						<img src="<?= DEF_PIC; ?>">
 					</a>
 					<div class="content">
 						<a class="author">Matt</a>
@@ -75,7 +131,7 @@ include (ROOT_PATH . "inc/head.php");
 				</div>
 				<div class="comment">
 					<a class="avatar">
-						<img src="/images/avatar/small/elliot.jpg">
+						<img src="<?= DEF_PIC; ?>">
 					</a>
 					<div class="content">
 						<a class="author">Elliot Fu</a>
@@ -92,7 +148,7 @@ include (ROOT_PATH . "inc/head.php");
 					<div class="comments">
 						<div class="comment">
 							<a class="avatar">
-								<img src="/images/avatar/small/jenny.jpg">
+								<img src="<?= DEF_PIC; ?>">
 							</a>
 							<div class="content">
 								<a class="author">Jenny Hess</a>
@@ -111,7 +167,7 @@ include (ROOT_PATH . "inc/head.php");
 				</div>
 				<div class="comment">
 					<a class="avatar">
-						<img src="/images/avatar/small/joe.jpg">
+						<img src="<?= DEF_PIC; ?>">
 					</a>
 					<div class="content">
 						<a class="author">Joe Henderson</a>
@@ -135,8 +191,30 @@ include (ROOT_PATH . "inc/head.php");
 					</div>
 				</form>
 			</div>
-
 		</div>
 	</div>
+	<script src="/sha/scripts/post.js"></script>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
+
+
+<div class="ui small modal post delete">
+	<div class="ui segment">
+		<div class="header">
+			<h3>DELETE</h3>
+		</div>
+		<div class="content">
+			<div class="description">
+				<p>This post and all it's comments will be deleted permanently , are you sure you want to continue ?</p><br>
+			</div>
+		</div>
+		<div class="actions">
+			<div class="ui white deny button">
+				Cancel
+			</div>
+			<div class="ui blue button" id="post-confirmDel">
+				Delete
+			</div>
+		</div>
+	</div>
+</div>

@@ -246,3 +246,56 @@ div#user-extrainfo-list, div#user-links-list {
 .user-profile .tab-questions {
     margin-top: 15px;
 }
+
+
+.user-profile .tab-saved i.remove.large.link.icon {
+    vertical-align: -webkit-baseline-middle;
+}
+
+
+.user-feed .feed-post .post-header {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.user-feed .feed-post .post-header p {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 0px;
+}
+
+.user-feed .feed-post .post-header img.avatar.image {
+    border-radius: 10%;
+}
+
+.user-feed .feed-post .post-title {
+    left: -25px;
+}
+
+.user-feed .feed-post {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.user-feed .feed-post .post-header i.mdi.mdi-menu-right {
+    font-size: x-large;
+    margin-top: -2px;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.dropdown#post-actions {
+    float: right;
+    position: absolute;
+    right: 0px;
+}
+
+#post-actions.dropdown .menu {
+    left: -40px;
+}

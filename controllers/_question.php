@@ -61,14 +61,14 @@ switch ($action) {
 		$PostID = sanitize_id($data['id']);
 
 		// check if question exists
-		if(!is_object(QNA::get_question($PostID))){
-			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
+		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
+			die(json_encode(['status' => false, 'err' => 'Post was not found.']));
 		}
 
 		// check if user has already upvoted the question
 		$voted = QNA::has_voted($PostID, USER_ID);
 		if($voted){
-			die(json_encode(['status' => false, 'err' => 'You have already upvoted this Question.']));
+			die(json_encode(['status' => false, 'err' => 'You have already upvoted this post.']));
 		}
 
 		global $database;
@@ -88,7 +88,7 @@ switch ($action) {
 		$PostID = sanitize_id($data['id']);
 
 		// check if question exists
-		if(!is_object(QNA::get_question($PostID))){
+		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
 
@@ -229,6 +229,30 @@ switch ($action) {
 			die(json_encode(['status' => false, 'err' => $save]));
 		}
 
+		break;
+
+
+	case 'post_delete':
+
+		$PostID = sanitize_id($data['id']);
+
+		// check if post exists
+		$post = Post::get_post($PostID, true);
+
+		if(!is_array($post)){
+			die(json_encode(['status' => false, 'err' => 'Post was not found.']));
+		}
+
+		if(USER_ID !== $post['user_id']) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
+
+		$post = new Post();
+		$post->PostID = $PostID;
+		
+		$delete = $post->delete();
+
+		if($delete === true){
+			die(json_encode(['status' => true]));
+		}
 		break;
 }
 

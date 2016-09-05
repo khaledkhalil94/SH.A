@@ -162,6 +162,7 @@ switch ($action) {
 			if($report === true){
 				die(json_encode(['status' => true, 'id' => $PostID]));
 			} else {
+
 				if($report[1] == 1062) {
 
 					die(json_encode(['status' => false, 'id' => $PostID, 'err' => 1062]));
@@ -181,6 +182,7 @@ switch ($action) {
 			if($report === true){
 				die(json_encode(['status' => true, 'id' => $PostID]));
 			} else {
+
 				if($report[1] == 1062) {
 
 					die(json_encode(['status' => false, 'id' => $PostID, 'err' => 1062]));

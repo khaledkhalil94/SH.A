@@ -110,10 +110,10 @@ require_once('init.php');
 			$name = trim(strtolower($name));
 			$name = str_replace(' ', '', $name);
 
-			if (!(preg_match("`^[-0-9A-Z_\.]+$`i", $name))) {
+			if (!(preg_match("`^[-0-9A-Z()$^&!_\.]+$`i", $name))) {
 
 				$this->error = true;
-				$this->errMsg = ('File name is not valid (suspicious characters).');
+				$this->errMsg = ('File name is invalid.');
 
 				return false;
 

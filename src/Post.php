@@ -43,6 +43,8 @@ class Post extends QNA {
 
 		if(!is_array($post)) return false;
 
+		$post['img_path'] = $post['img_path'] ?: DEF_PIC; 
+
 		return (object) $post;
 	}
 

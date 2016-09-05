@@ -61,7 +61,7 @@ class Comment extends QNA {
 		$sql = "SELECT comments.*, users.id AS uid, CONCAT(users.firstName, ' ', users.lastName) AS fullname,
 				pics.path AS path FROM ". TABLE_COMMENTS ." AS comments
 				INNER JOIN ". TABLE_USERS ." AS users ON users.id = comments.uid
-				INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = comments.uid
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = comments.uid
 				WHERE comments.post_id = :post_id AND comments.status = 1
 				ORDER BY created DESC LIMIT {$limit}";
 
@@ -73,7 +73,10 @@ class Comment extends QNA {
 
 			die($error[2]);
 		}
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+		$obj = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+		return $obj;
 	}
 
 	/**
@@ -103,7 +106,10 @@ class Comment extends QNA {
 			return $error[2];
 		}
 
-		return $stmt->fetch(PDO::FETCH_ASSOC);
+		$comment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		$comment['img_path'] = $comment['img_path'] ?: DEF_PIC; 
+		return $comment;
 	}
 
 	/**

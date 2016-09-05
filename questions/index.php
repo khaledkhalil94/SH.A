@@ -74,24 +74,22 @@ foreach ($sections as $s) {
 			} else {
 				foreach ($qs as $q):
 
-					$user = User::get_user_info($q->uid);
-					if(!$user) continue;
 					if(($q->status != 1) && ($q->uid != USER_ID)) continue;
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
 					$reports_count = QNA::get_reports("questions", $q->id) ? count(QNA::get_reports("questions", $q->id)) : null;
-					$img_path = $user->img_path ?: DEF_PIC;
+					$img_path = $q->img_path ?: DEF_PIC;
 					?>
 				 	<div class="ui items">
 				 		<div class="item">
 				 			<div class="ui tiny image">
-				 				<a href="/sha/user/<?= $user->id; ?>/"><img src="<?= $img_path; ?>"></a>
+				 				<a href="/sha/user/<?= $q->uid; ?>/"><img src="<?= $img_path; ?>"></a>
 				 			</div>
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $user->id; ?>" href="/sha/user/<?= $user->id; ?>/"><?=$user->full_name;?></a></span>
+				 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
 				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />

@@ -76,7 +76,7 @@ include (ROOT_PATH . "inc/head.php");
 					</div>
 				</div>
 			</div>
-			<br><br>
+			<br><br><hr><br>
 			<div class="actions">
 				<?php if(!$session->is_logged_in()){  ?>
 				<div class="ui dropdown ">
@@ -133,6 +133,8 @@ include (ROOT_PATH . "inc/head.php");
 						} else {
 							$edited = "";
 						}
+
+						$c->path = $c->path ?: DEF_PIC; 
 					?>
 					<div class="ui minimal comments">
 						<div class="ui comment padded segment" id="<?= $c->id; ?>" comment-id="<?= $c->id; ?>">
@@ -142,7 +144,7 @@ include (ROOT_PATH . "inc/head.php");
 							<div class="content">
 								<a class="author user-title" user-id="<?= $user->id; ?>" href="<?= BASE_URL."user/".$c->uid; ?>/"><?= $c->fullname;?></a>
 								<div class="metadata">
-									<a class="time" href="question.php?id=<?= $c->id; ?>"><span id="commentDate" title="<?=$c->created;?>"><?= $c->created;?></span></a><?= $edited; ?>
+									<a class="time" href="question.php?id=<?= $c->id; ?>"><span id="post-date" title="<?=$c->created;?>"><?= $c->created;?></span></a><?= $edited; ?>
 								</div>
 								<div class="text">
 									<h4><?= $c->content; ?></h4>
@@ -196,3 +198,9 @@ include (ROOT_PATH . "inc/head.php");
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/comment.delete.php'); ?>
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>
 <script src="<?= BASE_URL ?>scripts/comment.js"></script>
+<script>
+$('.metadata').each(function(index, value) {
+	$date = $(this).find('#post-date').text();
+	$(this).find('#post-date').text(moment($date).fromNow());
+});
+</script>

@@ -60,7 +60,9 @@ $following_count = count($following);
 $followers = $userg->get_flwers($id);
 $followers_count = count($followers);
 
-$saved_count = count($QNA->get_saved(USER_ID));
+if(USER_ID){
+	$saved_count = count($QNA->get_saved(USER_ID));
+}
 
 $pageTitle = $name;
 $sec = 'profile';

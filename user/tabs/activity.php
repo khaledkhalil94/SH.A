@@ -2,17 +2,50 @@
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 
 $post = new Post();
-$posts = $post->get_posts(USER_ID);
 
+$uid = $_GET['uid'];
+$posts = $post->get_posts($uid);
+
+$user = User::get_user_info($uid);
 ?>
 
 <div class="ui relaxed divided items">
 
-<?php foreach ($posts as $post): 
+<?php if(!$session->is_logged_in()){
+} elseif($uid === USER_ID){ ?>
+<form class="ui reply form" action="">
+	<div class="field">
+		<textarea name="content" id="comment-submit-textarea" rows="2" style="height:auto;" placeholder="What's going on ?"></textarea>
+	</div>
+	<input type="hidden" name="post_id" value="<?= $id; ?>" >
+	<input type="hidden" name="comment_token" value="<?= Token::generateToken(); ?>" >
+	<button name="comment" id="subcomment" class="ui blue submit icon button">Submit</button>
+</form>
+<br>
+<?php
+} else { ?>
+<form class="ui reply form" action="">
+	<div class="field">
+		<textarea name="content" id="comment-submit-textarea" rows="2" style="height:auto;" placeholder="Say something to <?= $user->firstName ?>"></textarea>
+	</div>
+	<input type="hidden" name="post_id" value="<?= $id; ?>" >
+	<input type="hidden" name="comment_token" value="<?= Token::generateToken(); ?>" >
+	<button name="comment" id="subcomment" class="ui blue submit icon button">Submit</button>
+</form>
+<br>
+<?php 
+}
+if(empty($posts)){
+	echo "<p>There's nothing here!</p>";
+} else {
+
+foreach ($posts as $post): 
 
 $votes_count = QNA::get_votes($post->id) ?: "0";
 
 $cCount = count($comments = Comment::get_comments($post->id));
+
+$post->img_path = $post->img_path ?: DEF_PIC; 
 ?>
 
 	<div class="item">
@@ -25,7 +58,7 @@ $cCount = count($comments = Comment::get_comments($post->id));
 			</a>
 				<span><h5 style="display: inline;"><a href="/sha/user/<?= $post->uid ?>/">@<?= $post->username ?></a></h5></span>
 			<div class="meta">
-				<a href="/sha/user/posts/<?= $post->id; ?>/" class="time"><?= $post->date ?></a>
+				<a href="/sha/user/posts/<?= $post->id; ?>/" class="time" id="post-date"><?= $post->date ?></a>
 			</div>
 			<div class="description">
 				<?= $post->content; ?>
@@ -36,9 +69,18 @@ $cCount = count($comments = Comment::get_comments($post->id));
 			</div>
 		</div>
 	</div>
-<?php endforeach;
+<?php 
+endforeach;
+}
 ?>
 </div>
 
 
-<script>$('.ui.dropdown').dropdown();</script>
+<script>
+$('.ui.dropdown').dropdown();
+
+$('.item').each(function(index, value) {
+	$date = $(this).find('#post-date').text();
+	$(this).find('#post-date').text(moment($date).fromNow());
+});
+</script>

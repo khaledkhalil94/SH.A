@@ -93,7 +93,7 @@ class QNA {
 				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
 				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
-				INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section";
 
 		if(!empty($section)) $sql .= " WHERE section.id = '$section' AND questions.status != 0";

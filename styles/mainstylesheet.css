@@ -438,3 +438,7 @@ p.form-note {
 .ui.card .meta .user-points i.thumbs.outline.up.icon {
     margin-right: 4px;
 }
+
+.ui.dimmer.modals .modal .error.message .header {
+    background-color: inherit;
+}

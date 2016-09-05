@@ -1,5 +1,6 @@
 <?php require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 
+$QNA = new QNA();
 $posts = $QNA->get_saved(USER_ID);
 ?>
 

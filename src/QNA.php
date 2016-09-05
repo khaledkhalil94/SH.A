@@ -325,7 +325,7 @@ class QNA {
 			return true;
 		} else {
 
-			return array_shift($database->errors);
+			return $database->errors;
 		}
 	}
 

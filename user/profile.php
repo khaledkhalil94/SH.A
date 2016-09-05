@@ -4,6 +4,8 @@ $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
 
 $userg = new User();
+$QNA = new QNA();
+
 $user = $userg->get_user_info($id);
 
 if(!$user){

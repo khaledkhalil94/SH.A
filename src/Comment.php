@@ -24,7 +24,7 @@ class Comment extends QNA {
 			die("Comment can't be empty");
 		}
 
-		if(!is_object(QNA::get_question($PostID))){
+		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
 			die("Error! Post was not found.");
 		}
 
@@ -55,18 +55,19 @@ class Comment extends QNA {
 	 *
 	 * @return object
 	 */
-	public static function get_comments($postID){
+	public static function get_comments($postID, $limit=10){
 		global $connection;
 
 		$sql = "SELECT comments.*, users.id AS uid, CONCAT(users.firstName, ' ', users.lastName) AS fullname,
 				pics.path AS path FROM ". TABLE_COMMENTS ." AS comments
 				INNER JOIN ". TABLE_USERS ." AS users ON users.id = comments.uid
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = comments.uid
-				WHERE comments.post_id = {$postID} AND comments.status = 1
-				ORDER BY created DESC
-				";
+				WHERE comments.post_id = :post_id AND comments.status = 1
+				ORDER BY created DESC LIMIT {$limit}";
 
 		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':post_id', $postID, PDO::PARAM_INT);
+
 		if(!$stmt->execute()){
 			$error = $stmt->errorInfo();
 
@@ -90,11 +91,12 @@ class Comment extends QNA {
 				pics.path AS img_path FROM ". TABLE_COMMENTS ." AS comments
 				INNER JOIN ". TABLE_USERS ." AS students ON comments.uid = students.id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON comments.uid = pics.user_id
-				WHERE comments.id = {$id} 
+				WHERE comments.id = :id
 				AND comments.status = 1
 				LIMIT 1";
 
 		$stmt = $connection->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
 		if(!$stmt->execute()){
 			$error = $stmt->errorInfo();

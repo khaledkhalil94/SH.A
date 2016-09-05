@@ -5,6 +5,7 @@ $sec = "questions";
 include (ROOT_PATH . 'inc/head.php');
 $sec = isset($_GET['section']) ? $_GET['section'] : "";
 
+$QNA = new QNA();
 $sections = $QNA->get_sections();
 
 foreach ($sections as $s) {

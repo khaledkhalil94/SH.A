@@ -18,6 +18,7 @@ if(USER_ID){
 
 $votes_count = QNA::get_votes($PostID) ?: "0";
 
+$comments = Comment::get_comments($post->id);
 
 include (ROOT_PATH . "inc/head.php");
 ?>
@@ -112,84 +113,78 @@ include (ROOT_PATH . "inc/head.php");
 			</div>
 			<br><hr>
 			<div class="ui comments">
-				<div class="comment">
-					<a class="avatar">
-						<img src="<?= DEF_PIC; ?>">
-					</a>
-					<div class="content">
-						<a class="author">Matt</a>
-						<div class="metadata">
-							<span class="date">Today at 5:42PM</span>
-						</div>
-						<div class="text">
-							How artistic!
-						</div>
-						<div class="actions">
-							<a class="reply">Reply</a>
-						</div>
+				<form class="ui reply form" action="">
+					<div class="field">
+						<textarea name="content" id="comment-submit-textarea" rows="2" style="height:auto;" placeholder="Add a new comment.."></textarea>
 					</div>
-				</div>
-				<div class="comment">
-					<a class="avatar">
-						<img src="<?= DEF_PIC; ?>">
-					</a>
-					<div class="content">
-						<a class="author">Elliot Fu</a>
-						<div class="metadata">
-							<span class="date">Yesterday at 12:30AM</span>
-						</div>
-						<div class="text">
-							<p>This has been very useful for my research. Thanks as well!</p>
-						</div>
-						<div class="actions">
-							<a class="reply">Reply</a>
-						</div>
-					</div>
-					<div class="comments">
-						<div class="comment">
-							<a class="avatar">
-								<img src="<?= DEF_PIC; ?>">
+					<input type="hidden" name="post_id" value="<?= $id; ?>" >
+					<input type="hidden" name="comment_token" value="<?= Token::generateToken(); ?>" >
+					<button name="comment" id="subcomment" style="display:none;" class="ui blue submit disabled icon button">Submit</button>
+				</form>
+				<br>
+				<div id="comments">
+					<?php foreach ($comments as $c):
+						$voted = QNA::has_voted($c->id, USER_ID);
+						$votes = Comment::get_votes($c->id);
+						$self = $c->uid === USER_ID;
+
+						if($c->last_modified > $c->created){
+							$edited = "(edited <span id='editedDate' title=\"$c->created\">$c->created</span>)";
+						} else {
+							$edited = "";
+						}
+					?>
+					<div class="ui minimal comments">
+						<div class="ui comment padded segment" id="<?= $c->id; ?>" comment-id="<?= $c->id; ?>">
+							<a class="" href="/sha/user/<?= $c->uid; ?>/">
+								<img class="" src="<?= $c->path; ?>">
 							</a>
 							<div class="content">
-								<a class="author">Jenny Hess</a>
+								<a class="author user-title" user-id="<?= $user->id; ?>" href="<?= BASE_URL."user/".$c->uid; ?>/"><?= $c->fullname;?></a>
 								<div class="metadata">
-									<span class="date">Just now</span>
+									<a class="time" href="question.php?id=<?= $c->id; ?>"><span id="commentDate" title="<?=$c->created;?>"><?= $c->created;?></span></a><?= $edited; ?>
 								</div>
 								<div class="text">
-									Elliot you are always so right :)
+									<h4><?= $c->content; ?></h4>
 								</div>
-								<div class="actions">
-									<a class="reply">Reply</a>
+								<div class="ui fitted divider"></div>
+								<?php if($voted){ ?>
+									<div class="comment-points">
+										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
+										<span class="comment-votes-count"><?=$votes;?></span>
+									</div>
+								<?php } else { ?>
+									<div class="comment-points">
+										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
+									</div>
+								<?php } ?>
+								<div title="Actions" class="ui pointing dropdown" id="comment-actions">
+									<i class="ellipsis link big horizontal icon"></i>
+									<div class="menu">
+										<?php if ($self || $session->adminCheck()) { ?>
+											<div class="item" id="edit">
+												<a class="edit">Edit</a>
+											</div>
+											<div class="item" id="del">
+												<a class="delete">Delete</a>
+											</div>
+										<?php } ?>
+										<?php if (!$self) { ?>
+											<div class="item" id="post_report">
+												<a class="report">Report</a>
+											</div>
+											<div class="item" id="comment_hide">
+												<a class="report">Hide</a>
+											</div>
+										<?php } ?>
+									</div>
 								</div>
+
 							</div>
 						</div>
 					</div>
+					<?php endforeach; ?>
 				</div>
-				<div class="comment">
-					<a class="avatar">
-						<img src="<?= DEF_PIC; ?>">
-					</a>
-					<div class="content">
-						<a class="author">Joe Henderson</a>
-						<div class="metadata">
-							<span class="date">5 days ago</span>
-						</div>
-						<div class="text">
-							Dude, this is awesome. Thanks so much
-						</div>
-						<div class="actions">
-							<a class="reply">Reply</a>
-						</div>
-					</div>
-				</div>
-				<form class="ui reply form">
-					<div class="field">
-						<textarea></textarea>
-					</div>
-					<div class="ui blue labeled submit icon button">
-						<i class="icon edit"></i> Add Reply
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>
@@ -197,24 +192,7 @@ include (ROOT_PATH . "inc/head.php");
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
 
-
-<div class="ui small modal post delete">
-	<div class="ui segment">
-		<div class="header">
-			<h3>DELETE</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<p>This post and all it's comments will be deleted permanently , are you sure you want to continue ?</p><br>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button">
-				Cancel
-			</div>
-			<div class="ui blue button" id="post-confirmDel">
-				Delete
-			</div>
-		</div>
-	</div>
-</div>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/post.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/comment.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>
+<script src="<?= BASE_URL ?>scripts/comment.js"></script>

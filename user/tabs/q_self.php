@@ -1,5 +1,9 @@
 <div class="tab-questions">
-<?php foreach($QNA->get_questions_by_user(USER_ID) AS $q): ?>
+<?php 
+
+$QNA = new QNA();
+$questions = $QNA->get_questions_by_user(USER_ID);
+foreach($questions AS $q): ?>
 	<div class="item">
 		<div class="ui grid">
 			<div class="fourteen wide column">

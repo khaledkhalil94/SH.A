@@ -3,6 +3,8 @@
 $pageTitle = "Question/User";
 $id = sanitize_id($_GET['id']) ?: null;
 
+$QNA = new QNA();
+
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
 	if ($q = Comment::getComment($id)) { 

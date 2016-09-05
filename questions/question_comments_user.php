@@ -58,8 +58,7 @@
 									<div class="comment-points">
 										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
 									</div>
-							<?php 
-							} ?>
+							<?php } ?>
 							<div title="Actions" class="ui pointing dropdown" id="comment-actions">
 								<i class="ellipsis link big horizontal icon"></i>
 								<div class="menu">
@@ -89,141 +88,11 @@
 		<?php endforeach; 
 	}?>
 </div>
-
-
-<div class="ui small modal comment delete">
-	<div class="ui segment">
-		<div class="header">
-			<h3>DELETE</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<h4>Are you sure you want to delete this comment ? This action cannot be undone.</h4><br>
-				<div class="ui teal message" style="text-align:left;">
-					<p></p>
-				</div>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button">
-				Cancel
-			</div>
-			<div class="ui blue button" id="comment-confirmDel">
-				Delete
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="ui small modal post delete">
-	<div class="ui segment">
-		<div class="header">
-			<h3>DELETE</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<p>This question and all it's comments will be deleted permanently , are you sure you want to continue ?</p><br>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button">
-				Cancel
-			</div>
-			<div class="ui blue button" id="post-confirmDel">
-				Delete
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="ui small modal post unpublish">
-	<div class="ui segment">
-		<div class="header">
-			<h3>unPublish Post</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<p>Are you sure you want to list this post as unpublished ? Only you will be able to view it.</p><br>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button">
-				Cancel
-			</div>
-			<div class="ui blue button" id="post-confirmUnP">
-				Confirm
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="ui small modal post publish">
-	<div class="ui segment">
-		<div class="header">
-			<h3>Publish Post</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<p>By publishing this post, anyone can see and interact with it.</p><br>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button">
-				Cancel
-			</div>
-			<div class="ui blue button" id="post-confirmPub">
-				Confirm
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div class="ui small modal report">
-	<div class="ui segment report-model">
-		<div class="header">
-			<h3>REPORT</h3>
-		</div>
-		<div class="content">
-			<div class="description">
-				<h4>Are you sure you want to report this post ?</h4>
-				<div class="ui teal message" style="text-align:left;">
-					<p></p>
-				</div>
-				<br>
-			</div>
-			<div class="ui toggle checkbox">
-				<input type="checkbox" name="public" class="hidden" tabindex="0">
-				<label>Add message</label>
-			</div>
-			<div class="ui form" id="modalForm" style="display:none;">
-				<div class="field">
-					<textarea rows="4"></textarea>
-				</div>
-			</div>
-		</div>
-		<div class="actions">
-			<div class="ui white deny button" id="report-cancel">
-				Cancel
-			</div>
-			<div class="ui blue button" id="report-confirm">
-				Report
-			</div>
-		</div>
-	</div>
-</div>
-
-
-
-
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/post.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.pub.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.unpb.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/comment.delete.php'); ?>
 <script>
-
-// $('.ui.dropdown').dropdown();
-
-// $('#comments').on('click', function(){
-// 	$('.ui.dropdown').dropdown();
-// });
-
 $('.ui.dropdown').dropdown({on: 'click'});
-
-	</script>
+</script>

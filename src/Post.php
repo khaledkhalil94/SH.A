@@ -71,7 +71,7 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_ACTIVITY ." AS activity ON users.id = activity.poster_id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON users.id = pic.user_id
 
-				WHERE activity.user_id = {$UserID}";
+				WHERE activity.user_id = {$UserID} ORDER BY date DESC";
 
 		$stmt = $connection->prepare($sql);
 

@@ -1,6 +1,6 @@
 <?php 
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
-$id = $_GET['uid'];
+$id = $_POST['uid'];
 
 $user = new User();
 $following = $user->get_flwing($id);

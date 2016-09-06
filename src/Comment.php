@@ -108,7 +108,7 @@ class Comment extends QNA {
 
 		$comment = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		$comment['img_path'] = $comment['img_path'] ?: DEF_PIC; 
+		$comment['img_path'] = $comment['img_path'] ?: DEF_PIC;
 		return $comment;
 	}
 

@@ -7,8 +7,23 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 	Redirect::redirectTo('404');
 }
 
+if(isset($_POST['action'])){
 
-switch ($_POST['action']) {
+	$action = $_POST['action'];
+	unset($_POST['action']);
+
+
+} elseif(isset($_GET['action'])){
+
+	$action = $_GET['action'];
+	unset($_GET['action']);
+
+} else {
+
+	die("Error! bad request.");
+}
+
+switch ($action) {
 
 	// follow a user
 	case 'follow':
@@ -91,6 +106,49 @@ switch ($_POST['action']) {
 		$html .= "</div>";
 		die($html);
 		break;
+
+	case 'feed':
+	sleep(2);
+		$data = $_POST;
+		unset($data['action']);
+
+		$user_id = $data['user_id'];
+		$content = $data['content'];
+		$token = $data['token'];
+
+		// check token validation
+		if(!Token::validateToken($token)){
+			 die(json_encode(['status' => false, 'err' => 'Token is not valid.']));
+		}
+
+		global $database;
+
+		$data = ['user_id' => $user_id, 'content' => $content, 'poster_id' => USER_ID];
+		$insert = $database->insert_data(TABLE_ACTIVITY, $data);
+		
+		if($insert === true){
+			$id = $database->lastId;
+
+			die(json_encode(['status' => true, 'id' => $id]));
+		}
+
+	case 'get_post':
+
+		$id = sanitize_id($_GET['id']);
+
+		$post = new Post();
+		$comment = $post->get_post($id);
+
+		if(is_object($comment)){
+			
+			die(json_encode($comment));
+
+		} else {
+
+			die(json_encode(['status' => false, 'err' => $comment]));
+		}
+		break;
+	
 
 	default:
 		break;

@@ -4,10 +4,10 @@ $pub = "<i class=\"circle green icon\"></i>";
 $unpub = "<i class=\"circle yellow icon\"></i>";
 
 
-if($_GET['self'] == 'true'){
+if($_POST['self'] == 'true'){
 	require('q_self.php');
 } else {
-	$UserID = $_GET['uid'];
+	$UserID = $_POST['uid'];
 	require('q_user.php');
 }
 ?>

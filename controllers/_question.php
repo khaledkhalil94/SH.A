@@ -243,7 +243,7 @@ switch ($action) {
 			die(json_encode(['status' => false, 'err' => 'Post was not found.']));
 		}
 
-		if(USER_ID !== $post['user_id']) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
+		if((USER_ID !== $post['user_id']) && (USER_ID !== $post['poster_id'])) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
 
 		$post = new Post();
 		$post->PostID = $PostID;

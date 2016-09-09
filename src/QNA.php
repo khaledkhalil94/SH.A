@@ -280,7 +280,8 @@ class QNA {
 		$connection->exec($sql);
 
 		// delete the question
-		$sql = "UPDATE {$table} SET status = 0 WHERE id = {$this->PostID}";
+		//$sql = "UPDATE {$table} SET status = 0 WHERE id = {$this->PostID}";
+		$sql = "DELETE FROM {$table} WHERE id = {$this->PostID}";
 		$connection->exec($sql);
 		return true;
 	}

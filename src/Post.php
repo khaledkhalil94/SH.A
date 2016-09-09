@@ -8,6 +8,8 @@ class Post extends QNA {
 	
 	public $PostID;
 
+	public $errors = [];
+
 	static $table = TABLE_ACTIVITY;
 
 	public function get_post($PostID, $c=false){
@@ -85,7 +87,151 @@ class Post extends QNA {
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
+	public function get_stream($uid=USER_ID){
+		global $database;
+
+		// initiating the feed array
+		$feed = [];
+
+
+		// getting the posts data
+		$sql = "SELECT DISTINCT ac.*, CONCAT(u.firstName, ' ', u.lastName) AS u_fullname, CONCAT(p.firstName, ' ', p.lastName) AS p_fullname, u.id AS u_id, p.id AS p_id,
+				pic.path AS path, picp.path AS p_path FROM ". TABLE_ACTIVITY ." AS ac 
+			
+				INNER JOIN ". TABLE_FOLLOWING ." AS f ON ac.user_id = f.user_id OR f.follower_id
+				INNER JOIN ". TABLE_USERS ." AS u ON ac.user_id = u.id
+				INNER JOIN ". TABLE_USERS ." AS p ON ac.poster_id = p.id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON ac.user_id = pic.user_id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS picp ON ac.poster_id = picp.user_id
+
+				WHERE f.follower_id = :uid OR ac.user_id = ". USER_ID ."
+				ORDER BY date DESC";
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+		
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$row['type'] = 'ac';
+				$feed[] = $row;
+			}
+		}
+
+
+		// getting user interactions data NEEDS REWEORK
+		$sql = "SELECT fl.*, u.firstName, pic.path FROM ". TABLE_FOLLOWING ." AS fl
+
+				INNER JOIN ". TABLE_USERS ." AS u ON fl.user_id = u.id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON fl.user_id = pic.user_id
+				
+				WHERE fl.user_id = :uid
+				ORDER BY date DESC";
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$row['type'] = 'fl';
+				//$feed[] = $row;
+			}
+		}
+
+		// getting the comments data
+		$sql = "SELECT cmt.*, cmt.created AS date, u.firstName, pic.path FROM ". TABLE_COMMENTS ." AS cmt
+
+
+				INNER JOIN ". TABLE_FOLLOWING ." AS f ON cmt.uid = f.user_id
+				INNER JOIN ". TABLE_USERS ." AS u ON cmt.uid = u.id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON cmt.uid = pic.user_id
+
+				WHERE f.follower_id = :uid
+				ORDER BY date DESC";
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				unset($row['created']); // don't need it
+				unset($row['last_modified']); // don't need it
+				$row['type'] = 'cmt';
+				$feed[] = $row;
+			}
+		}
+
+
+		// getting the points data
+		$sql = "SELECT ps.*, u.firstName, pic.path FROM ". TABLE_POINTS ." AS ps
+
+				INNER JOIN ". TABLE_FOLLOWING ." AS f ON ps.user_id = f.user_id
+				INNER JOIN ". TABLE_USERS ." AS u ON ps.user_id = u.id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON ps.user_id = pic.user_id
+
+				WHERE f.follower_id = :uid
+				ORDER BY date DESC";
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$row['type'] = 'ps';
+				$feed[] = $row;
+			}
+		}
+
+		// getting the questions data
+		$sql = "SELECT qs.*, qs.created AS date, u.firstName, pic.path FROM ". TABLE_QUESTIONS ." AS qs
+
+				INNER JOIN ". TABLE_FOLLOWING ." AS f ON qs.uid = f.user_id
+				INNER JOIN ". TABLE_USERS ." AS u ON qs.uid = u.id
+				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON qs.uid = pic.user_id
+
+				WHERE f.follower_id = :uid
+				ORDER BY date DESC";
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				unset($row['created']); // don't need it
+				unset($row['last_modified']); // don't need it
+				$row['type'] = 'qs';
+				$feed[] = $row;
+			}
+		}
+
+		return $feed;
+	}
+
 
 }
 
 ?>
+
+
+
+
+
+
+
+
+
+

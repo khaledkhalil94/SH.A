@@ -178,21 +178,26 @@ class Database {
 	/**
 	* execute a query string
 	*
-	* @param $sql string
+	* @param string $sql
+	* @param array $binds
 	*
-	* @return boolean|string
+	* @return object|string
 	*
 	*/
-	public function xcute($sql){
+	public function xcute($sql, $binds=[]){
 
 		$stmt = $this->connection->prepare($sql);
 
-		if(!$stmt->execute()){
-			$error = $stmt->errorInfo();
-			return $error;
+		$exe = !empty($binds) ? $stmt->execute($binds) : $stmt->execute();
+
+		if(!$exe){
+			$errors = $stmt->errorInfo();
+			$this->errors = $errors;
+			$this->error = true;
+			return $errors[2];
 		}
 
-		return true;
+		return $stmt;
 	}
 }
 	

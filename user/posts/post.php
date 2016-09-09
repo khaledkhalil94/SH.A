@@ -26,7 +26,7 @@ include (ROOT_PATH . "inc/head.php");
 <body>
 	<div class="user-feed post container section">
 		<div class="feed-post ui segment" id="post-page" post-id="<?= $post->id; ?>">
-			<?php if ($self): ?>
+			<?php if ($self || $post->poster_id === USER_ID): ?>
 			<div title="Actions" class="ui pointing dropdown" id="post-actions">
 				<i class="setting link large icon"></i>
 				<div class="menu">
@@ -115,7 +115,7 @@ include (ROOT_PATH . "inc/head.php");
 			<div class="ui comments">
 				<form class="ui reply form" action="">
 					<div class="field">
-						<textarea name="content" id="comment-submit-textarea" rows="2" style="height:auto;" placeholder="Add a new comment.."></textarea>
+						<textarea name="content" id="comment-submit-textarea" rows="2" placeholder="Add a new comment.."></textarea>
 					</div>
 					<input type="hidden" name="post_id" value="<?= $id; ?>" >
 					<input type="hidden" name="comment_token" value="<?= Token::generateToken(); ?>" >

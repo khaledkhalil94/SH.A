@@ -46,6 +46,7 @@ switch ($action) {
 
 		unset($data['token']);
 
+		$QNA = new QNA();
 		$create = $QNA->create($data);
 
 		if(is_int($create)){

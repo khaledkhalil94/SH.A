@@ -5,6 +5,7 @@ $pageTitle="Ask a new question";
 include (ROOT_PATH . 'inc/head.php');
 if (!$session->is_logged_in()) $session->message("You must log in to submit a new question.", "", "danger");
 
+$QNA = new QNA();
 $sections = $QNA->get_sections();
 ?>
 <body>

@@ -221,13 +221,13 @@ class Post extends QNA {
 		}
 
 		// getting the questions data
-		$sql = "SELECT qs.*, qs.created AS date, u.firstName, pic.path FROM ". TABLE_QUESTIONS ." AS qs
+		$sql = "SELECT DISTINCT qs.*, qs.created AS date, u.firstName, pic.path FROM ". TABLE_QUESTIONS ." AS qs
 
 				INNER JOIN ". TABLE_FOLLOWING ." AS f ON qs.uid = f.user_id
 				INNER JOIN ". TABLE_USERS ." AS u ON qs.uid = u.id
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON qs.uid = pic.user_id
 
-				WHERE f.follower_id = :uid AND qs.status = 1
+				WHERE f.follower_id = :uid AND qs.status = 1 OR qs.uid = :uid
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
@@ -246,6 +246,19 @@ class Post extends QNA {
 		}
 
 		return $feed;
+	}
+
+	public static function PorQ($id){
+
+		if(is_object(QNA::get_question($id))){
+			return "q";
+		} elseif(is_array(self::get_post($id, true))){
+			return "p";
+		} elseif (is_array(Comment::getComment($id))){
+			return "c";
+		} else {
+			return NULL;
+		};
 	}
 
 

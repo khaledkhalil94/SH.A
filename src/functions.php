@@ -1,14 +1,6 @@
 <?php 
 require_once('init.php');
 
-// TBR
-// function redirect_to_D($location = NULL, $delay="0") {
-// 	if ($location != NULL) {
-// 		header("refresh:{$delay};url={$location}");
-// 		exit;
-// 	}
-// }
-
 function msgs(){
 	global $session;
   	$msg = $session->displayMsg();
@@ -76,11 +68,11 @@ function displayDate($dat, $format=""){
 	return $date;
 }
 
-function ctrim($content, $lenght, $dots=false){
+function ctrim($content, $lenght, $dots=false, $link=''){
 	if (strlen($content) > $lenght) {
 		$content = substr($content, 0, $lenght);
-		if($dots){
-			$content .= "...";
+		if($dots === true){
+			$content .= !empty($link) ? "... <a href='{$link}'>Read More</a>" : "...";
 		}
 	}
 	return $content;

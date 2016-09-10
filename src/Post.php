@@ -12,6 +12,11 @@ class Post extends QNA {
 
 	static $table = TABLE_ACTIVITY;
 
+	/**
+	 *
+	 *
+	 *
+	 */
 	public function get_post($PostID, $c=false){
 		global $connection;
 
@@ -89,6 +94,7 @@ class Post extends QNA {
 
 	public function get_stream($uid=USER_ID){
 		global $database;
+		global $connection;
 
 		// initiating the feed array
 		$feed = [];
@@ -122,29 +128,50 @@ class Post extends QNA {
 
 
 		// getting user interactions data NEEDS REWEORK
-		$sql = "SELECT fl.*, u.firstName, pic.path FROM ". TABLE_FOLLOWING ." AS fl
 
-				INNER JOIN ". TABLE_USERS ." AS u ON fl.user_id = u.id
-				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON fl.user_id = pic.user_id
-				
-				WHERE fl.user_id = :uid
-				ORDER BY date DESC";
+		$following_ids = [];
+
+		$sql = "SELECT fl.user_id FROM ". TABLE_FOLLOWING ." AS fl
+
+				WHERE fl.follower_id = :uid";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
 
 		if($database->error === TRUE) {
 
-			$this->errors = $database->errors;
+			$this->errors = $database->errors;printX($this->errors);
 		} else {
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				$row['type'] = 'fl';
-				//$feed[] = $row;
+
+				$following_ids[] = $row['user_id'];
 			}
 		}
 
+		$followers = [];
+
+		foreach ($following_ids as $id) {
+			$sql = "SELECT fl.*, u.firstName AS u_firstname, u_fl.firstname AS f_firstname
+					FROM ". TABLE_FOLLOWING ." AS fl
+					
+					INNER JOIN ". TABLE_USERS ." AS u ON fl.user_id = u.id
+					INNER JOIN ". TABLE_USERS ." AS u_fl ON fl.follower_id = u_fl.id
+
+					WHERE fl.follower_id = {$id} AND fl.user_id != {$uid}";
+
+			$stmt = $connection->query($sql);
+
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$row['type'] = 'fl';
+				$feed[] = $row;
+			}
+
+		}
+		//printX($feed);
+
+
 		// getting the comments data
-		$sql = "SELECT cmt.*, cmt.created AS date, u.firstName, pic.path FROM ". TABLE_COMMENTS ." AS cmt
+		$sql = "SELECT cmt.*, cmt.created AS date, CONCAT(u.firstName, ' ', u.lastName) AS fullname, pic.path FROM ". TABLE_COMMENTS ." AS cmt
 
 
 				INNER JOIN ". TABLE_FOLLOWING ." AS f ON cmt.uid = f.user_id
@@ -200,7 +227,7 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_USERS ." AS u ON qs.uid = u.id
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON qs.uid = pic.user_id
 
-				WHERE f.follower_id = :uid
+				WHERE f.follower_id = :uid AND qs.status = 1
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);

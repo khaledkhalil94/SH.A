@@ -78,6 +78,7 @@ span#msg-undo {
 .messages .message.reply.ui.segment {
     box-shadow: none;
     width: 80%;
+    background: none;
 }
 
 .message-list .message-row .message-details p {

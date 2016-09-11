@@ -2,8 +2,9 @@
 
 .container.section {
     background-color: white;
-    padding: 60px 70px;
-    min-height: 600px;
+    padding: 90px 70px;
+    min-height: 755px;
+    height: 100%;
 }
 
 .wrapper h2 {

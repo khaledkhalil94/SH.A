@@ -211,3 +211,7 @@
 .ui.vertical.segment.title-form.form {
     border-bottom: none;
 }
+
+.question-page .post-header .nine.wide.column.post-title {
+    margin-left: -10px;
+}

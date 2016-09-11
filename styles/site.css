@@ -32,3 +32,71 @@
     font-size: 18px;
     text-align: right;
 }
+
+.ui.container.main-page.news-feed {
+    width: 80%;
+}
+
+.container.section.main-page .news-feed {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.container.section.main-page {
+    background-color: #eaeaea;
+}
+
+.main-page .news-feed .header.user-details {
+    display: flex;
+}
+
+.main-page .news-feed .header.user-details .summary {
+    display: flex;
+}
+
+.main-page .news-feed .content .extra.text, .main-page .news-feed .content .text p {
+    padding: 15px;
+}
+
+.main-page .news-feed .segment a:hover {
+    text-decoration: underline;
+}
+
+.main-page .news-feed .content .post-footer {
+    display: flex;
+}
+
+.main-page .news-feed .content .post-footer .post-comments {
+    margin-left: 17px;
+}
+
+.main-page .news-feed .content .post-footer a:hover {
+    text-decoration: none;
+}
+
+.main-page .news-feed .content .post-footer a {
+    cursor: pointer;
+}
+
+.main-page .news-feed .segment .image img {
+    border-radius: 10%;
+}
+
+.main-page .segment:not(.like-feed):not(.follow-feed) .user-details .summary {
+    margin-left: 10px;
+}
+
+.main-page .news-feed .ui.segment {
+    padding-right: 20%;
+}
+
+.main-page .follow-feed i.mdi.mdi-account-multiple-plus {
+    color: #21BA45;
+    font-size: x-large;
+    margin-right: 3px;
+}
+
+.main-page .news-feed .question-view .extra.text h3 {
+    margin: 0px;
+}

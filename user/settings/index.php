@@ -9,6 +9,7 @@ $session->userLock($user);
 
 $st = isset($_GET['st']) ? $_GET['st'] : 'ui';
 $pageTitle = 'Settings';
+$sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
 ?>
 <div class="container section user-settings">

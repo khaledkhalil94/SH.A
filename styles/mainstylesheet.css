@@ -302,7 +302,7 @@ ul.nav.navbar-nav {
 }
 
 .time {
-    font-size: small;
+    font-size: smaller;
     color: #B7B7B7;
 }
 
@@ -398,6 +398,9 @@ p.form-note {
     background-color: rgb(47, 83, 121);
     height: 50px;
     margin: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 555;
 }
 
 .ui.menu .elements a.item {
@@ -441,4 +444,51 @@ p.form-note {
 
 .ui.dimmer.modals .modal .error.message .header {
     background-color: inherit;
+}
+
+.user-feed .feed-post .comments textarea#comment-submit-textarea {
+    height: auto;
+    resize: none;
+}
+
+.time a {
+    color: inherit;
+}
+
+.time a:hover {
+    text-decoration: underline;
+}
+
+.ui.stackable.menu .right.item {
+    margin-left: 0!important;
+}
+
+.ui.selection.dropdown:focus {border-color: inherit;}
+
+.ui.stackable.menu .dropdown i.dropdown.icon {
+    margin: auto -7px;
+    color: white;
+}
+
+.stackable.menu .ui.selection.active.dropdown, .stackable.menu .ui.selection.dropdown .menu {
+    border-color: inherit;
+    background: inherit;
+}
+
+.stackable.menu .ui.compact.selection.dropdown {
+    background: inherit;
+    color: white;
+}
+
+
+.item {}
+
+.stackable.menu .ui.selection.dropdown .menu .item {
+    color: white!important;
+    border-color: inherit;
+}
+
+.stackable.menu .dropdown .text.default {
+    margin: auto 6px;
+    color: white;
 }

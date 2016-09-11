@@ -46,7 +46,6 @@ class Messages {
 		} else {
 			die(json_encode($database->errors));
 		}
-
 	}
 
 	// get all visible messages by user id
@@ -178,7 +177,6 @@ class Messages {
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
 		return $stmt->execute();
-
 	}
 
 	// hides a messages
@@ -207,11 +205,11 @@ class Messages {
 
 		$user_id = USER_ID;
 
-		$sql = "SELECT COUNT(*) FROM `messages` WHERE user_id = {$user_id}
+		$sql = "SELECT COUNT(*) AS count FROM `messages` WHERE user_id = {$user_id}
 				AND deleted = 0 AND seen = 0";
 		
 		$res = $connection->query($sql);
-		return $res->fetch()[0];
+		return $res->fetch()['count'];
 	}
 
 	// checks if the message is read or not

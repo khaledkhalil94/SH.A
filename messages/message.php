@@ -24,7 +24,7 @@ $date = $message->date;
 $sec = "messages";
 include (ROOT_PATH . "inc/head.php");
 ?>
-<div class="container section messages">
+<div class="ui container section messages">
 	<?= msgs(); ?>
 
 <?php 

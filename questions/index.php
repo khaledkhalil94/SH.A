@@ -24,7 +24,7 @@ foreach ($sections as $s) {
 
 ?>
 <body>
-	<div class="container section">
+	<div class="ui container section">
 		<div class="ui large search" id="question-search">
 			<div class="ui icon input">
 				<input type="text" placeholder="Search WILL ADD LATER">

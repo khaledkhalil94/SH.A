@@ -11,7 +11,7 @@ require(ROOT_PATH . 'inc/head.php');
 ?>
 <body>
 	<div class="main signup-page">
-		<div class="container">
+		<div class="ui container">
 			<?= msgs(); ?>
 			<div class="ui raised very padded segment sign-up">
 				<div class="ui compact warning message">

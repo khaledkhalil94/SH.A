@@ -12,7 +12,7 @@ $pageTitle = 'Settings';
 $sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
 ?>
-<div class="container section user-settings">
+<div class="ui container section user-settings">
 	<?= msgs(); ?>
 
 	<div class="ui grid">

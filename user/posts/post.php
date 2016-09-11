@@ -24,7 +24,7 @@ include (ROOT_PATH . "inc/head.php");
 ?>
 
 <body>
-	<div class="user-feed post container section">
+	<div class="user-feed post ui container section">
 		<div class="feed-post ui segment" id="post-page" post-id="<?= $post->id; ?>">
 			<?php if ($self || $post->poster_id === USER_ID): ?>
 			<div title="Actions" class="ui pointing dropdown" id="post-actions">

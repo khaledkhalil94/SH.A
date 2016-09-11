@@ -12,16 +12,11 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg">
 
 	<script src="<?= BASE_URL; ?>scripts/jquery-1.11.3.min.js"></script>
- 	<link rel="stylesheet" href="<?= BASE_URL; ?>styles/bootstrap-3.3.5/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/bootstrap-theme.min.css" />
-	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/carousel.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/site.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/font-awesome-4.4.0/css/font-awesome.min.css"/>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/students.css"/>
 	<link rel="stylesheet" href="//cdn.materialdesignicons.com/1.6.50/css/materialdesignicons.min.css">
 	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"> -->
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"> -->
 	<link rel="stylesheet" href="<?= BASE_URL; ?>styles/Semantic-UI-CSS-master/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/mainstylesheet.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/questions.css"/>

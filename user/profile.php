@@ -68,7 +68,7 @@ $pageTitle = $name;
 $sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
  ?>
-<div class="container section">
+<div class="ui ui container section">
 <?php 
 
 if($session->is_logged_in() && !$self){

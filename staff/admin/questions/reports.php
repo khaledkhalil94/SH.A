@@ -12,7 +12,7 @@ if (isset($_GET['dl'])) {
 	?>
 
 	<div class="main">
-		<div class="container section">
+		<div class="ui container section">
 			<div class="wrapper">
 			<h2>Comments reports</h2>
 			</div>

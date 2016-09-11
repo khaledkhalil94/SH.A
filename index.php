@@ -25,7 +25,7 @@ if($session->is_logged_in()){
 
 ?>
 <body>
-	<div class="container section main-page">
+	<div class="ui ui container section main-page">
 		<div class="content front">
 			<?= msgs(); ?>
 			<div class="news-feed">
@@ -58,12 +58,13 @@ if($session->is_logged_in()){
 										</div>
 										<?php } elseif($to_self) { ?>
 										<div class="summary">
-											<a href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on your profile&nbsp;
+											<a class="user-title" user-id="<?=$value['p_id']?>" href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on your profile&nbsp;
 											<div class="time"><a href="<?= $post_id; ?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
 										</div>
 										<?php } else { ?>
 										<div class="summary">
-											<a href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on&nbsp;<a href="<?=BASE_URL."user/{$value['u_id']}/"?>"><?= $value['u_fullname'] ?></a>'s profile&nbsp;
+											<a class="user-title" user-id="<?=$value['p_id']?>" href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on&nbsp;
+											<a class="user-title" user-id="<?=$value['u_id']?>" href="<?=BASE_URL."user/{$value['u_id']}/"?>"><?= $value['u_fullname'] ?></a>'s profile&nbsp;
 											<div class="time"><a href="<?= $post_id ?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
 										</div>
 										<?php } ?>
@@ -109,7 +110,7 @@ if($session->is_logged_in()){
 											<a href="<?=BASE_URL."user/{$value['uid']}/"?>"><img src="<?= $value['path'] ?>"></a>
 										</div>
 										<div class="summary">
-											<a href="<?=BASE_URL."user/{$value['uid']}/"?>"><?= $value['fullname'] ?></a>&nbsp;Commented on a&nbsp;<a href="<?= $post_id ?>"><?=$p?></a>&nbsp;
+											<a class="user-title" user-id="<?=$value['uid']?>" href="<?=BASE_URL."user/{$value['uid']}/"?>"><?= $value['fullname'] ?></a>&nbsp;Commented on a&nbsp;<a href="<?= $post_id ?>"><?=$p?></a>&nbsp;
 											<div class="time"><a href="<?= $id ?>"><span class="timestamp"><?= $value['date']; ?></span></a></div>
 										</div>
 									</div>
@@ -143,7 +144,7 @@ if($session->is_logged_in()){
 											<a href="<?=$uid ?>"><img src="<?= $value['path'] ?>"></a>
 										</div>
 										<div class="summary">
-											<?php if($self){ ?><p>You</p><?php }else{ ?><a href="<?=$uid ?>"><?= $value['firstName'] ?></a><?php }?>
+											<?php if($self){ ?><p>You</p><?php }else{ ?><a class="user-title" user-id="<?=$value['uid']?>" href="<?=$uid ?>"><?= $value['firstName'] ?></a><?php }?>
 											&nbsp;asked a new&nbsp;<a href="<?=$id?>">question</a>&nbsp;
 											<div class="time"><a href="<?= $id?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
 										</div>
@@ -173,7 +174,8 @@ if($session->is_logged_in()){
 									<div class="header user-details">
 										<i class="mdi mdi-account-multiple-plus"></i>
 										<div class="summary">
-											<a href="<?= BASE_URL."user/{$value['follower_id']}/"?>"><?=$value['f_firstname']?></a>&nbsp;Followed&nbsp;<a href="<?= BASE_URL."user/{$value['user_id']}/"?>"><?=$value['u_firstname']?></a>&nbsp;
+											<a class="user-title" user-id="<?=$value['follower_id']?>" href="<?= BASE_URL."user/{$value['follower_id']}/"?>"><?=$value['f_firstname']?></a>&nbsp;Followed&nbsp;
+											<a class="user-title" user-id="<?=$value['user_id']?>" href="<?= BASE_URL."user/{$value['user_id']}/"?>"><?=$value['u_firstname']?></a>&nbsp;
 											<div class="time"><span class="timestamp"><?= $value['date'] ?></span></div>
 										</div>
 									</div>
@@ -201,7 +203,7 @@ if($session->is_logged_in()){
 									<div class="header user-details">
 										<i class="thumbs up blue large icon"></i>
 										<div class="summary">
-											<a href="<?= BASE_URL."user/{$value['user_id']}/" ?>"><?= $value['firstName'] ?></a>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
+											<a class="user-title" user-id="<?=$value['user_id']?>" href="<?= BASE_URL."user/{$value['user_id']}/" ?>"><?= $value['firstName'] ?></a>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
 											<div class="time"><span class="timestamp"><?= $value['date'] ?></span></div>
 										</div>
 									</div>

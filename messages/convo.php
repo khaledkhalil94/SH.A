@@ -16,7 +16,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 ?>
 
 <div class="main">
-	<div class="container section message-list">
+	<div class="ui container section message-list">
 		<?php if($staff){ ?>
 		<h3>Messages from the admin.</h3>
 		<?php } else { ?>

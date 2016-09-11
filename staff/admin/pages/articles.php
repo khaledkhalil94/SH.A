@@ -35,7 +35,7 @@ $query = append_queries($_SERVER['QUERY_STRING']);
 	?>
 
 	<div class="main">
-		<div class="container section">
+		<div class="ui container section">
 			<div class="wrapper">
 			<?= msgs(); ?>
 			<p>TODO: search</p>

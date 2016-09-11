@@ -65,7 +65,7 @@ $pageTitle = $student->id;
 $sec = "users";
 include (ROOT_PATH . "inc/head.php");
  ?>
-<div class="container section">
+<div class="ui container section">
 <?= msgs(); ?>
 
 <h2>Update information</h2>

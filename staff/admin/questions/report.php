@@ -26,7 +26,7 @@ if (isset($_GET['dl'])) {
 
 ?>
 <body>
-	<div class="container section">
+	<div class="ui container section">
 		<div class="row">
 			<div class="col-sm-8 blog-main">
 				<div class="blog-post">

@@ -215,3 +215,7 @@
 .question-page .post-header .nine.wide.column.post-title {
     margin-left: -10px;
 }
+
+.question-page .commentz .comment .content .text {
+    padding-left: 70px;
+}

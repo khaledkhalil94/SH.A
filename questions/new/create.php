@@ -9,7 +9,7 @@ $QNA = new QNA();
 $sections = $QNA->get_sections();
 ?>
 <body>
-	<div class="container section">
+	<div class="ui container section">
 
 		<div class="ui raised very padded segment">
 			<h3>Create a new question</h3>

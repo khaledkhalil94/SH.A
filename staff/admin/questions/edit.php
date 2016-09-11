@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
 }
 ?>
 <body>
-	<div class="container section">
+	<div class="ui container section">
 	<?= msgs(); ?>
 	<h3>Edit Page</h3>
 		<div class="row">

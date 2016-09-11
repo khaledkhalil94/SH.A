@@ -9,7 +9,7 @@ $pageTitle = "Professors";
   ?>
 
   <div class="main">
-    <div class="container section">
+    <div class="ui container section">
       <div class="wrapper">
         <h2>PROFS</h2>
             <div class="pagination">

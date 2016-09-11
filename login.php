@@ -11,7 +11,7 @@ require(ROOT_PATH . 'inc/head.php');
 </pre>
 <body>
 	<div class="main login-page">
-		<div class="container">
+		<div class="ui container">
 	<?= msgs(); ?>
 		<div class="ui raised very padded segment log-in">
 				<div class="ui message">

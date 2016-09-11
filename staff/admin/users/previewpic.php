@@ -23,7 +23,7 @@ $pageTitle = $student->id;
 include (ROOT_PATH . "inc/head.php");
 
  ?>
-<div class="container section">
+<div class="ui container section">
 <?= msgs(); ?>
 
 	<div class="jumbotron">

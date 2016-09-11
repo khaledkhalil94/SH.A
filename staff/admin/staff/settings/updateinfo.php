@@ -56,7 +56,7 @@ include (ROOT_PATH . "inc/head.php");
 include (ROOT_PATH . 'inc/header.php');
 include (ROOT_PATH . 'inc/navbar.php');
  ?>
-<div class="container section">
+<div class="ui container section">
 <?php if(!empty($session->msg)):?>
 <div class="alert alert-success" role="alert"> <?= $session->msg; ?></div>
 <?php endif; ?>

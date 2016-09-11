@@ -19,7 +19,7 @@ $pageTitle = "Messages";
 $sec = "messages";
 include_once (ROOT_PATH . "inc/head.php");
 ?>
-<div class="container section messages">
+<div class="ui container section messages">
 	<?= msgs(); ?>
 	<ul class="msg-center center" id="msgs-msg" style="display:none;">
 

@@ -43,7 +43,7 @@ $name = $q->full_name;
 $imgPath = $q->img_path ?: DEF_PIC;
 ?>
 <body>
-	<div class="question-page container section">
+	<div class="question-page ui container section">
 		<?= msgs(); ?>
 
 		<?php require_once('question_body_user.php'); ?>

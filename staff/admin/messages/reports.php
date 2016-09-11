@@ -9,7 +9,7 @@ $session->adminLock();
   ?>
 
   <div class="main">
-    <div class="container section">
+    <div class="ui container section">
       <div class="wrapper">
       <h2>Messages reports</h2>
 			</div>

@@ -31,7 +31,7 @@ if($post_modified_date > $post_date){
 }
 ?>
 <body>
-	<div class="container section pub">
+	<div class="ui container section pub">
 		<?= msgs(); ?>
 		<div class="ui two column grid">
 			<div class="twelve wide column">

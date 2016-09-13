@@ -1,5 +1,5 @@
 <?php 
-	require_once($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 $sec = isset($sec) ? $sec : '';
 
@@ -51,7 +51,7 @@ if(USER_ID){
 	
 	</div>
 <?php if($session->is_logged_in()): ?>
-	<div class="ui compact selection dropdown">
+	<div class="ui compact selection dropdown" id="menu_dropdown">
 		<img class="ui avatar image" src="<?= $user->img_path ?>">
 		 <div class="text default"><?= $user->full_name ?></div>
 		<i class="dropdown icon"></i>

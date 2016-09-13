@@ -25,7 +25,6 @@ $imgValidation = array(
 	'max_height' => 800
 	);
 
-
 require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
 require_once(__DIR__.'/QNA.php');

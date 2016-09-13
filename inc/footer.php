@@ -39,6 +39,6 @@
   </div>
 </div>
 <script>
-  $('.ui.dropdown').dropdown({action:'nothing'});
+  $('#menu_dropdown').dropdown({action:'nothing'});
 
 </script>

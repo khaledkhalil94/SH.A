@@ -15,7 +15,7 @@
 			<?php if($session->adminCheck() && $reports_count) { ?>
 				<div class="report-message">
 					<div class="ui negative compact message reports">
-						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $id; ?>">This post has been reported <?= $reports_count; ?></a>
+						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $id; ?>">This question has been reported <?= $reports_count; ?></a>
 					</div>
 				</div>
 			<?php } ?>
@@ -23,7 +23,7 @@
 			<div class="ui left aligned container" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
-					This post is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
+					This question is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
 				</div>
 				<?php } ?>
 				<div class="ui header">
@@ -53,11 +53,11 @@
 							</div>
 							<?php if($q->status == "1"){ ?>
 							<div class="item" id="post-unpublish">
-								<a class="ui a">unPublish</a>
+								<a class="ui a">Hide</a>
 							</div>
 							<?php } else { ?>
 							<div class="item" id="post-publish">
-								<a class="ui a">Publish</a>
+								<a class="ui a">unHide</a>
 							</div>
 							<?php } ?>
 							<div class="item" id="post-delete">

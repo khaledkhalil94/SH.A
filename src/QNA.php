@@ -20,11 +20,9 @@ class QNA {
 	/**
 	 * create a new question
 	 *
-	 * @param $title string
-	 * @param $content string
-	 * @param $section int
+	 * @param array $data data
 	 *
-	 * @return int|array
+	 * @return int|string
 	 */
 	public function create($data){
 		global $database;

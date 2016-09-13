@@ -5,7 +5,7 @@ $QNA = new QNA();
 $sections = $QNA->get_sections();
 
 $cp = isset($_GET['page']) ? $_GET['page'] : 1;
-$rpp = 4;
+$rpp = 6;
 
 if(isset($_GET['section']) && !empty($_GET['section'])){
 	$sec = $_GET['section'];
@@ -94,3 +94,9 @@ foreach ($qs as $q):
 	<?php 
 endforeach;
  ?>
+<script>
+$('#questions .items').each(function(index, value) {
+	$date = $(this).find('#post-date').text();
+	$(this).find('#post-date').text(moment($date).fromNow());
+});
+</script>

@@ -5,7 +5,7 @@ $QNA = new QNA();
 $sections = $QNA->get_sections();
 
 $cp = isset($_GET['page']) ? $_GET['page'] : 1;
-$rpp = 4;
+$rpp = 6;
 
 if(isset($_GET['section'])){
 	$sec = $_GET['section'];
@@ -53,9 +53,9 @@ include (ROOT_PATH . 'inc/head.php');
 ?>
 <body>
 	<div class="ui container section">
-		<div class="ui large search" id="question-search">
+		<div class="ui large search" id="ent">
 			<div class="ui icon input">
-				<input type="text">
+				<input type="text" autocomplete="off" id="sec_ent" whoami>
 			</div>
 			<div class="results"></div>
 		</div>
@@ -92,7 +92,7 @@ include (ROOT_PATH . 'inc/head.php');
 		<br><br><hr>
 		<h3>Questions</h3>
 		<?= $pag->display(); ?>
-		<div class="container questions" id="questions">
+		<div class="ui container questions" id="questions">
 			<!-- TODO: Add pagination -->
 			<?php 
 			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 

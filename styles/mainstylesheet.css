@@ -150,6 +150,7 @@ p.form-note {
     position: fixed;
     width: 100%;
     z-index: 555;
+    border-radius: 0px;
 }
 
 .ui.menu .elements a.item {

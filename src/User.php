@@ -685,14 +685,6 @@ class User {
 			return false;
 		}
 	}
-
 }
 
 ?>
-
-
-
-
-
-
-

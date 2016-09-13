@@ -25,7 +25,7 @@ $sections = $QNA->get_sections();
 					</div>
 					<div class="field">
 						<label>Select section</label>
-						<div class="ui selection dropdown">
+						<div class="ui selection dropdown" id="q_c_dropdown">
 							<input type="hidden" name="section">
 							<i class="dropdown icon"></i>
 							<div class="default text"></div>

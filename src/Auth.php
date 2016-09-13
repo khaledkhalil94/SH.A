@@ -336,9 +336,4 @@ Class Auth {
 		return password_verify($pw, $current_pw);
 	}
 }
-
-
-
-
-
-
+?>

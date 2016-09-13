@@ -265,13 +265,3 @@ class Post extends QNA {
 }
 
 ?>
-
-
-
-
-
-
-
-
-
-

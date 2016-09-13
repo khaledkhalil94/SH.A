@@ -1,16 +1,11 @@
-images/profilepic/55010e1857c1e48c4046289ea3e8159836a1.jpg
 *.jpg
 *.png
 *.jpeg
-inc/navbar-old.php
 scripts/node_modules/
 scripts/dist/
 scripts/lib/
 scripts/gulpfile.js
 scripts/package.json
-pages
-scripts/moment.min.js
-scripts/jquery-1.11.3.min.min.js
 server.php
 test.php
 images/Thumbs.db

@@ -30,5 +30,4 @@
         <meta http-equiv="refresh" content="0; url='/sha/err.php?javascript=no'">
     </noscript>
 </head>
-<?php //require_once("header.php"); ?>
 <?php require_once("navbar.php"); ?>

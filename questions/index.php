@@ -1,34 +1,61 @@
 <?php
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
-$pageTitle = "Students";
-$sec = "questions";
-include (ROOT_PATH . 'inc/head.php');
-$sec = isset($_GET['section']) ? $_GET['section'] : "";
 
 $QNA = new QNA();
 $sections = $QNA->get_sections();
 
-foreach ($sections as $s) {
-	switch ($s['acronym']) {
-		case $sec:
-			$qs = $QNA->get_questions($s['id']);
-			$sec_name = $s['title'];
-			break 2; // breaks out of the two casses (foreach and switch)
-		
-		default:
-			$qs = $QNA->get_questions();
-			$sec_name = 'All';
-			break;
+$cp = isset($_GET['page']) ? $_GET['page'] : 1;
+$rpp = 4;
+
+if(isset($_GET['section'])){
+	$sec = $_GET['section'];
+
+	foreach ($sections as $s) {
+		switch ($s['acronym']) {
+			case $sec:
+				$sec_name = $s['title'];
+
+				$QNA->section = $s['id'];
+
+				$qs = $QNA->get_questions();
+
+				$count = count($qs);
+
+				$pag = new Pagination($count, $cp, $rpp);
+
+				$offset = $pag->offset();
+
+				$qs = $QNA->get_questions($rpp, $offset);
+
+				break 2; // breaks out of the two casses (foreach and switch)
+			
+			default:
+				break;
+		}
 	}
+} else {
+
+	$qs = $QNA->get_questions();
+
+	$count = count($qs);
+
+	$pag = new Pagination($count, $cp, $rpp);
+
+	$offset = $pag->offset();
+
+	$qs = $QNA->get_questions($rpp, $offset);
+	$sec_name = 'All';
 }
 
+$pageTitle = "Questions";
+$sec = "questions";
+include (ROOT_PATH . 'inc/head.php');
 ?>
 <body>
 	<div class="ui container section">
 		<div class="ui large search" id="question-search">
 			<div class="ui icon input">
-				<input type="text" placeholder="Search WILL ADD LATER">
-				<i class="search icon"></i>
+				<input type="text">
 			</div>
 			<div class="results"></div>
 		</div>
@@ -55,19 +82,17 @@ foreach ($sections as $s) {
 					<?php endforeach; ?>
 					</div>
 				</div>
-					<br>
-					<br>
-					<script>$('.ui.dropdown').dropdown();</script>
+				<br>
+				<br>
 			</div>
-
-
 		<?php if ($session->is_logged_in()): ?>
 			<a type="button" href="./new" class="ui green button">Ask a new question</a>
 		<?php endif; ?>
 		<?= msgs(); ?>
-		<hr>
+		<br><br><hr>
+		<h3>Questions</h3>
+		<?= $pag->display(); ?>
 		<div class="container questions" id="questions">
-			<h3>Questions</h3>
 			<!-- TODO: Add pagination -->
 			<?php 
 			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 
@@ -78,6 +103,7 @@ foreach ($sections as $s) {
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
 					$votes = QNA::get_votes($q->id);
+					$votes = $votes ?: "0";
 					$reports_count = QNA::get_reports("questions", $q->id) ? count(QNA::get_reports("questions", $q->id)) : null;
 					$img_path = $q->img_path ?: DEF_PIC;
 					?>
@@ -119,8 +145,10 @@ foreach ($sections as $s) {
 					<?php 
 			 	endforeach; 
 		 	}?>
-		 </div>
+		 </div><br>
+		<?= $pag->display(); ?>
  	</div>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
+<script src='/sha/scripts/q_pag.js'></script>
 </html>

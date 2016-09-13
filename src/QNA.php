@@ -9,6 +9,8 @@ class QNA {
 
 	public $PostID;
 
+	public $section='';
+
 	static $table = TABLE_QUESTIONS;
 
 	public function __construct($PostID=null){
@@ -81,9 +83,9 @@ class QNA {
 	 *
 	 * @return object
 	 */
-	public function get_questions($section="", $limit=true, $count=10, $order='CREATED DESC'){
+	public function get_questions($count='', $offset=0){
 		global $connection;
-
+//printX($this->section);
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
 				info.username AS username,
 				sections.title AS fac, pics.path AS img_path,
@@ -96,11 +98,12 @@ class QNA {
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section";
 
-		if(!empty($section)) $sql .= " WHERE section.id = '$section' AND questions.status != 0";
+		$sql .= " WHERE questions.status = 1";
+		if(!empty($this->section)) $sql .= " AND section.id = '$this->section'";
 
-		$sql .= " ORDER BY {$order}";
+		$sql .= " ORDER BY questions.created DESC";
 
-		if($limit) $sql .= " LIMIT {$count}";
+		if(!empty($count)) $sql .= " LIMIT {$count} OFFSET {$offset}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -109,7 +112,9 @@ class QNA {
 			return $error[2];
 		}
 
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
+		$qs = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+		return $qs;
 	}
 
 	/**
@@ -498,5 +503,4 @@ class QNA {
 	}
 
 }
-
- ?>
+?>

@@ -11,7 +11,7 @@
 	<link rel="icon" type="image/png" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg" sizes="192x192">
 	<link rel="apple-touch-icon" sizes="180x180" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg">
 
-	<script src="<?= BASE_URL; ?>scripts/jquery-1.11.3.min.js"></script>
+	<script src="<?= BASE_URL; ?>scripts/dist/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/site.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/font-awesome-4.4.0/css/font-awesome.min.css"/>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/students.css"/>

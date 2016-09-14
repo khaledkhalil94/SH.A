@@ -2,6 +2,7 @@
 *.png
 *.jpeg
 scripts/*
+scripts/dist/gulpfile.js
 !scripts/dist/
 styles/font-awesome-4.4.0
 styles/Semantic-UI-CSS-master
@@ -14,5 +15,3 @@ test.php
 images/Thumbs.db
 *.db
 *.db
-scripts/jquery-1.11.3.min.js
-scripts/moment.min.js

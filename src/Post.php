@@ -63,13 +63,23 @@ class Post extends QNA {
 
 				INNER JOIN ". TABLE_INFO ." AS info ON users.id = info.id 
 
-				WHERE users.id = {$uid}";
+				WHERE users.id = :uid";
 
-		return $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
+
+		$stmt = $database->xcute($sql, [':uid' => $uid]);
+
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+			
+			return $stmt->fetch(PDO::FETCH_ASSOC);
+		}
+
 	}
 
 	public function get_posts($UserID){
-		global $connection;
+		global $database;
 
 		$sql = "SELECT users.id AS uid, users.firstName, CONCAT(users.firstName, ' ', users.lastName) AS full_name, info.username,
 				activity.*, pic.path AS img_path FROM ". TABLE_USERS ." AS users
@@ -78,18 +88,17 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_ACTIVITY ." AS activity ON users.id = activity.poster_id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON users.id = pic.user_id
 
-				WHERE activity.user_id = {$UserID} ORDER BY date DESC";
+				WHERE activity.user_id = :uid ORDER BY date DESC";
 
-		$stmt = $connection->prepare($sql);
+		$stmt = $database->xcute($sql, [':uid' => $UserID]);
 
-		if(!$stmt->execute()){
-			$error = $stmt->errorInfo();
-			$this->error = true;
-			$errMsg = $error[2];
-			return $errMsg;
+		if($database->error === TRUE) {
+
+			$this->errors = $database->errors;
+		} else {
+
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
 		}
-
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	public function get_stream($uid=USER_ID){

@@ -6,18 +6,13 @@ include (ROOT_PATH . "inc/head.php");
 
 $post = new Post();
 
-function date_compare($a, $b)
-{
-	 $t1 = strtotime($a['date']);
-	 $t2 = strtotime($b['date']);
-	 return $t1 - $t2;
-}    
-
 if($session->is_logged_in()){
 	$feed = $post->get_stream();
 	
 	usort($feed, 'date_compare');
 	$feed = array_reverse($feed);
+	
+	$feed = array_slice($feed, 0, 30); // limit the feed items to 30
 
 	$nf = [];
 }

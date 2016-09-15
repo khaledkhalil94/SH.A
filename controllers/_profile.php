@@ -108,7 +108,7 @@ switch ($action) {
 		break;
 
 	case 'feed':
-	sleep(2);
+
 		$data = $_POST;
 		unset($data['action']);
 

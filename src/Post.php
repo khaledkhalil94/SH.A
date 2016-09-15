@@ -57,6 +57,7 @@ class Post extends QNA {
 
 	private function get_post_to($uid){
 		global $connection;
+		global $database;
 
 		$sql = "SELECT users.id AS uid, users.firstName AS r_fn, CONCAT(users.firstName, ' ', users.lastName) AS r_full_name, info.username AS r_un
 				FROM ". TABLE_USERS ." AS users

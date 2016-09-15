@@ -55,7 +55,7 @@ include (ROOT_PATH . 'inc/head.php');
 	<div class="ui container section">
 		<div class="ui large search" id="ent">
 			<div class="ui icon input">
-				<input type="text" autocomplete="off" id="sec_ent" whoami>
+				<input type="text" autocomplete="off" id="sec_ent">
 			</div>
 			<div class="results"></div>
 		</div>

@@ -450,7 +450,7 @@ class User {
 
 		INNER JOIN ". TABLE_USERS ." AS users ON block_list.blocked_id = users.id
 		INNER JOIN ". TABLE_INFO ." AS info ON block_list.blocked_id = info.id
-		INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON block_list.blocked_id = pics.user_id
+		INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON block_list.blocked_id = pics.user_id
 		
 		WHERE block_list.user_id = :user_id";
 
@@ -489,8 +489,8 @@ class User {
 		}
 
 		$sql = "SELECT info.username AS title, info.id AS id, pic.path AS image FROM `login_info` AS info
-		LEFT JOIN `profile_pic` AS pic ON info.id = pic.user_id
-		WHERE info.{$id} LIKE ? LIMIT 4";
+				LEFT JOIN `profile_pic` AS pic ON info.id = pic.user_id
+				WHERE info.{$id} LIKE ? LIMIT 4";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(1, "%{$name}%");

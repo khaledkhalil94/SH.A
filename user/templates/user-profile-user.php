@@ -145,7 +145,7 @@
 				<?php } else { ?>
 					<button class="ui button green" user-id="<?= $id ?>" id="user_flw">Follow</button>
 				<?php } ?>
-					<button class="ui button basic">Send message</button>
+					<a href='/sha/messages/?sh=compose&un=<?=$id?>' class="ui button basic">Send message</a>
 					<div title="Report" style="float:right;" data-variation="mini" class="ui icon link button">
 						<i class="flag icon" title="report"></i>
 					</div>

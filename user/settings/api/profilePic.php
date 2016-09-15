@@ -1,8 +1,7 @@
 <?php 
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
-//sleep(2);
-// delete action
+
 if(isset($_POST['action']) && $_POST['action'] == 'delete') {
 
 	$image = new Images();

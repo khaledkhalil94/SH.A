@@ -85,6 +85,9 @@ switch ($_POST['action']) {
 		
 		$data = $_POST;
 		unset($_POST);
+
+		if($data['send_to'] === USER_ID) die(json_encode(['status' => false, 'err' => 'You can\'t send a message to yourself.']));
+
 		$action = Messages::sendMsg($data);
 
 		if($action === true){ // delete success

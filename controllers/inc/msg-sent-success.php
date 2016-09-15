@@ -7,13 +7,12 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
       header('Location:404.php');
 }
 
-$msg = $_GET['msg'];
 ?>
 
 <div class="ui center" style="text-align:center;">
-	<i class="remove massive circle big red icon"></i>
+	<i class="check massive green circle icon"></i>
 	<br><br>
 	<div class="header">
-		<p><?= $msg; ?></p>
-	</div>
+		<h2>Your message has been sent.</h2>
+	</div><br>
 </div>

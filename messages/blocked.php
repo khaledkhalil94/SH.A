@@ -24,7 +24,7 @@ foreach ($blocked as $b):
 		</div>
 		<img class="ui avatar image" src="<?= $b->path; ?>">
 		<div class="content">
-			<a href="/sha/user/<?= $b->uid; ?>"><?= $b->full_name; ?></a>
+			<a href="/sha/user/<?= $b->uid; ?>/"><?= $b->full_name; ?></a>
 			<br>
 			<a class="username" href="/sha/user/<?= $b->uid; ?>">@<?= $b->username; ?></a>
 		</div>

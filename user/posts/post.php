@@ -49,7 +49,7 @@ include (ROOT_PATH . "inc/head.php");
 							<p><a href="/sha/user/<?= $post->r_id; ?>/"><?= $post->firstName;?> </a></p>
 						</span> 
 
-						<span id="post-date" class="time" title="<?=$post->date;?>"><?= $post->date;?></span>
+						<span id="post-date" class="time" title="<?=$post->date;?>"><?= get_timeago($post->date);?></span>
 					</div>
 				<?php } else { ?>
 					<div class="meta">
@@ -62,7 +62,7 @@ include (ROOT_PATH . "inc/head.php");
 							</p>
 						</span> 
 
-						<span id="post-date" class="time" title="<?=$post->date;?>"><?= $post->date;?></span>
+						<span id="post-date" class="time" title="<?=$post->date;?>"><?= get_timeago($post->date);?></span>
 					</div>
 				<?php } ?>
 					<br>

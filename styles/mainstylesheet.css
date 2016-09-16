@@ -252,3 +252,7 @@ hr {
     border-top: 1px solid #eeeeee;
     border-bottom: 1px solid #ffffff;
 }
+
+.ui.menu a.item.nav_cp {
+    color: red;
+}

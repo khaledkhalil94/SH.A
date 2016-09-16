@@ -4,14 +4,13 @@
 scripts/*
 scripts/dist/gulpfile.js
 !scripts/dist/
-styles/font-awesome-4.4.0
 styles/Semantic-UI-CSS-master
+src/Admin.php
 composer.json
 composer.lock
 composer.phar
 vendor
 server.php
 test.php
-images/Thumbs.db
 *.db
 *.db

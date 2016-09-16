@@ -11,6 +11,36 @@ class Admin extends User {
 		$session->adminLock();
 	}
 
+
+	public static function getAllUsers(){
+		global $connection;
+
+		$sql = "SELECT users.*, CONCAT(users.firstName, ' ', users.lastName) AS full_name, info.*,
+				pic.path AS img_path FROM ". TABLE_USERS ." AS users
+
+				INNER JOIN ". TABLE_INFO ." AS info ON users.id = info.id 
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON users.id = pic.user_id
+
+				WHERE users.id != 1 ORDER BY users.id";
+
+				$stmt = $connection->query($sql);
+
+				$obj = [];
+
+				while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+
+					unset($row->password);
+
+					if(empty($row->img_path)) $row->img_path = DEF_PIC;
+
+					$obj[] = $row;
+				}
+
+
+				return $obj;
+	}
+
+
 	// todo: make the user class do this instead.
 	public function create(){
 		global $connection;

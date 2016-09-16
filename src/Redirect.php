@@ -31,6 +31,11 @@ class Redirect {
 			case 'prev':
 				$location = $_SERVER['HTTP_REFERER'];
 				break;
+
+			// redirect to the current page
+			case 'self':
+				$location = $_SERVER['PHP_SELF'];
+				break;
 			
 			default:
 				$location = $location;

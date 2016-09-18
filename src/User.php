@@ -23,7 +23,7 @@ class User {
 	public function get_user_info($userID){
 		global $connection;
 
-		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.email, info.ual AS ual,
+		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.activity, info.register_date, info.email, info.ual AS ual,
 				info.register_date AS joined, privacy.*, pic.path AS img_path
 				FROM ". TABLE_USERS ." AS students
 
@@ -31,12 +31,12 @@ class User {
 				INNER JOIN ". TABLE_PRIVACY ." AS privacy ON students.id = privacy.user_id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON students.id = pic.user_id
 
-				WHERE students.id = {$userID} LIMIT 1";
+				WHERE students.id = :uid LIMIT 1";
 
 
 		$stmt = $connection->prepare($sql);
 
-		if(!$stmt->execute()){
+		if(!$stmt->execute([':uid' => $userID])){
 			$error = $stmt->errorInfo();
 			$this->error = true;
 			$errMsg = $error[2];

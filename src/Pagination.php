@@ -14,7 +14,7 @@ class Pagination {
 		$this->total_count = $total_count;
 	}
 
-	public function display(){
+	public function display($uq=false){
 		global $pagination;
 
 		$current_page = $this->current_page;
@@ -30,10 +30,17 @@ class Pagination {
 			$html = "<div class='ui pagination menu'>";
 			
 			for ($i=1; $i <= $this->total_pages(); $i++) { 
-			    if ($i == 1) {
+			    if ($i == $this->current_page) {
 			        $html .= "<a class='item active' cp='{$i}'>{$i}</a>";
 			    } else {
-			        $html .= "<a class='item' cp='{$i}'>{$i}</a>";
+
+			    	if($uq){
+
+			        	$html .= "<a href='?cp={$i}' class='item' cp='{$i}'>{$i}</a>";
+			    	} else {
+
+			        	$html .= "<a class='item' cp='{$i}'>{$i}</a>";
+			    	}
 			    }
 			}
 
@@ -48,28 +55,33 @@ class Pagination {
 	public function offset(){
 		return ($this->current_page - 1) * $this->rpp;
 	}
+
 	public function total_pages(){
 		return ceil($this->total_count/$this->rpp);
 	}
-	public function count(){
-		return count($this->get_users());
-	}
+
 	public function next_page(){
 		return $this->current_page + 1;
 	}
+
 	public function prev_page(){
 		return $this->current_page - 1;
 	}
+
 	public function has_next_page(){
 		return $this->next_page() <= $this->total_pages() ? true : false;
 	}
+
 	public function has_prev_page(){
 		return $this->prev_page() >= 1 ? true : false;
 	}
+
 	public function firstPage(){
 		return $this->total_pages();
 	}
+
 	public function lastPage(){
 		return $this->total_pages();
 	}
-} ?>
+} 
+?>

@@ -93,7 +93,6 @@ include (ROOT_PATH . 'inc/head.php');
 		<h3>Questions</h3>
 		<?= $pag->display(); ?>
 		<div class="ui container questions" id="questions">
-			<!-- TODO: Add pagination -->
 			<?php 
 			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 
 			} else {

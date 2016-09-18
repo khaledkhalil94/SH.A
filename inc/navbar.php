@@ -10,8 +10,8 @@ if(USER_ID){
 		$newMsg = "<div style='margin-top:2px;' class='ui green label'>{$msgCount}</div>";
 	}
 
-	$user = new User();
-	$user = $user->get_user_info(USER_ID);
+	$nvqu = new User();
+	$nvqu = $nvqu->get_user_info(USER_ID);
 }
 ?>
 
@@ -19,41 +19,31 @@ if(USER_ID){
 	<div class="menu elements">
 
 
-		<a class="item <?= $sec == 'index' ? 'active' : null; ?>" href="<?= BASE_URL; ?>">Home</a>
+		<a class="item<?= $sec == 'index' ? ' active' : null; ?>" href="<?= BASE_URL; ?>">Home</a>
+
+		<a class="item<?= $sec == 'questions' ? ' active' : null; ?>" href="<?= BASE_URL ?>questions">Questions</a>
 
 	<?php if($session->is_logged_in()): ?>
-		<a class="item <?= $sec == 'profile' ? 'active' : null; ?>" href="<?= BASE_URL."user/".USER_ID ?>/">Profile</a>
-	<?php endif; ?> 
-
-	<?php if($session->is_logged_in() && $session->adminCheck()): ?>
-		<a class="item <?= $sec == 'users' ? 'active' : null; ?>" href="<?= BASE_URL ?>staff/admin/users/students.php">Users</a>
-		<a class="item <?= $sec == 'ui' ? 'active' : null; ?>" href="<?= BASE_URL ?>staff/admin/staff/professors.php">Staff</a>
-	<?php endif ?>
-
-		<a class="item <?= $sec == 'questions' ? 'active' : null; ?>" href="<?= BASE_URL ?>questions">Questions</a>
-
-	<?php if($session->is_logged_in()): ?>
-		<a class="item <?= $sec == 'messages' ? 'active' : null; ?>" href="<?= BASE_URL ?>messages">Inbox<?= $newMsg; ?></a>
+		<a class="item<?= $sec == 'profile' ? ' active' : null; ?>" href="<?= BASE_URL."user/".USER_ID ?>/">Profile</a>
+		<a class="item<?= $sec == 'messages' ? ' active' : null; ?>" href="<?= BASE_URL ?>messages">Inbox<?= $newMsg; ?></a>
+		<a class="item" href="<?= BASE_URL ?>logout.php">Log out</a>
 	<?php endif; ?>  
 
 	<?php if(!$session->is_logged_in()): ?>
-		<a class="item <?= $sec == 'login' ? 'active' : null; ?>" href="<?= BASE_URL ?>login.php">Log In</a>
-		<a class="item <?= $sec == 'signup' ? 'active' : null; ?>" href="<?= BASE_URL ?>signup.php">Sign Up</a>
-	<?php endif; ?>
-
-	<?php if($session->is_logged_in()): ?>
-		<a class="item" href="<?= BASE_URL ?>logout.php">Log out</a>
+		<a class="item<?= $sec == 'login' ? ' active' : null; ?>" href="<?= BASE_URL ?>login.php">Log In</a>
+		<a class="item<?= $sec == 'signup' ? ' active' : null; ?>" href="<?= BASE_URL ?>signup.php">Sign Up</a>
 	<?php endif; ?>
 
 	<?php if($session->is_logged_in() && $session->adminCheck()): ?>
-		<a class="item <?= $sec == 'staff' ? 'active' : null; ?>" href="<?= BASE_URL ?>staff/admin" style="color:red">Admin Control Panel</a>
+		<a class="item nav_users<?= $sec == 'users' ? ' active' : null; ?>" href="<?= BASE_URL ?>admin/users/users.php">Users</a>
+		<a class="item nav_cp<?= $sec == 'staff' ? ' active' : null; ?>" href="<?= BASE_URL ?>admin">Admin Control Panel</a>
 	<?php endif; ?>
 	
 	</div>
 <?php if($session->is_logged_in()): ?>
 	<div class="ui compact selection dropdown" id="menu_dropdown">
-		<img class="ui avatar image" src="<?= $user->img_path ?>">
-		 <div class="text default"><?= $user->full_name ?></div>
+		<img class="ui avatar image" src="<?= $nvqu->img_path ?>">
+		 <div class="text default"><?= $nvqu->full_name ?></div>
 		<i class="dropdown icon"></i>
 		<div class="menu">
 			<a href="<?= USER_URL ?>" class="item">Profile</a>
@@ -64,4 +54,6 @@ if(USER_ID){
 			
 <?php endif; ?>
 </div>
-
+<script>
+	$('#menu_dropdown').dropdown({action:'nothing'});
+</script>

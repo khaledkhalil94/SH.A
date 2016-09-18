@@ -64,11 +64,11 @@ class QNA {
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
 
-				WHERE questions.id = {$PostID}";
+				WHERE questions.id = :id";
 
 		$stmt = $connection->prepare($sql);
 
-		if(!$stmt->execute()){
+		if(!$stmt->execute([':id' => $PostID])){
 			$error = $stmt->errorInfo();
 			echo $error[2];
 		}
@@ -81,7 +81,7 @@ class QNA {
 	 *
 	 * @return object
 	 */
-	public function get_questions($count='', $offset=0){
+	public function get_questions($limit='', $offset=0){
 		global $connection;
 //printX($this->section);
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
@@ -101,7 +101,7 @@ class QNA {
 
 		$sql .= " ORDER BY questions.created DESC";
 
-		if(!empty($count)) $sql .= " LIMIT {$count} OFFSET {$offset}";
+		if(!empty($limit)) $sql .= " LIMIT {$limit} OFFSET {$offset}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -134,7 +134,7 @@ class QNA {
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
 				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section
 
-				WHERE uid = {$UserID} AND questions.status != 0";
+				WHERE uid = :uid AND questions.status != 0";
 
 		$sql .= " ORDER BY {$order}";
 
@@ -142,7 +142,7 @@ class QNA {
 
 		$stmt = $connection->prepare($sql);
 
-		if(!$stmt->execute()){
+		if(!$stmt->execute([':uid' => $UserID])){
 			$error = $stmt->errorInfo();
 			return $error[2];
 		}

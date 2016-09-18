@@ -1,10 +1,20 @@
-
 body {
   background-color: #E5E5E5;
   background: #fefefe;
   background-image: url('/sha/images/bgMain.png');
 }
 
+.main .container {
+  background-color: white;
+  padding: 60px;
+  min-height: 550px;
+}
+
+body div.ui.container {
+    background-color: white;
+    padding: 90px 70px;
+    min-height: calc(100vh - 70px);
+}
 
 .dropdown ul {
   background-color: #f9f9f9;
@@ -117,12 +127,6 @@ p.form-note {
 .welcome-page i.check.icon {
     margin-right: 0px;
 }
-
-.signup-page, .login-page .center p {
-    margin-top: 5px;
-    font-size: medium;
-}
-
 
 .login-page .field .note {
     font-size: smaller;

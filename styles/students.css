@@ -1,9 +1,0 @@
-.main .container {background-color: white;padding: 60px;min-height: 550px;}
-
-.container.section {
-    background-color: white;
-    padding: 90px 70px;
-    min-height: calc(100vh - 70px);
-    /* height: 100vh; */
-}
-

@@ -2,11 +2,6 @@
 body {
   background-color: #E5E5E5;
   background: #fefefe;
-  background-image: url("http://i.imgur.com/VZKhO2A.png");
-  background-image: url("http://i.imgur.com/VZKhO2A.png"), 
-  -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fefefe), color-stop(100%,#fcfcfc));
-  background-image: url("http://i.imgur.com/VZKhO2A.png"), 
-  -webkit-linear-gradient(top, #fefefe 0%,#fcfcfc 100%);
   background-image: url('/sha/images/bgMain.png');
 }
 
@@ -230,9 +225,6 @@ p.form-note {
     color: white;
 }
 
-
-.item {}
-
 .stackable.menu .ui.selection.dropdown .menu .item {
     color: white!important;
     border-color: inherit;
@@ -245,6 +237,11 @@ p.form-note {
 
 .footer {
     background: rgb(22, 48, 76);
+    position: relative;
+    height: 70px;
+    color: white;
+    width: 100%;
+    margin: 0 auto;
 }
 
 hr {

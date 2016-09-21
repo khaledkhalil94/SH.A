@@ -10,6 +10,12 @@ require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 class Database {
 
 	/**
+	 * @var boolean database status
+	 *
+	 */
+	public $status=false;
+
+	/**
 	 * @var object database pdo connection
 	 *
 	 */
@@ -44,9 +50,13 @@ class Database {
 			$connection = new PDO($dsn,DB_USER,'');
 
 			$this->connection = $connection;
-			//echo "Connected to database.<br>";
+			$this->status = true;
+
 		} catch (PDOException $e) {
-			die($e->getMessage());
+
+			$this->status = false;
+			$this->errors = $e->getMessage();
+			die($this->errors);
 		}
 	}
 

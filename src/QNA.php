@@ -73,17 +73,24 @@ class QNA {
 			echo $error[2];
 		}
 
-		return $stmt->fetch(PDO::FETCH_OBJ);
+		$row = $stmt->fetch(PDO::FETCH_OBJ);
+		if(empty($row->img_path)) $row->img_path = DEF_PIC;
+
+		return $row;
 	}
 
 	/**
 	 * get all questions
 	 *
+	 * @param string $limit used for pagination
+	 * @param string $offset used for pagination
+	 * @param boolean $adm for admin access
+	 *
 	 * @return object
 	 */
-	public function get_questions($limit='', $offset=0){
+	public function get_questions($limit='', $offset=0, $adm=false, $priv=false){
 		global $connection;
-//printX($this->section);
+
 		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
 				info.username AS username,
 				sections.title AS fac, pics.path AS img_path,
@@ -96,7 +103,11 @@ class QNA {
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section";
 
-		$sql .= " WHERE questions.status = 1";
+		$sql .= " WHERE 1=1";
+
+		if(!$adm) $sql .= " AND questions.status = 1";
+			elseif($priv) $sql .= " AND questions.status != 1";
+
 		if(!empty($this->section)) $sql .= " AND section.id = '$this->section'";
 
 		$sql .= " ORDER BY questions.created DESC";
@@ -110,10 +121,42 @@ class QNA {
 			return $error[2];
 		}
 
-		$qs = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$obj = [];
+		
+		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
 
-		return $qs;
+			unset($row->password);
+
+			if(empty($row->img_path)) $row->img_path = DEF_PIC;
+
+			$obj[] = $row;
+		}
+
+		return $obj;
 	}
+
+
+	/**
+	 * get questions count
+	 *
+	 * @param string $sec section number
+	 * @param boolean $priv get hidden records
+	 *
+	 * @return int
+	 */
+	public static function get_questions_count($sec=null, $priv=false) {
+		global $connection;
+
+		$sql = "SELECT COUNT(*) AS count FROM " . TABLE_QUESTIONS . " WHERE 1=1";
+
+		if(!is_null($sec)) $sql .= " AND section = {$sec}";
+
+		if($priv) $sql .= " AND status != 1";
+
+		return (int) $connection->query($sql)->fetch()['count'];
+
+	}
+
 
 	/**
 	 * get all questions by a user
@@ -147,12 +190,22 @@ class QNA {
 			return $error[2];
 		}
 
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
+		$obj = [];
+
+		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+
+			unset($row->password);
+
+			if(empty($row->img_path)) $row->img_path = DEF_PIC;
+
+			$obj[] = $row;
+		}
+
+		return $obj;
 	}
 
 	/**
 	 * get all sections
-	 *
 	 *
 	 * @return array
 	 */

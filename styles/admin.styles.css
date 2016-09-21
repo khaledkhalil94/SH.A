@@ -1,0 +1,53 @@
+#admincp #main_counters {
+    background: rgba(236, 236, 236, 0.57);
+    border-radius: 4px;
+}
+
+#admincp #main_counters .column .ui.segment {
+    border-left: 2px solid green;
+    border-radius: 0px;
+    min-height: 90px;
+}
+
+.value {
+    font-size: 29px;
+    font-weight: 700;
+    margin-top: 13px;
+}
+
+#admincp #main_counters {
+    background: rgba(236, 236, 236, 0.57);
+    border-radius: 4px;
+}
+
+#admincp #main_counters .column .ui.segment {
+    border-left: 2px solid green;
+    border-radius: 0px;
+    min-height: 90px;
+}
+
+.value {
+    font-size: 29px;
+    font-weight: 700;
+    margin-top: 13px;
+}
+
+#admincp .ui.segment.cp_segs.sections {
+    margin-top: -40px;
+}
+
+#admincp .ui.segment.l_users .content {
+    margin-right: 18px;
+}
+
+#admincp .ui.segment.cp_segs.db_info {
+}
+
+#admincp .ui.segment.cp_segs .seg_btm {
+    text-align: center;
+}
+
+#admincp .ui.segment.cp_segs .seg_btm a {
+    color: dimgrey;
+    font-weight: bold;
+}

@@ -35,7 +35,6 @@ if(USER_ID){
 	<?php endif; ?>
 
 	<?php if($session->is_logged_in() && $session->adminCheck()): ?>
-		<a class="item nav_users<?= $sec == 'users' ? ' active' : null; ?>" href="<?= BASE_URL ?>admin/users/users.php">Users</a>
 		<a class="item nav_cp<?= $sec == 'staff' ? ' active' : null; ?>" href="<?= BASE_URL ?>admin">Admin Control Panel</a>
 	<?php endif; ?>
 	

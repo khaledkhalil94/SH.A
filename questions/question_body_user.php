@@ -20,7 +20,7 @@
 				</div>
 			<?php } ?>
 			<br>
-			<div class="ui left aligned container" style="min-height:320px;">
+			<div class="ui left aligned" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
 					This question is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 

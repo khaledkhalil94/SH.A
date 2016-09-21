@@ -47,7 +47,7 @@ if($post_modified_date > $post_date){
 						</div>
 					</div>
 					<br><br>
-					<div class="ui left aligned container" style="min-height:320px;">
+					<div class="ui left aligned" style="min-height:320px;">
 						<div class="ui header">
 							<h3 class="blog-post-title"><?= $q->title; ?></h3>
 						</div>

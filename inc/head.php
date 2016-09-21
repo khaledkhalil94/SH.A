@@ -12,13 +12,13 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="<?= BASE_URL; ?>images/SH.A_Logo-icon.jpg">
 
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/site.css" />
-	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/students.css"/>
 	<link rel="stylesheet" href="//cdn.materialdesignicons.com/1.6.50/css/materialdesignicons.min.css">
 	<link rel="stylesheet" href="<?= BASE_URL; ?>styles/Semantic-UI-CSS-master/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/mainstylesheet.css" />
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/questions.css"/>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/user-profile.css"/>
 	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/msg.styles.css"/>
+	<link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>styles/admin.styles.css"/>
 	
 	<script src="<?= BASE_URL; ?>scripts/dist/jquery-1.11.3.min.js"></script>
 	<script type='text/javascript' src="<?= BASE_URL; ?>styles/Semantic-UI-CSS-master/semantic.min.js"></script>

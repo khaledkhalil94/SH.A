@@ -7,45 +7,42 @@ $sections = $QNA->get_sections();
 $cp = isset($_GET['page']) ? $_GET['page'] : 1;
 $rpp = 6;
 
-if(isset($_GET['section'])){
-	$sec = $_GET['section'];
+$sec = isset($_GET['section']) ? $_GET['section'] : NULL;
 
-	foreach ($sections as $s) {
-		switch ($s['acronym']) {
-			case $sec:
-				$sec_name = $s['title'];
+foreach ($sections as $s) {
+	switch ($s['acronym']) {
+		case $sec:
+			$sec_name = $s['title'];
 
-				$QNA->section = $s['id'];
+			$QNA->section = $s['id'];
 
-				$qs = $QNA->get_questions();
+			$qs = $QNA->get_questions();
 
-				$count = count($qs);
+			$count = count($qs);
 
-				$pag = new Pagination($count, $cp, $rpp);
+			$pag = new Pagination($count, $cp, $rpp);
 
-				$offset = $pag->offset();
+			$offset = $pag->offset();
 
-				$qs = $QNA->get_questions($rpp, $offset);
+			$qs = $QNA->get_questions($rpp, $offset);
 
-				break 2; // breaks out of the two casses (foreach and switch)
-			
-			default:
-				break;
-		}
+			break 2; // breaks out of the two casses (foreach and switch)
+		
+		default:
+			$qs = $QNA->get_questions();
+
+			$count = count($qs);
+
+			$pag = new Pagination($count, $cp, $rpp);
+
+			$offset = $pag->offset();
+
+			$qs = $QNA->get_questions($rpp, $offset);
+			$sec_name = 'All';
+			break;
 	}
-} else {
-
-	$qs = $QNA->get_questions();
-
-	$count = count($qs);
-
-	$pag = new Pagination($count, $cp, $rpp);
-
-	$offset = $pag->offset();
-
-	$qs = $QNA->get_questions($rpp, $offset);
-	$sec_name = 'All';
 }
+
 
 $pageTitle = "Questions";
 $sec = "questions";
@@ -92,7 +89,7 @@ include (ROOT_PATH . 'inc/head.php');
 		<br><br><hr>
 		<h3>Questions</h3>
 		<?= $pag->display(); ?>
-		<div class="ui container questions" id="questions">
+		<div class="questions front-page" id="questions">
 			<?php 
 			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 
 			} else {

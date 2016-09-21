@@ -3,11 +3,8 @@ require_once ("src/init.php");
 $pageTitle = "Sign Up";
 if($session->is_logged_in()) Redirect::redirectTo('/sha');
 
-?>
-
-<?php
 $sec = "signup";
-require(ROOT_PATH . 'inc/head.php'); 
+require(ROOT_PATH . 'inc/head.php');
 ?>
 <body>
 	<div class="main signup-page">
@@ -66,13 +63,3 @@ require(ROOT_PATH . 'inc/head.php');
 	<?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

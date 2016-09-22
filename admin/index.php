@@ -7,7 +7,7 @@ $session->adminLock();
 $admin = new Admin();
 $QNA = new QNA();
 
-$total_reports = count($admin->getAllUnqReports());
+$total_reports = QNA::get_reports_count();
 $users_count = count($admin->getAllUsers());
 $qs_count = QNA::get_questions_count();
 
@@ -62,7 +62,7 @@ include (ROOT_PATH . 'inc/head.php');
 							<i class="ui warning sign icon red"></i> Reports
 						</div>
 						<div class="value">
-							<?= $total_reports; ?>
+							<a href="reports.php"><?= $total_reports; ?></a>
 						</div>
 					</div>
 				</div>

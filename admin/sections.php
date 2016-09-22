@@ -27,7 +27,7 @@ include (ROOT_PATH . 'inc/head.php');
 
 <body>
 	<div class="main" id="admincp">
-		<div class="ui container section">
+		<div class="ui container section sec_mng">
 			<h2>Sections</h2>
 			<button class="ui green button" id="new_sec">Add new section</button><br><br>
 			<table class="ui definition selectable single line table">

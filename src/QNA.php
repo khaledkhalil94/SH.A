@@ -74,6 +74,8 @@ class QNA {
 		}
 
 		$row = $stmt->fetch(PDO::FETCH_OBJ);
+		if(!is_object($row)) return false;
+		
 		if(empty($row->img_path)) $row->img_path = DEF_PIC;
 
 		return $row;
@@ -135,7 +137,6 @@ class QNA {
 		return $obj;
 	}
 
-
 	/**
 	 * get questions count
 	 *
@@ -156,7 +157,6 @@ class QNA {
 		return (int) $connection->query($sql)->fetch()['count'];
 
 	}
-
 
 	/**
 	 * get all questions by a user
@@ -389,19 +389,34 @@ class QNA {
 	/**
 	 * get total reports on a post/comment
 	 *
-	 * @param $table string
-	 * @param $PostID int
+	 * @param string $ord return order
+	 * @param int $PostID
+	 * @param boolean $unq
+	 * @param int $limit
+	 * @param int $offset
 	 *
-	 * @return boolean|string
+	 * @return object|boolean false
 	 */
-	public function get_reports($table, $PostID){
+	public static function get_reports($ord, $PostID='', $unq=false, $limit=false, $offset=0){
 		global $connection;
 
-		$sql = "SELECT CONCAT(students.firstName, ' ', students.lastName) AS reporterName,
-				reports.* FROM `reports`
+		$table = static::$table;
+
+		$sql = "SELECT reports.*, CONCAT(r.firstName, ' ', r.lastName) AS reporterName, r.id AS r_id,
+				CONCAT(u.firstName, ' ', u.lastName) AS fullname, u.id AS u_id,
+				{$table}.* FROM `reports` AS reports
+
 				INNER JOIN `$table` ON reports.post_id = $table.id 
-				INNER JOIN ". TABLE_USERS ." AS students ON reports.reporter = students.id 
-				WHERE reports.post_id = {$PostID}";
+				INNER JOIN ". TABLE_USERS ." AS u ON {$table}.uid = u.id
+				INNER JOIN ". TABLE_USERS ." AS r ON reports.reporter = r.id";
+		
+		if(!empty($PostID)) $sql .= " WHERE reports.post_id = {$PostID}";
+		if($unq) $sql .= " GROUP BY reports.post_id";
+		
+		if(!is_null($ord)) $sql .= " ORDER BY {$ord}, date DESC";
+		else $sql .= " ORDER BY date DESC";
+
+		if($limit) $sql .= " LIMIT {$limit} OFFSET {$offset}";
 
 		$stmt = $connection->prepare($sql);
 
@@ -413,6 +428,33 @@ class QNA {
 		$result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 		return !empty($result) ? $result : false;
+	}
+
+	/**
+	 * get reports count
+	 *
+	 * @param int $id post id
+	 * @param boolean $sec restrict count to a section
+	 *
+	 * @return int
+	 */
+	public static function get_reports_count($id='', $sec=false){
+		global $connection;
+
+		$table = static::$table;
+
+		$sql = "SELECT count(*) AS count FROM `reports`";
+
+		if($sec) $sql .= " INNER JOIN `$table` ON reports.post_id = $table.id";
+
+		if(!empty($id)) $sql .= " WHERE reports.post_id = {$id}";
+
+		$stmt = $connection->query($sql);
+
+
+		$results = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+		return $results;
 	}
 
 	/**

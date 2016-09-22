@@ -5,6 +5,7 @@ require_once('init.php');
 */
 class Comment extends QNA {
 
+	static $table = TABLE_COMMENTS;
 
 	/**
      * inserts a new comment
@@ -177,24 +178,6 @@ class Comment extends QNA {
 
 		return true;
 	}
-
-	public function get_reports(){
-		global $connection;
-
-		$sql = "SELECT comments.id as c_id, comments.content as comment, 
-				reports.* FROM `reports`
-				INNER JOIN `comments` ON reports.post_id = comments.id
-				ORDER BY date";
-
-		$stmt = $connection->prepare($sql);
-
-		if(!$stmt->execute()){
-			$error = ($stmt->errorInfo());
-			echo $error[2];
-		}
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
-	}
-
 }
 
 ?>

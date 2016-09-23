@@ -9,8 +9,8 @@ $cord = NULL;
 if(isset($_GET['qord']) && ($_GET['qord'] == 'count')) $qord = 'COUNT(*) DESC';
 elseif(isset($_GET['cord']) && ($_GET['cord'] == 'count')) $cord = 'COUNT(*) DESC';
 
-$q_reports = QNA::get_reports($qord, '', true);
-$c_reports = Comment::get_reports($cord, '', true);
+$q_reports = QNA::get_reports('', $qord, true);
+$c_reports = Comment::get_reports('', $qord, true);
 //printX($q_reports);
 $sec = "staff";
 
@@ -20,7 +20,7 @@ include (ROOT_PATH . 'inc/head.php');
 
 <body>
 	<div class="main" id="admincp">
-		<div class="ui container section sec_mng">
+		<div class="ui container section rep_mng">
 			<h2>Reports</h2>
 			<h3>Reported Questions (<?= count($q_reports); ?>)</h3>
 			<table class="ui red table">
@@ -38,9 +38,9 @@ include (ROOT_PATH . 'inc/head.php');
 					$count = QNA::get_reports_count($rp->id); ?>
 					<tr>
 						<td><a href="<?= BASE_URL.'questions/question.php?id='.$rp->id ?>"><?= $rp->title; ?></a></td>
-						<td><a href="<?= BASE_URL.'user/'.$rp->uid ?>/"><?= $rp->fullname ?></a></td>
+						<td><?= View::user($rp->uid) ?></td>
 						<td><?= $count ?></td>
-						<td><?= get_timeago($rp->date) ?></td>
+						<td><?= get_timeago($rp->rp_date) ?></td>
 						<td><a href="report.php?id=<?= $rp->id ?>">View Details</a></td>
 					</tr>
 					<?php endforeach; ?>
@@ -62,9 +62,9 @@ include (ROOT_PATH . 'inc/head.php');
 					$count = QNA::get_reports_count($rp->id); ?>
 					<tr>
 						<td><a href="/sha/questions/question.php?id=<?= $rp->id ?>"><?= $rp->content; ?></a></td>
-						<td><a href="<?= BASE_URL.'user/'.$rp->uid ?>/"><?= $rp->fullname ?></a></td>
+						<td><?= View::user($rp->uid) ?></td>
 						<td><?= $count ?></td>
-						<td><?= get_timeago($rp->date) ?></td>
+						<td><?= get_timeago($rp->rp_date) ?></td>
 						<td><a href="report.php?id=<?= $rp->id ?>">View Details</a></td>
 					</tr>
 					<?php endforeach; ?>

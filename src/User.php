@@ -13,6 +13,20 @@ class User {
 	 */
 	public $errors = [];
 
+	public $user;
+
+	public function __construct($id=null){
+
+		if(!is_null($id)){
+
+			$this->user = new stdClass();
+
+			$user = $this->get_user_info($id);
+
+			$this->user = $user;
+		}
+	}
+
 	/**
 	 * get all user info from the database
 	 *
@@ -23,15 +37,15 @@ class User {
 	public function get_user_info($userID){
 		global $connection;
 
-		$sql = "SELECT students.*, CONCAT(students.firstName, ' ', students.lastName) AS full_name, info.username, info.activity, info.register_date, info.email, info.ual AS ual,
+		$sql = "SELECT u.*, CONCAT(u.firstName, ' ', u.lastName) AS full_name, info.username, info.activity, info.register_date, info.email, info.ual AS ual,
 				info.register_date AS joined, privacy.*, pic.path AS img_path
-				FROM ". TABLE_USERS ." AS students
+				FROM ". TABLE_USERS ." AS u
 
-				RIGHT JOIN ". TABLE_INFO ." AS info ON students.id = info.id 
-				INNER JOIN ". TABLE_PRIVACY ." AS privacy ON students.id = privacy.user_id
-				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON students.id = pic.user_id
+				RIGHT JOIN ". TABLE_INFO ." AS info ON u.id = info.id 
+				INNER JOIN ". TABLE_PRIVACY ." AS privacy ON u.id = privacy.user_id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON u.id = pic.user_id
 
-				WHERE students.id = :uid LIMIT 1";
+				WHERE u.id = :uid LIMIT 1";
 
 
 		$stmt = $connection->prepare($sql);

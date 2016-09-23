@@ -16,6 +16,10 @@ body div.ui.container {
     min-height: calc(100vh - 70px);
 }
 
+i.ui.remove.icon {
+  cursor:pointer;
+}
+
 .dropdown ul {
   background-color: #f9f9f9;
   box-shadow: none;

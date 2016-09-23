@@ -39,7 +39,8 @@ class Post extends QNA {
 		$post = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if(is_array($post) && $c) return $post;
-
+		elseif(!is_array($post) || empty($post)) return false;
+		
 		// not a self post
 		if($post['user_id'] !== $post['poster_id']){
 
@@ -267,7 +268,7 @@ class Post extends QNA {
 		} elseif (is_array(Comment::getComment($id))){
 			return "c";
 		} else {
-			return NULL;
+			return false;
 		};
 	}
 

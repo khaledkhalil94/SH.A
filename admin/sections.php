@@ -51,7 +51,7 @@ include (ROOT_PATH . 'inc/head.php');
 						<td><?= $sec['acronym'] ?></td>
 						<td><?= $qs_count ?></td>
 						<?php if($sec['id'] != 1): ?>
-							<td class="right aligned"><i class="ui remove icon"></i></td>
+						<td class="right aligned"><i class="ui remove icon"></i></td>
 						<?php endif; ?>
 					</tr>
 					<?php endforeach; ?>

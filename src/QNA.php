@@ -49,7 +49,7 @@ class QNA {
 	 *
 	 * @param $PostID int
 	 *
-	 * @return object
+	 * @return mixed
 	 */
 	public function get_question($PostID){
 		global $connection;
@@ -70,7 +70,7 @@ class QNA {
 
 		if(!$stmt->execute([':id' => $PostID])){
 			$error = $stmt->errorInfo();
-			echo $error[2];
+			return $error[2];
 		}
 
 		$row = $stmt->fetch(PDO::FETCH_OBJ);
@@ -397,21 +397,20 @@ class QNA {
 	 *
 	 * @return object|boolean false
 	 */
-	public static function get_reports($ord, $PostID='', $unq=false, $limit=false, $offset=0){
+	public static function get_reports($PostID='', $ord=null, $unq=false, $limit=false, $offset=0){
 		global $connection;
 
 		$table = static::$table;
 
-		$sql = "SELECT reports.*, CONCAT(r.firstName, ' ', r.lastName) AS reporterName, r.id AS r_id,
-				CONCAT(u.firstName, ' ', u.lastName) AS fullname, u.id AS u_id,
-				{$table}.* FROM `reports` AS reports
+		$sql = "SELECT rp.id AS rp_id, rp.post_id AS rp_post_id, rp.content AS r_content, rp.reporter AS reporter, rp.date AS rp_date,
+				u.id AS u_id,
+				{$table}.* FROM `reports` AS rp
 
-				INNER JOIN `$table` ON reports.post_id = $table.id 
-				INNER JOIN ". TABLE_USERS ." AS u ON {$table}.uid = u.id
-				INNER JOIN ". TABLE_USERS ." AS r ON reports.reporter = r.id";
+				INNER JOIN `$table` ON rp.post_id = $table.id
+				INNER JOIN ". TABLE_USERS ." AS u ON {$table}.uid = u.id";
 		
-		if(!empty($PostID)) $sql .= " WHERE reports.post_id = {$PostID}";
-		if($unq) $sql .= " GROUP BY reports.post_id";
+		if(!empty($PostID)) $sql .= " WHERE rp.post_id = {$PostID}";
+		if($unq) $sql .= " GROUP BY rp.post_id";
 		
 		if(!is_null($ord)) $sql .= " ORDER BY {$ord}, date DESC";
 		else $sql .= " ORDER BY date DESC";

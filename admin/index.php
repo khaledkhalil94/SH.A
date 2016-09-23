@@ -16,6 +16,11 @@ $users = $admin->getAllUsers(6, 0);
 
 $sections = QNA::get_sections();
 
+$admin = new Admin();
+$count = count($admin->getTraffic());
+
+$database = new Database();
+
 $sec = "staff";
 include (ROOT_PATH . 'inc/head.php');
 
@@ -52,7 +57,7 @@ include (ROOT_PATH . 'inc/head.php');
 							<i class="ui line chart icon brown"></i> Unique visitors
 						</div>
 						<div class="value">
-							1
+							<a href="traffic.php"><?= $count; ?></a>
 						</div>
 					</div>
 				</div>

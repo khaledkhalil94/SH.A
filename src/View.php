@@ -8,14 +8,16 @@ class View {
 		return BASE_URL.'questions/question.php?id='.$id;
 	}
 
-	public static function user($id){
+	public static function user($id, $title=false){
 
 		$user = new User($id);
 		$user = $user->user;
 
 		if(!is_object($user)) return '';
 
-		$html = "<a href='". BASE_URL."user/{$user->id}/'>{$user->full_name}</a>";
+		$html = "<a";
+		if($title) $html .= " class='user-title' user-id='{$user->id}'";
+		$html .= " href='". BASE_URL."user/{$user->id}/'>{$user->full_name}</a>";
 		return $html;
 	}
 
@@ -23,18 +25,41 @@ class View {
 
 		$type = Post::PorQ($id);
 
-		if($type == 'q'){
+		if(($type == 'q') || $type == 'c'){
 
-			$post = QNA::get_question($id);
+			$post = QNA::get_question($id) ?: (object) Comment::getComment($id);
 			$date = $post->created;
 
-			$html = "<a href='". BASE_URL ."questions/question.php?id={$id}'>".get_timeago($date)."</a>";
-		} elseif($type == 'c'){
+			$html = "<a href='". self::pLink($id) ."' title='{$date}'> ".get_timeago($date)."</a>";
+		} elseif($type == 'p'){
 
-			$post = (object) Comment::getComment($id);
-			$date = $post->created;
+			$post = Post::get_post($id, true);
+			$date = $post['date'];
 
-			$html = "<a href='". BASE_URL ."questions/question.php?id={$id}'>".get_timeago($date)."</a>";
+			$html = "<a href='". self::pLink($id) ."' title='{$date}'> ".get_timeago($date)."</a>";
+		} else {
+
+			return false;
+		}
+
+		return $html;
+	}
+
+	public static function pLink($id){
+
+		$type = Post::PorQ($id);
+
+		if(($type == 'q') || $type == 'c'){
+
+			$html = BASE_URL.'questions/question.php?id='.$id;
+
+		} elseif($type == 'p'){
+
+			$html = BASE_URL."user/posts/{$id}/";
+
+		} else {
+
+			return false;
 		}
 
 		return $html;

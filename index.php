@@ -34,8 +34,9 @@ if($session->is_logged_in()){
 								$postID = $value['id'];
 
 								$self = ($value['u_id'] === $value['p_id']) ? true : false;
+								$me = ($value['p_id'] == USER_ID) ? true :false;
 								$to_self = ($value['u_id'] === USER_ID) ? true : false;
-								$post_id = BASE_URL ."user/posts/{$value['id']}/";
+								$post_id = $value['id'];
 								$poster_id = BASE_URL."user/{$value['p_id']}/";
 
 								$p_count = QNA::get_votes($postID) ?: "0";
@@ -48,19 +49,19 @@ if($session->is_logged_in()){
 										</div>
 										<?php if($self){ ?>
 										<div class="summary">
-											<p>You posted </p>&nbsp;
-											<div class="time"><a href="<?= $post_id; ?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
+											<p><?= $me ? 'You' : View::user($value['p_id'], true) ?> posted </p>&nbsp;
+											<div class="time"><?= View::postDate($post_id) ?></div>
 										</div>
 										<?php } elseif($to_self) { ?>
 										<div class="summary">
-											<a class="user-title" user-id="<?=$value['p_id']?>" href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on your profile&nbsp;
-											<div class="time"><a href="<?= $post_id; ?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
+											<?= $me ? 'You' : View::user($value['p_id'], true) ?>&nbsp;Posted on your profile&nbsp;
+											<div class="time"><?= View::postDate($post_id) ?></div>
 										</div>
 										<?php } else { ?>
 										<div class="summary">
-											<a class="user-title" user-id="<?=$value['p_id']?>" href="<?= $poster_id ?>"><?= $value['p_fullname']?></a>&nbsp;Posted on&nbsp;
-											<a class="user-title" user-id="<?=$value['u_id']?>" href="<?=BASE_URL."user/{$value['u_id']}/"?>"><?= $value['u_fullname'] ?></a>'s profile&nbsp;
-											<div class="time"><a href="<?= $post_id ?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
+											<?= $me ? 'You' : View::user($value['p_id'], true) ?>&nbsp;Posted on&nbsp;
+											<?= View::user($value['u_id'], true) ?>'s profile&nbsp;
+											<div class="time"><?= View::postDate($post_id) ?></div>
 										</div>
 										<?php } ?>
 									</div>
@@ -86,16 +87,21 @@ if($session->is_logged_in()){
 
 							case 'cmt': 
 								$postID = $value['id'];
+								$type = Post::PorQ($value['post_id']);
 
-								if(Post::PorQ($value['post_id']) == "q"){
+								if($type == "q"){
+
 									$post_id = BASE_URL."questions/question.php?id={$value['post_id']}";
 									$p = "question";
-								} else {
+
+								} elseif($type == 'p') {
+
 									$post_id = BASE_URL."user/posts/{$value['post_id']}/";
 									$p = "post";
+								} else {
+									continue;
 								}
 
-								$id = BASE_URL."questions/question.php?id={$postID}";
 
 								$p_count = QNA::get_votes($postID) ?: "0";
 								?>
@@ -105,8 +111,8 @@ if($session->is_logged_in()){
 											<a href="<?=BASE_URL."user/{$value['uid']}/"?>"><img src="<?= $value['path'] ?>"></a>
 										</div>
 										<div class="summary">
-											<a class="user-title" user-id="<?=$value['uid']?>" href="<?=BASE_URL."user/{$value['uid']}/"?>"><?= $value['fullname'] ?></a>&nbsp;Commented on a&nbsp;<a href="<?= $post_id ?>"><?=$p?></a>&nbsp;
-											<div class="time"><a href="<?= $id ?>"><span class="timestamp"><?= $value['date']; ?></span></a></div>
+											<?= View::user($value['uid'], true) ?>&nbsp;Commented on a&nbsp;<a href="<?= $post_id ?>"><?=$p?></a>&nbsp;
+											<div class="time"><?= View::postDate($value['post_id']) ?></div>
 										</div>
 									</div>
 									<div class="content">
@@ -139,9 +145,9 @@ if($session->is_logged_in()){
 											<a href="<?=$uid ?>"><img src="<?= $value['path'] ?>"></a>
 										</div>
 										<div class="summary">
-											<?php if($self){ ?><p>You</p><?php }else{ ?><a class="user-title" user-id="<?=$value['uid']?>" href="<?=$uid ?>"><?= $value['firstName'] ?></a><?php }?>
+											<?= $self ? "<p>You</p>" : View::user($value['uid'], true); ?>
 											&nbsp;asked a new&nbsp;<a href="<?=$id?>">question</a>&nbsp;
-											<div class="time"><a href="<?= $id?>"><span class="timestamp"><?= $value['date'] ?></span></a></div>
+											<div class="time"><?= View::postDate($value['id']) ?></div>
 										</div>
 									</div>
 									<div class="content">
@@ -169,9 +175,9 @@ if($session->is_logged_in()){
 									<div class="header user-details">
 										<i class="mdi mdi-account-multiple-plus"></i>
 										<div class="summary">
-											<a class="user-title" user-id="<?=$value['follower_id']?>" href="<?= BASE_URL."user/{$value['follower_id']}/"?>"><?=$value['f_firstname']?></a>&nbsp;Followed&nbsp;
-											<a class="user-title" user-id="<?=$value['user_id']?>" href="<?= BASE_URL."user/{$value['user_id']}/"?>"><?=$value['u_firstname']?></a>&nbsp;
-											<div class="time"><span class="timestamp"><?= $value['date'] ?></span></div>
+											<?= View::user($value['follower_id'], true) ?>&nbsp;Followed&nbsp;
+											<?= View::user($value['user_id'], true) ?>&nbsp;
+											<div class="time"><span class="timestamp" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
 										</div>
 									</div>
 								</div>
@@ -181,25 +187,27 @@ if($session->is_logged_in()){
 
 								$id = $value['post_id'];
 
-								if(Post::PorQ($id) === "q"){
+								$type = Post::PorQ($id);
+
+								if($type == "q"){
 									$post_id = BASE_URL."questions/question.php?id={$id}";
 									$pc = "question";
-								} elseif(Post::PorQ($id) === "p") {
+								} elseif($type == "p") {
 									$post_id = BASE_URL."user/posts/{$id}/";
 									$pc = "post";
-								} elseif(Post::PorQ($id) === "c") {
+								} elseif($type == "c") {
 									$post_id = BASE_URL."questions/question.php?id={$id}";
 									$pc = "comment";
 								} else {
-									echo "WHAT THE FUCK IS GOING ON";
+									continue;
 								}
 								?>
 								<div class="ui segment like-feed">
 									<div class="header user-details">
 										<i class="thumbs up blue large icon"></i>
 										<div class="summary">
-											<a class="user-title" user-id="<?=$value['user_id']?>" href="<?= BASE_URL."user/{$value['user_id']}/" ?>"><?= $value['firstName'] ?></a>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
-											<div class="time"><span class="timestamp"><?= $value['date'] ?></span></div>
+											<?= View::user($value['user_id'], true) ?>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
+											<div class="time"><span class="timestamp" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
 										</div>
 									</div>
 								</div>

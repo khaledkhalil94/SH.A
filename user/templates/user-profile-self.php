@@ -187,7 +187,7 @@
 				<a class="item active" data-tab="activity">Activity</a>
 				<a class="item" data-tab="following">Following (<?= $following_count ?>)</a>
 				<a class="item" data-tab="followers">Followers (<?= $followers_count ?>)</a>
-				<a class="item" data-tab="questions">Questions (<?= $q_count ?>)</a>
+				<a class="item" data-tab="questions">My Questions (<?= $q_count ?>)</a>
 				<a class="item" data-tab="saved">Saved (<?= $saved_count ?>)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="activity">

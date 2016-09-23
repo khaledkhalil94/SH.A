@@ -56,15 +56,12 @@ foreach ($posts as $post):
 				<img src="<?= $post->img_path ?>">
 			</a>
 			<div class="content">
-				<a href="/sha/user/<?= $post->uid ?>/" class="header">
-					<span><h4><?= $post->firstName; ?></h4></span>
-				</a>
 				<span>
-					<h5 style="display:inline;">
+					<h4 style="display:inline;">
 						<a href="/sha/user/<?= $post->uid ?>/">@<?= $post->username ?></a>
-					</h5>
+					</h4>
 				</span>
-				<div class="meta">
+				<div class="meta" style="display:inline;">
 					<a href="/sha/user/posts/<?= $post->id; ?>/" class="time" id="post-date"><?= $post->date ?></a>
 				</div>
 				<div class="description">
@@ -91,4 +88,4 @@ $('.item').each(function(index, value) {
 });
 
 </script>
-<script src='/sha/user/tabs/feed.js'></script>
+<script src='<?= BASE_URL ?>scripts/feed.js'></script>

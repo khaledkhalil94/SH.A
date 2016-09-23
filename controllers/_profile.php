@@ -121,7 +121,7 @@ switch ($action) {
 			 die(json_encode(['status' => false, 'err' => 'Token is not valid.']));
 		}
 
-		global $database;
+		$database = new Database();
 
 		$data = ['user_id' => $user_id, 'content' => $content, 'poster_id' => USER_ID];
 		$insert = $database->insert_data(TABLE_ACTIVITY, $data);

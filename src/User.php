@@ -84,44 +84,36 @@ class User {
 	 * 
 	 * @return boolean
 	 */
-	public function deleteUser($email, $pw){
+	public function deleteUser($token, $uid, $pw){
 		global $connection;
 
 		$con = $connection;
 		
+		$pw = trim($pw);
+
 		// check for empty values
-		if(empty($email) || empty($pw)) {
-			$this->errors[] = "Email and Password can't be empty";
+		if(empty($pw)) {
+			$this->errors[] = "Please enter your correct password";
 			return false;
 		}
 
 
 		// check token validation
-		if(!Token::validateToken($data['auth_token'])){
+		if(!Token::validateToken($token)){
 			$this->error = true;
 			$this->errors[] = "Token is not valid.";
 			return false;
 		}
 
-		// validate email
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$this->errors[] = "Email is not valid.";
-			return false;
-		}
 
-		$user = Auth::getUserDetails($email);
+		$user = Auth::getUserDetails($uid);
 
-		// if email or password are wrong
+		// if password is wrong
 		if(!is_object($user)) {
 			$this->errors[] = "Details are not correct.";
 			return false;
 		}
 
-		// if the user id or email don't match those in the database
-		if($user->id !== USER_ID) {
-			$this->errors[] = "Details are not correct.";
-			return false;
-		}
 
 		// if the given password doesn't match the user password in the db
 		if(!password_verify($pw, $user->password)) {
@@ -226,7 +218,7 @@ class User {
 	 * @return boolean
 	 */
 	public function changeSettings($data, $user_id=USER_ID){
-		global $database;
+		$database = new Database();
 
 		if(!is_array($data)) return false;
 		//print_r($data); exit;
@@ -370,7 +362,7 @@ class User {
 	 * @return boolean
 	 */
 	public static function block($user_id){
-		global $database;
+		$database = new Database();
 		global $connection;
 
 		$self = USER_ID;
@@ -551,7 +543,7 @@ class User {
 	 * @return boolean|string
 	 */
 	public static function follow($userID){
-		global $database;
+		$database = new Database();
 
 		// if user is blocked
 		$blocked = self::blocked_by_user($userID);

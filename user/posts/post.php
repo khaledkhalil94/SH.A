@@ -66,7 +66,7 @@ include (ROOT_PATH . "inc/head.php");
 					</div>
 				<?php } ?>
 					<br>
-					<div class="ui left aligned container">
+					<div class="ui left aligned">
 						<?php if($post->status == "2"){ ?>
 						<div class="ui warning message">
 							This post is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 

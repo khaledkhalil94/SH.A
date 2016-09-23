@@ -50,7 +50,7 @@ require_once('init.php');
 
 	// checks if the user has a profile picture or not
 	public static function has_pic($user_id){
-		global $database;
+		$database = new Database();
 
 		return $database->row_exists('profile_pic', 'user_id', $user_id);
 

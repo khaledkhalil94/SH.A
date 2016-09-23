@@ -142,8 +142,10 @@ Class Auth {
 	*
 	*/
 	public function RegisterNewUser(){
-		global $database, $session;
+		global $session;
 
+		$database = new Database();
+		
 		$data = $this->processData();
 
 		if(!is_array($data) || $this->error){

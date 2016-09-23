@@ -3,9 +3,6 @@ require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 $pageTitle = "Admin Control Panel";
 $session->adminLock();
 
-
-// printX($users);
-
 $users = Admin::getAllUsers();
 
 $count = count($users);

@@ -3,14 +3,12 @@ require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 // Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
-      
-      header('Location:404.php');
+	Redirect::redirectTo('404');
 }
 
 // only the delete page can access this file
 if (strtolower(basename($_SERVER['HTTP_REFERER'])) != '?st=dl' ) {
-
-	header('Location:404.php');
+	Redirect::redirectTo('404');
 
 }
 
@@ -26,15 +24,9 @@ if (strtolower(basename($_SERVER['HTTP_REFERER'])) != '?st=dl' ) {
 	</div>
 </div>
 <hr>
-<h3>Enter your email and password to confim this action.</h3>
+<h3>Enter your password to confim this action.</h3>
 <br>
 <form id="confirm-acc-del" class="ui form" method="POST">
-
-	<div class="field">
-		<label for="email">email</label>
-		<input type="email" id="email" value="" />
-	</div>
-
 	<div class="field">
 		<label for="password">Password</label>
 		<input type="password" id="password" value="" />
@@ -51,14 +43,14 @@ $('#confirm-acc-del').submit(function(e){
 	
 	$('form').addClass('loading');
 
-	$email = $('#email').val();
 	$pw = $('#password').val();
+	$token = $('input[name=auth_token]').val();
 
 	$.ajax({
 		url: '/sha/controllers/_account.php',
 		type: 'post',
 		dataType: 'json',
-		data: {'action' : 'delete_acc', 'email' : $email, 'password' : $pw},
+		data: {'action' : 'delete_acc', 'password' : $pw, 'token' : $token},
 
 		success: function(data){
 			if(data == 1){
@@ -77,7 +69,7 @@ $('#confirm-acc-del').submit(function(e){
 				$('.negative.message').replaceWith($sucMsg);
 
 				window.setTimeout(function(){
-					window.location = "/sha/";
+					window.location = "<?= BASE_URL ?>";
 				}, 2000)
 
 			} else {
@@ -100,8 +92,6 @@ $('#confirm-acc-del').submit(function(e){
 		error: function(xhr, desc, err){
 
 		}
-
-
 	});
 })
 </script>

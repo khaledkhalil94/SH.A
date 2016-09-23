@@ -17,11 +17,11 @@ switch ($_POST['action']) {
 	// user account deletion
 	case 'delete_acc':
 		
-		$email = $_POST['email'];
+		$token = $_POST['token'];
 		$pw = $_POST['password'];
 
 		$user = new User();
-		$delete = $user->deleteUser($email, $pw);
+		$delete = $user->deleteUser($token, USER_ID, $pw);
 		if($delete === true){ // delete success
 
 			$session->logout();
@@ -36,6 +36,8 @@ switch ($_POST['action']) {
 
 	// update user profile info
 	case 'update_info':
+
+		$database = new Database();
 
 		$data = $_POST['values'];
 		unset($_POST);
@@ -70,6 +72,8 @@ switch ($_POST['action']) {
 	// update user settings
 	case 'update_settings':
 
+		$database = new Database();
+
 		$data = $_POST['values'];
 
 		$user = new User();
@@ -81,15 +85,6 @@ switch ($_POST['action']) {
 			echo json_encode($user->errors);
 		}
 		exit;
-		$update = $database->update_data("students", $fields, $values, "id", USER_ID);
-		if($update === true){ // delete success
-
-			echo "1";
-
-		} else {
-			
-			echo json_encode($database->errors);
-		}
 
 	break;
 	
@@ -97,12 +92,14 @@ switch ($_POST['action']) {
 	// update user privacy
 	case 'privacy_update':
 
+		$database = new Database();
+
 		unset($_POST['action']);
 		$data = $_POST;
 		unset($_POST);
 
-		$fields = [$data['fields']];
-		$values = [$data['values']];
+		$fields = $data['fields'];
+		$values = $data['values'];
 
 		$update = $database->update_data("user_privacy", $fields, $values, "user_id");
 		if($update === true){ // update success

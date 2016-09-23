@@ -121,6 +121,8 @@ class Database {
 		$set = '';
 		$r_values = []; // values to be escaped when executing
 
+		if(!is_array($fields)) $fields = [$fields];
+		if(!is_array($values)) $values = [$values];
 
 		$source = array_combine($fields, $values);
 		foreach ($fields as $field) {
@@ -136,8 +138,7 @@ class Database {
 		// remove the last coma from the set
 		$set = substr($set, 0, -2); 
 
-		$sql = "UPDATE `{$table}` SET $set WHERE {$where} = {$rule}";
-
+		$sql = "UPDATE `{$table}` SET $set WHERE {$where} = '{$rule}'";
 		$stmt = $this->connection->prepare($sql);
 		$res = $stmt->execute($r_values);
 
@@ -210,8 +211,5 @@ class Database {
 		return $stmt;
 	}
 }
-	
-
-$database = new Database();
 
 ?>

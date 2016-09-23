@@ -10,7 +10,7 @@ if(isset($_GET['qord']) && ($_GET['qord'] == 'count')) $qord = 'COUNT(*) DESC';
 elseif(isset($_GET['cord']) && ($_GET['cord'] == 'count')) $cord = 'COUNT(*) DESC';
 
 $q_reports = QNA::get_reports('', $qord, true);
-$c_reports = Comment::get_reports('', $qord, true);
+$c_reports = Comment::get_reports('', $cord, true);
 //printX($q_reports);
 $sec = "staff";
 

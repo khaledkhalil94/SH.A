@@ -15,7 +15,7 @@ class Comment extends QNA {
      * @return int(id)|string(error)
      */
 	public static function new_comment($data){
-		global $database;
+		$database = new Database();
 
 		$PostID = $data['post_id'];
 		$content = $data['content'];
@@ -170,7 +170,7 @@ class Comment extends QNA {
 	 * @return array|string
 	 */
 	public static function edit_comment($commentID, $content){
-		global $database;
+		$database = new Database();
 
 		$update = $database->update_data(TABLE_COMMENTS, ['content'], [$content], 'id', $commentID);
 

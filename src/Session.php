@@ -39,6 +39,8 @@ class Session {
 		session_start();
 		$this->check_login();
 
+		Admin::registerVisitor();
+		
 		if($this->logged_in){
 
 			// define user_id constant

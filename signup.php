@@ -49,10 +49,9 @@ require(ROOT_PATH . 'inc/head.php');
 							<label>re-enter Password</label>
 							<input type="password" name="repassword" placeholder="Password" />
 						</div>
-
 						<br>
 						<br>
-						 <button class="ui button green submit" type="submit">Sign up</button>
+						<button class="ui button green submit" type="submit">Sign up</button>
 					</form>
 
 				</div>

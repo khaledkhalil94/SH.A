@@ -25,21 +25,21 @@ $imgValidation = array(
 	'max_height' => 800
 	);
 
-require_once(__DIR__.'/Database.php');
-require_once(__DIR__."/Session.php");
-require_once(__DIR__.'/QNA.php');
-require_once(__DIR__."/User.php");
-require_once(__DIR__.'/Images.php');
-require_once(__DIR__.'/functions.php');
-require_once(__DIR__.'/Comment.php');
-require_once(__DIR__.'/Post.php');
-
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";
  	require_once($path);
  }
 
 spl_autoload_register('autoloader');
+
+require_once(__DIR__.'/functions.php');
+require_once(__DIR__.'/Database.php');
+require_once(__DIR__."/Session.php");
+require_once(__DIR__.'/QNA.php');
+require_once(__DIR__."/User.php");
+require_once(__DIR__.'/Images.php');
+require_once(__DIR__.'/Comment.php');
+require_once(__DIR__.'/Post.php');
 
 if($session->is_logged_in()){
 $msgCount = Messages::getMsgsCount();

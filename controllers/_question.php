@@ -72,7 +72,7 @@ switch ($action) {
 			die(json_encode(['status' => false, 'err' => 'You have already upvoted this post.']));
 		}
 
-		global $database;
+		$database = new Database();
 
 		$data = ['post_id' => $PostID, 'user_id' => USER_ID];
 		$insert = $database->insert_data(TABLE_POINTS, $data);

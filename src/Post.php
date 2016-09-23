@@ -58,7 +58,8 @@ class Post extends QNA {
 
 	private function get_post_to($uid){
 		global $connection;
-		global $database;
+		
+		$database = new Database();
 
 		$sql = "SELECT users.id AS uid, users.firstName AS r_fn, CONCAT(users.firstName, ' ', users.lastName) AS r_full_name, info.username AS r_un
 				FROM ". TABLE_USERS ." AS users
@@ -81,7 +82,7 @@ class Post extends QNA {
 	}
 
 	public function get_posts($UserID){
-		global $database;
+		$database = new Database();
 
 		$sql = "SELECT users.id AS uid, users.firstName, CONCAT(users.firstName, ' ', users.lastName) AS full_name, info.username,
 				activity.*, pic.path AS img_path FROM ". TABLE_USERS ." AS users
@@ -104,9 +105,10 @@ class Post extends QNA {
 	}
 
 	public function get_stream($uid=USER_ID){
-		global $database;
 		global $connection;
 
+		$database = new Database();
+		
 		// initiating the feed array
 		$feed = [];
 
@@ -150,7 +152,7 @@ class Post extends QNA {
 
 		if($database->error === TRUE) {
 
-			$this->errors = $database->errors;printX($this->errors);
+			$this->errors = $database->errors;
 		} else {
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){

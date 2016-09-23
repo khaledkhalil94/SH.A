@@ -5,7 +5,7 @@ class Messages {
 	
 
 	public static function sendMsg($data){
-		global $database;
+		$database = new Database();
 
 		$token = $data['token'];
 		$send_by = USER_ID;
@@ -183,7 +183,7 @@ class Messages {
 	public static function hideMsg($id){
 
 		// TODO: check if message is already hidden or not
-		global $database;
+		$database = new Database();
 		
 		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id}";
 
@@ -192,7 +192,7 @@ class Messages {
 
 	// unHides a messages
 	public static function unHideMsg($id){
-		global $database;
+		$database = new Database();
 		
 		$sql = "UPDATE `messages` SET deleted = 0 WHERE id = {$id}";
 

@@ -25,7 +25,7 @@ class QNA {
 	 * @return int|string
 	 */
 	public function create($data){
-		global $database;
+		$database = new Database();
 
 		//$data = ['title' => $title, 'content' => $content, 'section' => $section, 'uid' => USER_ID];
 		$data['uid'] = USER_ID;
@@ -228,7 +228,7 @@ class QNA {
 	 * @return boolean
 	 */
 	public static function upvote($PostID, $uid){
-		global $database;
+		$database = new Database();
 
 		$data = ['post_id' => $PostID, 'user_id' => $uid];
 		$insert = $database->insert_data(TABLE_POINTS, $data);
@@ -350,7 +350,7 @@ class QNA {
 	 * @return array|string
 	 */
 	public function edit_question($content){
-		global $database;
+		$database = new Database();
 
 		$update = $database->update_data(TABLE_QUESTIONS, 'content', $content, 'id', $this->PostID);
 
@@ -371,7 +371,7 @@ class QNA {
 	 * @return boolean|string
 	 */
 	public function report($CommentID, $content, $user_id){
-		global $database;
+		$database = new Database();
 
 		$data = ['post_id' => $CommentID, 'content' => $content, 'reporter' => $user_id];
 
@@ -464,7 +464,7 @@ class QNA {
 	 * @return boolean|string
 	 */
 	public static function Publish($PostID){
-		global $database;
+		$database = new Database();
 
 		$fields = ['status'];
 		$values = [1];
@@ -486,7 +486,7 @@ class QNA {
 	 * @return boolean|string
 	 */
 	public static function unPublish($PostID){
-		global $database;
+		$database = new Database();
 
 		$fields = ['status'];
 		$values = [2];
@@ -526,7 +526,7 @@ class QNA {
 	 * @return mixed
 	 */
 	public function save_post(){
-		global $database;
+		$database = new Database();
 
 		$data = ['post_id' => $this->PostID, 'user_id' => USER_ID];
 

@@ -214,14 +214,34 @@
     border-bottom: none;
 }
 
-.question-page .post-header .nine.wide.column.post-title {
-    margin-left: -10px;
-}
-
 .question-page .commentz .comment .content .text {
     padding-left: 70px;
 }
 
 .questions.front-page.vertical.segment.loading {
     padding-top: 0px;
+}
+
+#sidebar-content .item {
+    padding: 9px 0;
+}
+
+.question-page .nine.wide.column.post-title {}
+
+.nine.wide.column.post-title {
+    margin: 15px 2px;
+}
+
+.question-page .nine.wide.column.post-title {
+    margin: 16px 5px;
+}
+
+#comments .cmt_rpts {
+    display: inline;
+    margin-left: 10px;
+}
+
+.question-page #comments  span.cmt_rpt_count {
+    text-decoration: none;
+    color: black;
 }

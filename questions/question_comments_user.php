@@ -11,15 +11,18 @@
 </form>
 <hr>
 <div id="comments">
-<?php if(count($comments) === 0) {
-		echo "<span id=\"emptycmt\">There is nothing here yet, be the first to comment!</span>";
-	} else {
+<?php if(count($comments) === 0) echo "<span id=\"emptycmt\">There is nothing here yet, be the first to comment!</span>";
+		else;
 		foreach ($comments as $comment):
 			$voted = QNA::has_voted($comment->id, USER_ID);
 			$votes = Comment::get_votes($comment->id); 
 			$self = $comment->uid === USER_ID;
-			$reports_count = QNA::get_reports("comments", $comment->id) ? count(QNA::get_reports("comments", $comment->id)) : null; 
-			$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
+
+			$rpsc = QNA::get_reports_count($comment->id) ?: false;
+
+
+			//$reports_count = QNA::get_reports("comments", $comment->id) ? count(QNA::get_reports("comments", $comment->id)) : null; 
+			//$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
 
 			$comment_date = $comment->created;
 			$comment_edited_date = $comment->last_modified;
@@ -31,8 +34,8 @@
 			}
 			?>
 				<?php if($session->adminCheck()) {?>
-				<a style="color:red;" href="/sha/staff/admin/questions/reports.php#id=<?= $id; ?>">
-				 <?= $reports_count; ?></a>
+				<a style="color:red;" href="/sha/admin/report.php?id=<?= $comment->id; ?>">
+				 </a>
 				<?php } ?>
 
 				<div class="ui minimal comments">
@@ -45,20 +48,11 @@
 							<div class="metadata">
 								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 							</div>
-							<div class="text">
-								<h4><?= $comment->content; ?></h4>
+							<?php if($rpsc): ?>
+							<div class='cmt_rpts'>
+								<a title="Reports" href="/sha/admin/report.php?id=<?= $comment->id; ?>"><span class="cmt_rpt_count"><?= $rpsc; ?> </span><i class="ui icon flag red"></i></a>
 							</div>
-							<div class="ui fitted divider"></div>
-							<?php if($voted){ ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
-										<span class="comment-votes-count"><?=$votes;?></span>
-									</div>
-							<?php } else { ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
-									</div>
-							<?php } ?>
+							<?php endif; ?>
 							<div title="Actions" class="ui pointing dropdown" id="comment-actions">
 								<i class="ellipsis link big horizontal icon"></i>
 								<div class="menu">
@@ -80,13 +74,26 @@
 									<?php } ?>
 								</div>
 							</div>
+							<div class="text">
+								<h4><?= $comment->content; ?></h4>
+							</div>
+							<div class="ui fitted divider"></div>
+							<?php if($voted){ ?>
+									<div class="comment-points">
+										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
+										<span class="comment-votes-count"><?=$votes;?></span>
+									</div>
+							<?php } else { ?>
+									<div class="comment-points">
+										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
+									</div>
+							<?php } ?>
 
 						</div>
 					</div>
 				</div>
 
-		<?php endforeach; 
-	}?>
+		<?php endforeach; ?>
 </div>
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/post.delete.php'); ?>
 <?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>

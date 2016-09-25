@@ -34,13 +34,13 @@ if($q->last_modified > $q->created){
 } else {
 	$edited = "";
 }
-//$isReported = QNA::reports("questions", $id);
 
-$reports_count = QNA::get_reports("questions", $id) ? count(QNA::get_reports("questions", $id)) : null; 
-$reports_count = $reports_count > 1 ? $reports_count." times." : ($reports_count === NULL ? NULL : "1 time.");
+$rpsc = QNA::get_reports_count($id) ?: false;
+if($rpsc) $reports_count = ($rpsc == 1) ? "1 time" : "{$rpsc} times";
+	else $reports_count = false;
+
 include (ROOT_PATH . 'inc/head.php');
 $name = $q->full_name;
-$imgPath = $q->img_path ?: DEF_PIC;
 ?>
 <body>
 	<div class="question-page ui container section">

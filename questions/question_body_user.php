@@ -3,19 +3,19 @@
 		<div class="blog-post" id="<?= $id; ?>">
 			<div class="ui grid post-header">
 				<div class="two wide column post-avatar">
-					<a href="/sha/user/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $imgPath; ?>"></a>
+					<div class="thumbnail small">
+						<a href="<?= BASE_URL.'user/'.$q->uid ?>/"><img src="<?= $q->img_path ?>"></a>
+					</div>
 				</div>
 				<div class="nine wide column post-title">
-					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
-					<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
-					
+					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>				
 					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
 				<div class="report-message">
 					<div class="ui negative compact message reports">
-						<a style="color:red;" href="/sha/staff/admin/questions/report.php?id=<?= $id; ?>">This question has been reported <?= $reports_count; ?></a>
+						<a style="color:red;" href="/sha/admin/report.php?id=<?= $id; ?>">This question has been reported <?= $reports_count; ?></a>
 					</div>
 				</div>
 			<?php } ?>
@@ -28,6 +28,7 @@
 				<?php } ?>
 				<div class="ui header">
 					<h3 class="blog-post-title"><?= $q->title; ?></h3>
+					<!-- Question actions menu -->
 					<div title="Actions" class="ui pointing dropdown" id="blog-post-actions">
 						<i class="setting link large icon"></i>
 						<div class="menu">
@@ -40,14 +41,7 @@
 							</div>
 							<?php } ?>
 
-							<?php if ($session->userCheck($user) || $session->adminCheck()):
-								if ($session->adminCheck()) { ?>
-							<a id="admin-preview" class="item" href="/sha/staff/admin/questions/edit.php?id=<?= $q->id; ?>">
-								<div class="item">
-								Preview Page
-								</div>
-							</a>
-							<?php } ?>
+							<?php if ($session->userCheck($user) || $session->adminCheck()): ?>
 							<div class="item" id="post-edit">
 								<a class="ui a">Edit</a>
 							</div>
@@ -67,14 +61,12 @@
 							<?php endif; ?>	
 						</div>
 					</div>
+					<!-- Question actions menu -->
 				</div>
 				<div class="ui divider"></div>
-				
-
 				<p><?= $q->content; ?></p>
 			</div>
-
-<hr><br>
+			<hr><br>
 			<div class="actions">
 				<?php if($voted){ ?>
 				<div class="ui labeled button" tabindex="0">
@@ -99,15 +91,18 @@
 			<h4>Related questions</h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list" id="sidebar-content">
-					<?php foreach($QNA->get_questions($q->section, true, 5) as $item){ ?>
-						<?php if ($q->id != $item->id){ ?>
+					<?php 
+						$items = QNA::get_posts_by_section($q->section, 5, true);
+						if(count($items) < 2) echo "<p>There are no other question in this section.</p>";
+							else;
+						foreach(QNA::get_posts_by_section($q->section, 5, true) as $item){ ?>
+						<?php if ($q->id == $item->id) continue; ?>
 							<div class="item">
 								<div class="content">
 									<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 								</div>
 								<span id="sidebar-date"><?= $item->created; ?></span>
 							</div>
-						<?php } ?>
 					<?php } ?>
 				</div>
 			</div>
@@ -115,12 +110,11 @@
 			<div class="ui segment">
 				<div class="ui relaxed divided list" id="sidebar-content">
 					<?php
-					$items = $QNA->get_posts_by_user($q->uid);
-					if (count($items) < 2) {
-						echo "<p>This user doesn't have any other questions.</p>";
-					} else {
+					$items = QNA::get_posts_by_user($q->uid, 5, true);
+					if (count($items) < 2) echo "<p>This user doesn't have any other questions.</p>";
+						else;
 					 foreach($items as $item){ ?>
-					<?php if ($q->id != $item->id){ ?>
+					<?php if ($q->id == $item->id) continue; ?>
 						<div class="item">
 							<div class="content">
 								<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
@@ -128,9 +122,7 @@
 							<span id="sidebar-date"><?= $item->created; ?></span>
 						</div>
 					<?php 
-							} 
-						}
-					} ?>
+						}  ?>
 				</div>
 			</div>
 		</div>

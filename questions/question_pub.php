@@ -1,8 +1,9 @@
 <?php
 // The view for the public
 $pageTitle = "Question/Public";
-include (ROOT_PATH . 'inc/head.php');
 $id = sanitize_id($_GET['id']) ?: null;
+
+$QNA = new QNA();
 
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
@@ -15,35 +16,36 @@ if(!$q = QNA::get_question($id)) {
 	}
 }
 
-if($q->status != 1 && !($session->adminCheck() || $session->userCheck($q->uid))) Redirect::redirectTo('404');
+if($q->status != 1) Redirect::redirectTo('404');
 
 $votes_count = QNA::get_votes($id) ?: "0";
 
 $post_date = $q->created;
 $post_modified_date = $q->last_modified;
 
-$imgPath = $q->img_path ?: DEF_PIC;
-
 if($post_modified_date > $post_date){
 	$edited = " (edited <span id='post-date-ago' title=\"$post_modified_date\">$post_modified_date</span>)";
 } else {
 	$edited = "";
 }
+include (ROOT_PATH . 'inc/head.php');
 ?>
 <body>
-	<div class="ui container section pub">
+	<div class="question-page ui container section pub">
 		<?= msgs(); ?>
 		<div class="ui two column grid">
 			<div class="twelve wide column">
 				<div class="blog-post" id="<?= $id; ?>">
 					<div class="ui grid post-header">
 						<div class="two wide column post-avatar">
-							<a href="/sha/user/<?= $q->uid; ?>/"><img class="ui avatar tiny image" src="<?= $imgPath; ?>"></a>
+							<div class="thumbnail small">
+								<a href="<?= BASE_URL.'user/'.$q->uid ?>/"><img src="<?= $q->img_path ?>"></a>
+							</div>
 						</div>
 						<div class="nine wide column post-title">
 							<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
 							<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
-							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <?= $q->fac; ?> <span id="post-date-ago"><?= $edited; ?></span></p>
+							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
 						</div>
 					</div>
 					<br><br>
@@ -79,37 +81,39 @@ if($post_modified_date > $post_date){
 				<div class="sidebar-module sidebar-module-inset">
 					<h4>Related questions</h4>
 					<div class="ui segment">
-						<div class="ui relaxed divided list">
-							<?php foreach(QNA::get_content($q->section) as $item){ ?>
-								<?php if ($q->id != $item->id){ ?>
+						<div class="ui relaxed divided list" id="sidebar-content">
+							<?php 
+								$items = QNA::get_posts_by_section($q->section, 5, true);
+								if(count($items) < 2) echo "<p>There are no other question in this section.</p>";
+									else;
+								foreach(QNA::get_posts_by_section($q->section, 5, true) as $item){ ?>
+								<?php if ($q->id == $item->id) continue; ?>
 									<div class="item">
 										<div class="content">
 											<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 										</div>
+										<span id="sidebar-date"><?= $item->created; ?></span>
 									</div>
-								<?php } ?>
 							<?php } ?>
 						</div>
 					</div>
-					<h4>More questions by <a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
+					<h4>More questions by <?= View::user($q->uid); ?></h4>
 					<div class="ui segment">
-						<div class="ui relaxed divided list">
+						<div class="ui relaxed divided list" id="sidebar-content">
 							<?php
-							$items = QNA::get_content_by_user($q->uid);
-							if (count($items) < 2) {
-								echo "<p>This user doesn't have any other questions.</p>";
-							} else {
-								foreach($items as $item){ ?>
-									<?php if ($q->id != $item->id){ ?>
-										<div class="item">
-											<div class="content">
-												<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
-											</div>
-										</div>
-									<?php 
-									} 
-								}
-							} ?>
+							$items = QNA::get_posts_by_user($q->uid, 5, true);
+							if (count($items) < 2) echo "<p>". View::user($q->uid)." doesn't have any other questions.</p>";
+								else;
+							 foreach($items as $item){ ?>
+							<?php if ($q->id == $item->id) continue; ?>
+								<div class="item">
+									<div class="content">
+										<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
+									</div>
+									<span id="sidebar-date"><?= $item->created; ?></span>
+								</div>
+							<?php 
+								}  ?>
 						</div>
 					</div>
 				</div>
@@ -122,14 +126,11 @@ if($post_modified_date > $post_date){
 				<h3>Comments (<?= count($comments) ?: "0"; ?>): </h3>
 			<div id="comments">
 				<?php 
-				if(count($comments) === 0) {
-					echo "There is nothing here yet, be the first to comment!";
-				} else {
+				if(count($comments) === 0) echo "There is nothing here yet, be the first to comment!";
+				else;
 					foreach ($comments as $comment):
 						$votes = Comment::get_votes($comment->id); 
 						$commenter = User::get_user_info($comment->uid);
-
-						$img_path = Images::get_profile_pic(User::get_user_info($comment->uid));
 
 						$comment_date = $comment->created;
 						$comment_modified_date = $comment->last_modified;
@@ -140,22 +141,20 @@ if($post_modified_date > $post_date){
 							$edited = "";
 						}
 						?>
-
 						<div class="ui minimal comments">
 							<div class="ui comment padded segment" id="<?= $comment->id; ?>">
-								<a class="avatar" href="/sha/user/<?= $comment->uid; ?>/">
-									<img src="<?= $img_path; ?>">
+								<a class="avatar" href="<?= BASE_URL .'user/'.$comment->uid; ?>/">
+									<img src="<?= $comment->path; ?>">
 								</a>
 								<div class="content">
-									<a class="author" href="<?= BASE_URL."user/".$commenter->id; ?>/"><?= $commenter->full_name;?></a>
+									<?= View::user($comment->uid, false, 'author'); ?>
 									<div class="metadata">
 										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
 									</div>
 									<div class="text">
 										<h4><?= $comment->content; ?></h4>
 									</div>
-
-									<div class="ui dropdown ">
+									<div class="ui comment dropdown">
 										<div class="ui labeled button" tabindex="0">
 											<div class="comment-points">
 												<a class="comment-vote-btn-pub">
@@ -163,24 +162,21 @@ if($post_modified_date > $post_date){
 												</a>
 												<span class="comment-votes-count"><?=$votes;?> </span>
 											</div>
-
 										</div>
 										<div class="menu">
 											<div class="ui error message">
 												<p>You must <a href="/sha/login.php">login</a> to like this comment.</p>
 											</div>
 										</div>
-										<script>
-											$('.ui.dropdown').dropdown({on: 'click'}).dropdown({'direction':'upward'});
-										</script>
 									</div>
 
 								</div>
 							</div>
 						</div>
-
-				<?php endforeach;
-				} ?>
+				<?php endforeach; ?>
+			<script>
+				$('.ui.comment.dropdown').dropdown({on: 'click'}).dropdown({'direction':'upward'});
+			</script>
 			</div>
 		</div>
 	</div>

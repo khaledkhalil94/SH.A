@@ -8,16 +8,29 @@ class View {
 		return BASE_URL.'questions/question.php?id='.$id;
 	}
 
-	public static function user($id, $title=false){
+	public static function user($id, $title=false, $class=false){
 
 		$user = new User($id);
 		$user = $user->user;
 
 		if(!is_object($user)) return '';
 
+		$classes = '';
+
+		if($title) $classes .= 'user-title ';
+		if($class) $classes .= "{$class} ";
+		
 		$html = "<a";
-		if($title) $html .= " class='user-title' user-id='{$user->id}'";
+
+		if(!empty($classes)) {
+			$classes = trim($classes);
+			$html .= " class='{$classes}'";
+		}
+
+		if($title) $html .= " user-id='{$user->id}'";
+
 		$html .= " href='". BASE_URL."user/{$user->id}/'>{$user->full_name}</a>";
+
 		return $html;
 	}
 

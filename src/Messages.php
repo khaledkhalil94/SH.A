@@ -55,10 +55,10 @@ class Messages {
 				profile_pic.path AS img_path,
 				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
 				info.ual AS ual,
-				messages.* FROM `messages` 
-				LEFT JOIN `students` ON messages.sender_id = students.id
-				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
-				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
+				messages.* FROM ". TABLE_MESSAGES ."
+				LEFT JOIN ". TABLE_USERS ." ON messages.sender_id = students.id
+				LEFT JOIN ". TABLE_INFO ." AS info ON messages.sender_id = info.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." ON messages.sender_id = profile_pic.user_id
 				WHERE messages.user_id = :user_id AND deleted = 0 
 				ORDER BY Date DESC";
 
@@ -78,10 +78,10 @@ class Messages {
 				profile_pic.path AS img_path,
 				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
 				info.ual AS ual,
-				messages.* FROM `messages` 
-				LEFT JOIN `students` ON messages.sender_id = students.id
-				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
-				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
+				messages.* FROM ". TABLE_MESSAGES ." 
+				LEFT JOIN ". TABLE_USERS ." ON messages.sender_id = students.id
+				LEFT JOIN ". TABLE_INFO ." AS info ON messages.sender_id = info.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." ON messages.sender_id = profile_pic.user_id
 				WHERE messages.user_id = :user_id AND deleted = 1 
 				ORDER BY Date DESC";
 
@@ -103,10 +103,10 @@ class Messages {
 				students.firstName AS u_fullname,
 				info.ual AS ual,
 				messages.id, messages.user_id, messages.date, messages.subject
-				FROM `messages` 
-				LEFT JOIN `students` ON messages.user_id = students.id
-				LEFT JOIN `login_info` AS info ON messages.user_id = info.id
-				LEFT JOIN `profile_pic` ON messages.user_id = profile_pic.user_id
+				FROM ". TABLE_MESSAGES ." 
+				LEFT JOIN ". TABLE_USERS ." ON messages.user_id = students.id
+				LEFT JOIN ". TABLE_INFO ." AS info ON messages.user_id = info.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." ON messages.user_id = profile_pic.user_id
 				WHERE messages.sender_id = :user_id
 				ORDER BY Date DESC";
 
@@ -127,11 +127,11 @@ class Messages {
 				info.ual AS ual,
 				sender.firstName AS u_name,
 				receiver.firstName AS r_name,
-				messages.* FROM `messages` 
-				LEFT JOIN `students` AS sender ON messages.sender_id = sender.id
-				LEFT JOIN `students` AS receiver ON messages.user_id = receiver.id
-				LEFT JOIN `login_info` AS info ON messages.sender_id = info.id
-				LEFT JOIN `profile_pic` ON messages.sender_id = profile_pic.user_id
+				messages.* FROM ". TABLE_MESSAGES ." 
+				LEFT JOIN ". TABLE_USERS ." AS sender ON messages.sender_id = sender.id
+				LEFT JOIN ". TABLE_USERS ." AS receiver ON messages.user_id = receiver.id
+				LEFT JOIN ". TABLE_INFO ." AS info ON messages.sender_id = info.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." ON messages.sender_id = profile_pic.user_id
 				WHERE messages.id = {$id}";
 		$stmt = $connection->prepare($sql);
 		if (!$stmt->execute()) {
@@ -146,10 +146,10 @@ class Messages {
 		$sql = "SELECT profile_pic.path AS img_path,
 				login_info.type AS type,
 				CONCAT(students.firstName, ' ', students.lastName) AS u_fullname,
-				messages.* FROM `messages` 
-				LEFT JOIN `students` ON messages.sender_id = students.id
-				LEFT JOIN `profile_pic` ON {$id} = profile_pic.user_id
-				INNER JOIN `login_info` ON {$id} = login_info.id
+				messages.* FROM ". TABLE_MESSAGES ." 
+				LEFT JOIN ". TABLE_USERS ." ON messages.sender_id = students.id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." ON {$id} = profile_pic.user_id
+				INNER JOIN ". TABLE_INFO ." ON {$id} = login_info.id
 				WHERE deleted = 0 
 				AND
 				(messages.user_id = {$selfId} AND messages.sender_id = {$id}
@@ -171,7 +171,7 @@ class Messages {
 
 		$user_id = USER_ID;
 
-		$sql = "DELETE FROM `messages` WHERE id = :id AND user_id = $user_id LIMIT 1";
+		$sql = "DELETE FROM ". TABLE_MESSAGES ." WHERE id = :id AND user_id = $user_id LIMIT 1";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -185,7 +185,7 @@ class Messages {
 		// TODO: check if message is already hidden or not
 		$database = new Database();
 		
-		$sql = "UPDATE `messages` SET deleted = 1 WHERE id = {$id}";
+		$sql = "UPDATE ". TABLE_MESSAGES ." SET deleted = 1 WHERE id = {$id}";
 
 		return $database->xcute($sql);
 	}
@@ -194,7 +194,7 @@ class Messages {
 	public static function unHideMsg($id){
 		$database = new Database();
 		
-		$sql = "UPDATE `messages` SET deleted = 0 WHERE id = {$id}";
+		$sql = "UPDATE ". TABLE_MESSAGES ." SET deleted = 0 WHERE id = {$id}";
 
 		return $database->xcute($sql);
 	}
@@ -205,7 +205,7 @@ class Messages {
 
 		$user_id = USER_ID;
 
-		$sql = "SELECT COUNT(*) AS count FROM `messages` WHERE user_id = {$user_id}
+		$sql = "SELECT COUNT(*) AS count FROM ". TABLE_MESSAGES ." WHERE user_id = {$user_id}
 				AND deleted = 0 AND seen = 0";
 		
 		$res = $connection->query($sql);
@@ -215,7 +215,7 @@ class Messages {
 	// checks if the message is read or not
 	public static function isSeen($id){
 		global $connection;
-		$sql = "SELECT seen FROM `messages` WHERE id = :id";
+		$sql = "SELECT seen FROM ". TABLE_MESSAGES ." WHERE id = :id";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -243,7 +243,7 @@ class Messages {
 	// marks a message as seen once the user opens it
 	public static function msgSeen($user_id, $id){
 		global $connection;
-		$sql = "UPDATE `messages` SET seen = 1 WHERE id = :id AND user_id = :user_id LIMIT 1";
+		$sql = "UPDATE ". TABLE_MESSAGES ." SET seen = 1 WHERE id = :id AND user_id = :user_id LIMIT 1";
 
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -256,7 +256,7 @@ class Messages {
 	public static function msgUnRead($id){
 		global $connection;
 
-		$sql = "UPDATE `messages` SET seen = 0 WHERE id = :id LIMIT 1";
+		$sql = "UPDATE ". TABLE_MESSAGES ." SET seen = 0 WHERE id = :id LIMIT 1";
 		$stmt = $connection->prepare($sql);
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 

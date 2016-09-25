@@ -346,7 +346,7 @@ class User {
 		$fields = array_keys($newData);
 		$values = array_values($newData);
 
-		$update = $database->update_data('login_info', $fields, $values, 'id', $id);
+		$update = $database->update_data(TABLE_INFO, $fields, $values, 'id', $id);
 		if($update !== true){ // if something went wrong while updating
 			return $database->errors;
 		}
@@ -494,8 +494,8 @@ class User {
 			}
 		}
 
-		$sql = "SELECT info.username AS title, info.id AS id, pic.path AS image FROM `login_info` AS info
-				LEFT JOIN `profile_pic` AS pic ON info.id = pic.user_id
+		$sql = "SELECT info.username AS title, info.id AS id, pic.path AS image FROM ". TABLE_INFO ." AS info
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON info.id = pic.user_id
 				WHERE info.{$id} LIKE ? LIMIT 4";
 
 		$stmt = $connection->prepare($sql);
@@ -679,10 +679,10 @@ class User {
 	public function is_friend($uid, $UserID){
 		global $connection;
 
-		$sql = "SELECT 1 FROM `following` WHERE user_id = {$uid} AND follower_id = {$UserID}";
+		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$uid} AND follower_id = {$UserID}";
 		$q1 = (bool)$connection->query($sql)->fetch();
 
-		$sql = "SELECT 1 FROM `following` WHERE user_id = {$UserID} AND follower_id = {$uid}";
+		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$UserID} AND follower_id = {$uid}";
 		$q2 = (bool)$connection->query($sql)->fetch();
 
 		if($q1 && $q2){

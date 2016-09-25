@@ -15,7 +15,7 @@ require_once('init.php');
 
 		if (!$user->has_pic) return BASE_URL."images/profilepic/pp.png";
 
-		$sql = "SELECT `path` FROM profile_pic WHERE user_id = {$user->id}";
+		$sql = "SELECT ". TABLE_PROFILE_PICS ." FROM profile_pic WHERE user_id = {$user->id}";
 
 		$stmt = $connection->query($sql);
 		return $stmt->fetch()['path'];
@@ -221,7 +221,7 @@ require_once('init.php');
 
 			$this->path = $path;
 
-			$sql = "INSERT INTO `profile_pic` 
+			$sql = "INSERT INTO ". TABLE_PROFILE_PICS ."
 			(`user_id`, `path`, `type`, `size`, `name`, `extension`, `width`, `height`, `attr`, `type_constant`) VALUES 
 			('{$this->user_id}', '{$path}','{$file['type']}', '{$file['size']}', '{$file['name']}', '{$file['extension']}',
 			'{$file['width']}','{$file['height']}', '{$file['attr']}', '{$file['typeC']}')";
@@ -251,57 +251,6 @@ require_once('init.php');
 	}
 
 	public function change_profile_pic(){
-		//global $connection;
-
-
-		// $file = $this->process_img();
-
-		// if (!$file || $this->error) {
-		// 	return false;
-		// }
-
-
-		// $oldFile = $this->get_pic_info();
-
-		// if($oldFile->user_id !== USER_ID) {
-		// 	$this->error = true;
-		// 	$this->errMsg = "Authentication error!";
-
-		// 	return false;
-		// }
-
-		// $oldPath = $_SERVER["DOCUMENT_ROOT"] . $oldFile->path;
-
-		// if(!unlink($oldPath)) return false;
-
-		// $path = DEF_IMG_UP_DIR. DS .USER_ID. DS ;
-		// $upload_dir = $path . $file['name'] .".". $file['extension'];
-
-		// if(move_uploaded_file($file['tmp_name'], $upload_dir)){
-
-		// 	//register in the database
-		// 	$this->path = DEF_PIC_PATH . USER_ID . "/" . $file['name'] .".". $file['extension'];
-
-		// 	$sql = "UPDATE profile_pic SET 
-		// 			`path` = '$this->path', `type` = '{$file['type']}', `size` = '{$file['size']}', `name` = '{$file['name']}', `extension` = '{$file['extension']}',
-		// 			`width` = '{$file['width']}', `height` = '{$file['height']}', `attr` = '{$file['attr']}', `type_constant` = '{$file['typeC']}'
-		// 			WHERE user_id = {$this->user_id}
-		// 			LIMIT 1";
-
-		// 	$stmt = $connection->query($sql);
-
-		// 	if(!$stmt) {
-
-		// 		$this->error = true;
-		// 		$this->errMsg = $connection->errorInfo();
-
-		// 		return false;
-		// 	}
-		// }
-
-		// 	return true;
-
-		// so after I wrote this method, I realised that I can just do this..
 		if($this->process_img()){
 
 			$this->delete_profile_pic();
@@ -331,7 +280,7 @@ require_once('init.php');
 		
 		$oldPath = $_SERVER["DOCUMENT_ROOT"] . $oldFile->path;
 
-		$sql = "DELETE FROM `profile_pic` WHERE `user_id` = {$this->user_id} LIMIT 1";
+		$sql = "DELETE FROM ". TABLE_PROFILE_PICS ." WHERE `user_id` = {$this->user_id} LIMIT 1";
 		$stmt = $connection->query($sql);
 		if($stmt) {
 

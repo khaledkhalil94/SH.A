@@ -156,7 +156,7 @@ class Session {
 	private function updateActivity($user_id){
 		global $connection;
 
-		$sql = "UPDATE `login_info` SET activity = CURRENT_TIMESTAMP WHERE id = {$user_id}";
+		$sql = "UPDATE ". TABLE_INFO ." SET activity = CURRENT_TIMESTAMP WHERE id = {$user_id}";
 		$connection->query($sql);
 	}
 

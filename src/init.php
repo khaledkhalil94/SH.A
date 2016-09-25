@@ -25,31 +25,6 @@ $imgValidation = array(
 	'max_height' => 800
 	);
 
- function autoloader($class_name){
- 	$path = DOCROOT . "/{$class_name}.php";
- 	require_once($path);
- }
-
-spl_autoload_register('autoloader');
-
-require_once(__DIR__.'/functions.php');
-require_once(__DIR__.'/Database.php');
-require_once(__DIR__."/Session.php");
-require_once(__DIR__.'/QNA.php');
-require_once(__DIR__."/User.php");
-require_once(__DIR__.'/Images.php');
-require_once(__DIR__.'/Comment.php');
-require_once(__DIR__.'/Post.php');
-
-if($session->is_logged_in()){
-$msgCount = Messages::getMsgsCount();
-}
-
-if (defined('BASE_URL') && defined('USER_ID')) {
-	define('USER_URL', BASE_URL."user/".USER_ID."/");
-}
-
-
 // define table names
 
 define('TABLE_COMMENTS', 'comments');
@@ -66,5 +41,31 @@ define('TABLE_FOLLOWING', 'following');
 define('TABLE_BLOCKS', 'block_list');
 define('TABLE_SAVED', 'saved');
 define('TABLE_ACTIVITY', 'activity');
+
+
+ function autoloader($class_name){
+ 	$path = DOCROOT . "/{$class_name}.php";
+ 	require_once($path);
+ }
+
+spl_autoload_register('autoloader');
+
+require_once(__DIR__.'/functions.php');
+require_once(__DIR__.'/Database.php');
+require_once(__DIR__."/Session.php");
+// require_once(__DIR__.'/QNA.php');
+// require_once(__DIR__."/User.php");
+// require_once(__DIR__.'/Images.php');
+// require_once(__DIR__.'/Comment.php');
+// require_once(__DIR__.'/Post.php');
+
+if($session->is_logged_in()) $msgCount = Messages::getMsgsCount();
+
+
+if (defined('BASE_URL') && defined('USER_ID')) {
+	define('USER_URL', BASE_URL."user/".USER_ID."/");
+}
+
+
 
 ?>

@@ -247,7 +247,7 @@ class QNA {
 	public static function downvote($PostID, $uid){
 		global $connection;
 
-		$sql = "DELETE FROM `points`
+		$sql = "DELETE FROM ". TABLE_POINTS ."
 				WHERE post_id = {$PostID}
 				AND user_id = {$uid}
 				LIMIT 1";
@@ -404,7 +404,7 @@ class QNA {
 
 		$sql = "SELECT rp.id AS rp_id, rp.post_id AS rp_post_id, rp.content AS r_content, rp.reporter AS reporter, rp.date AS rp_date,
 				u.id AS u_id,
-				{$table}.* FROM `reports` AS rp
+				{$table}.* FROM ". TABLE_REPORTS ." AS rp
 
 				INNER JOIN `$table` ON rp.post_id = $table.id
 				INNER JOIN ". TABLE_USERS ." AS u ON {$table}.uid = u.id";
@@ -442,7 +442,7 @@ class QNA {
 
 		$table = static::$table;
 
-		$sql = "SELECT count(*) AS count FROM `reports`";
+		$sql = "SELECT count(*) AS count FROM ". TABLE_REPORTS ."";
 
 		if($sec) $sql .= " INNER JOIN `$table` ON reports.post_id = $table.id";
 
@@ -453,7 +453,7 @@ class QNA {
 
 		$results = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
-		return $results;
+		return !empty($results) ? $results : false;
 	}
 
 	/**
@@ -507,15 +507,48 @@ class QNA {
 	 *
 	 * @return object
 	 */
-	public function get_posts_by_user($uid){
+	public static function get_posts_by_section($sec, $limit=5, $random=false){
 		global $connection;
 		
 		$sql = "SELECT * FROM ". TABLE_QUESTIONS ."
 				WHERE status = 1
-				AND uid = {$uid}
-				ORDER BY created DESC
-				";
-		$stmt = $connection->query($sql);
+				AND section = :sec
+				ORDER BY";
+
+		if($random) $sql .= " RAND()";
+			else $sql .= " created DESC";
+
+		$sql .= " LIMIT {$limit}";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->execute([':sec' => $sec]);
+
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	/**
+	 * get all posts by a user id
+	 *
+	 * @param $uid int
+	 *
+	 * @return object
+	 */
+	public static function get_posts_by_user($uid, $limit=5, $random=false){
+		global $connection;
+		
+		$sql = "SELECT * FROM ". TABLE_QUESTIONS ."
+				WHERE status = 1
+				AND uid = :uid
+				ORDER BY";
+
+		if($random) $sql .= " RAND()";
+			else $sql .= " created DESC";
+
+		$sql .= " LIMIT {$limit}";
+
+		$stmt = $connection->prepare($sql);
+		$stmt->execute([':uid' => $uid]);
+
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
 

@@ -118,7 +118,7 @@ Class Auth {
 			$inputType = "username";
 		}
 
-		$sql = "SELECT * FROM `login_info` WHERE {$inputType} = :input";
+		$sql = "SELECT * FROM  ". TABLE_INFO ." WHERE {$inputType} = :input";
 		$stmt = $connection->prepare($sql);
 
 		$stmt->bindValue(':input', $input, PDO::PARAM_STR);

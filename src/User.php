@@ -34,9 +34,11 @@ class User {
 	 * 
 	 * @return object
 	 */
-	public function get_user_info($userID){
+	public function get_user_info($userID=false){
 		global $connection;
 
+		if(!$userID) return $this->user;
+		
 		$sql = "SELECT u.*, CONCAT(u.firstName, ' ', u.lastName) AS full_name, info.username, info.activity, info.register_date, info.email, info.ual AS ual,
 				info.register_date AS joined, privacy.*, pic.path AS img_path
 				FROM ". TABLE_USERS ." AS u

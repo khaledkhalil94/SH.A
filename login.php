@@ -6,13 +6,11 @@ if($session->is_logged_in()){
 }
 $sec = "login";
 require(ROOT_PATH . 'inc/head.php'); 
-
-	?>
+?>
 </pre>
 <body>
 	<div class="main login-page">
 		<div class="ui container">
-	<?= msgs(); ?>
 		<div class="ui raised very padded segment log-in">
 				<div class="ui message">
 					<div class="header">
@@ -20,7 +18,6 @@ require(ROOT_PATH . 'inc/head.php');
 					</div>
 				</div>
 				<hr id="login-hr">
-
 				<div class="ui login form">
 					<form class="login-form" method="post">
 						<div class="field username">
@@ -28,7 +25,7 @@ require(ROOT_PATH . 'inc/head.php');
 							<input type="text" id="username" name="username" placeholder="Username">
 							<p class="note">You can login with your username, email or id.</p>
 						</div>
-						<div class="field username">
+						<div class="field password">
 							<label>Password</label>
 							<input type="password" name="password" placeholder="Password">
 						</div>

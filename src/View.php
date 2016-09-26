@@ -78,7 +78,94 @@ class View {
 		return $html;
 	}
 
-}
+	public static function userCard($uid){
+		global $session;
 
+		$userq = new User($uid);
+		$user = $userq->get_user_info();
+
+		$logged = $session->is_logged_in();
+
+		if(!is_object($user)) die("User was not found.");
+
+		if($logged){
+			$is_frnd = $userq->is_friend($uid, USER_ID);
+		}
+
+		ob_start(); ?>
+			<div class='ui card'>
+			<a class='ui image' href='<?= BASE_URL."user/$user->id"; ?>/'>
+				<img src='<?=$user->img_path?>'>
+			</a>
+			<div class='content'>
+				<h3 class='header'><?= self::user($user->id); ?>
+				<?php if($logged && $is_frnd) ?> <i title='You and <?=$user->firstName?> are friends' class='mdi mdi-account-multiple' style='color: #1ed02d; margin-left:5px;'></i>
+				
+				</h3>
+				<div class='meta'>
+					<span class='username'>@<?= $user->username ?></span>
+					<div class='user-points'>
+						<a class='ui label' style='color:#04c704;' title='Total Points'>
+						<i class='thumbs outline up icon'></i>
+						<?= User::get_user_points($uid)?>
+						</a>
+					</div>
+				</div>
+			</div>
+			<?php if(!$logged){ ?>
+				<a href='/sha/login.php' class='ui button green'>Follow</a>
+			<?php } elseif($uid === USER_ID){
+			} elseif(User::is_flw($uid, USER_ID) !== true){?>
+			<button id='user_flw' user-id='<?= $uid ?>' class='ui button green'>Follow</button>
+			<?php } else { ?>
+				<button id='user_unflw' user-id='<?= $uid ?>' class='ui button red'>Following</button>
+			<?php } ?>
+		</div>
+		<?php 
+		$html = ob_get_contents();
+		ob_end_clean();
+		return $html;
+	}
+
+	public static function getFeedPost($id){
+
+		$post = new Post();
+		$post = $post->get_post($id);
+
+		ob_start(); ?>
+			<div class="ui segment activity-view">
+				<div class="header user-details">
+					<div class="ui image mini">
+						<a href="/sha/user/<?= $post->r_id ?>/"><img src="<?= $post->img_path ?>"></a>
+					</div>
+					<div class="summary">
+						<p>You posted </p>&nbsp;
+						<div class="time"><a href="/sha/user/posts/<?= $post->id ?>/"> A few seconds ago</a></div>
+					</div>
+				</div>
+				<div class="content">
+					<div class="text">
+						<p><?= $post->content ?></p>
+					</div>
+					<div class="meta post-footer">
+						<div class="post-points">
+							<a class="like">
+								<i class="like red icon"></i>0 Like
+							</a>
+						</div>
+						<div class="post-comments">
+							<a href="/sha/user/posts/<?= $post->id ?>/" class="comments">
+								<i class="comments blue icon"></i>0 Comments
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php
+		$html = ob_get_contents();
+		ob_end_clean();
+		return $html;
+	}
+}
 
 ?>

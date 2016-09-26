@@ -7,13 +7,6 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
       header('Location:404.php');
 }
 
-// only the login page can access this file
-if (strtolower(basename($_SERVER['HTTP_REFERER'])) != 'login.php' ) {
-
-	header('Location:404.php');
-
-}
-
 ?>
 
 <div class="ui center" style="text-align:center;">

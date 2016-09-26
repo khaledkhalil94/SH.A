@@ -258,6 +258,12 @@ hr {
     border-bottom: 1px solid #ffffff;
 }
 
+hr.rev {
+    border: 0;
+    border-top: 1px solid #d2d2d2;
+    border-bottom: 1px solid white;
+}
+
 .ui.menu a.item.nav_cp {
     color: red;
 }
@@ -287,4 +293,30 @@ hr {
   -webkit-transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
+}
+
+form.main.index textarea {
+    resize: none;
+}
+
+.container.section.main-page.pub-view {
+    background: white;
+}
+
+.main-page.pub-view .login-page .segment.log-in {
+    margin: 0px;
+    width: 70%;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    border-color: white!important;
+    border-bottom: 1px solid #656594 !important;
+}
+
+.main-page.pub-view .login-form input {
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #656594;
+    margin-top: 10px;
 }

@@ -7,8 +7,20 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 	Redirect::redirectTo('404');
 }
 
+if(isset($_POST['action'])){
 
-switch ($_POST['action']) {
+	$action = $_POST['action'];
+	unset($_POST['action']);
+
+
+} elseif(isset($_GET['action'])){
+
+	$action = $_GET['action'];
+	unset($_GET['action']);
+
+}
+
+switch ($action) {
 	case 'signup':
 
 		$auth = new Auth();
@@ -38,6 +50,11 @@ switch ($_POST['action']) {
 		} else {
 			echo json_encode($auth->errMsg);
 		}
+		break;
+
+	case 'get_uid':
+		
+		die(USER_ID);
 		break;
 
 	default:

@@ -20,10 +20,6 @@
 
 			$rpsc = QNA::get_reports_count($comment->id) ?: false;
 
-
-			//$reports_count = QNA::get_reports("comments", $comment->id) ? count(QNA::get_reports("comments", $comment->id)) : null; 
-			//$reports_count = $reports_count > 1 ? "This comment has been reported ".$reports_count." times." : ($reports_count === NULL ? NULL : "This comment has been reported once.");
-
 			$comment_date = $comment->created;
 			$comment_edited_date = $comment->last_modified;
 

@@ -1,9 +1,11 @@
 *.jpg
 *.png
 *.jpeg
-scripts/*
+scripts/lib/
+scripts/node_modules/
+scripts/gulpfile.js
 scripts/dist/gulpfile.js
-!scripts/dist/
+scripts/package.js
 styles/Semantic-UI-CSS-master
 src/Admin.php
 composer.json

@@ -77,6 +77,7 @@ class Database {
 		foreach ($data as $k => $v) {
 			$fields[] = '`'.$k.'`';
 			$values[] = ':'.$k;
+			$v = htmlentities($v);
 			$params[":".$k] = $v;
 		}
 
@@ -130,7 +131,7 @@ class Database {
 			if (isset($source[$field])) {
 				$set.="`$field`=:$field, ";
 
-				$r_values[$field] = $source[$field];
+				$r_values[$field] = htmlentities($source[$field]);
 
 			}
 		}

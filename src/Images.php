@@ -211,8 +211,11 @@ require_once('init.php');
 
 		$path = DEF_IMG_UP_DIR. DS .USER_ID. DS ;
 
+		$name = htmlentities($file['name']);
+		$extension = htmlentities($file['extension']);
+		
 		// the full path in the server for the to-be-uploaded file
-		$upload_dir = $path . $file['name'] .".". $file['extension'];
+		$upload_dir = $path . $name .".". $extension;
 
 		if(move_uploaded_file($file['tmp_name'], $upload_dir)){
 

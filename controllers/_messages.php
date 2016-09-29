@@ -38,11 +38,11 @@ switch ($_POST['action']) {
 
 		if($action === true){ // delete success
 
-			echo json_encode(array('status' => '1', 'msgID' => $msg_id));
+			echo json_encode(['status' => '1', 'msgID' => $msg_id]);
 
 		} else {
 			
-			echo $action[2];
+			die(json_encode($action));
 		}
 
 		break;

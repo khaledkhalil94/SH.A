@@ -20,7 +20,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 		<?php if($staff){ ?>
 		<h3>Messages from the admin.</h3>
 		<?php } else { ?>
-		<h3>Your messages with <a href="/sha/user/<?= $user_id; ?>/"><?= $user->full_name; ?></a></h3>
+		<h3>Your messages with <?= View::user($user_id) ?></h3>
 		<?php } ?>
 		<?php if(empty($messages)) {
 				echo "There are no messages between you and ".$user->full_name." yet.<br><br>";

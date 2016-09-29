@@ -112,7 +112,7 @@ $(function(){
 
 				if(data.status == "1"){ // success
 
-					_form.parent().load('/sha/controllers/inc/msg-send-success.php');
+					_form.parent().load('/sha/controllers/inc/msg-sent-success.php');
 
 				} else { // failure
 					console.log(data);

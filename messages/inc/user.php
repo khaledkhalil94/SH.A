@@ -1,4 +1,4 @@
-<div class="ui container">
+<div class="ui msg-content">
 	<div class="ui image tiny msg-image">
 		<img src="<?= $img_path ?>">
 	</div>

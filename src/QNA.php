@@ -54,12 +54,12 @@ class QNA {
 	public function get_question($PostID){
 		global $connection;
 
-		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username,
 				sections.title AS fac, sections.acronym AS acr, pics.path AS img_path,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
-				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_USERS ." AS u ON u.id = questions.uid
 				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
@@ -74,9 +74,12 @@ class QNA {
 		}
 
 		$row = $stmt->fetch(PDO::FETCH_OBJ);
+
 		if(!is_object($row)) return false;
-		
+
 		if(empty($row->img_path)) $row->img_path = DEF_PIC;
+
+		if($row->full_name == ' ') $row->full_name = $row->username;
 
 		return $row;
 	}
@@ -93,13 +96,13 @@ class QNA {
 	public function get_questions($limit='', $offset=0, $adm=false, $priv=false){
 		global $connection;
 
-		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username,
 				sections.title AS fac, pics.path AS img_path,
 				section.acronym AS acr, section.id AS fid, section.title AS fac,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
-				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_USERS ." AS u ON u.id = questions.uid
 				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = questions.uid
@@ -130,6 +133,7 @@ class QNA {
 			unset($row->password);
 
 			if(empty($row->img_path)) $row->img_path = DEF_PIC;
+			if($row->full_name == ' ') $row->full_name = $row->username;
 
 			$obj[] = $row;
 		}
@@ -167,12 +171,12 @@ class QNA {
 	public function get_questions_by_user($UserID, $limit=true, $count=10, $order='CREATED DESC'){
 		global $connection;
 
-		$sql = "SELECT students.id AS uid, CONCAT(students.firstName, ' ', students.lastName) AS full_name,
+		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username, sections.title AS fac,
 				section.acronym AS acr, section.id AS fid, section.title AS fac,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
-				INNER JOIN ". TABLE_USERS ." AS students ON students.id = questions.uid
+				INNER JOIN ". TABLE_USERS ." AS u ON u.id = questions.uid
 				INNER JOIN ". TABLE_INFO ." AS info ON info.id = questions.uid
 				INNER JOIN ". TABLE_SECTIONS ." AS sections ON sections.id = questions.section
 				INNER JOIN ". TABLE_SECTIONS ." AS section ON section.id = questions.section
@@ -197,6 +201,7 @@ class QNA {
 			unset($row->password);
 
 			if(empty($row->img_path)) $row->img_path = DEF_PIC;
+			if($row->full_name == ' ') $row->full_name = $row->username;
 
 			$obj[] = $row;
 		}

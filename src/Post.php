@@ -117,11 +117,11 @@ class Post extends QNA {
 		$sql = "SELECT DISTINCT ac.*, CONCAT(u.firstName, ' ', u.lastName) AS u_fullname, CONCAT(p.firstName, ' ', p.lastName) AS p_fullname, u.id AS u_id, p.id AS p_id,
 				pic.path AS path, picp.path AS p_path FROM ". TABLE_ACTIVITY ." AS ac 
 			
-				INNER JOIN ". TABLE_FOLLOWING ." AS f ON ac.user_id = f.user_id OR f.follower_id
+				INNER JOIN ". TABLE_FOLLOWING ." AS f ON ac.user_id = f.user_id OR ac.user_id = f.follower_id
 				INNER JOIN ". TABLE_USERS ." AS u ON ac.user_id = u.id
 				INNER JOIN ". TABLE_USERS ." AS p ON ac.poster_id = p.id
-				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON ac.user_id = pic.user_id
-				INNER JOIN ". TABLE_PROFILE_PICS ." AS picp ON ac.poster_id = picp.user_id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON ac.user_id = pic.user_id
+				LEFT JOIN ". TABLE_PROFILE_PICS ." AS picp ON ac.poster_id = picp.user_id
 
 				WHERE f.follower_id = :uid OR ac.user_id = ". USER_ID ."
 				ORDER BY date DESC";
@@ -135,6 +135,7 @@ class Post extends QNA {
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 				$row['type'] = 'ac';
+				if(empty($row['p_path'])) $row['p_path'] = DEF_PIC;
 				$feed[] = $row;
 			}
 		}

@@ -98,9 +98,10 @@ class View {
 				<img src='<?=$user->img_path?>'>
 			</a>
 			<div class='content'>
-				<h3 class='header'><?= self::user($user->id); ?>
-				<?php if($logged && $is_frnd) ?> <i title='You and <?=$user->firstName?> are friends' class='mdi mdi-account-multiple' style='color: #1ed02d; margin-left:5px;'></i>
-				
+				<h3 class='header'><?= SELF::user($user->id); ?>
+				<?php if($logged && $is_frnd) {?>
+					<i title='You and <?=$user->firstName?> are friends' class='mdi mdi-account-multiple' style='color: #1ed02d; margin-left:5px;'></i>
+				<?php } ?>
 				</h3>
 				<div class='meta'>
 					<span class='username'>@<?= $user->username ?></span>

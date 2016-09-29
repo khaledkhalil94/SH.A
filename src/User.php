@@ -59,23 +59,28 @@ class User {
 			return false;
 		}
 
-		$obj = $stmt->fetch(PDO::FETCH_OBJ);
+		$user = $stmt->fetch(PDO::FETCH_OBJ);
 
-		if(empty($obj)){
+		if(empty($user)){
 			$this->error = true;
 			$errMsg = "Error fetching user details from the database.";
 			return false;
 		}
 
-		if(!is_object($obj)){
+		if(!is_object($user)){
 			$this->error = true;
-			$errMsg = $obj;
+			$errMsg = $user;
 			return false;
 		}
 
-		$obj->img_path = $obj->img_path ?: DEF_PIC; 
+		$user->img_path = $user->img_path ?: DEF_PIC;
 
-		return $obj;
+		if($user->firstName == '') {
+			$user->firstName = $user->username;
+			$user->full_name = $user->username;
+		}
+		
+		return $user;
 	}
 
 	/**

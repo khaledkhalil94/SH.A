@@ -91,6 +91,7 @@ $(function(){
 	var $username, $email;
 	var _form = $('.signup-form');
 	var $neg;
+	var captcha;
 
 	_form.form({
 		fields: {
@@ -234,7 +235,14 @@ $(function(){
 			event.preventDefault();
 
 			_form.find('.error').removeClass('error').find('.prompt').remove();
-			
+
+			captcha = grecaptcha.getResponse();
+			if(!captcha) {
+
+				$('.recap-err p').text('Please verify reCaptcha');
+				return false;
+			}
+
 			if($username !== false && $email !== false){
 				$values = _form.form('get values');
 				_form.parents('.form.sign-up').addClass('loading');
@@ -243,7 +251,7 @@ $(function(){
 					url: 'controllers/_auth.php',
 					type: 'post',
 					dataType: 'json',
-					data: {'action': 'signup', 'values' : $values},
+					data: {'action': 'signup', 'values' : $values, 'reCaptcha' : captcha},
 
 					success: function(data, status) {
 

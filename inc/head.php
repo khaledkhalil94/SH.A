@@ -28,5 +28,6 @@
     <noscript>
         <meta http-equiv="refresh" content="0; url='/sha/err.php?javascript=no'">
     </noscript>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <?php require_once("navbar.php"); ?>

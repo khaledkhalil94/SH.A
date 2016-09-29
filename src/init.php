@@ -25,6 +25,9 @@ $imgValidation = array(
 	'max_height' => 800
 	);
 
+// reCaptcha secret key
+define('RECAP_SKEY', '6LdZ8gcUAAAAAKNsM82igmt7nN_Xn-o55hJmEkkb');
+
 // define table names
 
 define('TABLE_COMMENTS', 'comments');
@@ -53,11 +56,6 @@ spl_autoload_register('autoloader');
 require_once(__DIR__.'/functions.php');
 require_once(__DIR__.'/Database.php');
 require_once(__DIR__."/Session.php");
-// require_once(__DIR__.'/QNA.php');
-// require_once(__DIR__."/User.php");
-// require_once(__DIR__.'/Images.php');
-// require_once(__DIR__.'/Comment.php');
-// require_once(__DIR__.'/Post.php');
 
 if($session->is_logged_in()) $msgCount = Messages::getMsgsCount();
 

@@ -49,7 +49,8 @@ require(ROOT_PATH . 'inc/head.php');
 							<label>re-enter Password</label>
 							<input type="password" name="repassword" placeholder="Password" />
 						</div>
-						<br>
+						<div class="g-recaptcha" data-sitekey="6LdZ8gcUAAAAAGFWH18ZNsN5r9PLa6SIWpTSN1bT"></div>
+						<div class="recap-err" style="color:red;"><p></p></div>
 						<br>
 						<button class="ui button green submit" type="submit">Sign up</button>
 					</form>

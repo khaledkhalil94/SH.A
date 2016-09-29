@@ -224,7 +224,13 @@ Class Auth {
 	public function processData($data=null){
 
 		$data = $data ?: $this->props['values'];
-				
+
+		$cpvr = $this->verifyCaptcha($this->props['reCaptcha']);
+
+		if(!$cpvr){
+			$this->error = true;
+			$this->errMsg['reCaptcha'] = "Invalid reCaptcha";
+		}
 
 		// trim and lower case all the data fields
 		$data_p = array_map('strtolower',  array_map('trim', $data));
@@ -296,6 +302,21 @@ Class Auth {
 
 	}
 
+
+	/**
+	 * verify reCaptcha token
+	 *
+	 * @param string $resp
+	 *
+	 * @return boolean
+	 */
+	private function verifyCaptcha($resp){
+
+		$verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.RECAP_SKEY.'&response='.$resp);
+		$responseData = json_decode($verifyResponse);
+
+		return $responseData->success;
+	}
 
 	/**
 	* Checks the database with field and value

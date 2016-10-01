@@ -15,7 +15,10 @@
 		else;
 		foreach ($comments as $comment):
 			$voted = QNA::has_voted($comment->id, USER_ID);
+
 			$votes = Comment::get_votes($comment->id); 
+			$votes = $votes > 0 ? '+'.$votes : null;
+
 			$self = $comment->uid === USER_ID;
 
 			$rpsc = QNA::get_reports_count($comment->id) ?: false;
@@ -36,17 +39,46 @@
 
 				<div class="ui minimal comments">
 					<div class="ui comment padded segment" id="<?= $comment->id; ?>" comment-id="<?= $comment->id; ?>">
-						<a class="" href="/sha/user/<?= $comment->uid; ?>/">
-							<img class="" src="<?= $comment->path; ?>">
-						</a>
 						<div class="content">
-							<a class="author user-title" user-id="<?= $user->id; ?>" href="<?= BASE_URL."user/".$comment->uid; ?>/"><?= $comment->fullname;?></a>
-							<div class="metadata">
-								<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
+							<div class="ui grid">
+								<div class="two wide column cmt_avatar">
+									<a href="/sha/user/<?= $comment->uid; ?>/">
+										<img class="" src="<?= $comment->path; ?>">
+									</a>
+								</div>
+								<div class="fourteen wide column user-details">
+									<?= View::user($comment->uid, true, 'author'); ?>
+									<div class="metadata">
+										<a class="time" href="question.php?id=<?= $comment->id; ?>">
+											<span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span>
+										</a><?= $edited; ?>
+									</div>
+									<div class="text">
+										<h4><?= $comment->content; ?></h4>
+									</div>
+									<?php if($voted){ ?>
+											<div class="comment-points">
+												<a class="comment-vote-btn voted">
+													<i class="thumbs up circular yellow icon"></i>
+												</a>
+												<span class="comment-votes-count"><?=$votes;?></span>
+											</div>
+									<?php } else { ?>
+											<div class="comment-points">
+												<a class="comment-vote-btn">
+													<i class="thumbs up circular icon"></i>
+												</a>
+												<span class="comment-votes-count"><?=$votes;?></span>
+											</div>
+									<?php } ?>
+								</div>
 							</div>
 							<?php if($rpsc): ?>
 							<div class='cmt_rpts'>
-								<a title="Reports" href="/sha/admin/report.php?id=<?= $comment->id; ?>"><span class="cmt_rpt_count"><?= $rpsc; ?> </span><i class="ui icon flag red"></i></a>
+								<a title="Reports" href="/sha/admin/report.php?id=<?= $comment->id; ?>">
+									<span class="cmt_rpt_count"><?= $rpsc; ?> </span>
+									<i class="ui icon flag red"></i>
+								</a>
 							</div>
 							<?php endif; ?>
 							<div title="Actions" class="ui pointing dropdown" id="comment-actions">
@@ -70,21 +102,6 @@
 									<?php } ?>
 								</div>
 							</div>
-							<div class="text">
-								<h4><?= $comment->content; ?></h4>
-							</div>
-							<div class="ui fitted divider"></div>
-							<?php if($voted){ ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
-										<span class="comment-votes-count"><?=$votes;?></span>
-									</div>
-							<?php } else { ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
-									</div>
-							<?php } ?>
-
 						</div>
 					</div>
 				</div>

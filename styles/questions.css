@@ -86,7 +86,7 @@
 	padding: 2px 20px;
 }
 
-.comment-vote-btn .heart.circular {
+.comment-vote-btn i.icon {
 	cursor: pointer;
 	color:grey;
 }
@@ -186,7 +186,7 @@
 #comments .comments a img {
     width: 58px;
     height: auto;
-    float: left;
+    /* float: left; */
     margin-right: 11px;
     border-radius: 10%;
 }
@@ -212,10 +212,6 @@
 
 .ui.vertical.segment.title-form.form {
     border-bottom: none;
-}
-
-.question-page .commentz .comment .content .text {
-    padding-left: 70px;
 }
 
 .questions.front-page.vertical.segment.loading {

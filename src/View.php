@@ -167,6 +167,59 @@ class View {
 		ob_end_clean();
 		return $html;
 	}
+
+	public static function renderComment($id){
+
+		$comment = (object)Comment::getComment($id);
+
+		ob_start(); ?>
+		<div class="ui minimal comments">
+			<div class="ui comment padded segment" id="<?= $comment->id; ?>" comment-id="<?= $comment->id; ?>">
+				<div class="content">
+					<div class="ui grid">
+						<div class="two wide column cmt_avatar">
+							<a href="/sha/user/<?= $comment->uid; ?>/">
+								<img class="" src="<?= $comment->img_path; ?>">
+							</a>
+						</div>
+						<div class="fourteen wide column user-details">
+							<?= Self::user($comment->uid, true, 'author'); ?>
+							<div class="metadata">
+								<a class="time" href="question.php?id=<?= $comment->id; ?>">
+									<span id="commentDate">A few seconds ago</span>
+								</a>
+							</div>
+							<div class="text">
+								<h4><?= $comment->content; ?></h4>
+							</div>
+								<div class="comment-points">
+									<a class="comment-vote-btn">
+										<i class="thumbs up circular icon"></i>
+									</a>
+									<span class="comment-votes-count"></span>
+								</div>
+						</div>
+					</div>
+					<div title="Actions" class="ui pointing dropdown" id="comment-actions">
+						<i class="ellipsis link big horizontal icon"></i>
+						<div class="menu">
+							<div class="item" id="edit">
+								<a class="edit">Edit</a>
+							</div>
+							<div class="item" id="del">
+								<a class="delete">Delete</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<?php
+		$comment = ob_get_contents();
+		ob_end_clean();
+		return $comment;
+	}
 }
 
 ?>

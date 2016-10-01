@@ -19,10 +19,10 @@ $(function(){
 				success: function(data, status) {
 					if(data.status == true) {
 						$comment.find($('.comment-vote-btn')).addClass("voted");
-						$comment.find($('.comment-vote-btn i')).addClass("red");
+						$comment.find($('.comment-vote-btn i')).addClass("yellow");
 
 						var $votescount = parseInt($comment.find($('.comment-votes-count')).text());
-						$votescount = isNaN($votescount) ? 1 : $votescount + 1;
+						$votescount = isNaN($votescount) ? '+1' : '+'+($votescount + 1);
 
 						$comment.find($('.comment-votes-count')).text($votescount);
 					}
@@ -41,11 +41,11 @@ $(function(){
 				success: function(data, status) {
 					if(data.status == true) {
 						$comment.find($('.comment-vote-btn')).removeClass("voted");
-						$comment.find($('.comment-vote-btn i')).removeClass("red");
+						$comment.find($('.comment-vote-btn i')).removeClass("yellow");
 
 						var $votescount = parseInt($comment.find($('.comment-votes-count')).text());
 
-						$votescount = ($votescount == 1) ? '' : $votescount - 1;
+						$votescount = ($votescount == 1) ? '' : '+'+($votescount - 1);
 
 						$comment.find($('.comment-votes-count')).text($votescount);
 					}
@@ -103,8 +103,22 @@ $(function(){
 
 				 if(data.status == true) { // success
 				 	
-					id = data.id;
-				 	output_comment(id);
+				 	$.get('/sha/controllers/_view.php', {'action' : 'renderComment', 'id' : data.id}, function(res){
+
+			 			$("#comments").prepend(res); // prepend the comment into the comment div
+						$('.ui.dropdown').dropdown();
+
+			 			// increment the comments count
+			 			var commentscount = parseInt($('#commentscount').text()) + 1;
+			 			$('#commentscount').text(commentscount);
+
+						$('#subcomment').addClass('disabled');
+						$('.commentz form').removeClass('loading');
+
+			 			$('#emptycmt').remove();
+			 			$('.reply textarea').val('');
+			 			$('#subcomment').hide();
+					}, 'html');
 				 	return;
 
 				 } else { // fail
@@ -125,77 +139,6 @@ $(function(){
 		}); // end ajax call
 	});
 });
-
-function output_comment(id){
-
-		$.ajax({
-		 	url: '/sha/controllers/_comment.php',
-		 	type: 'get',
-		 	dataType: 'json',
-		 	data: {
-					'action': 'get_comment', 
-					'id':id
-				 	},
-
-			success: function(data, status) {
-
-				$comment = Comment(data);
-
-	 			$("#comments").prepend($comment); // prepend the comment into the comment div
-				$('.ui.dropdown').dropdown();
-
-	 			// increment the comments count
-	 			var commentscount = parseInt($('#commentscount').text()) + 1;
-	 			$('#commentscount').text(commentscount);
-
-				$('#subcomment').addClass('disabled');
-				$('.commentz form').removeClass('loading');
-
-	 			$('#emptycmt').remove();
-	 			$('.reply textarea').val('');
-	 			$('#subcomment').hide();
-			},
-			error: function(xhr, desc, err) {
-				$('#subcomment').addClass('disabled');
-				$('.commentz form').removeClass('loading');
-				console.log(xhr);
-				console.log("Details: " + desc + "\nError:" + err);
-			}
-		}); // end ajax call
-
-	function Comment(data){
-		var $comment = " \
-			<div class=\"ui minimal comments\">\
-				<div class=\"ui comment padded segment\" comment-id=\""+data.id+"\">\
-					<a class=\"avatar\" href=\"/sha/user/"+data.uid+"/\">\
-						<img src=\""+data.img_path+"\">\
-					</a>\
-					<div class=\"content\">\
-						<a class=\"author\" href=\"/sha/user/"+data.uid+"/\">"+data.name+"</a>\
-						<div class=\"metadata\">\
-							<span class=\"date\">"+moment(data.created).fromNow()+"</span>\
-						</div>\
-						<div class=\"text\">\
-							<h4>"+data.content+"</h4>\
-						</div>\
-						<a class=\"comment-vote-btn\"><i class=\"heart circular icon\"></i></a><span class=\"comment-votes-count\"></span>\
-						<div title=\"Actions\" class=\"ui pointing dropdown\" id='comment-actions'>\
-							<i class=\"ellipsis link big horizontal icon\"></i>\
-							<div class=\"menu\">\
-								<div class=\"item\" id=\"edit\">\
-									<a class=\"edit\">Edit</a>\
-								</div>\
-								<div class=\"item\" id=\"del\">\
-									<a class=\"delete\">Delete</a>\
-								</div>\
-							</div>\
-						</div>\
-					</div>\
-				</div>\
-			</div>"
-		return $comment;
-	}
-}
 
 // post/comment report
 $(function(){

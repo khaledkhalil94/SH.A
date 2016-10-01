@@ -125,7 +125,10 @@ include (ROOT_PATH . "inc/head.php");
 				<div id="comments">
 					<?php foreach ($comments as $c):
 						$voted = QNA::has_voted($c->id, USER_ID);
+						
 						$votes = Comment::get_votes($c->id);
+						$votes = $votes > 0 ? '+'.$votes : null;
+
 						$self = $c->uid === USER_ID;
 
 						if($c->last_modified > $c->created){
@@ -138,50 +141,63 @@ include (ROOT_PATH . "inc/head.php");
 					?>
 					<div class="ui minimal comments">
 						<div class="ui comment padded segment" id="<?= $c->id; ?>" comment-id="<?= $c->id; ?>">
-							<a class="" href="/sha/user/<?= $c->uid; ?>/">
-								<img class="" src="<?= $c->path; ?>">
-							</a>
 							<div class="content">
-								<a class="author user-title" user-id="<?= $user->id; ?>" href="<?= BASE_URL."user/".$c->uid; ?>/"><?= $c->fullname;?></a>
-								<div class="metadata">
-									<a class="time" href="question.php?id=<?= $c->id; ?>"><span id="post-date" title="<?=$c->created;?>"><?= $c->created;?></span></a><?= $edited; ?>
-								</div>
-								<div class="text">
-									<h4><?= $c->content; ?></h4>
-								</div>
-								<div class="ui fitted divider"></div>
-								<?php if($voted){ ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn voted"><i class="heart small circular red icon"></i></a>
-										<span class="comment-votes-count"><?=$votes;?></span>
+								<div class="ui grid">
+									<div class="two wide column cmt_avatar">
+										<a class="" href="/sha/user/<?= $c->uid; ?>/">
+											<img class="" src="<?= $c->path; ?>">
+										</a>
 									</div>
-								<?php } else { ?>
-									<div class="comment-points">
-										<a class="comment-vote-btn"><i class="heart small circular icon"></i></a><span class="comment-votes-count"><?=$votes;?> </span>
-									</div>
-								<?php } ?>
-								<div title="Actions" class="ui pointing dropdown" id="comment-actions">
-									<i class="ellipsis link big horizontal icon"></i>
-									<div class="menu">
-										<?php if ($self || $session->adminCheck()) { ?>
-											<div class="item" id="edit">
-												<a class="edit">Edit</a>
+									<div class="fourteen wide column user-details">
+										<div class="content">
+											<?= View::user($c->uid, true, 'author'); ?>
+											<div class="metadata">
+												<a class="time" href="question.php?id=<?= $c->id; ?>">
+													<span id="post-date" title="<?=$c->created;?>"><?= $c->created;?></span>
+												</a><?= $edited; ?>
 											</div>
-											<div class="item" id="del">
-												<a class="delete">Delete</a>
+											<div class="text">
+												<h4><?= $c->content; ?></h4>
 											</div>
-										<?php } ?>
-										<?php if (!$self) { ?>
-											<div class="item" id="post_report">
-												<a class="report">Report</a>
+											<?php if($voted){ ?>
+												<div class="comment-points">
+													<a class="comment-vote-btn voted">
+														<i class="thumbs up circular yellow icon"></i>
+													</a>
+													<span class="comment-votes-count"><?=$votes;?></span>
+												</div>
+											<?php } else { ?>
+												<div class="comment-points">
+													<a class="comment-vote-btn">
+														<i class="thumbs up circular icon"></i>
+													</a>
+													<span class="comment-votes-count"><?=$votes;?></span>
+												</div>
+											<?php } ?>
+											<div title="Actions" class="ui pointing dropdown" id="comment-actions">
+												<i class="ellipsis link big horizontal icon"></i>
+												<div class="menu">
+													<?php if ($self || $session->adminCheck()) { ?>
+														<div class="item" id="edit">
+															<a class="edit">Edit</a>
+														</div>
+														<div class="item" id="del">
+															<a class="delete">Delete</a>
+														</div>
+													<?php } ?>
+													<?php if (!$self) { ?>
+														<div class="item" id="post_report">
+															<a class="report">Report</a>
+														</div>
+														<div class="item" id="comment_hide">
+															<a class="report">Hide</a>
+														</div>
+													<?php } ?>
+												</div>
 											</div>
-											<div class="item" id="comment_hide">
-												<a class="report">Hide</a>
-											</div>
-										<?php } ?>
+										</div>
 									</div>
 								</div>
-
 							</div>
 						</div>
 					</div>

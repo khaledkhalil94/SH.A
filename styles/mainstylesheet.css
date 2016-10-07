@@ -320,3 +320,22 @@ input:-webkit-autofill {
     border-bottom: 1px solid #656594;
     margin-top: 10px;
 }
+
+.footer .info p, .footer .info span {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.footer .container .ui.grid {
+    margin: 0px;
+}
+
+.footer .container .ui.grid .six.wide.column {
+    margin-top: 9px;
+    font-weight: 600;
+    /* font-size: medium; */
+}
+
+.footer .info p, .footer .info a {
+    color: white;
+}

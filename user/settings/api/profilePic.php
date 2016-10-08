@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 
@@ -15,7 +15,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'delete') {
 		die(json_encode(array('status' => 'fail', 'errMsg' => $image->errMsg)));
 
 	}
-		
+
 }
 
 if(isset($_GET['action'])) {
@@ -41,7 +41,7 @@ if(Images::has_pic(USER_ID)){
 		exit;
 
 	} else {
-		
+
 		echo json_encode(array('status' => 'fail', 'errMsg' => $image->errMsg, 'id' => $image->id));
 		exit;
 
@@ -49,11 +49,11 @@ if(Images::has_pic(USER_ID)){
 	}
 } else {
 	if($image->upload_profile_pic()){
-		echo json_encode(array('action' => 'upload', 'status' => 'success', 'path' => $image->path, 'id' => $image->id));
+		echo json_encode(['status' => 'success', 'path' => $image->path, 'id' => $image->id]);
 		exit;
 
 	} else {
-		
+
 		echo json_encode(array('status' => 'fail', 'errMsg' => $image->errMsg, 'id' => $image->id));
 		exit;
 

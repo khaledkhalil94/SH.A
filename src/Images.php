@@ -3,8 +3,13 @@ require_once('init.php');
 
  class Images {
 
-	// todo: make $errMsg array and return multiple errors
-	public $user_id, $id, $path, $error=false, $errMsg;
+	public $user_id;
+  public $name;
+  public $ext;
+  public $id;
+  public $path;
+  public $error=false;
+  public $errMsg;
 
 	public function __construct(){
 		$this->user_id = USER_ID;
@@ -22,8 +27,7 @@ require_once('init.php');
 
 
 		if(!$stmt){
-			echo $sql;
-			echo $connection->errorInfo()[2];
+			return $connection->errorInfo()[2];
 		}
 	}
 
@@ -67,7 +71,7 @@ require_once('init.php');
 			$this->error = true;
 
 			switch ($_FILES['error']) {
-				case '1':			
+				case '1':
 				case '2':
 					$this->errMsg = 'Exceeded filesize limit.';
 					break;
@@ -77,7 +81,7 @@ require_once('init.php');
 				case '4':
 					$this->errMsg = 'No file was uploaded.';
 					break;
-					
+
 				case '6':
 					$this->errMsg = 'Temp folder is missing.';
 					break;
@@ -90,50 +94,42 @@ require_once('init.php');
 					$this->errMsg = 'File upload stopped by extension.';
 					break;
 
-				default: 
-                	$this->errMsg = "Unknown upload error"; 
-                	break; 
+				default:
+                	$this->errMsg = "Unknown upload error";
+                	break;
 			}
 
 			return false;
 		}
-		
+
 		// break the file path into parts
 		$path_parts = pathinfo($_FILES['name']);
 
 		$file = [];
 
-		// if true, will use a generated name
-		if($rndmName === false) {
-			// characters allowed (a-z, A-Z, 0-9, -, _, .)
-			$name = $path_parts['filename'];
-			$name = trim(strtolower($name));
-			$name = str_replace(' ', '', $name);
+		// characters allowed (a-z, A-Z, 0-9, -, _, .)
+		$name = $path_parts['filename'];
+		$name = trim(strtolower($name));
+		$name = str_replace(' ', '', $name);
 
-			if (!(preg_match("`^[-0-9A-Z()$^&!_\.]+$`i", $name))) {
+		if (!(preg_match("`^[-0-9A-Z()$^&!_\.]+$`i", $name))) {
 
-				$this->error = true;
-				$this->errMsg = ('File name is invalid.');
+      $this->name = md5(uniqid());
 
-				return false;
+		} elseif((mb_strlen($path_parts['filename'],"UTF-8") > 225)){
 
-			} elseif((mb_strlen($path_parts['filename'],"UTF-8") > 225)){
+			$this->error = true;
+			$this->errMsg = ('File name is not valid (too long).');
 
-				$this->error = true;
-				$this->errMsg = ('File name is not valid (too long).');
+			return false;
 
-				return false;
+  	} else {
 
-			} else {
-		
-				$file['name'] = trim($path_parts['filename']);
-			} 
-		} else {
-			$file['name'] = md5(uniqid());
+			$this->name = trim($path_parts['filename']);
 		}
 
 
-		$file['extension'] = $path_parts['extension'];
+		$file['extension'] = strtolower($path_parts['extension']);
 		$file['basename'] = $path_parts['basename'];
 
 		$file['tmp_name'] = $_FILES['tmp_name'];
@@ -161,6 +157,8 @@ require_once('init.php');
 				return false;
 			}
 
+      $this->ext = $file['extension'];
+
 		// validating image size
 			if($file['size'] > $imgValidation['max_size']){
 
@@ -184,19 +182,22 @@ require_once('init.php');
 
 	public function upload_profile_pic(){
 		global $connection;
-		
+
 		$file = $this->process_img();
 
 		if (!$file || $this->error) {
 			return false;
 		}
 
+    $path = DEF_IMG_UP_DIR. DS .USER_ID. DS;
+    $t_path = $path . DS . 'thumbnails';
+
 		// if file does not exist, create it
-		if(!file_exists(DEF_IMG_UP_DIR.USER_ID. DS )){
-			if(mkdir(DEF_IMG_UP_DIR. DS .USER_ID)){
-				
+		if(!file_exists($path)){
+			if(mkdir($path)){
+        mkdir($t_path);
+
 				// create an index file and redirect to 404 page
-				$path = DEF_IMG_UP_DIR. DS .USER_ID. DS ;
 				$fp = fopen($path . "/index.php", "w");
 				fwrite($fp, "<?php header(\"Location: /sha/404.php\"); ?>");
 				fclose($fp);
@@ -209,41 +210,51 @@ require_once('init.php');
 			}
 		}
 
-		$path = DEF_IMG_UP_DIR. DS .USER_ID. DS ;
+    $extension = htmlentities($file['extension']);
 
-		$name = htmlentities($file['name']);
-		$extension = htmlentities($file['extension']);
-		
 		// the full path in the server for the to-be-uploaded file
-		$upload_dir = $path . $name .".". $extension;
+		$upload_dir = $path . $this->name .".". $extension;
 
 		if(move_uploaded_file($file['tmp_name'], $upload_dir)){
 
 			//register in the database
-			$path = DEF_PIC_PATH . USER_ID . "/" . $file['name'] .".". $file['extension'];
+			$path = DEF_PIC_PATH . USER_ID . "/" . $this->name .".". $file['extension'];
 
-			$this->path = $path;
+      $this->resize();
 
-			$sql = "INSERT INTO ". TABLE_PROFILE_PICS ."
-			(`user_id`, `path`, `type`, `size`, `name`, `extension`, `width`, `height`, `attr`, `type_constant`) VALUES 
-			('{$this->user_id}', '{$path}','{$file['type']}', '{$file['size']}', '{$file['name']}', '{$file['extension']}',
-			'{$file['width']}','{$file['height']}', '{$file['attr']}', '{$file['typeC']}')";
+      $t_path = DEF_PIC_PATH . USER_ID . '/thumbnails/' . $this->name.'.'.$this->ext;
 
+      $data = [
+        'user_id' => $this->user_id,
+        'path' => $path,
+        'thumb_path' => $t_path,
+        'type' => $file['type'],
+        'size' => $file['size'],
+        'name' => $this->name,
+        'extension' => $this->ext,
+        'width' => $file['width'],
+        'height' => $file['height'],
+        'attr' => $file['attr'],
+        'type_constant' => $file['typeC']
+      ];
 
-			$stmt = $connection->prepare($sql);
+      $database = new Database();
 
-			if(!$stmt->execute()){
+      $insert = $database->insert_data(TABLE_PROFILE_PICS, $data);
 
-				$this->error = true;
-				$this->errMsg = $stmt->errorInfo()[2];
+      if($insert === true){
 
-				return false;
+        $this->id = $database->lastId;
+        $this->path = $path;
 
-			}
+        return true;
 
-			$this->id = $connection->lastInsertId();
+      } else {
 
-			return true; // you made it!! :)
+        $this->error = true;
+        $this->errMsg = array_shift($database->errors);
+        return false;
+      }
 
 		} else {
 
@@ -271,7 +282,7 @@ require_once('init.php');
 
 			return false;
 		}
-		
+
 		$oldFile = $this->get_pic_info();
 
 		if($oldFile->user_id !== USER_ID) {
@@ -280,7 +291,7 @@ require_once('init.php');
 
 			return false;
 		}
-		
+
 		$oldPath = $_SERVER["DOCUMENT_ROOT"] . $oldFile->path;
 
 		$sql = "DELETE FROM ". TABLE_PROFILE_PICS ." WHERE `user_id` = {$this->user_id} LIMIT 1";
@@ -292,15 +303,33 @@ require_once('init.php');
 
 		} else {
 			$error = $connection->errorInfo();
-			
+
 			$this->error = true;
 			$this->errMsg = $error;
 
 			return false;
-		} 
+		}
 
 	}
 
+  private function resize(){
+
+    require('SimpleImage.php');
+
+    $path = DEF_IMG_UP_DIR. USER_ID. DS . $this->name.'.'.$this->ext;
+
+    $t_path = DEF_IMG_UP_DIR .USER_ID . '/thumbnails';
+
+    if(!is_dir($t_path)){
+        mkdir($t_path);
+      }
+
+    $t_path = DEF_IMG_UP_DIR. USER_ID. '/thumbnails/' . $this->name.'.'.$this->ext;
+
+    $img = new abeautifulsite\SimpleImage($path);
+    $img->thumbnail(120, 120)->save($t_path);
+
+  }
  }
 
  ?>

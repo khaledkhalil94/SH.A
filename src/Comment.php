@@ -1,7 +1,7 @@
-<?php 
+<?php
 require_once('init.php');
 /**
-* 
+*
 */
 class Comment extends QNA {
 
@@ -60,9 +60,11 @@ class Comment extends QNA {
 		global $connection;
 
 		$sql = "SELECT comments.*, users.id AS uid, CONCAT(users.firstName, ' ', users.lastName) AS fullname,
-				pics.path AS path FROM ". TABLE_COMMENTS ." AS comments
+				pics.thumb_path AS path FROM ". TABLE_COMMENTS ." AS comments
+
 				INNER JOIN ". TABLE_USERS ." AS users ON users.id = comments.uid
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON pics.user_id = comments.uid
+
 				WHERE comments.post_id = :post_id AND comments.status = 1
 				ORDER BY created DESC LIMIT {$limit}";
 
@@ -75,7 +77,14 @@ class Comment extends QNA {
 			die($error[2]);
 		}
 
-		$obj = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$obj = [];
+
+		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+
+			if(empty($row->path)) $row->path = DEF_PIC;
+
+			$obj[] = $row;
+		}
 
 		return $obj;
 	}
@@ -92,9 +101,11 @@ class Comment extends QNA {
 
 		$sql = "SELECT comments.*,
 				CONCAT(students.firstName, ' ', students.lastName) AS name,
-				pics.path AS img_path FROM ". TABLE_COMMENTS ." AS comments
+				pics.thumb_path AS img_path FROM ". TABLE_COMMENTS ." AS comments
+
 				INNER JOIN ". TABLE_USERS ." AS students ON comments.uid = students.id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON comments.uid = pics.user_id
+
 				WHERE comments.id = :id
 				AND comments.status = 1
 				LIMIT 1";
@@ -110,7 +121,7 @@ class Comment extends QNA {
 		$comment = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if(!is_array($comment) || empty($comment)) return false;
-		
+
 		$comment['img_path'] = $comment['img_path'] ?: DEF_PIC;
 		return $comment;
 	}

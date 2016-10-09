@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('init.php');
 
 class User {
@@ -31,19 +31,19 @@ class User {
 	 * get all user info from the database
 	 *
 	 * @param int @userID
-	 * 
+	 *
 	 * @return object
 	 */
 	public function get_user_info($userID=false){
 		global $connection;
 
 		if(!$userID) return $this->user;
-		
+
 		$sql = "SELECT u.*, CONCAT(u.firstName, ' ', u.lastName) AS full_name, info.username, info.activity, info.register_date, info.email, info.ual AS ual,
-				info.register_date AS joined, privacy.*, pic.path AS img_path
+				info.register_date AS joined, privacy.*, pic.thumb_path AS img_path
 				FROM ". TABLE_USERS ." AS u
 
-				RIGHT JOIN ". TABLE_INFO ." AS info ON u.id = info.id 
+				RIGHT JOIN ". TABLE_INFO ." AS info ON u.id = info.id
 				INNER JOIN ". TABLE_PRIVACY ." AS privacy ON u.id = privacy.user_id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON u.id = pic.user_id
 
@@ -79,7 +79,7 @@ class User {
 			$user->firstName = $user->username;
 			$user->full_name = $user->username;
 		}
-		
+
 		return $user;
 	}
 
@@ -88,14 +88,14 @@ class User {
 	 *
 	 * @param string @email user's email
 	 * @param string @pw user's password
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function deleteUser($token, $uid, $pw){
 		global $connection;
 
 		$con = $connection;
-		
+
 		$pw = trim($pw);
 
 		// check for empty values
@@ -127,7 +127,7 @@ class User {
 			$this->errors[] = "Details are not correct.";
 			return false;
 		}
-		
+
 		// root path to the user's local server folder
 		$path = DEF_IMG_UP_DIR.$user->id.DS;
 
@@ -157,7 +157,7 @@ class User {
 		$count = count($queries);
 		$affected_rows = 0;
 
-		for ($i=0; $i < $count; $i++) { 
+		for ($i=0; $i < $count; $i++) {
 
 			$queries[$i]->execute();
 			if($queries[$i]->rowCount() == 1){
@@ -168,7 +168,7 @@ class User {
 				$this->errors[$i+1] = $queries[$i]->queryString;
 			}
 		}
-		
+
 		// if the deleted rows count is not the same as the queries count, roll back everything
 		if ($affected_rows !== $count) {
 			$con->rollBack();
@@ -182,7 +182,7 @@ class User {
 
 		} else {
 
-			// delete from remaining tables 
+			// delete from remaining tables
 
 			// delete pictures
 			$sql = "DELETE FROM ". TABLE_PROFILE_PICS ." WHERE user_id = {$user->id} LIMIT 1";
@@ -221,7 +221,7 @@ class User {
 	 *
 	 * @param array @data user settings values
 	 * @param ing @user_id (default is the id stored in session)
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function changeSettings($data, $user_id=USER_ID){
@@ -289,7 +289,7 @@ class User {
 			if (strlen($username) > 15){
 				$this->error = true;
 				$this->errors['username'] = "Username must be between 4 and 15 characters.";
-				
+
 			} elseif(strlen($username) < 4){
 				$this->error = true;
 				$this->errors['username'] = "Username must be between 4 and 15 characters.";
@@ -309,7 +309,7 @@ class User {
 		// the same for email
 		if($email && ($email !== $user->email)) {
 			if(!Auth::form_check("email", $email)) {
-				
+
 				$this->errors['email'] = "email already exists.";
 				$this->error = true;
 			}
@@ -365,7 +365,7 @@ class User {
 	 * adds a user to blocklist
 	 *
 	 * @param int @user_id
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function block($user_id){
@@ -378,7 +378,7 @@ class User {
 		$sql = "SELECT 1 FROM ". TABLE_BLOCKS ." WHERE user_id = :self AND blocked_id = :blocked";
 
 		$stmt = $connection->prepare($sql);
-		
+
 		$stmt->bindValue(':self', $self, PDO::PARAM_INT);
 		$stmt->bindValue(':blocked', $user_id, PDO::PARAM_INT);
 
@@ -394,7 +394,7 @@ class User {
 			);
 
 		$insert = $database->insert_data(TABLE_BLOCKS, $data);
-		
+
 		if($insert === true) {
 			return true;
 		} else {
@@ -406,7 +406,7 @@ class User {
 	 * remove a user from blocklist
 	 *
 	 * @param int @user_id
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function unBlock($user_id){
@@ -432,7 +432,7 @@ class User {
 	 * gets an array of block list by user
 	 *
 	 * @param int @user_id
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function blocked_by_user($user_id){
@@ -464,7 +464,7 @@ class User {
 		INNER JOIN ". TABLE_USERS ." AS users ON block_list.blocked_id = users.id
 		INNER JOIN ". TABLE_INFO ." AS info ON block_list.blocked_id = info.id
 		INNER JOIN ". TABLE_PROFILE_PICS ." AS pics ON block_list.blocked_id = pics.user_id
-		
+
 		WHERE block_list.user_id = :user_id";
 
 		$stmt = $connection->prepare($sql);
@@ -487,7 +487,7 @@ class User {
 	 * searches for a user in the database by username or id
 	 *
 	 * @param mixed $name
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function users_search($name){
@@ -523,7 +523,7 @@ class User {
 	 * get user total points from posts and comments
 	 *
 	 * @param int $name
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function get_user_points($userID){
@@ -546,7 +546,7 @@ class User {
 	 * follow a user
 	 *
 	 * @param int $userID
-	 * 
+	 *
 	 * @return boolean|string
 	 */
 	public static function follow($userID){
@@ -560,7 +560,7 @@ class User {
 		}
 
 		if($userID == USER_ID) return "You can't follow yourself.";
-		
+
 		$data = ['user_id' => $userID, 'follower_id' => USER_ID];
 
 		$insert = $database->insert_data(TABLE_FOLLOWING, $data);
@@ -583,7 +583,7 @@ class User {
 	 * unfollow a user
 	 *
 	 * @param int $userID
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function unfollow($userID){
@@ -602,16 +602,16 @@ class User {
 	/**
 	 * check if a user is following another user
 	 *
-	 * @param int $uid 
+	 * @param int $uid
 	 * @param int $follower_id
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function is_flw($userID, $follower_id){
 		global $connection;
 
 		if(!$follower_id) return true; // if not logged in
-		
+
 		$sql = "SELECT 1 FROM ". TABLE_FOLLOWING ." WHERE user_id = {$userID} AND follower_id = {$follower_id}";
 
 		$stmt = $connection->query($sql);
@@ -623,14 +623,14 @@ class User {
 	 * get following users
 	 *
 	 * @param int $UserID
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_flwing($UserID){
 		global $connection;
 
 		$sql = "SELECT following.user_id FROM ". TABLE_FOLLOWING ." AS following WHERE follower_id = {$UserID}";
-		
+
 		$stmt =  $connection->query($sql);
 
 		$ids = [];
@@ -651,7 +651,7 @@ class User {
 	 * get followers
 	 *
 	 * @param int $UserID
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_flwers($UserID){
@@ -680,7 +680,7 @@ class User {
 	 *
 	 * @param int $uid
 	 * @param int $UserID
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function is_friend($uid, $UserID){

@@ -1,7 +1,7 @@
-<?php 
+<?php
 require_once('init.php');
 /**
-* 
+*
 * handles all the actions for the question page, questions
 *
 */
@@ -56,7 +56,7 @@ class QNA {
 
 		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username,
-				sections.title AS fac, sections.acronym AS acr, pics.path AS img_path,
+				sections.title AS fac, sections.acronym AS acr, pics.thumb_path AS img_path,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
 				INNER JOIN ". TABLE_USERS ." AS u ON u.id = questions.uid
@@ -98,7 +98,7 @@ class QNA {
 
 		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username,
-				sections.title AS fac, pics.path AS img_path,
+				sections.title AS fac, pics.thumb_path AS img_path,
 				section.acronym AS acr, section.id AS fid, section.title AS fac,
 				questions.* FROM ". TABLE_QUESTIONS ." AS questions
 
@@ -127,7 +127,7 @@ class QNA {
 		}
 
 		$obj = [];
-		
+
 		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
 
 			unset($row->password);
@@ -220,7 +220,7 @@ class QNA {
 		$sql = "SELECT * FROM ".TABLE_SECTIONS."";
 
 		$sections = $connection->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		return $sections;
 	}
 
@@ -293,7 +293,7 @@ class QNA {
 	 */
 	public static function get_votes($PostID){
 		global $connection;
-		
+
 		$sql = "SELECT SUM(points.votes) AS count from ". TABLE_POINTS ." AS points
 				WHERE points.post_id = :post_id";
 
@@ -413,10 +413,10 @@ class QNA {
 
 				INNER JOIN `$table` ON rp.post_id = $table.id
 				INNER JOIN ". TABLE_USERS ." AS u ON {$table}.uid = u.id";
-		
+
 		if(!empty($PostID)) $sql .= " WHERE rp.post_id = {$PostID}";
 		if($unq) $sql .= " GROUP BY rp.post_id";
-		
+
 		if(!is_null($ord)) $sql .= " ORDER BY {$ord}, date DESC";
 		else $sql .= " ORDER BY date DESC";
 
@@ -514,7 +514,7 @@ class QNA {
 	 */
 	public static function get_posts_by_section($sec, $limit=5, $random=false){
 		global $connection;
-		
+
 		$sql = "SELECT * FROM ". TABLE_QUESTIONS ."
 				WHERE status = 1
 				AND section = :sec
@@ -540,7 +540,7 @@ class QNA {
 	 */
 	public static function get_posts_by_user($uid, $limit=5, $random=false){
 		global $connection;
-		
+
 		$sql = "SELECT * FROM ". TABLE_QUESTIONS ."
 				WHERE status = 1
 				AND uid = :uid
@@ -586,7 +586,7 @@ class QNA {
 	 * get saved posts
 	 *
 	 * @param int $UserID
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_saved($UserID){
@@ -614,7 +614,7 @@ class QNA {
 	 * remove a saved post
 	 *
 	 * @param int $PostID
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function remove_saved($PostID){
@@ -629,7 +629,7 @@ class QNA {
 		$sql = "DELETE FROM ". TABLE_SAVED ." WHERE post_id = {$PostID} LIMIT 1";
 		$stmt =  $connection->exec($sql);
 
-		return true;	
+		return true;
 	}
 
 }

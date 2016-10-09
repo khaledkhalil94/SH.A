@@ -1,8 +1,8 @@
-<?php 
+<?php
 require_once('init.php');
 
 class Messages {
-	
+
 
 	public static function sendMsg($data){
 		$database = new Database();
@@ -52,15 +52,15 @@ class Messages {
 	public static function getMsgs($user_id){
 		global $connection;
 
-		$sql = "SELECT 
-				pics.path AS img_path,
+		$sql = "SELECT
+				pics.thumb_path AS img_path,
 				CONCAT(u.firstName, ' ', u.lastName) AS u_fullname, info.username AS username,
 				info.ual AS ual,
 				messages.* FROM ". TABLE_MESSAGES ."
 				LEFT JOIN ". TABLE_USERS ." AS u ON messages.sender_id = u.id
 				LEFT JOIN ". TABLE_INFO ." AS info ON messages.sender_id = info.id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON messages.sender_id = pics.user_id
-				WHERE messages.user_id = :user_id AND deleted = 0 
+				WHERE messages.user_id = :user_id AND deleted = 0
 				ORDER BY Date DESC";
 
 		$stmt = $connection->prepare($sql);
@@ -80,21 +80,21 @@ class Messages {
 			$obj[] = $row;
 		}
 
-		return $obj; 
+		return $obj;
 	}
 
 	// get all visible messages by user id
 	public static function getDeletedMsgs($user_id){
 		global $connection;
-		$sql = "SELECT 
-				pics.path AS img_path,
+		$sql = "SELECT
+				pics.thumb_path AS img_path,
 				CONCAT(u.firstName, ' ', u.lastName) AS u_fullname,
 				info.ual AS ual, info.username AS username,
-				messages.* FROM ". TABLE_MESSAGES ." 
+				messages.* FROM ". TABLE_MESSAGES ."
 				LEFT JOIN ". TABLE_USERS ." AS u ON messages.sender_id = u.id
 				LEFT JOIN ". TABLE_INFO ." AS info ON messages.sender_id = info.id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON messages.sender_id = pics.user_id
-				WHERE messages.user_id = :user_id AND deleted = 1 
+				WHERE messages.user_id = :user_id AND deleted = 1
 				ORDER BY Date DESC";
 
 		$stmt = $connection->prepare($sql);
@@ -121,12 +121,12 @@ class Messages {
 	public static function getSentMsgs($user_id){
 		global $connection;
 
-		$sql = "SELECT 
-				pics.path AS img_path,
+		$sql = "SELECT
+				pics.thumb_path AS img_path,
 				u.firstName AS u_fullname,
 				info.ual AS ual, info.username AS username,
 				messages.id, messages.user_id, messages.date, messages.subject
-				FROM ". TABLE_MESSAGES ." 
+				FROM ". TABLE_MESSAGES ."
 
 				LEFT JOIN ". TABLE_USERS ." AS u ON messages.user_id = u.id
 				LEFT JOIN ". TABLE_INFO ." AS info ON messages.user_id = info.id
@@ -141,7 +141,7 @@ class Messages {
 		if (!$stmt->execute()) {
 			return $stmt->errorInfo()[2];
 		}
-		
+
 		$obj = [];
 
 		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
@@ -159,11 +159,11 @@ class Messages {
 	public static function getMsg($id){
 		global $connection;
 
-		$sql = "SELECT pics.path AS img_path, sender.id AS u_id,
+		$sql = "SELECT pics.thumb_path AS img_path, sender.id AS u_id,
 				info.ual AS ual, info.username AS username,
 				sender.firstName AS u_name,
 				receiver.firstName AS r_name,
-				messages.* FROM ". TABLE_MESSAGES ." 
+				messages.* FROM ". TABLE_MESSAGES ."
 
 				LEFT JOIN ". TABLE_USERS ." AS sender ON messages.sender_id = sender.id
 				LEFT JOIN ". TABLE_USERS ." AS receiver ON messages.user_id = receiver.id
@@ -190,7 +190,7 @@ class Messages {
 	public static function getConvo($selfId, $id, $limit=""){
 		global $connection;
 
-		$sql = "SELECT pics.path AS img_path,
+		$sql = "SELECT pics.thumb_path AS img_path,
 				CONCAT(u.firstName, ' ', u.lastName) AS u_fullname, info.username AS username,
 				msgs.* FROM ". TABLE_MESSAGES ." AS msgs
 
@@ -198,22 +198,22 @@ class Messages {
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pics ON msgs.sender_id = pics.user_id
 				INNER JOIN ". TABLE_INFO ." AS info ON msgs.sender_id = info.id
 
-				WHERE deleted = 0 
+				WHERE deleted = 0
 				AND
 				(msgs.user_id = {$selfId} AND msgs.sender_id = {$id}
-				OR 
+				OR
 				msgs.user_id = {$id} AND msgs.sender_id = {$selfId})
 
 				ORDER BY Date DESC ";
 
 		if(!empty($limit)) $sql .= "LIMIT {$limit}";
-				
+
 		$stmt = $connection->prepare($sql);
 
 		if (!$stmt->execute()) {
 			echo $stmt->errorInfo()[2];
 		}
-		
+
 		$obj = [];
 
 		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
@@ -247,7 +247,7 @@ class Messages {
 
 		// TODO: check if message is already hidden or not
 		global $connection;
-		
+
 		$sql = "UPDATE ". TABLE_MESSAGES ." SET deleted = 1 WHERE id = :id";
 
 		$stmt = $connection->prepare($sql);
@@ -259,7 +259,7 @@ class Messages {
 	// unHides a messages
 	public static function unHideMsg($id){
 		$database = new Database();
-		
+
 		$sql = "UPDATE ". TABLE_MESSAGES ." SET deleted = 0 WHERE id = {$id}";
 
 		return $database->xcute($sql);
@@ -273,7 +273,7 @@ class Messages {
 
 		$sql = "SELECT COUNT(*) AS count FROM ". TABLE_MESSAGES ." WHERE user_id = {$user_id}
 				AND deleted = 0 AND seen = 0";
-		
+
 		$res = $connection->query($sql);
 		return $res->fetch()['count'];
 	}
@@ -417,7 +417,7 @@ class Messages {
 
 			if(!$send){
 				$html .="<td class='msg-remove center aligned'>";
-			
+
 				if($sec == 'archive'){
 					$html .= "<i title='Permanently delete message' class='remove large link icon' id='msg_remove'></i>";
 				} else {
@@ -426,7 +426,7 @@ class Messages {
 
 				$html .="</td>";
 			}
-			
+
 			$html .="</tr>";
 
 		endforeach;

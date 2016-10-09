@@ -1,9 +1,21 @@
-<?php 
+<?php
 require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 
 class View {
-	
+
+	public static function getPP($uid){
+		global $connection;
+
+		$sql = "SELECT path AS pic FROM ". TABLE_PROFILE_PICS ." WHERE user_id = :uid";
+
+		$stmt = $connection->prepare($sql);
+		
+		$stmt->execute([':uid' => $uid]);
+
+		return $stmt->fetch()['pic'];
+	}
+
 	public static function qsn($id){
 		return BASE_URL.'questions/question.php?id='.$id;
 	}
@@ -19,7 +31,7 @@ class View {
 
 		if($title) $classes .= 'user-title ';
 		if($class) $classes .= "{$class} ";
-		
+
 		$html = "<a";
 
 		if(!empty($classes)) {
@@ -122,7 +134,7 @@ class View {
 				<button id='user_unflw' user-id='<?= $uid ?>' class='ui button red'>Following</button>
 			<?php } ?>
 		</div>
-		<?php 
+		<?php
 		$html = ob_get_contents();
 		ob_end_clean();
 		return $html;
@@ -214,7 +226,7 @@ class View {
 				</div>
 			</div>
 		</div>
-	
+
 		<?php
 		$comment = ob_get_contents();
 		ob_end_clean();

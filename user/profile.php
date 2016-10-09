@@ -12,7 +12,7 @@ if(!$user){
 	$session->message("User was not found!", BASE_URL, 'danger');
 }
 
-$img_path = $user->img_path;
+$img_path = View::getPP($id);
 $name = $user->full_name;
 $username = $user->username;
 $id = $user->id;
@@ -69,7 +69,7 @@ $sec = 'profile';
 include (ROOT_PATH . "inc/head.php");
  ?>
 <div class="ui ui container section">
-<?php 
+<?php
 
 if($session->is_logged_in() && !$self){
 

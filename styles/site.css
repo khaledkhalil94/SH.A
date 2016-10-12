@@ -65,3 +65,17 @@
 .main-page .news-feed .question-view .extra.text h3 {
     margin: 0px;
 }
+
+#contact .contact-content .contact-list ul {
+    list-style: none;
+    padding: 0px;
+}
+
+#contact .contact-content .contact-list ul li {
+    display: inline-block;
+    margin-right: 7px;
+}
+
+#contact .contact-content {
+    width: 70%;
+}

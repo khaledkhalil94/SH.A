@@ -2,3 +2,4 @@ RewriteEngine On
 RewriteRule ^user/$ /sha/404.php
 RewriteRule ^user/([0-9]+)(/|)$ /sha/user/profile.php?id=$1
 RewriteRule ^user/posts/([0-9]+)(/|)$ /sha/user/posts/post.php?post_id=$1
+RewriteRule ^contact(/|)$ /sha/contact.php

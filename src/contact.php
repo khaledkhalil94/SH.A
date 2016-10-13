@@ -1,6 +1,6 @@
 <?php require_once ("src/init.php");
 if(!Token::validateToken($_POST['token'])) Redirect::redirectTo();
-Token::newToken();
+Token::generateToken(true);
 Admin::PrivateMsg();
 require(ROOT_PATH . "inc/head.php");
 ?>

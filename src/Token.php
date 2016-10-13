@@ -12,30 +12,17 @@ class Token {
 	 *
 	 * @return string
 	 */
-	public static function generateToken(){
+	public static function generateToken($new=false){
 
-		if(!Session::get('token')){
+		if(!Session::get('token') || $new){
 
 			$token = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
 
 			Session::set('token', $token);
-
 		}
 
 		return Session::get('token');
 	}
-
-	/**
-	 * Replace the session token with a new one
-	 */
-	public static function newToken(){
-
-			$token = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-
-			Session::set('token', $token);
-
-	}
-
 
 	/**
 	 * validates a given token with the one stored in the session
@@ -50,6 +37,4 @@ class Token {
 		return hash_equals($s_token, $token);
 	}
 }
-
-
- ?>
+?>

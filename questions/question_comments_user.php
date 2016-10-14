@@ -16,7 +16,7 @@
 		foreach ($comments as $comment):
 			$voted = QNA::has_voted($comment->id, USER_ID);
 
-			$votes = Comment::get_votes($comment->id); 
+			$votes = Comment::get_votes($comment->id);
 			$votes = $votes > 0 ? '+'.$votes : null;
 
 			$self = $comment->uid === USER_ID;

@@ -1,4 +1,4 @@
- <?php 
+ <?php
 require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 
@@ -6,22 +6,22 @@ require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 * handles authentications
 */
 Class Auth {
-	
+
 	/**
 	* @var boolean $error error status
 	*/
 	public $error=false;
-	
+
 	/**
 	* @var array $errMsg array of errors
 	*/
 	public $errMsg=[];
-	
+
 	/**
 	* @var mixed $props this properties
 	*/
 	private $props;
-	
+
 	/**
 	* @var mixed $action this action
 	*/
@@ -88,7 +88,7 @@ Class Auth {
 			return false;
 		}
 
-		if($this->error) return false; 
+		if($this->error) return false;
 
 		// success, log the user in
 		$session->login($user);
@@ -145,7 +145,7 @@ Class Auth {
 		global $session;
 
 		$database = new Database();
-		
+
 		$data = $this->processData();
 
 		if(!is_array($data) || $this->error){
@@ -196,7 +196,7 @@ Class Auth {
 		// create user folder
 		if(!file_exists(DEF_IMG_UP_DIR.$id. DS )){
 			if(mkdir(DEF_IMG_UP_DIR. DS .$id)){
-				
+
 				// create an index file that redirects to 404 page
 				$path = DEF_IMG_UP_DIR. DS .$id. DS ;
 				$fp = fopen($path . "/index.php", "w");
@@ -207,7 +207,7 @@ Class Auth {
 		}
 
 		echo json_encode(['data' => $data_Org]);
-		
+
 		// login user
 		$session->login((object)$data_Org);
 	}
@@ -215,7 +215,7 @@ Class Auth {
 
 	/**
 	* Process and validate data from a signup form
-	* 
+	*
 	* @param array $data (default null)
 	*
 	* @return array:user-data | false
@@ -243,15 +243,15 @@ Class Auth {
 			if($v == ''){
 				$this->error = true;
 				$this->errMsg[$k] = "{$k} can't be empty";
-				
+
 			}
 
 			if($k == 'password') continue;
-			
+
 			if(!$this->form_check($k, $v)){
 				$this->error = true;
 				$this->errMsg[$k] = "{$k} is already taken";
-				
+
 			}
 		}
 
@@ -263,7 +263,7 @@ Class Auth {
 		if (strlen($un) > 15){
 			$this->error = true;
 			$this->errMsg['username'] = "Username must be between 4 and 15 characters.";
-			
+
 		} elseif(strlen($un) < 4){
 			$this->error = true;
 			$this->errMsg['username'] = "Username must be between 4 and 15 characters.";
@@ -323,13 +323,13 @@ Class Auth {
 	*
 	* @param string field name
 	* @param string field value
-	* @param string database name 
+	* @param string database name
 	*
 	* @return boolean true if values doesn't exist | false if it exists
 	*
 	*/
 	public static function form_check($field, $value, $db='login_info'){
-		global $connection;		
+		global $connection;
 
 
 

@@ -27,7 +27,7 @@ foreach ($sections as $s) {
 			$qs = $QNA->get_questions($rpp, $offset);
 
 			break 2; // breaks out of the two casses (foreach and switch)
-		
+
 		default:
 			$qs = $QNA->get_questions();
 
@@ -56,7 +56,7 @@ include (ROOT_PATH . 'inc/head.php');
 			</div>
 			<div class="results"></div>
 		</div>
-		
+
 			<div class="questions sortby">
 				<p style="display:inline;">Show questions from: </p>
 				<div class="ui inline dropdown">
@@ -90,8 +90,8 @@ include (ROOT_PATH . 'inc/head.php');
 		<h3>Questions</h3>
 		<?= $pag->display(); ?>
 		<div class="questions front-page" id="questions">
-			<?php 
-			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>"; 
+			<?php
+			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>";
 			} else {
 				foreach ($qs as $q):
 
@@ -138,8 +138,8 @@ include (ROOT_PATH . 'inc/head.php');
 				 			</div>
 				 		</div>
 				 	</div>
-					<?php 
-			 	endforeach; 
+					<?php
+			 	endforeach;
 		 	}?>
 		 </div><br>
 		<?= $pag->display(); ?>

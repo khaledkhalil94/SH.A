@@ -8,7 +8,7 @@
 					</div>
 				</div>
 				<div class="nine wide column post-title">
-					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>				
+					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
 					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="ui left aligned" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
-					This question is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a> 
+					This question is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a>
 				</div>
 				<?php } ?>
 				<div class="ui header">
@@ -58,7 +58,7 @@
 								<a class="ui a">Delete</a>
 							</div>
 
-							<?php endif; ?>	
+							<?php endif; ?>
 						</div>
 					</div>
 					<!-- Question actions menu -->
@@ -91,7 +91,7 @@
 			<h4>Related questions</h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list" id="sidebar-content">
-					<?php 
+					<?php
 						$items = QNA::get_posts_by_section($q->section, 5, true);
 						if(count($items) < 2) echo "<p>There are no other question in this section.</p>";
 							else;
@@ -121,7 +121,7 @@
 							</div>
 							<span id="sidebar-date"><?= $item->created; ?></span>
 						</div>
-					<?php 
+					<?php
 						}  ?>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 
 $QNA = new QNA();
@@ -27,7 +27,7 @@ if(isset($_GET['section']) && !empty($_GET['section'])){
 				$qs = $QNA->get_questions($rpp, $offset);
 
 				break 2; // breaks out of the two casses (foreach and switch)
-			
+
 			default:
 				break;
 		}
@@ -91,7 +91,7 @@ foreach ($qs as $q):
  			</div>
  		</div>
  	</div>
-	<?php 
+	<?php
 endforeach;
  ?>
 <script>

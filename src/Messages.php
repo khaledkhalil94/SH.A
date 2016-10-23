@@ -33,7 +33,7 @@ class Messages {
 			'subject' => $value
 			);
 
-		$insertion = $database->insert_data('messages', $data);
+		$insertion = $database->insert_data(TABLE_MESSAGES, $data);
 
 		if($insertion === true){
 			die(json_encode(array(
@@ -395,14 +395,22 @@ class Messages {
 			$html .= "<td>";
 			$html .= "<div class='ui grid'>";
 			$html .= "<div class='four wide column'>";
-			$html .= "<a href='/sha/user/$senderID/'><img class='ui avatar image' src=' $message->img_path '></a>";
+			if($staff) {
+			$html .= "<p><img class='ui avatar image' src='$message->img_path'></p>";
+			} else {
+			$html .= "<a href='/sha/user/$senderID/'><img class='ui avatar image' src='$message->img_path'></a>";
+			}
 			$html .= "</div>";
 			$html .= "<div class='ten wide column'>";
-			$html .= "<a class='user-title' user-id='$senderID' href='/sha/user/$senderID'/>$message->u_fullname</a>";
-			$html .= "<br><div class='time' id='msg_date' title='$date'>$date</div>";
+			if($staff) {
+				$html .= "<p class='msg_username' user-id='$senderID'/>$message->u_fullname</p>";
+			} else {
+				$html .= "<a class='msg_username user-title' user-id='$senderID' href='/sha/user/$senderID/'/>$message->u_fullname</a>";
+			}
+			$html .= "<div class='time' id='msg_date' title='$date'>$date</div>";
 			$html .="</div>";
 			$html .="</td>";
-			$html .= "<td class='msg-content selectable'>";
+			$html .= "<td class='msg-content'>";
 			$html .= "<a style='color:black;text-decoration: none;' href='?msg=$message->id'>";
 
 			$html .= $subject;
@@ -437,10 +445,6 @@ class Messages {
 		return $html;
 
 	}
-
-
-
 }
-
 
 ?>

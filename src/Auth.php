@@ -27,6 +27,11 @@ Class Auth {
 	*/
 	private $action;
 
+  /**
+   * @var object $user the user object
+   */
+  private $user;
+
 
 	public function __construct() {
 
@@ -39,12 +44,11 @@ Class Auth {
 		}
 	}
 
-
 	/**
-	* logs in a user
-	*
-	* @return boolean
-	*/
+  	* logs in a user
+  	*
+  	* @return boolean
+  	*/
 	public function login(){
 		global $session;
 		$this->props = $this->props['values'];
@@ -96,12 +100,11 @@ Class Auth {
 		return true;
 	}
 
-
 	/**
-	* gets user details from the database by username or email or id
-	*
-	* @return object:user details | null
-	*/
+  	* gets user details from the database by username or email or id
+  	*
+  	* @return object:user details | null
+  	*/
 	public static function getUserDetails($input){
 		global $connection;
 
@@ -136,11 +139,11 @@ Class Auth {
 	}
 
 	/**
-	* Registers a new user
-	*
-	* @return json encoded array
-	*
-	*/
+  	* Registers a new user
+  	*
+  	* @return json encoded array
+  	*
+  	*/
 	public function RegisterNewUser(){
 		global $session;
 
@@ -157,11 +160,11 @@ Class Auth {
 		$id = mt_rand(0,99).substr(time(), 4);
 		$data['id'] = $id;
 
-		$data_Org = $data;
-		$data_Org['ual'] = 1;
+		$user = $data;
+		$user['ual'] = 1;
 
 		// hashing the password
-		$pw = $data_Org['password'];
+		$pw = $user['password'];
 		$pw_h = password_hash($pw, PASSWORD_BCRYPT);
 
 		$data['password'] = $pw_h;
@@ -206,21 +209,26 @@ Class Auth {
 			}
 		}
 
-		echo json_encode(['data' => $data_Org]);
+    $this->user = (object) $user;
+
+    // send a default welcoming message to the user from the admin
+    $this->sendDefaultMessage();
+
+		echo json_encode(['data' => $this->user]);
 
 		// login user
-		$session->login((object)$data_Org);
+		$session->login($this->user);
 	}
 
 
 	/**
-	* Process and validate data from a signup form
-	*
-	* @param array $data (default null)
-	*
-	* @return array:user-data | false
-	*
-	*/
+  	* Process and validate data from a signup form
+  	*
+  	* @param array $data (default null)
+  	*
+  	* @return array:user-data | false
+  	*
+  	*/
 	public function processData($data=null){
 
 		$data = $data ?: $this->props['values'];
@@ -319,15 +327,15 @@ Class Auth {
 	}
 
 	/**
-	* Checks the database with field and value
-	*
-	* @param string field name
-	* @param string field value
-	* @param string database name
-	*
-	* @return boolean true if values doesn't exist | false if it exists
-	*
-	*/
+  	* Checks the database with field and value
+  	*
+  	* @param string field name
+  	* @param string field value
+  	* @param string database name
+  	*
+  	* @return boolean true if values doesn't exist | false if it exists
+  	*
+  	*/
 	public static function form_check($field, $value, $db='login_info'){
 		global $connection;
 
@@ -340,7 +348,15 @@ Class Auth {
 		return $exists ? false : true;
 	}
 
-
+  /**
+    * check password
+    *
+    * @param string $input
+    * @param string $pw
+    *
+    * @return boolean
+    *
+    */
 	public static function password_check($input, $pw){
 
 		if(empty($input) || empty($pw)){
@@ -355,8 +371,25 @@ Class Auth {
 
 		$current_pw = $user->password;
 
-
 		return password_verify($pw, $current_pw);
 	}
+
+  /**
+    * send a default message to new users
+    */
+  private function sendDefaultMessage(){
+
+    $db = new Database();
+
+    $msg = "Thanks for signing up!";
+
+    $data = array(
+      'user_id' => $this->user->id,
+      'sender_id' => 1,
+      'subject' => $msg
+      );
+
+      $db->insert_data(TABLE_MESSAGES, $data);
+  }
 }
 ?>

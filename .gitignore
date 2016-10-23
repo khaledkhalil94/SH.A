@@ -16,3 +16,5 @@ server.php
 test.php
 *.db
 *.db
+photos/*
+!photos/5501

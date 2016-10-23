@@ -18,5 +18,5 @@
 </div>
 <hr>
 <div">
-	<a class="ui primary button" href="./?pm=<?= $message->user_id ?>">Back</a>
+	<a class="ui primary button" href="./?sh=st">Back</a>
 </div>

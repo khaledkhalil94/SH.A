@@ -18,7 +18,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 <div class="main">
 	<div class="ui container section message-list">
 		<?php if($staff){ ?>
-		<h3>Messages from the admin.</h3>
+		<h3>Your messages with the admin.</h3>
 		<?php } else { ?>
 		<h3>Your messages with <?= View::user($user_id) ?></h3>
 		<?php } ?>
@@ -29,6 +29,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 
 			foreach($messages as $message):
 				$sender = User::get_user_info($message->sender_id);
+				$sstaf = $sender->id == 1 ? true : false;
 				$self = USER_ID == $sender->id ? true : false;
 				if (!$self) Messages::msgSeen($message->user_id, $message->id);
 				$img_path = $sender->img_path;
@@ -38,9 +39,13 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 ?>
 				<div class="message message-row ui">
 					<div class="message-image">
+						<?php if($sstaf){ ?>
+							<img class="ui tiny image" src="<?= $img_path ?>">
+						<?php } else { ?>
 						<a href="<?= "../".$sender->id ?>/">
 							<img class="ui tiny image" src="<?= $img_path ?>">
 						</a>
+						<?php } ?>
 					</div>
 					<div class="message-details">
 						<?php if($staff){ ?>
@@ -48,11 +53,8 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 						<?php } else { ?>
 						<p><?= $self ? "You" : "<a href=\"/sha/user/$sender->id/\">$sender->firstName</a>"; ?>
 						<?php } ?>
-
 						<a class="time" title="<?= $date; ?>" href="message.php?msg=<?= $message->id; ?>"><?= $timeAgo; ?></a></p>
-
 						<p class="message-content"><?= $subject; ?></p>
-					
 					</div>
 				</div>
 		<?php endforeach; ?>

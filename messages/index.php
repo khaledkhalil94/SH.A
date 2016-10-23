@@ -12,8 +12,6 @@ if (isset($_GET['pm'])) {
 	exit;
 }
 
-
-
 $sh = isset($_GET['sh']) ? $_GET['sh'] : 'inb';
 $pageTitle = "Messages";
 $sec = "messages";
@@ -45,9 +43,7 @@ include_once (ROOT_PATH . "inc/head.php");
 			</div>
 		</div>
 		<div class="twelve wide column">
-			<?php 
-
-
+			<?php
 			switch ($sh) {
 				case 'compose':
 					require_once('compose.php');
@@ -71,7 +67,7 @@ include_once (ROOT_PATH . "inc/head.php");
 				case 'blc':
 					require('blocked.php');
 					break;
-				
+
 				default:
 					break;
 			} ?>

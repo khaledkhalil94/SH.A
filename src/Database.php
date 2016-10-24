@@ -1,8 +1,8 @@
- <?php 
+ <?php
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 /**
- * Database class, opens the connection to the database 
+ * Database class, opens the connection to the database
  * Handles main database queries
  * Escaped and fully reusable database queries
  */
@@ -137,7 +137,7 @@ class Database {
 		}
 
 		// remove the last coma from the set
-		$set = substr($set, 0, -2); 
+		$set = substr($set, 0, -2);
 
 		$sql = "UPDATE `{$table}` SET $set WHERE {$where} = '{$rule}'";
 		$stmt = $this->connection->prepare($sql);
@@ -172,7 +172,7 @@ class Database {
 		$sql = "SELECT 1 FROM `{$table}` WHERE $where = ?";
 
 		$stmt = $this->connection->prepare($sql);
-		
+
 		$stmt->bindParam(1, $rule);
 
 		if(!$stmt->execute()){
@@ -212,5 +212,4 @@ class Database {
 		return $stmt;
 	}
 }
-
 ?>

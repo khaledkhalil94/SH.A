@@ -171,3 +171,7 @@ a.ui.basic.label.msg_compose {
 .ui.search>.results {
     width: 30%;
 }
+
+.messages .message-row .msg_username {
+    margin-bottom: 0px;
+}

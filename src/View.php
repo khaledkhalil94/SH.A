@@ -10,10 +10,12 @@ class View {
 		$sql = "SELECT path AS pic FROM ". TABLE_PROFILE_PICS ." WHERE user_id = :uid";
 
 		$stmt = $connection->prepare($sql);
-		
+
 		$stmt->execute([':uid' => $uid]);
 
-		return $stmt->fetch()['pic'];
+		$pic = $stmt->fetch()['pic'];
+
+		return $pic ? $pic : DEF_PIC;
 	}
 
 	public static function qsn($id){

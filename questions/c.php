@@ -53,7 +53,7 @@ foreach ($qs as $q):
 	$commentsCount = count(Comment::get_comments($q->id));
 	$votes = QNA::get_votes($q->id);
 	$votes = $votes ?: "0";
-	$reports_count = QNA::get_reports("questions", $q->id) ? count(QNA::get_reports("questions", $q->id)) : null;
+	$reports_count = QNA::get_reports_count($q->id) ?: null;
 	$img_path = $q->img_path ?: DEF_PIC;
 	?>
  	<div class="ui items">

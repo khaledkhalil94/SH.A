@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
 if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
@@ -161,7 +161,7 @@ switch ($action) {
 		if(USER_ID !== $question->uid) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
 
 		$QNA = new QNA($PostID);
-		
+
 		$delete = $QNA->delete();
 
 		if($delete === true){
@@ -173,6 +173,7 @@ switch ($action) {
 
 		$PostID = sanitize_id($data['id']);
 		$content = $data['content'];
+		$title = $data['title'];
 
 		// check if question exists
 		$question = QNA::get_question($PostID);
@@ -180,14 +181,33 @@ switch ($action) {
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
 
-		if(USER_ID !== $question->uid) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
+		if(USER_ID !== $question->uid && !$session->adminCheck()) die(json_encode(['status' => false, 'id' => $PostID, 'err' => 'Authentication error.']));
+
+		$errors = [];
 
 		$QNA = new QNA($PostID);
-		$edit = $QNA->edit_question($content);
 
-		if($edit === true){
-			die(json_encode(['status' => true]));
+
+		if($title != $question->title){
+
+			if(trim($title) == '') die(json_encode(['err' => 'Title can\'t be empty']));
+			$edit = $QNA->edit_title($title);
+
+			if($edit !== true){
+				$errors[] = $edit;
+			}
 		}
+
+		if($content != $question->content){
+			$edit = $QNA->edit_question($content);
+
+			if($edit !== true){
+				$errors[] = $edit;
+			}
+		}
+
+		if(empty($errors)) die(json_encode(['status' => true]));
+			else die(json_encode(['err' => $errors]));
 
 		break;
 
@@ -248,7 +268,7 @@ switch ($action) {
 
 		$post = new Post();
 		$post->PostID = $PostID;
-		
+
 		$delete = $post->delete();
 
 		if($delete === true){

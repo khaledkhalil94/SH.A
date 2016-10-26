@@ -4,7 +4,7 @@ $(function(){
 
 		e.preventDefault();
 
-		_this = $(this)
+		_this = $(this);
 		$postID = $('.blog-post').attr('id');
 
 		$('#votebtn').addClass("loading");
@@ -16,7 +16,7 @@ $(function(){
 				data: {'action':'upvote','id': $postID},
 
 				success: function(data, status) {
-					if(data.status == true) {
+					if(data.status === true) {
 						$(_this).removeClass("loading grey");
 						$(_this).addClass("red voted");
 						$('#votescount').removeClass("grey");
@@ -68,7 +68,7 @@ $(function(){
 		e.stopPropagation();
 
 		$postID = $('.blog-post').attr('id');
-		
+
 		$.ajax({
 			url: '/sha/controllers/_question.php',
 			type: 'post',
@@ -77,7 +77,7 @@ $(function(){
 
 			success: function(data, status) {
 
-				if(data.status == true) {
+				if(data.status === true) {
 					if(!msg){ // to avoid duplicate messages
 
 						$('.ui.grid.post-header').after(sucMsg("Question has been saved."));
@@ -88,7 +88,7 @@ $(function(){
 						$('.ui.grid.post-header').after(sucMsg('Question has been saved.'));
 
 					}
-				} else { 
+				} else {
 					if(!msg){ // to avoid duplicate messages
 
 						$('.ui.grid.post-header').after(errMsg(data.err));
@@ -132,7 +132,7 @@ $(function(){
 
 		// add loading
 		$('.modal.post.publish .segment').addClass('loading');
-		
+
 		$.ajax({
 			url: '/sha/controllers/_question.php',
 			type: 'post',
@@ -141,12 +141,12 @@ $(function(){
 
 			success: function(data, status) {
 
-				if(data.status == true) {
+				if(data.status === true) {
 					console.log('published');
 					$('.modal.post.publish').modal('hide');
 					window.location.reload(false);
 
-				} else { 
+				} else {
 					var $errMsg = "\
 								<div class=\"ui error message\">\
 								<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
@@ -199,7 +199,7 @@ $(function(){
 
 		// add loading
 		$('.modal.post.unpublish .segment').addClass('loading');
-		
+
 		$.ajax({
 			url: '/sha/controllers/_question.php',
 			type: 'post',
@@ -208,12 +208,12 @@ $(function(){
 
 			success: function(data, status) {
 
-				if(data.status == true) {
+				if(data.status === true) {
 					console.log('unpublishd');
 					$('.modal.post.unpublish').modal('hide');
 					window.location.reload(false);
 
-				} else { 
+				} else {
 					var $errMsg = "\
 								<div class=\"ui error message\">\
 								<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
@@ -254,7 +254,7 @@ $(function(){
 		e.preventDefault();
 
 		$this = $(this);
-		
+
 		$('.ui.modal.post.delete').modal('show');
 
 	});
@@ -267,7 +267,7 @@ $(function(){
 
 		// add loading
 		$('.modal.post.delete .segment').addClass('loading');
-		
+
 		$.ajax({
 			url: '/sha/controllers/_question.php',
 			type: 'post',
@@ -275,10 +275,10 @@ $(function(){
 			data: {'action':'delete', 'id': $postID},
 
 			success: function(data, status) {
-				if(data.status == true) {
-					window.location.replace('./')
+				if(data.status === true) {
+					window.location.replace('./');
 
-				} else { 
+				} else {
 					var $errMsg = "\
 								<div class=\"ui error message\">\
 								<i class=\"close icon\" id=\"post-errmsg-close-icon\"></i>\
@@ -315,13 +315,14 @@ $(function(){
 $(function(){
 	var $postOrgContent;
 	var $newContent;
+	var erMsg = false;
 
 	// on editing
 	$('.blog-post').on('click', '#post-edit', function(e){
 		e.stopPropagation();
-	
+
 		$postDOM = $(this).closest('.blog-post');
-		$content = $postDOM.find('.ui.container p').text();
+		$content = $postDOM.find('.question-box .question-content').text();
 		$title = $postDOM.find('.ui.header h3').text();
 
 		var $titleEdit = "\
@@ -343,25 +344,36 @@ $(function(){
 			</div>";
 
 		$postOrgTitle = $postDOM.find('.header .blog-post-title').replaceWith($titleEdit);
-		$postOrgContent = $postDOM.find('.container p').replaceWith($contentEdit);
-
+		$postOrgContent = $postDOM.find('.question-box .question-content').replaceWith($contentEdit);
 
 		$postOrgActions = $postDOM.find('.actions').replaceWith($newActions);
 
 		$('.ui.pointing.dropdown').hide();
 	});
 
+	function reOrg(){
+		$postDOM.find('.form.content-form').replaceWith($postOrgContent);
+		$postDOM.find('.form.title-form').replaceWith($postOrgTitle);
+		$('.ui.pointing.dropdown').show();
+	}
+
 	// on clicking Save
-	$('.blog-post').on('click', '#post-confirm-save', function(e){
+	$(document).on('click', '#post-confirm-save', function(e){
 		e.stopPropagation();
 
 		var $PostID = $postDOM.attr('id');
 
-		$newContent = $postDOM.find('.content-form textarea#content').val();
+		$newContent = $('.content-form textarea#content').val();
 		$newTitle = $postDOM.find('.title-form textarea#content').val();
 
-		if (typeof $newContent == 'undefined') return; // if content is not defined
-		if ($newContent.trim() == '') return; // if comment is empty
+		if (typeof $newContent == 'undefined') return;  // if content is not defined
+
+		if ($newContent.trim() === ''){
+			reOrg();
+			if(erMsg) $('#profile_err_msg').remove();
+			$('.ui.grid.post-header').after(errMsg("Content can't be empty"));
+			return false;
+		}
 
 		if (($content == $newContent) && ($title == $newTitle)) { // if the new content is the same as the current content
 			$('#post-cancel').click();
@@ -373,7 +385,7 @@ $(function(){
 		} else {
 			$postDOM.find('.form.content-form').replaceWith($postOrgContent);
 		}
-			
+
 		if ($title != $newTitle) {
 			$postDOM.find('.form.title-form').addClass('loading');
 		} else {
@@ -390,7 +402,7 @@ $(function(){
 			data: {'action':'edit', 'title': $newTitle, 'content': $newContent, 'id':$PostID},
 
 			success: function(data, status) {
-				if(data.status == true) {
+				if(data.status === true) {
 
 					var $editedDOM = '(edited <span id="post-date-ago">A few seconds ago</span>)';
 
@@ -400,10 +412,15 @@ $(function(){
 						$postDOM.find('.time').append($editedDOM);
 					}
 
-					$postDOM.find('.form.content-form').replaceWith('<p>'+$newContent+'</p>');
-					$postDOM.find('.form.title-form').replaceWith('<h3>'+$newTitle+'</h3>');
+					$postDOM.find('.form.content-form').replaceWith("<p class='question-content'>"+$newContent+"</p>");
+					$postDOM.find('.form.title-form').replaceWith("<h3 class='blog-post-title'>"+$newTitle+"</h3>");
 
 					$postDOM.find('.actions').replaceWith($postOrgActions);
+				} else {
+					reOrg();
+					if(erMsg) $('#profile_err_msg').remove();
+					$('.ui.grid.post-header').after(errMsg(data.err));
+					erMsg = true;
 				}
 			},
 			error: function(xhr, desc, err) {
@@ -417,11 +434,7 @@ $(function(){
 	$('.blog-post').on('click', '#post-cancel', function(e){
 		e.stopPropagation();
 
-		$postDOM.find('.content-form.form').replaceWith($postOrgContent);
-		$postDOM.find('.title-form.form').replaceWith($postOrgTitle);
-
-		$postDOM.find('.actions').replaceWith($postOrgActions);
-
+		reOrg();
 		$('#post-edit').parent().removeClass('active selected');
 		$('.ui.pointing.dropdown').show();
 

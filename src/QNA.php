@@ -348,7 +348,7 @@ class QNA {
 	}
 
 	/**
-	 * edit a question
+	 * edit a question content
 	 *
 	 * @param $content string
 	 *
@@ -357,7 +357,30 @@ class QNA {
 	public function edit_question($content){
 		$database = new Database();
 
-		$update = $database->update_data(TABLE_QUESTIONS, 'content', $content, 'id', $this->PostID);
+		$now = getNow();
+
+		$update = $database->update_data(TABLE_QUESTIONS, ['content', 'last_modified'], [$content, $now], 'id', $this->PostID);
+
+		if($update !== true || $database->error){
+			return array_shift($database->errors);
+		}
+
+		return true;
+	}
+
+	/**
+	 * edit a question title
+	 *
+	 * @param $content string
+	 *
+	 * @return array|string
+	 */
+	public function edit_title($title){
+		$database = new Database();
+
+		$now = getNow();
+
+		$update = $database->update_data(TABLE_QUESTIONS, ['title', 'last_modified'], [$title, $now], 'id', $this->PostID);
 
 		if($update !== true || $database->error){
 			return array_shift($database->errors);

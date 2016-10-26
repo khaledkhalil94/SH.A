@@ -7,7 +7,7 @@ $QNA = new QNA();
 
 if(!$q = QNA::get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
-	if ($q = Comment::getComment($id)) { 
+	if ($q = Comment::getComment($id)) {
 		$q = $q->post_id;
 		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
 		Redirect::redirectTo("question.php?id={$q}#{$id}");
@@ -49,7 +49,7 @@ include (ROOT_PATH . 'inc/head.php');
 						</div>
 					</div>
 					<br><br>
-					<div class="ui left aligned" style="min-height:320px;">
+					<div class="ui left aligned question-box" style="min-height:320px;">
 						<div class="ui header">
 							<h3 class="blog-post-title"><?= $q->title; ?></h3>
 						</div>
@@ -82,7 +82,7 @@ include (ROOT_PATH . 'inc/head.php');
 					<h4>Related questions</h4>
 					<div class="ui segment">
 						<div class="ui relaxed divided list" id="sidebar-content">
-							<?php 
+							<?php
 								$items = QNA::get_posts_by_section($q->section, 5, true);
 								if(count($items) < 2) echo "<p>There are no other question in this section.</p>";
 									else;
@@ -112,7 +112,7 @@ include (ROOT_PATH . 'inc/head.php');
 									</div>
 									<span id="sidebar-date"><?= $item->created; ?></span>
 								</div>
-							<?php 
+							<?php
 								}  ?>
 						</div>
 					</div>
@@ -125,11 +125,11 @@ include (ROOT_PATH . 'inc/head.php');
 			<?php $comments = Comment::get_comments($id); ?>
 				<h3>Comments (<?= count($comments) ?: "0"; ?>): </h3>
 			<div id="comments">
-				<?php 
+				<?php
 				if(count($comments) === 0) echo "There is nothing here yet, be the first to comment!";
 				else;
 					foreach ($comments as $comment):
-						$votes = Comment::get_votes($comment->id); 
+						$votes = Comment::get_votes($comment->id);
 						$commenter = User::get_user_info($comment->uid);
 
 						$comment_date = $comment->created;

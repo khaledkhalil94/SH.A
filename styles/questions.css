@@ -241,3 +241,10 @@
     text-decoration: none;
     color: black;
 }
+
+
+.blog-post .ui.message.negative {
+    width: 55%;
+    margin: 0 auto;
+    text-align: center;
+}

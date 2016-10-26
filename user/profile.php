@@ -2,7 +2,7 @@
 require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
 if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
-
+if($id === 1 && !$session->adminCheck()) Redirect::redirectTo();
 $userg = new User();
 $QNA = new QNA();
 

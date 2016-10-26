@@ -139,4 +139,10 @@ function date_compare($a, $b){
 	 $t2 = strtotime($b['date']);
 	 return $t1 - $t2;
 }
+
+// return the current datetime with a default format 2016-10-25 10:03:36 (sql datetime format)
+function getNow($format=null){
+
+	return $format ? Date($format) : Date('Y-m-d H:i:s');
+}
 ?>

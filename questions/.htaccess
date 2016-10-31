@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^new/create new/create.php
+RewriteRule ^new/random new/random.php

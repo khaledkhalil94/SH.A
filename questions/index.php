@@ -83,7 +83,8 @@ include (ROOT_PATH . 'inc/head.php');
 				<br>
 			</div>
 		<?php if ($session->is_logged_in()): ?>
-			<a type="button" href="./new" class="ui green button">Ask a new question</a>
+			<a type="button" href="new/create" class="ui green button">Ask a new question</a>
+			<a type="button" href="new/random" data-inverted data-tooltip="Create a new question with random content" class="ui orange button">Generate question</a>
 		<?php endif; ?>
 		<?= msgs(); ?>
 		<br><br><hr>
@@ -102,6 +103,7 @@ include (ROOT_PATH . 'inc/head.php');
 					$votes = $votes ?: "0";
 					$reports_count = QNA::get_reports_count($q->id) ?: null;
 					$img_path = $q->img_path ?: DEF_PIC;
+					$type = $q->fid == 5 ? 'Generated' : 'Asked';
 					?>
 				 	<div class="ui items">
 				 		<div class="item">
@@ -111,7 +113,7 @@ include (ROOT_PATH . 'inc/head.php');
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
+				 					<span style="display:inline;" class="price"><?= $type ?> by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
 				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />

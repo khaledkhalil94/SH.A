@@ -20,15 +20,12 @@ class QNA {
 	/**
 	 * create a new question
 	 *
-	 * @param array $data data
+	 * @param array $data data ['title' => $title, 'content' => $content, 'section' => $section, 'uid' => USER_ID];
 	 *
 	 * @return int|string
 	 */
 	public function create($data){
 		$database = new Database();
-
-		//$data = ['title' => $title, 'content' => $content, 'section' => $section, 'uid' => USER_ID];
-		$data['uid'] = USER_ID;
 
 		$insert = $database->insert_data(TABLE_QUESTIONS, $data);
 
@@ -655,5 +652,34 @@ class QNA {
 		return true;
 	}
 
+	/**
+	 * generates a new question using the lorm ipsum api
+	 *
+	 * @param array $options
+	 *
+	 * @return int
+	 */
+	public function generate_question($options = []){
+		$url = 'http://loripsum.net/api/';
+
+		$titleURL = $url."veryshort/1/plaintext";
+		$title = trim(file_get_contents($titleURL));
+
+		$num = isset($options['num']) ? $options['num'] : 2;
+		$len = isset($options['len']) ? $options['len'] : 'long';
+
+		$contentURL = $url."{$len}/{$num}/html";
+
+		$content = trim(file_get_contents($contentURL));
+
+		$data = [
+			'title' => $title,
+			'content' => $content,
+			'section' => 5,
+			'uid' => $options['uid']
+		];
+
+		return $this->create($data);
+	}
 }
 ?>

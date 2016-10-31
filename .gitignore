@@ -8,6 +8,7 @@ scripts/dist/gulpfile.js
 scripts/package.js
 styles/Semantic-UI-CSS-master
 src/Admin.php
+src/secret.php
 composer.json
 composer.lock
 composer.phar

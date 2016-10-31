@@ -1,7 +1,13 @@
 <?php
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
 
-if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
+if(Session::get('devmode')) goto bp;
+
+if(!$session->is_logged_in()) {
+	http_response_code(404);
+	header("HTTP/1.1 404 Not Found", true, 404);
+	exit;
+}
 
 // Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
@@ -9,7 +15,7 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 	Redirect::redirectTo('404');
 }
 
-
+bp:
 if(isset($_POST['action'])){
 
 	$action = $_POST['action'];
@@ -45,6 +51,7 @@ switch ($action) {
 		}
 
 		unset($data['token']);
+		$data['uid'] = USER_ID;
 
 		$QNA = new QNA();
 		$create = $QNA->create($data);

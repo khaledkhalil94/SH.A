@@ -29,7 +29,6 @@ $imgValidation = array(
 define('RECAP_SKEY', '6LdZ8gcUAAAAAKNsM82igmt7nN_Xn-o55hJmEkkb');
 
 // define table names
-
 define('TABLE_COMMENTS', 'comments');
 define('TABLE_USERS', 'students');
 define('TABLE_PROFILE_PICS', 'profile_pic');
@@ -44,7 +43,6 @@ define('TABLE_FOLLOWING', 'following');
 define('TABLE_BLOCKS', 'block_list');
 define('TABLE_SAVED', 'saved');
 define('TABLE_ACTIVITY', 'activity');
-
 
  function autoloader($class_name){
  	$path = DOCROOT . "/{$class_name}.php";
@@ -64,6 +62,5 @@ if (defined('BASE_URL') && defined('USER_ID')) {
 	define('USER_URL', BASE_URL."user/".USER_ID."/");
 }
 
-
-
+include(ROOT_PATH.'src/secret.php');
 ?>

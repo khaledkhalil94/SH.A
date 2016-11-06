@@ -114,7 +114,7 @@ include (ROOT_PATH . 'inc/head.php');
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
 				 					<span style="display:inline;" class="price"><?= $type ?> by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
-				 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
+				 					<span title="<?= $q->created; ?>" class="time datetime"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />
 				 				<div class="extra">

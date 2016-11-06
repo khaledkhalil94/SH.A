@@ -10,19 +10,20 @@ defined('DOCROOT')   ? null : define('DOCROOT', __DIR__);
 defined('DS')        ? NULL : define('DS', "/");
 
 
-defined('DEF_IMG_UP_DIR')  ? null : define('DEF_IMG_UP_DIR', ROOT_PATH . 'photos/');
-
+defined('DEF_IMG_UP_DIR') ? null : define('DEF_IMG_UP_DIR', ROOT_PATH . 'photos/');
 defined('DEF_PIC_PATH')   ? null : define('DEF_PIC_PATH',  BASE_URL."photos/");
-defined('DEF_PIC')   ? null : define('DEF_PIC',  BASE_URL."images/dpp.png");
+defined('DEF_PIC')        ? null : define('DEF_PIC',  BASE_URL."images/dpp.png");
+
+date_default_timezone_set('America/New_York');
 
 // image validation
 // todo later: adjust these settings in the admin panel
 $imgValidation = array(
 	'allowed_ext_C' => array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG),
-	'allowed_ext' => array('gif','jpg','jpeg','png'),
-	'max_size' => 2097152, // 2097152 byte == 2mb
-	'max_width' => 800,
-	'max_height' => 800
+	'allowed_ext'   => array('gif','jpg','jpeg','png'),
+	'max_size'      => 2097152, // 2097152 byte == 2mb
+	'max_width'     => 800,
+	'max_height'    => 800
 	);
 
 // reCaptcha secret key

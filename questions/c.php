@@ -65,7 +65,7 @@ foreach ($qs as $q):
  				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
  				<div class="meta">
  					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
- 					<span title="<?= $q->created; ?>" id="post-date" class="time"><?= $q->created; ?></span>
+ 					<span title="<?= $q->created; ?>" class="time datetime"><?= $q->created; ?></span>
  				</div>
  				<br />
  				<div class="extra">
@@ -95,8 +95,11 @@ foreach ($qs as $q):
 endforeach;
  ?>
 <script>
-$('#questions .items').each(function(index, value) {
-	$date = $(this).find('#post-date').text();
-	$(this).find('#post-date').text(moment($date).fromNow());
+$('.datetime').each(function() {
+	var _t = $(this);
+
+	var d1 = moment.tz(_t.text(), "America/New_York");
+
+	_t.text(d1.fromNow());
 });
 </script>

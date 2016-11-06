@@ -9,7 +9,10 @@
 				</div>
 				<div class="nine wide column post-title">
 					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
-					<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
+					<p class="time">
+						<span class="datetime" title="<?=$post_date;?>"><?= ($post_date);?></span> in 
+						<a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a><?= $edited; ?>
+					</p>
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
@@ -64,7 +67,7 @@
 					<!-- Question actions menu -->
 				</div>
 				<div class="ui divider"></div>
-				<p class="question-content"><?= $q->content; ?></p>
+				<div class="question-content"><?= html_entity_decode($q->content); ?></div>
 			</div>
 			<hr><br>
 			<div class="actions">
@@ -101,7 +104,7 @@
 								<div class="content">
 									<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 								</div>
-								<span id="sidebar-date"><?= $item->created; ?></span>
+								<span class="datetime"><?= $item->created; ?></span>
 							</div>
 					<?php } ?>
 				</div>
@@ -119,7 +122,7 @@
 							<div class="content">
 								<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 							</div>
-							<span id="sidebar-date"><?= $item->created; ?></span>
+							<span class="datetime"><?= $item->created; ?></span>
 						</div>
 					<?php
 						}  ?>

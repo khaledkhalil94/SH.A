@@ -27,7 +27,7 @@
 			$comment_edited_date = $comment->last_modified;
 
 			if($comment->last_modified > $comment->created){
-				$edited = "(edited <span id='editedDate' title=\"$comment_edited_date\">$comment_edited_date</span>)";
+				$edited = "(edited <span class='datetime' title=\"$comment_edited_date\">$comment_edited_date</span>)";
 			} else {
 				$edited = "";
 			}
@@ -50,7 +50,7 @@
 									<?= View::user($comment->uid, true, 'author'); ?>
 									<div class="metadata">
 										<a class="time" href="question.php?id=<?= $comment->id; ?>">
-											<span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span>
+											<span class="datetime" title="<?=$comment_date;?>"><?= $comment_date;?></span>
 										</a><?= $edited; ?>
 									</div>
 									<div class="text">

@@ -30,7 +30,7 @@ $post_date = $q->created;
 $post_modified_date = $q->last_modified;
 
 if($q->last_modified > $q->created){
-	$edited = " (edited <span id='post-date-ago' title=\"$post_modified_date\">$post_modified_date</span>)";
+	$edited = " (edited <span class='datetime' title=\"$post_modified_date\">$post_modified_date</span>)";
 } else {
 	$edited = "";
 }

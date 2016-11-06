@@ -57,13 +57,13 @@ class View {
 			$post = QNA::get_question($id) ?: (object) Comment::getComment($id);
 			$date = $post->created;
 
-			$html = "<a href='". self::pLink($id) ."' title='{$date}'> ".get_timeago($date)."</a>";
+			$html = "<a href='". self::pLink($id) ."' title='{$date}' class='datetime'>{$date}</a>";
 		} elseif($type == 'p'){
 
 			$post = Post::get_post($id, true);
 			$date = $post['date'];
 
-			$html = "<a href='". self::pLink($id) ."' title='{$date}'> ".get_timeago($date)."</a>";
+			$html = "<a href='". self::pLink($id) ."' title='{$date}' class='datetime'>{$date}</a>";
 		} else {
 
 			return false;

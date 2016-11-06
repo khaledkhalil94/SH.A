@@ -1,6 +1,6 @@
 <?php foreach ($feed as $value) {
 	switch ($value['type']) {
-		case 'ac': 
+		case 'ac':
 			$postID = $value['id'];
 
 			$self = ($value['u_id'] === $value['p_id']) ? true : false;
@@ -47,7 +47,7 @@
 						</div>
 						<div class="post-comments">
 							<a class="comments">
-								<i class="comments blue icon"></i><?= $commentsCount ?><?= ($commentsCount > 1) ? " Comments" : ($commentsCount == 0) ? " Comments" : " Comment"; ?> 
+								<i class="comments blue icon"></i><?= $commentsCount ?><?= ($commentsCount > 1) ? " Comments" : ($commentsCount == 0) ? " Comments" : " Comment"; ?>
 							</a>
 						</div>
 					</div>
@@ -55,7 +55,7 @@
 			</div>
 		<?php break;
 
-		case 'cmt': 
+		case 'cmt':
 			$postID = $value['id'];
 			$type = Post::PorQ($value['post_id']);
 
@@ -100,7 +100,7 @@
 			</div>
 		<?php break;
 
-		case 'qs': 
+		case 'qs':
 			$self = ($value['uid'] === USER_ID) ? true : false;
 			$postID = $value['id'];
 			$id = BASE_URL."questions/question.php?id={$postID}";
@@ -127,12 +127,12 @@
 					<div class="meta post-footer">
 						<div class="post-points">
 							<a href="<?=$id?>" class="like">
-								<i class="heart red icon"></i><?= $p_count ?><?= ($p_count > 1) ? " Likes" : ($p_count == 0) ? " Likes" : " Like"; ?> 
+								<i class="heart red icon"></i><?= $p_count ?><?= ($p_count > 1) ? " Likes" : ($p_count == 0) ? " Likes" : " Like"; ?>
 							</a>
 						</div>
 						<div class="post-comments">
 							<a href="<?=$id?>" class="comments">
-								<i class="comments blue icon"></i><?= $commentsCount ?><?= ($commentsCount > 1) ? " Comments" : ($commentsCount == 0) ? " Comments" : " Comment"; ?> 
+								<i class="comments blue icon"></i><?= $commentsCount ?><?= ($commentsCount > 1) ? " Comments" : ($commentsCount == 0) ? " Comments" : " Comment"; ?>
 							</a>
 						</div>
 					</div>
@@ -147,13 +147,13 @@
 					<div class="summary">
 						<?= View::user($value['follower_id'], true) ?>&nbsp;Followed&nbsp;
 						<?= View::user($value['user_id'], true) ?>&nbsp;
-						<div class="time"><span class="timestamp" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
+						<div class="time"><span class="datetime" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
 					</div>
 				</div>
 			</div>
 		<?php break;
 
-		case 'ps': 
+		case 'ps':
 
 			$id = $value['post_id'];
 
@@ -177,14 +177,12 @@
 					<i class="thumbs up blue large icon"></i>
 					<div class="summary">
 						<?= View::user($value['user_id'], true) ?>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
-						<div class="time"><span class="timestamp" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
+						<div class="time"><span class="datetime" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
 					</div>
 				</div>
 			</div>
 		<?php break;
-		
 		default:
-			
 			break;
 	}
 } ?>

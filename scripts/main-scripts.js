@@ -1,33 +1,11 @@
+//parsing and displaying datetimes
 $(function(){
-	$('.comments').each(function() {
-		$date = $(this).find('#commentDate').text();
-		$(this).find('#commentDate').text(moment($date).fromNow());
-
-		$date = $(this).find('#editedDate').text();
-		$(this).find('#editedDate').text(moment($date).fromNow());
-	});
-
-	$('#questions .items').each(function(index, value) {
-		$date = $(this).find('#post-date').text();
-		$(this).find('#post-date').text(moment($date).fromNow());
+	$('.datetime').each(function() {
+		var _t = $(this);
+		var d1 = moment.tz(_t.text(), "America/New_York");
+		_t.text(d1.fromNow());
 	});
 });
-
-
-//parsing and displaying times
-$(function(){
-
-	// question date in the question page
-	$('.question-page #post-date').text(moment($('#post-date').text()).fromNow());
-	$('.question-page #post-date-ago').text(moment($('#post-date-ago').text()).fromNow());
-
-	// question date in the sidebar
-	$('#sidebar-content .item').each(function(index, value) {
-		$date = $(this).find('#sidebar-date').text();
-		$(this).find('#sidebar-date').text(moment($date).fromNow());
-	});
-});
-
 
 $('.ui.dropdown').dropdown();
 
@@ -43,7 +21,6 @@ function getUrlVars(){
     return vars;
 }
 
-
 function errMsg(msg){
 	var $errMsg = "\
 		<div id=\"profile_err_msg\" class=\"ui negative message\" style='text-align:center;'>\
@@ -53,7 +30,6 @@ function errMsg(msg){
 		</div>\
 		<p>"+ msg +"\</p>\
 		</div>";
-
 	return $errMsg;
 }
 
@@ -66,13 +42,11 @@ function sucMsg(msg){
 		</div>\
 		<p>"+ msg +"\</p>\
 		</div>";
-
 	return $sucMsg;
 }
 
-
 $(function(){
-	var uid; 
+	var uid;
 	_popup = $('.user-title');
 
 	_popup.hover(function(){
@@ -80,7 +54,7 @@ $(function(){
 	});
 
 	var popupLoading = '<i class="spinner loading icon green"></i> wait...';
-	
+
 	_popup.popup({
 	    on: 'hover',
 	    exclusive: true,
@@ -90,7 +64,6 @@ $(function(){
 	    variation: 'wide',
 	    transition: 'vertical flip',
 	    onShow: function (el) { // load data (it could be called in an external function.)
-
 	        var popup = this;
 	        $.ajax({
 	            url: '/sha/controllers/_profile.php',
@@ -103,23 +76,19 @@ $(function(){
 	        });
 	    }
 	});
-
-
 });
 
 $(document).on('click', '#user_flw', function(){
 	_this = $(this);
-
 	id = _this.attr('user-id');
 	_this.addClass('loading');
-
 	$.ajax({
 			url: '/sha/controllers/_profile.php',
 			type: 'post',
 			data: {'action' : 'follow', 'id' : id},
 			dataType: 'json',
 		  success: function(data, textStatus){
-		  	if(data.status == true){
+		  	if(data.status === true){
 
 		  		_this.removeClass('loading');
 		  		_this.removeClass('green');
@@ -130,24 +99,19 @@ $(document).on('click', '#user_flw', function(){
 
 		  		// TODO: add hover effect
 		  	} else {
-
 		  		_this.removeClass('loading');
 		  		error = data.err;
 		  		$('.profile-body').prepend(errMsg(error));
 		  	}
 		  },
-
 		  error: function(jqXHR, textStatus, errorThrown){
 			console.log('ERRORS: ' + textStatus);
 		  }
 	 });
-
 });
-
 
 $(document).on('click', '#user_unflw', function(){
 	_this = $(this);
-
 	id = _this.attr('user-id');
 	_this.addClass('loading');
 
@@ -157,34 +121,29 @@ $(document).on('click', '#user_unflw', function(){
 			data: {'action' : 'unfollow', 'id' : id},
 			dataType: 'json',
 		  success: function(data, textStatus){
-		  	if(data.status == true){
-
+		  	if(data.status === true){
 		  		_this.removeClass('loading');
 		  		_this.removeClass('blue');
 		  		_this.addClass('green');
 		  		_this.removeClass('following');
 		  		_this.text('Follow');
 		  		_this.attr('id', 'user_flw');
-
 		  	} else {
-
 		  		_this.removeClass('loading');
 		  		error = data.err;
 		  		$('.profile-body').prepend(errMsg('unknown error!'));
 		  	}
 		  },
-
 		  error: function(jqXHR, textStatus, errorThrown){
 			console.log('ERRORS: ' + textStatus);
 		  }
 	 });
-
 });
 
 $(document).on('mouseover', '#user_unflw', function(){
 	$(this).text('unFollow');
 	$(this).removeClass('blue');
-	$(this).addClass('red');	
+	$(this).addClass('red');
 });
 
 $(document).on('mouseleave', '#user_unflw', function(){
@@ -198,5 +157,4 @@ $(document).on('click', '.close.icon', function() {
       .closest('.message')
       .transition('fade')
     ;
-  })
-;
+  });

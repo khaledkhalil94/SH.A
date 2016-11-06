@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
 
 $sec = isset($sec) ? $sec : '';
@@ -27,7 +27,7 @@ if(USER_ID){
 		<a class="item<?= $sec == 'profile' ? ' active' : null; ?>" href="<?= BASE_URL."user/".USER_ID ?>/">Profile</a>
 		<a class="item<?= $sec == 'messages' ? ' active' : null; ?>" href="<?= BASE_URL ?>messages">Inbox<?= $newMsg; ?></a>
 		<a class="item" href="<?= BASE_URL ?>logout.php">Log out</a>
-	<?php endif; ?>  
+	<?php endif; ?>
 
 	<?php if(!$session->is_logged_in()): ?>
 		<a class="item<?= $sec == 'login' ? ' active' : null; ?>" href="<?= BASE_URL ?>login.php">Log In</a>
@@ -50,7 +50,7 @@ if(USER_ID){
 			<a href="<?= BASE_URL ?>logout.php" class="item">Log out</a>
 		</div>
 	</div>
-			
+			<a href="<?= BASE_URL."changelog.php" ?>" class="item">Changelog</a>
 <?php endif; ?>
 </div>
 <script>

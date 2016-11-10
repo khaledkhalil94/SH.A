@@ -19,3 +19,4 @@ test.php
 *.db
 photos/*
 !photos/5501
+!images/admin_panel.png

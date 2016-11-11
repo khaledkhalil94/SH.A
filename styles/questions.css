@@ -12,10 +12,6 @@
 	background-color: rgba(255, 255, 255, 0.05);
 }
 
-.blog-post .dropdown .menu {
-	left: -15px;
-}
-
 .dropdown .menu .item:not(:last-child) {
 	z-index: 3;
 	border-bottom: 1px solid rgba(212, 212, 212, 0.52);
@@ -27,7 +23,7 @@
 	padding: 0px!important;
 }
 
-.dropdown .menu .item {
+.ui.dropdown .menu .item {
 	padding: 15px 30px !important;
 }
 
@@ -247,4 +243,35 @@
     width: 55%;
     margin: 0 auto;
     text-align: center;
+}
+
+.ui.modal .header {
+  display: block;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  background: #FFF;
+  margin: 0;
+  padding: 0rem .7rem .6rem;
+  box-shadow: none;
+  color: rgba(0,0,0,.85);
+  border-bottom: 1px solid rgba(34,36,38,.15);
+}
+
+.ui.modal .content {
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    line-height: 1.4;
+    padding: 1.5rem;
+    background: #FFF;
+}
+
+.ui.modal .actions {
+    background: #F9FAFB;
+    padding: 1rem;
+    border-top: 1px solid rgba(34,36,38,.15);
+    text-align: right;
+}
+
+#modalForm {
+	margin-top: 10px;
 }

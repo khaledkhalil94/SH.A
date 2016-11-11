@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $pageTitle = "Admin Control Panel";
 
 $session->adminLock();
@@ -39,7 +39,7 @@ include (ROOT_PATH . 'inc/head.php');
 						<div class="value">
 							<a href="users.php"><?= $users_count ?></a>
 						</div>
-					</div> 
+					</div>
 				</div>
 				<div class="four wide column">
 					<div class="ui segment">
@@ -128,8 +128,8 @@ include (ROOT_PATH . 'inc/head.php');
 						</div>
 						<hr>
 						<div class="ui relaxed divided list">
-							<?php foreach($sections AS $sec): 
-								$sec_count = QNA::get_questions_count($sec['id']); 
+							<?php foreach($sections AS $sec):
+								$sec_count = QNA::get_questions_count($sec['id']);
 							?>
 							<div class="item">
 								<div class="content">
@@ -156,9 +156,9 @@ include (ROOT_PATH . 'inc/head.php');
 							<p><b>HTTP Status:</b> <?= http_response_code(); ?></p>
 						</div><hr>
 						<div>
-							<p><b>Connection Status:</b> <?= $database->status ? "<i class='ui circle icon green'></i>Connected" : $database->errors; ?></p>
-							<p><b>Database Version:</b> <?= $connection->getAttribute(PDO::ATTR_SERVER_VERSION) ?></p>
-							<p><b>Connection info:</b> <?= $connection->getAttribute(PDO::ATTR_CONNECTION_STATUS) ?></p>
+							<p><b>Database Status:</b> <?= $database->status ? "<i class='ui circle icon green'></i>Connected" : $database->errors; ?></p>
+							<p><b>Database Server:</b> <?= $connection->getAttribute(PDO::ATTR_CONNECTION_STATUS) ?></p>
+							<p><b>Database Server type:</b> <?= $connection->getAttribute(PDO::ATTR_SERVER_VERSION) ?></p>
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 
 $QNA = new QNA();
 $sections = $QNA->get_sections();
@@ -59,13 +59,13 @@ foreach ($qs as $q):
  	<div class="ui items">
  		<div class="item">
  			<div class="ui tiny image">
- 				<a href="/sha/user/<?= $q->uid; ?>/"><img src="<?= $img_path; ?>"></a>
+ 				<a href="/user/<?= $q->uid; ?>/"><img src="<?= $img_path; ?>"></a>
  			</div>
  			<div class="content">
  				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
  				<div class="meta">
- 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
- 					<span title="<?= $q->created; ?>" class="time datetime"><?= $q->created; ?></span>
+ 					<span style="display:inline;" class="price">Asked by <a class="user-title" user-id="<?= $q->uid; ?>" href="/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
+ 					<span title="<?= $q->created." GMT".Date('P') ?>" class="time datetime"><?= $q->created; ?></span>
  				</div>
  				<br />
  				<div class="extra">
@@ -97,9 +97,7 @@ endforeach;
 <script>
 $('.datetime').each(function() {
 	var _t = $(this);
-
 	var d1 = moment.tz(_t.text(), "America/New_York");
-
 	_t.text(d1.fromNow());
 });
 </script>

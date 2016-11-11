@@ -24,7 +24,7 @@ $(function(){
 		_form.addClass('loading');
 
 		$.ajax({
-		 	url: '/sha/controllers/_profile.php',
+		 	url: '/controllers/_profile.php',
 		 	type: 'POST',
 		 	dataType: 'json',
 		 	data: {
@@ -69,7 +69,7 @@ function output_comment(id){
 	_form = $('.ui.feed-post.form');
 
 	$.ajax({
-	 	url: '/sha/controllers/_profile.php',
+	 	url: '/controllers/_profile.php',
 	 	type: 'get',
 	 	dataType: 'json',
 	 	data: {
@@ -101,17 +101,17 @@ function output_comment(id){
 
 		var $comment = "\
 		<div class='item'>\
-			<a class='ui tiny image' href='/sha/user/"+data.uid+"/'>\
+			<a class='ui tiny image' href='/user/"+data.uid+"/'>\
 				<img src='"+data.img_path+"'>\
 			</a>\
 			<div class='content'>\
 				<span>\
 					<h4 style='display:inline;'>\
-						<a href='/sha/user/"+data.uid+"/'>@"+data.username+"</a>\
+						<a href='/user/"+data.uid+"/'>@"+data.username+"</a>\
 					</h4>\
 				</span>\
 				<div class='meta' style='display:inline;'>\
-					<a href='/sha/user/posts/"+data.id+"/' class='time' id='post-date'>a few seconds ago</a>\
+					<a href='/user/posts/"+data.id+"/' class='time' id='post-date'>a few seconds ago</a>\
 				</div>\
 				<div class='description'>\
 					"+data.content+"\
@@ -120,7 +120,7 @@ function output_comment(id){
 					<span style='cursor:pointer;' class='likes'>\
 						<i class='heart red icon'></i> 0\
 					</span>\
-					<a href='/sha/user/posts/"+data.id+"/' style='cursor:pointer;' class='comments'>\
+					<a href='/user/posts/"+data.id+"/' style='cursor:pointer;' class='comments'>\
 						<i class='comments blue icon'></i> 0 comments\
 					</a>\
 				</div>\
@@ -158,7 +158,7 @@ $(function(){
 
 
 		$.ajax({
-		 	url: '/sha/controllers/_profile.php',
+		 	url: '/controllers/_profile.php',
 		 	type: 'POST',
 		 	dataType: 'json',
 		 	data: {
@@ -201,7 +201,7 @@ function output_post(id){
 	_form = $('form#feed-box');
 
 	$.ajax({
-	 	url: '/sha/controllers/_profile.php',
+	 	url: '/controllers/_profile.php',
 	 	type: 'get',
 	 	dataType: 'html',
 	 	data: {'action': 'feed_post',  'id': id},

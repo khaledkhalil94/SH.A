@@ -19,11 +19,8 @@ class User {
 
 		if(!is_null($id)){
 
-			$this->user = new stdClass();
-
-			$user = $this->get_user_info($id);
-
-			$this->user = $user;
+			$this->user = $this->get_user_info($id);
+			return $this;
 		}
 	}
 

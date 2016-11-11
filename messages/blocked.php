@@ -1,5 +1,5 @@
 <?php 
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 
 $user = new User();
 $blocked = $user->get_blocks(USER_ID);
@@ -24,9 +24,9 @@ foreach ($blocked as $b):
 		</div>
 		<img class="ui avatar image" src="<?= $b->path; ?>">
 		<div class="content">
-			<a href="/sha/user/<?= $b->uid; ?>/"><?= $b->full_name; ?></a>
+			<a href="/user/<?= $b->uid; ?>/"><?= $b->full_name; ?></a>
 			<br>
-			<a class="username" href="/sha/user/<?= $b->uid; ?>">@<?= $b->username; ?></a>
+			<a class="username" href="/user/<?= $b->uid; ?>">@<?= $b->username; ?></a>
 		</div>
 	</div>
 

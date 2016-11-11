@@ -1,6 +1,6 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
-if(!$session->is_logged_in()) Redirect::redirectTo("/sha/signup.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
+if(!$session->is_logged_in()) Redirect::redirectTo("/signup.php");
 
 if (isset($_GET['msg'])) {
 	require_once('message.php');

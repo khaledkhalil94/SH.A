@@ -1,5 +1,5 @@
 <?php 
-require($_SERVER['DOCUMENT_ROOT'].'/sha/src/init.php');
+require($_SERVER['DOCUMENT_ROOT'].'/src/init.php');
 
 // Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
@@ -12,7 +12,7 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 <div class="ui icon message success">
 	<i class="archive icon tiny"></i>
 	<div class="content">
-		<p>Message has been moved to <a href="/sha/messages/?sh=tr">archive</a>.</p>
+		<p>Message has been moved to <a href="/messages/?sh=tr">archive</a>.</p>
 	</div>
 </div>
 		

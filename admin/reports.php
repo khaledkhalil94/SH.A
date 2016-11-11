@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $pageTitle = "Admin Control Panel";
 $session->adminLock();
 
@@ -34,7 +34,7 @@ include (ROOT_PATH . 'inc/head.php');
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach($q_reports as $rp): 
+					<?php foreach($q_reports as $rp):
 					$count = QNA::get_reports_count($rp->id); ?>
 					<tr>
 						<td><a href="<?= BASE_URL.'questions/question.php?id='.$rp->id ?>"><?= $rp->title; ?></a></td>
@@ -58,10 +58,10 @@ include (ROOT_PATH . 'inc/head.php');
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach($c_reports as $rp): 
+					<?php foreach($c_reports as $rp):
 					$count = QNA::get_reports_count($rp->id); ?>
 					<tr>
-						<td><a href="/sha/questions/question.php?id=<?= $rp->id ?>"><?= $rp->content; ?></a></td>
+						<td><a href="/questions/question.php?id=<?= $rp->id ?>"><?= $rp->content; ?></a></td>
 						<td><?= View::user($rp->uid) ?></td>
 						<td><?= $count ?></td>
 						<td><?= get_timeago($rp->rp_date) ?></td>

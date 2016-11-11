@@ -20,10 +20,10 @@
 		</div>
 		<div class="eleven wide column">
 					<div class="ui message warning">
-						<p>You must <a href="/sha/login.php">login</a> or <a href="/sha/signup.php">signup</a> to view the full profile.</p>
+						<p>You must <a href="/login.php">login</a> or <a href="/signup.php">signup</a> to view the full profile.</p>
 					</div>
 			<div class="ui top attached tabular menu">
-				<a class="item active" data-tab="questions">Questions (<?= $q_count ?>)</a>
+				<a class="item active" data-tab="questions">Stories (<?= $q_count ?>)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="questions">
 			</div>

@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $pageTitle = "Admin Control Panel";
 
 $session->adminLock();
@@ -41,7 +41,7 @@ include (ROOT_PATH . 'inc/head.php');
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($sections as $sec): 
+					<?php foreach ($sections as $sec):
 					$i++;
 					$qs_count = QNA::get_questions_count($sec['id']);
 					?>

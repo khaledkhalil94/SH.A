@@ -55,24 +55,23 @@ $(function(){
 		$output = $this.parents('.field').next().attr('class');
 
 		$.ajax({
-			url: '/sha/controllers/_account.php',
+			url: '/controllers/_account.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action': 'privacy_update', 'fields' : $name, 'values' : $value},
 
 			success: function(data, status) {
-				console.log(data);
 
 				if(data == "1"){ // success
 
 					if($output != 'output') $this.parents('.field').after($saved);
-					
+
 					setTimeout(function() {
 						$this.parents('.field').next('.output').fadeOut(function(){
 							this.remove();
 						});
 					}, 1300);
-					
+
 				} else { // failure
 
 					var $error = "\
@@ -86,7 +85,7 @@ $(function(){
 						$this.parents('.field').after($error);
 						$vis = true;
 					}
-					
+
 					setTimeout(function() {
 						$this.parents('.field').next('.output').fadeOut(function(){
 							this.remove();
@@ -99,7 +98,7 @@ $(function(){
 				console.log("Details: " + desc + "\nError:" + err);
 			}
 		}); // end ajax call
-		
+
 	});
 });
 
@@ -123,7 +122,6 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 
 
 	var $isValid = $('.ui.form').form('is valid');
-	//console.log($isValid);
 
 	var $values = $('.ui.form').form('get values');
 	var $this = $(this);
@@ -143,8 +141,6 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 		$cvalues[this.name] = $(this)[0].defaultValue;
 	});
 
-	//console.log($cvalues);
-
 	var $newValues = {};
 
 	$.each($values, function (index, value) {
@@ -152,10 +148,6 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 			$newValues[index] = value;
 		}
 	});
-
-	//$s_Values = $.extend($cvalues, $newValues);
-	console.log($newValues);
-	//console.log($s_Values);
 
 	if ($.isEmptyObject($newValues)) {
 		console.log('No fields changed.');
@@ -168,14 +160,12 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 		_form.addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_account.php',
+			url: '/controllers/_account.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': action, 'values' : $newValues},
 
 			success: function(data, status) {
-
-				//console.log(data);
 
 				if(data == "1"){ // success
 
@@ -199,11 +189,9 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 						$vis = _form.find('.'+i).next().hasClass('output');
 
 						if(!$vis) _form.find('.'+i).after($saved);
-						
+
 
 					});
-					console.log($newValues);
-
 					setTimeout(function() {
 						$.each($newValues, function(i, v) {
 							_form.find('.field').next('.output').fadeOut(function(){
@@ -215,7 +203,7 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 
 					//$newValues = '';
 					return true;
-					
+
 				} else { // failure
 
 					_form.removeClass('loading');
@@ -230,14 +218,12 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 
 					$.each(data, function(i, v) {
 
-					console.log(i);
 						_form.find('.'+i+' :input').css({"background-color": "#f3bbbb"});
-						
 
 						$vis = _form.find('.'+i).next().hasClass('output');
 
 						if(!$vis) _form.find('.'+i).after($error(v));
-						
+
 					});
 
 					setTimeout(function() {
@@ -247,8 +233,6 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 							});
 						});
 					}, 3500 );
-
-
 
 					return false;
 				}
@@ -267,7 +251,7 @@ $('.settings-content .user-settings-information, .user-settings-links, .user-set
 // delete
 $(function(){
 	$('#acc_del').click(function(){
-		$('.ui.delete.segment').load('/sha/controllers/inc/account-delete.php');
+		$('.ui.delete.segment').load('/controllers/inc/account-delete.php');
 	})
 })
 
@@ -297,7 +281,7 @@ $('#myFile').on('change', function(e){
 	$('.special.cards .image').dimmer({
 		'closable' : false
 	});
-	
+
 	$('#pp_actions').toggle();
 
 	 $.ajax({
@@ -309,12 +293,8 @@ $('#myFile').on('change', function(e){
 			contentType: false,
 			cache: false,
 		  success: function(data, textStatus){
-				console.log(data);
-
 				if(data.status == "success"){
-
 					unDim();
-
 					var $viewBtn = "\
 						<div id=\"viewPicture\" class=\"ui icon button\" data-variation=\"mini\" data-content=\"View Picture\" >\
 						<i data-variation=\"mini\" class=\"unhide icon link\"></i>\
@@ -399,7 +379,7 @@ $(document).on('click', '#deletePicture', function(e){
 					$('.profile-body').prepend(errMsg(data.errMsg));
 
 				}
-				
+
 		  },
 		  error: function(jqXHR, textStatus, errorThrown){
 
@@ -436,9 +416,7 @@ $(document).on('click', '#viewPicture', function(e){
 });
 
 $('#dimmer-close').click(function(){
-	console.log("??");
 	$('.page.dimmer:first').dimmer('hide');
-
 });
 
 $('.ui.icon.button').popup({
@@ -447,7 +425,7 @@ $('.ui.icon.button').popup({
 
 $(function(){
 	uid = $('.user-profile').attr('user-id');
-	
+
 	$('.page.dimmer:first').dimmer({
 		onShow : function(){
 		 $.ajax({

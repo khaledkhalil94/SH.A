@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 
 
 if(isset($_POST['action']) && $_POST['action'] == 'delete') {
@@ -20,7 +20,8 @@ if(isset($_POST['action']) && $_POST['action'] == 'delete') {
 
 if(isset($_GET['action'])) {
 
-	$info = Images::get_pic_info($_GET['id']);
+	$image = new Images();
+	$info = $image->get_pic_info($_GET['id']);
 
 	$info->size = human_filesize($info->size);
 	echo json_encode((array)$info);
@@ -29,7 +30,7 @@ if(isset($_GET['action'])) {
 
 
 // upload or change
-if(!isset($_FILES['file'])) header('Location: /sha/404.php');
+if(!isset($_FILES['file'])) header('Location: /404.php');
 
 $_FILES = $_FILES['file'];
 

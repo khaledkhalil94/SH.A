@@ -10,7 +10,7 @@ $(function(){
 		$('#votebtn').addClass("loading");
 		if (!_this.hasClass('voted')) { // if not upvoted
 			$.ajax({
-				url: '/sha/controllers/_question.php',
+				url: '/controllers/_question.php',
 				type: 'post',
 				dataType : 'json',
 				data: {'action':'upvote','id': $postID},
@@ -33,7 +33,7 @@ $(function(){
 			}); // end ajax call
 		} else {
 			$.ajax({
-				url: '/sha/controllers/_question.php',
+				url: '/controllers/_question.php',
 				type: 'post',
 				dataType : 'json',
 				data: {'action':'downvote','id': $postID},
@@ -79,7 +79,7 @@ $(function(){
 		$('.modal.post.delete .segment').addClass('loading');
 		
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'post_delete', 'id': $postID},

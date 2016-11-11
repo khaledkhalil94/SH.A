@@ -1,7 +1,4 @@
-<h1>Welcome!</h1>
-<h4>You can read more about this project here.<br>If you have any suggestions or find any bugs, feel free to open up an issue on the github page.</h4>
-<p>In the meanwhile, you can login below, or <a href="/sha/signup.php"><b>register</b></a> a new account if you haven't signed up yet!</p>
-
+<h1>Welcome to SH.A!</h1>
 <div class="main login-page">
 	<div class="ui segment log-in">
 		<div class="ui login form">
@@ -19,4 +16,7 @@
 		</div>
 	</div>
 </div>
-<script src="/sha/scripts/auth.js"></script>
+<p>If you haven't signed up yet, you can<a href="/signup.php"><b> register</b></a> a new account.</p>
+<h3>See the <a href="https://github.com/khaledkhalil94/SH.A"><i class="ui icon github"></i>github</a> page for features and more information about this project.<br>
+If you have any suggestions or find any bugs, feel free to open up <a href="https://github.com/khaledkhalil94/SH.A/issues">a new issue</a>.</h3>
+<script src="/scripts/auth.js"></script>

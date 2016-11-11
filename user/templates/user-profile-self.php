@@ -8,7 +8,7 @@
 						<div class="ui dimmer">
 							<div class="content">
 								<div id="pp_actions" class="top right profile-picture-actions">
-									<?php if($has_pic){ ?>			
+									<?php if($has_pic){ ?>
 										<div id="viewPicture" class="ui icon button" data-variation="mini" data-content="View Picture" >
 										  <i data-variation="mini" class="unhide icon link"></i>
 										</div>
@@ -45,12 +45,12 @@
 			</div>
 			<div class="ui segment">
 				<?php if(!empty($about)): ?>
-				<a class="ui icon button" href="/sha/user/settings/?st=ui&about_autofocus" id="about-edit" data-variation="mini" data-tooltip="Edit" data-inverted="">
+				<a class="ui icon button" href="/user/settings/?st=ui&about_autofocus" id="about-edit" data-variation="mini" data-tooltip="Edit" data-inverted="">
 				  <i data-variation="mini" class="edit icon"></i>
 				</a>
 				<?php endif; ?>
 				<div class="user-info">
-					<div class="user-info-about"><?= empty($about) ? "<a href='/sha/user/settings/?st=ui&about_autofocus'>Write some words about yourself!</a>" : $about; ?></div>
+					<div class="user-info-about"><?= empty($about) ? "<a href='/user/settings/?st=ui&about_autofocus'>Write some words about yourself!</a>" : $about; ?></div>
 				</div>
 			</div>
 
@@ -61,15 +61,15 @@
 						<i id="btn-extrainfo-angle-up" class="angle up icon"></i>
 					</button>
 				<?php if($pub){ ?>
-					<a class="ui icon button" href="/sha/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are public" data-inverted="">
+					<a class="ui icon button" href="/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are public" data-inverted="">
 					  <i class="world icon"></i>
 					</a>
 				<?php } elseif($custom) { ?>
-					<a class="ui icon button" href="/sha/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are custom" data-inverted="">
+					<a class="ui icon button" href="/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are custom" data-inverted="">
 					  <i class="setting icon"></i>
 					</a>
-				<?php } else { ?>			
-					<a class="ui icon button" href="/sha/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are private" data-inverted="">
+				<?php } else { ?>
+					<a class="ui icon button" href="/user/settings/?st=up" id="extrainfo-edit" data-variation="mini" data-tooltip="Your information are private" data-inverted="">
 					  <i class="lock icon"></i>
 					</a>
 
@@ -128,11 +128,11 @@
 						<i id="btn-angle-up" class="angle up icon"></i>
 					</button>
 					<?php if($linksP){ ?>
-					<a class="ui icon button" href="/sha/user/settings/?st=up" id="links-edit" data-variation="mini" data-tooltip="Your links are public" data-inverted="">
+					<a class="ui icon button" href="/user/settings/?st=up" id="links-edit" data-variation="mini" data-tooltip="Your links are public" data-inverted="">
 					  <i class="world icon"></i>
 					</a>
 					<?php } else { ?>
-					<a class="ui icon button" href="/sha/user/settings/?st=up" id="links-edit" data-variation="mini" data-tooltip="Your links are private" data-inverted="">
+					<a class="ui icon button" href="/user/settings/?st=up" id="links-edit" data-variation="mini" data-tooltip="Your links are private" data-inverted="">
 					  <i class="lock icon"></i>
 					</a>
 					<?php } ?>
@@ -187,7 +187,7 @@
 				<a class="item active" data-tab="activity">Activity</a>
 				<a class="item" data-tab="following">Following (<?= $following_count ?>)</a>
 				<a class="item" data-tab="followers">Followers (<?= $followers_count ?>)</a>
-				<a class="item" data-tab="questions">My Questions (<?= $q_count ?>)</a>
+				<a class="item" data-tab="questions">My Stories (<?= $q_count ?>)</a>
 				<a class="item" data-tab="saved">Saved (<?= $saved_count ?>)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="activity">

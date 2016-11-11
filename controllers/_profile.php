@@ -1,5 +1,5 @@
 <?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 //Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {

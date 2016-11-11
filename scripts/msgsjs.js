@@ -103,7 +103,7 @@ $(function(){
 		_form.addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_messages.php',
+			url: '/controllers/_messages.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': 'msg_send', 'value' : value, 'token' : token, 'send_to' : send_to},
@@ -112,12 +112,12 @@ $(function(){
 
 				if(data.status == "1"){ // success
 
-					_form.parent().load('/sha/controllers/inc/msg-sent-success.php');
+					_form.parent().load('/controllers/inc/msg-sent-success.php');
 
 				} else { // failure
 					console.log(data);
 					_form.removeClass('loading');
-					_form.parent().load('/sha/controllers/inc/msg-send-fail.php', 'msg='+data);
+					_form.parent().load('/controllers/inc/msg-send-fail.php', 'msg='+data);
 
 				}
 				
@@ -144,7 +144,7 @@ $(function(){
 		$('.dropdown').dropdown('hide');
 
 		$.ajax({
-			url: '/sha/controllers/_messages.php',
+			url: '/controllers/_messages.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': 'msg_hide', 'msgID' : msg_id},
@@ -161,7 +161,7 @@ $(function(){
 						</div>";
 
 					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
-					$('#msg_msg').load('/sha/controllers/inc/msg-arch-success.php');
+					$('#msg_msg').load('/controllers/inc/msg-arch-success.php');
 
 					$arch = "<i title=\"This message is archived\" class=\"archive icon\"></i>";
 					$('.messages .msg-user_info div.time').after($arch);
@@ -192,7 +192,7 @@ $(function(){
 		
 		msg_ajax('msg_unhide', msg_id);
 
-		location = '/sha/messages/?sh=inb';
+		location = '/messages/?sh=inb';
 		window.location.replace(location);
 	});
 });
@@ -207,7 +207,7 @@ $(function(){
 		
 		msg_ajax('msg_unread', msg_id);
 
-		var url = '/sha/messages/';
+		var url = '/messages/';
 		window.location = url;
 	});
 });
@@ -224,7 +224,7 @@ $(function(){
 		$('.dropdown').dropdown('hide');
 
 		$.ajax({
-			url: '/sha/controllers/_messages.php',
+			url: '/controllers/_messages.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': 'msg_block', 'msgID' : msg_id},
@@ -237,13 +237,13 @@ $(function(){
 				if(data.status == "1"){ // success
 
 					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
-					$('#msg_msg').load('/sha/controllers/inc/user-block-success.php');
+					$('#msg_msg').load('/controllers/inc/user-block-success.php');
 
 				} else { // failure
 
 					
 					$('.container.section.messages').prepend('<div id=\'msg_msg\'></div>');
-					$('#msg_msg').load('/sha/controllers/inc/user-block-fail.php', 'msg='+data);
+					$('#msg_msg').load('/controllers/inc/user-block-fail.php', 'msg='+data);
 				}
 				
 			},
@@ -265,7 +265,7 @@ $(function(){
 		uid = _this.closest('.item').attr('user-id');
 
 	$.ajax({
-		url: '/sha/controllers/_messages.php',
+		url: '/controllers/_messages.php',
 		type: 'post',
 		dataType: 'json',
 		data: {'action': 'unblock', 'msgID' : uid},
@@ -295,7 +295,7 @@ $(function(){
 // function for different ajax calls
 function msg_ajax(action, msgID){
 	$.ajax({
-		url: '/sha/controllers/_messages.php',
+		url: '/controllers/_messages.php',
 		type: 'post',
 		dataType: 'json',
 		data: {'action': action, 'msgID' : msgID},
@@ -337,7 +337,7 @@ $(function(){
 
 	function label(user, closable=true){
 				label =
-				"<a href='/sha/user/"+ user.id +"/' class='ui image label'>\
+				"<a href='/user/"+ user.id +"/' class='ui image label'>\
 				<img src='"+ user.image +"'>\
 				"+ user.title;
 
@@ -351,7 +351,7 @@ $(function(){
 
 	if(typeof vars.un !== 'undefined') {
 
-		q = '/sha/controllers/_messages.php';
+		q = '/controllers/_messages.php';
 
 		$.get(q, {'un' : vars.un}, 
 			function(res){
@@ -370,7 +370,7 @@ $(function(){
 
 	} else {
 
-	 	q = '/sha/controllers/_messages.php?un={query}';
+	 	q = '/controllers/_messages.php?un={query}';
 		_search = $('.ui.search');
 
 		_search.search({
@@ -479,7 +479,7 @@ $(function(){
 		_form.addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_messages.php',
+			url: '/controllers/_messages.php',
 			type: 'post',
 			dataType: 'json',
 			data: {'action': 'msg_send', 'value' : content, 'token' : token, 'send_to' : uid},
@@ -488,12 +488,12 @@ $(function(){
 
 				if(data.status == "1"){ // success
 
-					_form.parent().load('/sha/controllers/inc/msg-sent-success.php');
+					_form.parent().load('/controllers/inc/msg-sent-success.php');
 
 				} else { // failure
 					console.log(data);
 					_form.removeClass('loading');
-					_form.parent().load('/sha/controllers/inc/msg-send-fail.php', 'msg='+data.err);
+					_form.parent().load('/controllers/inc/msg-send-fail.php', 'msg='+data.err);
 
 				}
 				

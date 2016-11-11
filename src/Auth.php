@@ -1,5 +1,5 @@
  <?php
-require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+require_once($_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 
 /**
@@ -203,7 +203,7 @@ Class Auth {
 				// create an index file that redirects to 404 page
 				$path = DEF_IMG_UP_DIR. DS .$id. DS ;
 				$fp = fopen($path . "/index.php", "w");
-				fwrite($fp, "<?php header(\"Location: /sha/404.php\"); ?>");
+				fwrite($fp, "<?php header(\"Location: /404.php\"); ?>");
 				fclose($fp);
 
 			}

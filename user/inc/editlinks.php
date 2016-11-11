@@ -8,7 +8,7 @@ $session->userLock($user);
 	</div>
 	<div class="ui segment vertical">
 		<form id="user-links-form" class="ui form links">
-			
+
 			<div class="field website">
 				<label>Website</label>
 				<input type="text" name="website" value="<?= $user->website ?>" />
@@ -36,6 +36,4 @@ $session->userLock($user);
 		</form>
 	</div>
 </div>
-
-<script src="/sha/scripts/auth/forms-vald.js">
 </script>

@@ -7,11 +7,11 @@ $(function(){
 	query = vars.section ? vars.section : null;
 
 	$('.ui.pagination.menu a').click(function(){
-		
+
 		_this = $(this);
 		page = _this.attr('cp');
 
-		$('#questions').addClass('vertical segment loading');
+		$('#questions').addClass('ui vertical segment loading');
 
 		$.get('c.php', {page: page, section:query}).done(function(data){
 

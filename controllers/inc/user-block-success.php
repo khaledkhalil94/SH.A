@@ -1,5 +1,5 @@
 <?php 
-require($_SERVER['DOCUMENT_ROOT'].'/sha/src/init.php');
+require($_SERVER['DOCUMENT_ROOT'].'/src/init.php');
 
 // Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
@@ -12,7 +12,7 @@ if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQU
 <div class="ui icon message success">
 	<i class="remove circle icon tiny"></i>
 	<div class="content">
-		<p>User has been blocked, you can manage your  <a href="/sha/messages/?sh=blc">blocklist</a> anytime later.</p>
+		<p>User has been blocked, you can manage your  <a href="/messages/?sh=blc">blocklist</a> anytime later.</p>
 	</div>
 </div>
 		

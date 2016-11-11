@@ -7,7 +7,7 @@
 			<?php if($staff){ ?>
 				<h4>Sent by <?= $message->u_name; ?></h4>
 				<?php } else { ?>
-				<h4>Sent by <a href="/sha/user/<?= $message->u_id ?>/"><?= $message->u_name; ?></a></h4>
+				<h4>Sent by <a href="/user/<?= $message->u_id ?>/"><?= $message->u_name; ?></a></h4>
 				<?php } ?>
 			<div class="time" id="s_msg_date" title="<?= $date; ?>"><?= $date; ?></div>
 			<?php if($arch){ ?>

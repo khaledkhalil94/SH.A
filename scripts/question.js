@@ -10,7 +10,7 @@ $(function(){
 		$('#votebtn').addClass("loading");
 		if (!_this.hasClass('voted')) { // if not upvoted
 			$.ajax({
-				url: '/sha/controllers/_question.php',
+				url: '/controllers/_question.php',
 				type: 'post',
 				dataType : 'json',
 				data: {'action':'upvote','id': $postID},
@@ -33,7 +33,7 @@ $(function(){
 			}); // end ajax call
 		} else {
 			$.ajax({
-				url: '/sha/controllers/_question.php',
+				url: '/controllers/_question.php',
 				type: 'post',
 				dataType : 'json',
 				data: {'action':'downvote','id': $postID},
@@ -70,7 +70,7 @@ $(function(){
 		$postID = $('.blog-post').attr('id');
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'save', 'id': $postID},
@@ -134,7 +134,7 @@ $(function(){
 		$('.modal.post.publish .segment').addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'publish', 'id': $postID},
@@ -201,7 +201,7 @@ $(function(){
 		$('.modal.post.unpublish .segment').addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'unPublish', 'id': $postID},
@@ -269,7 +269,7 @@ $(function(){
 		$('.modal.post.delete .segment').addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'delete', 'id': $postID},
@@ -396,7 +396,7 @@ $(function(){
 		$('.ui.pointing.dropdown').show();
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'edit', 'title': $newTitle, 'content': $newContent, 'id':$PostID},

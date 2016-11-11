@@ -16,6 +16,7 @@ class Comment extends QNA {
      */
 	public static function new_comment($data){
 		$database = new Database();
+		$post = new Post();
 
 		$PostID = $data['post_id'];
 		$content = $data['content'];
@@ -24,8 +25,8 @@ class Comment extends QNA {
 		if(empty(trim($content))){
 			die("Comment can't be empty");
 		}
-
-		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
+		$qna = new QNA();
+		if(!is_object($qna->get_question($PostID)) && !is_array($post->get_post($PostID, true))){
 			die("Error! Post was not found.");
 		}
 

@@ -33,16 +33,15 @@
 			}
 			?>
 				<?php if($session->adminCheck()) {?>
-				<a style="color:red;" href="/sha/admin/report.php?id=<?= $comment->id; ?>">
+				<a style="color:red;" href="/admin/report.php?id=<?= $comment->id; ?>">
 				 </a>
 				<?php } ?>
-
 				<div class="ui minimal comments">
 					<div class="ui comment padded segment" id="<?= $comment->id; ?>" comment-id="<?= $comment->id; ?>">
 						<div class="content">
 							<div class="ui grid">
 								<div class="two wide column cmt_avatar">
-									<a href="/sha/user/<?= $comment->uid; ?>/">
+									<a href="/user/<?= $comment->uid; ?>/">
 										<img class="" src="<?= $comment->path; ?>">
 									</a>
 								</div>
@@ -50,8 +49,16 @@
 									<?= View::user($comment->uid, true, 'author'); ?>
 									<div class="metadata">
 										<a class="time" href="question.php?id=<?= $comment->id; ?>">
-											<span class="datetime" title="<?=$comment_date;?>"><?= $comment_date;?></span>
+											<span class="datetime" title="<?=$comment_date." GMT".Date('P')?>"><?= $comment_date;?></span>
 										</a><?= $edited; ?>
+										<?php if($rpsc): ?>
+											<div class='cmt_rpts'>
+												<a title="Reports" href="/admin/report.php?id=<?= $comment->id; ?>">
+													<span class="cmt_rpt_count"><?= $rpsc; ?> </span>
+													<i class="ui icon flag red"></i>
+												</a>
+											</div>
+										<?php endif; ?>
 									</div>
 									<div class="text">
 										<h4><?= $comment->content; ?></h4>
@@ -73,14 +80,6 @@
 									<?php } ?>
 								</div>
 							</div>
-							<?php if($rpsc): ?>
-							<div class='cmt_rpts'>
-								<a title="Reports" href="/sha/admin/report.php?id=<?= $comment->id; ?>">
-									<span class="cmt_rpt_count"><?= $rpsc; ?> </span>
-									<i class="ui icon flag red"></i>
-								</a>
-							</div>
-							<?php endif; ?>
 							<div title="Actions" class="ui pointing dropdown" id="comment-actions">
 								<i class="ellipsis link big horizontal icon"></i>
 								<div class="menu">
@@ -105,14 +104,13 @@
 						</div>
 					</div>
 				</div>
-
 		<?php endforeach; ?>
 </div>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/post.delete.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.pub.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.unpb.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/comment.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/post.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/q.report.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/q.pub.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/q.unpb.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/comment.delete.php'); ?>
 <script>
 $('.ui.dropdown').dropdown({on: 'click'});
 </script>

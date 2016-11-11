@@ -1,8 +1,8 @@
-<?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+<?php
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 /**
- * Handles redirections 
+ * Handles redirections
  *
  */
 class Redirect {
@@ -10,7 +10,7 @@ class Redirect {
 
 	/**
 	 * redirects a user to a given url
-	 * 
+	 *
 	 * @param @location string
 	 *
 	 * @return void
@@ -36,7 +36,7 @@ class Redirect {
 			case 'self':
 				$location = $_SERVER['PHP_SELF'];
 				break;
-			
+
 			default:
 				$location = $location;
 				break;

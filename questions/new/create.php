@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 $sec = "questions";
 $pageTitle="Ask a new question";
 include (ROOT_PATH . 'inc/head.php');
@@ -12,7 +12,7 @@ $sections = $QNA->get_sections();
 	<div class="ui container section">
 
 		<div class="ui raised very padded segment">
-			<h3>Create a new question</h3>
+			<h3>Write a new story</h3>
 				<form class="ui form create_q" action="" method="POST">
 					<div class="field">
 						<label>Title</label>
@@ -31,6 +31,7 @@ $sections = $QNA->get_sections();
 							<div class="default text"></div>
 							<div class="menu">
 							<?php foreach($sections AS $section): ?>
+								<?php if($section['id'] == 5) continue; ?>
 								<div class="item section <?= $section['acronym']; ?>" data-value="<?= $section['id']; ?>"><?= $section['title']; ?></div>
 							<?php endforeach; ?>
 							</div>
@@ -44,7 +45,7 @@ $sections = $QNA->get_sections();
 					<br>
 					<br>
 					<button type="submit" name="submit" class="ui button green">Submit</button>
-					<a type="button" href="../" class="ui button ">Cancel</a>
+					<a type="button" href=".." class="ui button ">Cancel</a>
 				<div class="ui error message"></div>
 				</form>
 		</div>

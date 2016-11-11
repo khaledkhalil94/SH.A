@@ -16,7 +16,7 @@ require(ROOT_PATH . "inc/head.php");
     </div>
     <hr>
     <div class="ui raised padded segment contact">
-      <h3>Thanks for your message! You can also follow me on <a href="https://twitter.com/khaledkhalil94"><i class="ui icon blue twitter link large"></i></a></h3>
+      <h3>Thanks for your message!</h3>
     </div>
   </div>
 </div>

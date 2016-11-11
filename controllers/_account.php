@@ -1,5 +1,5 @@
-<?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+<?php
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 if(!$session->is_logged_in()) Redirect::redirectTo('/sha');
 
@@ -16,7 +16,7 @@ switch ($_POST['action']) {
 
 	// user account deletion
 	case 'delete_acc':
-		
+
 		$token = $_POST['token'];
 		$pw = $_POST['password'];
 
@@ -28,7 +28,7 @@ switch ($_POST['action']) {
 			echo "1";
 
 		} else {
-			
+
 			echo json_encode($user->errors);
 		}
 
@@ -63,12 +63,12 @@ switch ($_POST['action']) {
 			echo "1";
 
 		} else {
-			
+
 			echo json_encode($database->errors);
 		}
 
 		break;
-	
+
 	// update user settings
 	case 'update_settings':
 
@@ -87,7 +87,7 @@ switch ($_POST['action']) {
 		exit;
 
 	break;
-	
+
 
 	// update user privacy
 	case 'privacy_update':
@@ -107,7 +107,7 @@ switch ($_POST['action']) {
 			echo "1";
 
 		} else {
-			
+
 			echo json_encode($database->errors);
 		}
 

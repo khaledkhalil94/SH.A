@@ -22,5 +22,5 @@ $id = array_shift(array_keys($_GET));
 	<div class="header">
 		<h2>Thank you for signing up!</h2>
 	</div>
-	<p>Please head over to your <a href="/sha/user/<?= $id; ?>/">profile</a> and update your informations.</p>
+	<p>Please head over to your <a href="/user/<?= $id; ?>/">profile</a> and update your informations.</p>
 </div>

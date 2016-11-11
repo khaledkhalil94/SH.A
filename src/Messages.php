@@ -398,14 +398,14 @@ class Messages {
 			if($staff) {
 			$html .= "<p><img class='ui avatar image' src='$message->img_path'></p>";
 			} else {
-			$html .= "<a href='/sha/user/$senderID/'><img class='ui avatar image' src='$message->img_path'></a>";
+			$html .= "<a href='/user/$senderID/'><img class='ui avatar image' src='$message->img_path'></a>";
 			}
 			$html .= "</div>";
 			$html .= "<div class='ten wide column'>";
 			if($staff) {
 				$html .= "<p class='msg_username' user-id='$senderID'/>$message->u_fullname</p>";
 			} else {
-				$html .= "<a class='msg_username user-title' user-id='$senderID' href='/sha/user/$senderID/'/>$message->u_fullname</a>";
+				$html .= "<a class='msg_username user-title' user-id='$senderID' href='/user/$senderID/'/>$message->u_fullname</a>";
 			}
 			$html .= "<div class='time' id='msg_date' title='$date'>$date</div>";
 			$html .="</div>";

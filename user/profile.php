@@ -1,7 +1,7 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 $id = sanitize_id($_GET['id']) ?: null;
-if(!$id) $session->message("Invalid url.", "/sha/404.php", "warning");
+if(!$id) $session->message("Invalid url.", "/404.php", "warning");
 if($id === 1 && !$session->adminCheck()) Redirect::redirectTo();
 $userg = new User();
 $QNA = new QNA();
@@ -85,7 +85,7 @@ if($session->is_logged_in() && !$self){
 
 }?>
 </div>
-<script src="/sha/scripts/user-src.js"></script>
+<script src="/scripts/user-src.js"></script>
 <?php
 include (ROOT_PATH . 'inc/footer.php');
 ?>

@@ -8,17 +8,17 @@
 					</div>
 				</div>
 				<div class="nine wide column post-title">
-					<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
+					<h3><a href="/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
 					<p class="time">
-						<span class="datetime" title="<?=$post_date;?>"><?= ($post_date);?></span> in 
-						<a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a><?= $edited; ?>
+						<span class="datetime" title="<?=$post_date." GMT".Date('P')?>"><?= ($post_date);?></span> in
+						<a href="/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a><?= $edited; ?>
 					</p>
 				</div>
 			</div>
 			<?php if($session->adminCheck() && $reports_count) { ?>
 				<div class="report-message">
 					<div class="ui negative compact message reports">
-						<a style="color:red;" href="/sha/admin/report.php?id=<?= $id; ?>">This question has been reported <?= $reports_count; ?></a>
+						<a style="color:red;" href="/admin/report.php?id=<?= $id; ?>">This story has been reported <?= $reports_count; ?></a>
 					</div>
 				</div>
 			<?php } ?>
@@ -26,7 +26,7 @@
 			<div class="ui left aligned question-box" style="min-height:320px;">
 				<?php if($q->status == "2"){ ?>
 				<div class="ui warning message">
-					This question is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a>
+					This story is private, only you can see it, you can change that by clicking <a id="post-publish" href="#"> here.</a>
 				</div>
 				<?php } ?>
 				<div class="ui header">
@@ -67,7 +67,7 @@
 					<!-- Question actions menu -->
 				</div>
 				<div class="ui divider"></div>
-				<div class="question-content"><?= html_entity_decode($q->content); ?></div>
+				<div class="question-content"><?= $q->content; ?></div>
 			</div>
 			<hr><br>
 			<div class="actions">
@@ -91,7 +91,7 @@
 	</div>
 	<div class="four wide column" style="border-left: 1px #e2e2e2 solid;">
 		<div class="sidebar-module sidebar-module-inset">
-			<h4>Related questions</h4>
+			<h4>Related stories</h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list" id="sidebar-content">
 					<?php
@@ -104,12 +104,12 @@
 								<div class="content">
 									<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 								</div>
-								<span class="datetime"><?= $item->created; ?></span>
+								<span class="time datetime"><?= $item->created; ?></span>
 							</div>
 					<?php } ?>
 				</div>
 			</div>
-			<h4>More questions by <a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
+			<h4>More stories by <a href="/user/<?= $q->uid; ?>/"><?= $q->full_name; ?></a></h4>
 			<div class="ui segment">
 				<div class="ui relaxed divided list" id="sidebar-content">
 					<?php
@@ -122,7 +122,7 @@
 							<div class="content">
 								<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 							</div>
-							<span class="datetime"><?= $item->created; ?></span>
+							<span class="time datetime"><?= $item->created; ?></span>
 						</div>
 					<?php
 						}  ?>

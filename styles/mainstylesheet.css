@@ -1,13 +1,17 @@
 body {
   background-color: #E5E5E5;
-  background: #fefefe;
-  background-image: url('/sha/images/bgMain.png');
+  /**background: #fefefe;*/
+  background-image: url('/images/bgMain.png');
 }
 
 .main .container {
   background-color: white;
   padding: 60px;
   min-height: 550px;
+}
+
+body .ui.container.section.main-page {
+  background-color: whitesmoke;
 }
 
 body div.ui.container {
@@ -334,6 +338,7 @@ input:-webkit-autofill {
     margin-top: 5px;
     font-weight: 600;
     /* font-size: medium; */
+    text-align: center;
 }
 
 .footer .info p, .footer .info a {

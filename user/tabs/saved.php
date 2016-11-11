@@ -1,4 +1,4 @@
-<?php require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+<?php require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 
 $QNA = new QNA();
 $posts = $QNA->get_saved(USER_ID);
@@ -9,7 +9,7 @@ $posts = $QNA->get_saved(USER_ID);
 	<div class="item" post-id="<?= $post->id ?>">
 		<div class="ui grid">
 			<div class="fifteen wide column">
-				<a href='/sha/questions/question.php?id=<?= $post->id ?>'><h4><?= $post->title; ?></h4></a>
+				<a href='/questions/question.php?id=<?= $post->id ?>'><h4><?= $post->title; ?></h4></a>
 				<div class="time" id="post-date"><?= $post->created ?></div>
 			</div>
 			<div class="one wide column">
@@ -34,7 +34,7 @@ $(function(){
 		id = _elm.attr('post-id');
 
 		$.ajax({
-			url: '/sha/controllers/_question.php',
+			url: '/controllers/_question.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'unsave', 'id': id},

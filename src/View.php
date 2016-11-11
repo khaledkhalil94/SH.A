@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 
 
 class View {
@@ -49,21 +49,21 @@ class View {
 	}
 
 	public static function postDate($id){
-
+		$QNA = new QNA();
 		$type = Post::PorQ($id);
 
 		if(($type == 'q') || $type == 'c'){
 
-			$post = QNA::get_question($id) ?: (object) Comment::getComment($id);
+			$post = $QNA->get_question($id) ?: (object) Comment::getComment($id);
 			$date = $post->created;
 
-			$html = "<a href='". self::pLink($id) ."' title='{$date}' class='datetime'>{$date}</a>";
+			$html = "<a href='". self::pLink($id) ."' title='{$date} GMT".Date('P')."' class='datetime'>{$date}</a>";
 		} elseif($type == 'p'){
 
 			$post = Post::get_post($id, true);
 			$date = $post['date'];
 
-			$html = "<a href='". self::pLink($id) ."' title='{$date}' class='datetime'>{$date}</a>";
+			$html = "<a href='". self::pLink($id) ."' title='{$date} GMT".Date('P')."' class='datetime'>{$date}</a>";
 		} else {
 
 			return false;
@@ -128,7 +128,7 @@ class View {
 				</div>
 			</div>
 			<?php if(!$logged){ ?>
-				<a href='/sha/login.php' class='ui button green'>Follow</a>
+				<a href='/login.php' class='ui button green'>Follow</a>
 			<?php } elseif($uid === USER_ID){
 			} elseif(User::is_flw($uid, USER_ID) !== true){?>
 			<button id='user_flw' user-id='<?= $uid ?>' class='ui button green'>Follow</button>
@@ -151,11 +151,11 @@ class View {
 			<div class="ui segment activity-view">
 				<div class="header user-details">
 					<div class="ui image mini">
-						<a href="/sha/user/<?= $post->r_id ?>/"><img src="<?= $post->img_path ?>"></a>
+						<a href="/user/<?= $post->r_id ?>/"><img src="<?= $post->img_path ?>"></a>
 					</div>
 					<div class="summary">
 						<p>You posted </p>&nbsp;
-						<div class="time"><a href="/sha/user/posts/<?= $post->id ?>/"> A few seconds ago</a></div>
+						<div class="time"><a href="/user/posts/<?= $post->id ?>/"> A few seconds ago</a></div>
 					</div>
 				</div>
 				<div class="content">
@@ -169,7 +169,7 @@ class View {
 							</a>
 						</div>
 						<div class="post-comments">
-							<a href="/sha/user/posts/<?= $post->id ?>/" class="comments">
+							<a href="/user/posts/<?= $post->id ?>/" class="comments">
 								<i class="comments blue icon"></i>0 Comments
 							</a>
 						</div>
@@ -192,7 +192,7 @@ class View {
 				<div class="content">
 					<div class="ui grid">
 						<div class="two wide column cmt_avatar">
-							<a href="/sha/user/<?= $comment->uid; ?>/">
+							<a href="/user/<?= $comment->uid; ?>/">
 								<img class="" src="<?= $comment->img_path; ?>">
 							</a>
 						</div>

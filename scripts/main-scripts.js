@@ -66,7 +66,7 @@ $(function(){
 	    onShow: function (el) { // load data (it could be called in an external function.)
 	        var popup = this;
 	        $.ajax({
-	            url: '/sha/controllers/_profile.php',
+	            url: '/controllers/_profile.php',
 	            data: {'action' : 'profile_card', 'id' : uid},
 	            type: 'post'
 	        }).done(function(result) {
@@ -83,7 +83,7 @@ $(document).on('click', '#user_flw', function(){
 	id = _this.attr('user-id');
 	_this.addClass('loading');
 	$.ajax({
-			url: '/sha/controllers/_profile.php',
+			url: '/controllers/_profile.php',
 			type: 'post',
 			data: {'action' : 'follow', 'id' : id},
 			dataType: 'json',
@@ -116,7 +116,7 @@ $(document).on('click', '#user_unflw', function(){
 	_this.addClass('loading');
 
 	$.ajax({
-			url: '/sha/controllers/_profile.php',
+			url: '/controllers/_profile.php',
 			type: 'post',
 			data: {'action' : 'unfollow', 'id' : id},
 			dataType: 'json',

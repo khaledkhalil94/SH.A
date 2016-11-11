@@ -5,7 +5,7 @@ if($session->is_logged_in()){
  Redirect::redirectTo();
 }
 $sec = "login";
-require(ROOT_PATH . 'inc/head.php'); 
+require(ROOT_PATH . 'inc/head.php');
 ?>
 </pre>
 <body>
@@ -37,7 +37,7 @@ require(ROOT_PATH . 'inc/head.php');
 			</div>
 		</div>
 	</div>
-<script src="/sha/scripts/auth.js"></script>
+<script src="/scripts/auth.js"></script>
 <?php include (ROOT_PATH . 'inc/footer.php') ?>
 </body>
 </html>

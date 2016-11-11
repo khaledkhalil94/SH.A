@@ -1,4 +1,6 @@
-<?php foreach ($feed as $value) {
+<?php
+$QNA = new QNA();
+foreach ($feed as $value) {
 	switch ($value['type']) {
 		case 'ac':
 			$postID = $value['id'];
@@ -10,7 +12,7 @@
 			$poster_id = BASE_URL."user/{$value['p_id']}/";
 
 			$p_count = QNA::get_votes($postID) ?: "0";
-			$commentsCount = QNA::get_Qcomments($postID) ? count(QNA::get_Qcomments($postID)) : "0";
+			$commentsCount = $QNA->get_Qcomments($postID) ? count($QNA->get_Qcomments($postID)) : "0";
 			?>
 			<div class="ui segment activity-view">
 				<div class="header user-details">
@@ -58,20 +60,15 @@
 		case 'cmt':
 			$postID = $value['id'];
 			$type = Post::PorQ($value['post_id']);
-
 			if($type == "q"){
-
 				$post_id = BASE_URL."questions/question.php?id={$value['post_id']}";
-				$p = "question";
-
+				$p = "story";
 			} elseif($type == 'p') {
-
 				$post_id = BASE_URL."user/posts/{$value['post_id']}/";
 				$p = "post";
 			} else {
 				continue;
 			}
-
 
 			$p_count = QNA::get_votes($postID) ?: "0";
 			?>
@@ -107,7 +104,7 @@
 			$uid = BASE_URL."user/{$value['uid']}/";
 
 			$p_count = QNA::get_votes($postID) ?: "0";
-			$commentsCount = QNA::get_Qcomments($postID) ? count(QNA::get_Qcomments($postID)) : "0";
+			$commentsCount = $QNA->get_Qcomments($postID) ? count($QNA->get_Qcomments($postID)) : "0";
 			?>
 			<div class="ui segment question-view">
 				<div class="header user-details">
@@ -116,7 +113,7 @@
 					</div>
 					<div class="summary">
 						<?= $self ? "<p>You</p>" : View::user($value['uid'], true); ?>
-						&nbsp;asked a new&nbsp;<a href="<?=$id?>">question</a>&nbsp;
+						&nbsp;wrote a new&nbsp;<a href="<?=$id?>">story</a>&nbsp;
 						<div class="time"><?= View::postDate($value['id']) ?></div>
 					</div>
 				</div>
@@ -147,7 +144,7 @@
 					<div class="summary">
 						<?= View::user($value['follower_id'], true) ?>&nbsp;Followed&nbsp;
 						<?= View::user($value['user_id'], true) ?>&nbsp;
-						<div class="time"><span class="datetime" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
+						<span class="time datetime" title="<?= $value['date'] ?>"><?= $value['date'] ?></span>
 					</div>
 				</div>
 			</div>
@@ -161,7 +158,7 @@
 
 			if($type == "q"){
 				$post_id = BASE_URL."questions/question.php?id={$id}";
-				$pc = "question";
+				$pc = "story";
 			} elseif($type == "p") {
 				$post_id = BASE_URL."user/posts/{$id}/";
 				$pc = "post";
@@ -177,12 +174,14 @@
 					<i class="thumbs up blue large icon"></i>
 					<div class="summary">
 						<?= View::user($value['user_id'], true) ?>&nbsp;Liked a&nbsp;<a href="<?= $post_id ?>"><?= $pc ?></a>&nbsp;
-						<div class="time"><span class="datetime" title="<?= $value['date'] ?>"><?= $value['date'] ?></span></div>
+						<span class="time datetime" title="<?= $value['date']." GMT".Date('P') ?>"><?= $value['date'] ?></span>
 					</div>
 				</div>
 			</div>
 		<?php break;
+
 		default:
+
 			break;
 	}
 } ?>

@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 
 $QNA = new QNA();
 $sections = $QNA->get_sections();
@@ -42,9 +42,7 @@ foreach ($sections as $s) {
 			break;
 	}
 }
-
-
-$pageTitle = "Questions";
+$pageTitle = "Stories";
 $sec = "questions";
 include (ROOT_PATH . 'inc/head.php');
 ?>
@@ -58,7 +56,7 @@ include (ROOT_PATH . 'inc/head.php');
 		</div>
 
 			<div class="questions sortby">
-				<p style="display:inline;">Show questions from: </p>
+				<p style="display:inline;">Show stories from: </p>
 				<div class="ui inline dropdown">
 					<div class="text">
 					<?= $sec_name ?>
@@ -83,19 +81,18 @@ include (ROOT_PATH . 'inc/head.php');
 				<br>
 			</div>
 		<?php if ($session->is_logged_in()): ?>
-			<a type="button" href="new/create" class="ui green button">Ask a new question</a>
-			<a type="button" href="new/random" data-inverted data-tooltip="Create a new question with random content" class="ui orange button">Generate question</a>
+			<a type="button" href="new/create" class="ui green button">Write a new story</a>
+			<a type="button" href="new/random" data-inverted data-tooltip="Create a new story with generated content" class="ui orange button">Generate story</a>
 		<?php endif; ?>
 		<?= msgs(); ?>
 		<br><br><hr>
-		<h3>Questions</h3>
+		<h3>Stories</h3>
 		<?= $pag->display(); ?>
 		<div class="questions front-page" id="questions">
 			<?php
-			if (count($qs) < 1) { echo "There are no questions in this section yet.<br>";
+			if (count($qs) < 1) { echo "There are no stories in this section yet.<br>";
 			} else {
 				foreach ($qs as $q):
-
 					if(($q->status != 1) && ($q->uid != USER_ID)) continue;
 					$self = $q->uid === USER_ID ?: false;
 					$commentsCount = count(Comment::get_comments($q->id));
@@ -103,18 +100,18 @@ include (ROOT_PATH . 'inc/head.php');
 					$votes = $votes ?: "0";
 					$reports_count = QNA::get_reports_count($q->id) ?: null;
 					$img_path = $q->img_path ?: DEF_PIC;
-					$type = $q->fid == 5 ? 'Generated' : 'Asked';
+					$type = $q->fid == 5 ? 'Generated' : 'Written';
 					?>
 				 	<div class="ui items">
 				 		<div class="item">
 				 			<div class="ui tiny image">
-				 				<a href="/sha/user/<?= $q->uid; ?>/"><img src="<?= $img_path; ?>"></a>
+				 				<a href="/user/<?= $q->uid; ?>/"><img src="<?= $img_path; ?>"></a>
 				 			</div>
 				 			<div class="content">
 				 				<a href="../questions/question.php?id=<?= $q->id; ?>"><h3> <?= $q->title; ?> </h3></a>
 				 				<div class="meta">
-				 					<span style="display:inline;" class="price"><?= $type ?> by <a class="user-title" user-id="<?= $q->uid; ?>" href="/sha/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
-				 					<span title="<?= $q->created; ?>" class="time datetime"><?= $q->created; ?></span>
+				 					<span style="display:inline;" class="price"><?= $type ?> by <a class="user-title" user-id="<?= $q->uid; ?>" href="/user/<?= $q->uid; ?>/"><?=$q->full_name;?></a></span>
+				 					<span title="<?= $q->created." GMT".Date('P') ?>" class="time datetime"><?= $q->created; ?></span>
 				 				</div>
 				 				<br />
 				 				<div class="extra">
@@ -148,5 +145,5 @@ include (ROOT_PATH . 'inc/head.php');
  	</div>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
-<script src='/sha/scripts/q_pag.js'></script>
+<script src='/scripts/q_pag.js'></script>
 </html>

@@ -48,9 +48,11 @@ class QNA {
 	 *
 	 * @return mixed
 	 */
-	public function get_question($PostID){
+	public function get_question($PostID=null){
 		global $connection;
 
+		$PostID = $PostID ?: $this->PostID;
+		
 		$sql = "SELECT u.id AS uid, CONCAT(u.firstName, ' ', u.lastName) AS full_name,
 				info.username AS username,
 				sections.title AS fac, sections.acronym AS acr, pics.thumb_path AS img_path,
@@ -211,7 +213,7 @@ class QNA {
 	 *
 	 * @return array
 	 */
-	public function get_sections(){
+	public static function get_sections(){
 		global $connection;
 
 		$sql = "SELECT * FROM ".TABLE_SECTIONS."";
@@ -395,7 +397,7 @@ class QNA {
 	 *
 	 * @return boolean|string
 	 */
-	public function report($CommentID, $content, $user_id){
+	public static function report($CommentID, $content, $user_id){
 		$database = new Database();
 
 		$data = ['post_id' => $CommentID, 'content' => $content, 'reporter' => $user_id];

@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 //if (!isset($_GET['to'])) exit("404");
 $user_id = isset($_GET['to']) ? sanitize_id($_GET['to']) : null;
 if (USER_ID == $user_id) $session->message("You can't send a message to yourself.", ".");

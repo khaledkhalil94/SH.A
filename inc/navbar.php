@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 
 $sec = isset($sec) ? $sec : '';
 
@@ -10,8 +10,8 @@ if(USER_ID){
 		$newMsg = "<div style='margin-top:2px;' class='ui green label'>{$msgCount}</div>";
 	}
 
-	$nvqu = new User();
-	$nvqu = $nvqu->get_user_info(USER_ID);
+	$nvqu = new User(USER_ID);
+	$nvqu = $nvqu->get_user_info();
 }
 ?>
 
@@ -21,7 +21,7 @@ if(USER_ID){
 
 		<a class="item<?= $sec == 'index' ? ' active' : null; ?>" href="<?= BASE_URL; ?>">Home</a>
 
-		<a class="item<?= $sec == 'questions' ? ' active' : null; ?>" href="<?= BASE_URL ?>questions">Questions</a>
+		<a class="item<?= $sec == 'questions' ? ' active' : null; ?>" href="<?= BASE_URL ?>questions">Stories</a>
 
 	<?php if($session->is_logged_in()): ?>
 		<a class="item<?= $sec == 'profile' ? ' active' : null; ?>" href="<?= BASE_URL."user/".USER_ID ?>/">Profile</a>
@@ -37,7 +37,11 @@ if(USER_ID){
 	<?php if($session->is_logged_in() && $session->adminCheck()): ?>
 		<a class="item nav_cp<?= $sec == 'staff' ? ' active' : null; ?>" href="<?= BASE_URL ?>admin">Admin Control Panel</a>
 	<?php endif; ?>
-	
+
+	<?php if(Session::get('devmode')): ?>
+		<p style="color:red;">ADMIN</p>
+	<?php endif; ?>
+
 	</div>
 <?php if($session->is_logged_in()): ?>
 	<div class="ui compact selection dropdown" id="menu_dropdown">
@@ -47,10 +51,11 @@ if(USER_ID){
 		<div class="menu">
 			<a href="<?= USER_URL ?>" class="item">Profile</a>
 			<a href="<?= BASE_URL."user/settings/" ?>" class="item">Settings</a>
+			<a href="<?= BASE_URL."changelog.php" ?>" class="item">Changelog</a>
 			<a href="<?= BASE_URL ?>logout.php" class="item">Log out</a>
 		</div>
 	</div>
-			<a href="<?= BASE_URL."changelog.php" ?>" class="item">Changelog</a>
+
 <?php endif; ?>
 </div>
 <script>

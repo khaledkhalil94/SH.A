@@ -10,7 +10,7 @@ $(function(){
 
 		if (!$this.hasClass('voted')) { // if not upvoted
 			$.ajax({
-				url: '/sha/controllers/_comment.php',
+				url: '/controllers/_comment.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action': 'upvote', 'comment_id' : $id},
@@ -34,7 +34,7 @@ $(function(){
 			}); // end ajax call
 		} else { // downVote
 			$.ajax({
-				url: '/sha/controllers/_comment.php',
+				url: '/controllers/_comment.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action': 'downvote', 'comment_id' : $id},
@@ -89,7 +89,7 @@ $(function(){
 	 	$('.commentz form').addClass("loading");
 
 		$.ajax({
-		 	url: '/sha/controllers/_comment.php',
+		 	url: '/controllers/_comment.php',
 		 	type: 'post',
 		 	dataType: 'json',
 		 	data: {
@@ -103,7 +103,7 @@ $(function(){
 
 				 if(data.status == true) { // success
 				 	
-				 	$.get('/sha/controllers/_view.php', {'action' : 'renderComment', 'id' : data.id}, function(res){
+				 	$.get('/controllers/_view.php', {'action' : 'renderComment', 'id' : data.id}, function(res){
 
 			 			$("#comments").prepend(res); // prepend the comment into the comment div
 						$('.ui.dropdown').dropdown();
@@ -216,7 +216,7 @@ $(function(){
 		$orgDOM = $('.modal.report .content').replaceWith($loader);
 
 		$.ajax({
-			url: '/sha/controllers/_comment.php',
+			url: '/controllers/_comment.php',
 			type: 'post',
 			dataType : 'json',
 			data: {
@@ -330,7 +330,7 @@ $(function(){
 		var $emptycmt = '<span id=\"emptycmt\">There is nothing here yet, be the first to comment!</span>'
 
 		$.ajax({
-			url: '/sha/controllers/_comment.php',
+			url: '/controllers/_comment.php',
 			dataType: 'json',
 			type: 'post',
 			data: {'action':'delete', 'id': $id},
@@ -426,7 +426,7 @@ $(function(){
 		_form.addClass('loading');
 
 		$.ajax({
-			url: '/sha/controllers/_comment.php',
+			url: '/controllers/_comment.php',
 			type: 'post',
 			dataType : 'json',
 			data: {'action':'edit', 'content': $newContent, 'id':commentID},

@@ -8,9 +8,9 @@
     border-radius: 5px;
 }
 
-.container.section.main-page {
+/*.container.section.main-page {
     background-color: #eaeaea;
-}
+}*/
 
 .main-page .news-feed .header.user-details {
     display: flex;

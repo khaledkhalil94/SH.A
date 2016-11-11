@@ -1,18 +1,18 @@
 <?php
 // The view for the public
-$pageTitle = "Question/Public";
+$pageTitle = "Stories";
 $id = sanitize_id($_GET['id']) ?: null;
 
 $QNA = new QNA();
 
-if(!$q = QNA::get_question($id)) {
+if(!$q = $QNA->get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
 	if ($q = Comment::getComment($id)) {
 		$q = $q->post_id;
-		if($q == $id) $session->message("Page was not found!", "/sha/404.php", "warning");
+		if($q == $id) $session->message("Page was not found!", "/404.php", "warning");
 		Redirect::redirectTo("question.php?id={$q}#{$id}");
 	} else {
-		$session->message("Page was not found!", "/sha/404.php", "warning");
+		$session->message("Page was not found!", "/404.php", "warning");
 	}
 }
 
@@ -24,7 +24,7 @@ $post_date = $q->created;
 $post_modified_date = $q->last_modified;
 
 if($post_modified_date > $post_date){
-	$edited = " (edited <span id='post-date-ago' title=\"$post_modified_date\">$post_modified_date</span>)";
+	$edited = " (edited <span id='post-date-ago' title={$post_modified_date} GMT".Date('P')">$post_modified_date</span>)";
 } else {
 	$edited = "";
 }
@@ -43,9 +43,9 @@ include (ROOT_PATH . 'inc/head.php');
 							</div>
 						</div>
 						<div class="nine wide column post-title">
-							<h3><a href="/sha/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
-							<p><a href="/sha/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
-							<p class="time"><span id="post-date" title="<?=$post_date;?>"><?= $post_date;?></span>  in <a href="/sha/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
+							<h3><a href="/user/<?= $q->uid; ?>/"><?= $q->full_name;?></a></h3>
+							<p><a href="/user/<?= $q->uid; ?>/">@<?= $q->username;?></a></p>
+							<p class="time"><span id="post-date" title="<?=$post_date." GMT".Date('P')?>"><?= $post_date;?></span>  in <a href="/questions/?section=<?= $q->acr; ?>"><?= $q->fac; ?></a> <?= $edited; ?></p>
 						</div>
 					</div>
 					<br><br>
@@ -67,7 +67,7 @@ include (ROOT_PATH . 'inc/head.php');
 							</div>
 							<div class="menu">
 								<div class="ui error message">
-									<p>You must <a href="/sha/login.php">login</a> to like this post.</p>
+									<p>You must <a href="/login.php">login</a> to like this post.</p>
 								</div>
 							</div>
 							<script>
@@ -79,7 +79,7 @@ include (ROOT_PATH . 'inc/head.php');
 			</div>
 			<div class="four wide column" style="border-left: 1px #e2e2e2 solid;">
 				<div class="sidebar-module sidebar-module-inset">
-					<h4>Related questions</h4>
+					<h4>Related stories</h4>
 					<div class="ui segment">
 						<div class="ui relaxed divided list" id="sidebar-content">
 							<?php
@@ -92,12 +92,12 @@ include (ROOT_PATH . 'inc/head.php');
 										<div class="content">
 											<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 										</div>
-										<span id="sidebar-date"><?= $item->created; ?></span>
+										<span class="time datetime"><?= $item->created; ?></span>
 									</div>
 							<?php } ?>
 						</div>
 					</div>
-					<h4>More questions by <?= View::user($q->uid); ?></h4>
+					<h4>More stories by <?= View::user($q->uid); ?></h4>
 					<div class="ui segment">
 						<div class="ui relaxed divided list" id="sidebar-content">
 							<?php
@@ -110,7 +110,7 @@ include (ROOT_PATH . 'inc/head.php');
 									<div class="content">
 										<a href="question.php?id=<?= $item->id; ?>"><?= $item->title; ?></a>
 									</div>
-									<span id="sidebar-date"><?= $item->created; ?></span>
+									<span class="time datetime"><?= $item->created; ?></span>
 								</div>
 							<?php
 								}  ?>
@@ -121,7 +121,7 @@ include (ROOT_PATH . 'inc/head.php');
 		</div>
 		<hr>
 		<div class="commentz section">
-			<p style="font-size: large;"><a href="/sha/login.php">Login</a> or <a href="/sha/signup.php">sign up</a> to comment on this post.</p><br>
+			<p style="font-size: large;"><a href="/login.php">Login</a> or <a href="/signup.php">sign up</a> to comment on this post.</p><br>
 			<?php $comments = Comment::get_comments($id); ?>
 				<h3>Comments (<?= count($comments) ?: "0"; ?>): </h3>
 			<div id="comments">
@@ -130,13 +130,14 @@ include (ROOT_PATH . 'inc/head.php');
 				else;
 					foreach ($comments as $comment):
 						$votes = Comment::get_votes($comment->id);
-						$commenter = User::get_user_info($comment->uid);
+						$commenter = new User($comment->uid);
+						$commenter = $commenter->user;
 
 						$comment_date = $comment->created;
 						$comment_modified_date = $comment->last_modified;
 
 						if($comment->last_modified > $comment->created){
-							$edited = "(edited <span id='editedDate' title=\"$comment_modified_date\">$comment_modified_date</span>)";
+							$edited = "(edited <span class=\"datetime\" title=\"$comment_modified_date\">$comment_modified_date</span>)";
 						} else {
 							$edited = "";
 						}
@@ -149,7 +150,7 @@ include (ROOT_PATH . 'inc/head.php');
 								<div class="content">
 									<?= View::user($comment->uid, false, 'author'); ?>
 									<div class="metadata">
-										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span id="commentDate" title="<?=$comment_date;?>"><?= $comment_date;?></span></a><?= $edited; ?>
+										<a class="time" href="question.php?id=<?= $comment->id; ?>"><span class="time datetime" title="<?=$comment_date." GMT".Date('P')?>"><?= $comment_date;?></span></a><?= $edited; ?>
 									</div>
 									<div class="text">
 										<h4><?= $comment->content; ?></h4>
@@ -165,7 +166,7 @@ include (ROOT_PATH . 'inc/head.php');
 										</div>
 										<div class="menu">
 											<div class="ui error message">
-												<p>You must <a href="/sha/login.php">login</a> to like this comment.</p>
+												<p>You must <a href="/login.php">login</a> to like this comment.</p>
 											</div>
 										</div>
 									</div>

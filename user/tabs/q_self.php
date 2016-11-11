@@ -7,7 +7,7 @@ foreach($questions AS $q): ?>
 	<div class="item">
 		<div class="ui grid">
 			<div class="fourteen wide column">
-				<a href='/sha/questions/question.php?id=<?= $q->id ?>'><h4><?= $q->title; ?></h4></a>
+				<a href='/questions/question.php?id=<?= $q->id ?>'><h4><?= $q->title; ?></h4></a>
 				<div class="time" id="post-date"><?= $q->created ?></div>
 			</div>
 			<div class="two wide column">

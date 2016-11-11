@@ -34,7 +34,7 @@ $(function(){
 			$values = _form.form('get values');
 
 			$.ajax({
-				url: '/sha/controllers/_auth.php',
+				url: '/controllers/_auth.php',
 				type: 'post',
 				dataType: 'json',
 				data: {'action': 'login', 'values' : $values},
@@ -42,11 +42,11 @@ $(function(){
 				success: function(data, status) {
 
 					if(data == "1"){ // success
-						
+
 						_form.parents('.form.login').removeClass('loading');
 						$('.ui.message').remove();
 						$('#login-hr').remove();
-						_form.parents('.form.login').load('/sha/controllers/inc/login-success.php', $username,
+						_form.parents('.form.login').load('/controllers/inc/login-success.php', $username,
 							function( response, status, xhr ) {
 								if ( status == "error" ) {
 									console.log(xhr);
@@ -55,12 +55,9 @@ $(function(){
 						_form.remove();
 
 						window.setTimeout(function(){
-							window.location = "/sha";
-						}, 2000)
-
-
+							window.location = "/";
+						}, 2000);
 					} else { // failure
-
 						var error = data;
 
 						console.log(error);
@@ -68,9 +65,7 @@ $(function(){
 						_form.parents('.form.login').removeClass('loading');
 						$('.ui.message').addClass('negative');
 						$('.ui.message .header').text(error);
-
 					}
-					
 				},
 				error: function(xhr, desc, err) {
 					_form.parents('.form.sign-up').removeClass('loading');
@@ -171,12 +166,12 @@ $(function(){
 
 				// remove any status indicators before displaying the loader
 				$('.'+$name+'-status').children().remove();
-				
+
 
 				// display the laoder if its' not there
 				if($('.'+$name+'-status').find($('.loader')).length == 0) {
 					_this.parents('.field').next().append($loader);
-					
+
 				}
 
 				$.ajax({
@@ -248,7 +243,7 @@ $(function(){
 				_form.parents('.form.sign-up').addClass('loading');
 
 				$.ajax({
-					url: 'controllers/_auth.php',
+					url: '/controllers/_auth.php',
 					type: 'post',
 					dataType: 'json',
 					data: {'action': 'signup', 'values' : $values, 'reCaptcha' : captcha},
@@ -261,7 +256,7 @@ $(function(){
 							_form.parents('.form.sign-up').removeClass('loading');
 							$('.ui.compact.warning.message').remove();
 							$('#signup-hr').remove();
-							_form.parents('.form.sign-up').load('controllers/inc/signup-success.php', data.id,
+							_form.parents('.form.sign-up').load('/controllers/inc/signup-success.php', data.id,
 								function( response, status, xhr ) {
 									if ( status == "error" ) {
 										console.log(status);
@@ -271,7 +266,7 @@ $(function(){
 							_form.remove();
 						console.log('registered');
 						window.setTimeout(function(){
-							window.location = "/sha/";
+							window.location = "/";
 						}, 4000)
 
 
@@ -282,7 +277,7 @@ $(function(){
 							console.log(errors);
 
 							_form.parents('.form.sign-up').removeClass('loading');
-							
+
 							$.each(errors, function(k, v){
 								$('.'+k+'-status').children().remove();
 								console.log(v);
@@ -292,7 +287,7 @@ $(function(){
 							return;
 
 						}
-						
+
 					},
 					error: function(xhr, desc, err) {
 						_form.parents('.form.sign-up').removeClass('loading');

@@ -199,7 +199,7 @@ require_once('init.php');
 
 				// create an index file and redirect to 404 page
 				$fp = fopen($path . "/index.php", "w");
-				fwrite($fp, "<?php header(\"Location: /sha/404.php\"); ?>");
+				fwrite($fp, "<?php header(\"Location: /404.php\"); ?>");
 				fclose($fp);
 
 			} else {

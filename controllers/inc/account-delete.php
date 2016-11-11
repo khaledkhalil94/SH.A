@@ -1,5 +1,5 @@
 <?php 
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 // Allow access only via ajax requests
 if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' ) {
@@ -47,7 +47,7 @@ $('#confirm-acc-del').submit(function(e){
 	$token = $('input[name=auth_token]').val();
 
 	$.ajax({
-		url: '/sha/controllers/_account.php',
+		url: '/controllers/_account.php',
 		type: 'post',
 		dataType: 'json',
 		data: {'action' : 'delete_acc', 'password' : $pw, 'token' : $token},

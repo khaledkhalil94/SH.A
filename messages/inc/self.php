@@ -5,7 +5,7 @@
 	<div class="msg-main">
 		<div class="msg-user_info">
 
-				<h4>Sent to <a href="/sha/user/<?= $message->user_id ?>/"><?= $message->r_name; ?></a></h4>
+				<h4>Sent to <a href="/user/<?= $message->user_id ?>/"><?= $message->r_name; ?></a></h4>
 
 			<div class="time" id="s_msg_date" title="<?= $date; ?>"><?= $date; ?></div>
 

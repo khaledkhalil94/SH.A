@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 include (ROOT_PATH . 'inc/head.php');
 ?>
 <body>

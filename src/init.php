@@ -4,27 +4,29 @@ defined('DB_USER')   ? null : define('DB_USER', "root");
 defined('DB_PASS')   ? null : define('DB_PASS', "");
 defined('DB_NAME')   ? null : define('DB_NAME', "sha2");
 
-defined('BASE_URL')  ? null : define('BASE_URL', "/sha/");
-defined('ROOT_PATH') ? null : define('ROOT_PATH',  $_SERVER["DOCUMENT_ROOT"] . "/sha/");
+defined('BASE_URL')  ? null : define('BASE_URL', "/");
+defined('ROOT_PATH') ? null : define('ROOT_PATH',  $_SERVER["DOCUMENT_ROOT"].'/');
 defined('DOCROOT')   ? null : define('DOCROOT', __DIR__);
 defined('DS')        ? NULL : define('DS', "/");
-
 
 defined('DEF_IMG_UP_DIR') ? null : define('DEF_IMG_UP_DIR', ROOT_PATH . 'photos/');
 defined('DEF_PIC_PATH')   ? null : define('DEF_PIC_PATH',  BASE_URL."photos/");
 defined('DEF_PIC')        ? null : define('DEF_PIC',  BASE_URL."images/dpp.png");
 
+// set default time zone
 date_default_timezone_set('America/New_York');
 
 // image validation
 // todo later: adjust these settings in the admin panel
-$imgValidation = array(
+$imgValidation = [
 	'allowed_ext_C' => array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG),
 	'allowed_ext'   => array('gif','jpg','jpeg','png'),
 	'max_size'      => 2097152, // 2097152 byte == 2mb
 	'max_width'     => 800,
 	'max_height'    => 800
-	);
+];
+
+$allowed_tags = '<h1><h2><h3><h4><h5><h6><p><a>';
 
 // reCaptcha secret key
 define('RECAP_SKEY', '6LdZ8gcUAAAAAKNsM82igmt7nN_Xn-o55hJmEkkb');

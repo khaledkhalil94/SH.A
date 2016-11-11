@@ -8,7 +8,7 @@
 						<div class="ui dimmer">
 							<div class="content">
 								<div id="pp_actions" class="top right profile-picture-actions">
-									<?php if($has_pic){ ?>			
+									<?php if($has_pic){ ?>
 										<div id="viewPicture" class="ui icon button" data-variation="mini" data-content="View Picture" >
 										  <i data-variation="mini" class="unhide icon link"></i>
 										</div>
@@ -145,7 +145,7 @@
 				<?php } else { ?>
 					<button class="ui button green" user-id="<?= $id ?>" id="user_flw">Follow</button>
 				<?php } ?>
-					<a href='/sha/messages/?sh=compose&un=<?=$id?>' class="ui button basic">Send message</a>
+					<a href='/messages/?sh=compose&un=<?=$id?>' class="ui button basic">Send message</a>
 					<div title="Report" style="float:right;" data-variation="mini" class="ui icon link button">
 						<i class="flag icon" title="report"></i>
 					</div>
@@ -155,7 +155,7 @@
 				<a class="item active" data-tab="activity">Activity</a>
 				<a class="item" data-tab="following">Following (<?= $following_count ?>)</a>
 				<a class="item" data-tab="followers">Followers (<?= $followers_count ?>)</a>
-				<a class="item" data-tab="questions">Questions (<?= $q_count ?>)</a>
+				<a class="item" data-tab="questions">Stories (<?= $q_count ?>)</a>
 			</div>
 			<div class="ui bottom attached tab segment active" data-tab="activity">
 			</div>

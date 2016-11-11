@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"] . "/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"] . "/src/init.php");
 
 $PostID = sanitize_id($_GET['post_id']);
 if(!$PostID) Redirect::redirectTo();
@@ -38,7 +38,7 @@ include (ROOT_PATH . "inc/head.php");
 			<?php endif; ?>	
 			<div class="ui grid post-header">
 				<div class="three wide column post-avatar">
-					<a href="/sha/user/<?= $post->r_id; ?>/"><img class="ui avatar tiny image" src="<?= $post->img_path ?>"></a>
+					<a href="/user/<?= $post->r_id; ?>/"><img class="ui avatar tiny image" src="<?= $post->img_path ?>"></a>
 				</div>
 				<div class="thirteen wide column post-title">
 
@@ -46,7 +46,7 @@ include (ROOT_PATH . "inc/head.php");
 					<div class="meta">
 
 						<span class="post-header">
-							<p><a href="/sha/user/<?= $post->r_id; ?>/"><?= $post->firstName;?> </a></p>
+							<p><a href="/user/<?= $post->r_id; ?>/"><?= $post->firstName;?> </a></p>
 						</span> 
 
 						<span id="post-date" class="time" title="<?=$post->date;?>"><?= get_timeago($post->date);?></span>
@@ -54,11 +54,11 @@ include (ROOT_PATH . "inc/head.php");
 				<?php } else { ?>
 					<div class="meta">
 						<span class="post-header" style="margin-bottom: -5px;">
-							<p><a href="/sha/user/<?= $post->r_id; ?>/"><?= $post->firstName;?></a></p>
+							<p><a href="/user/<?= $post->r_id; ?>/"><?= $post->firstName;?></a></p>
 
 							<p>
 								<i class="mdi mdi-menu-right"></i>
-								<a href="/sha/user/<?= $post->uid; ?>/"><?= $post->r_fn; ?></a>
+								<a href="/user/<?= $post->uid; ?>/"><?= $post->r_fn; ?></a>
 							</p>
 						</span> 
 
@@ -88,7 +88,7 @@ include (ROOT_PATH . "inc/head.php");
 					</div>
 					<div class="menu">
 						<div class="ui error message">
-							<p>You must <a href="/sha/login.php">login</a> to like this post.</p>
+							<p>You must <a href="/login.php">login</a> to like this post.</p>
 						</div>
 					</div>
 					<script>
@@ -144,7 +144,7 @@ include (ROOT_PATH . "inc/head.php");
 							<div class="content">
 								<div class="ui grid">
 									<div class="two wide column cmt_avatar">
-										<a class="" href="/sha/user/<?= $c->uid; ?>/">
+										<a class="" href="/user/<?= $c->uid; ?>/">
 											<img class="" src="<?= $c->path; ?>">
 										</a>
 									</div>
@@ -206,13 +206,13 @@ include (ROOT_PATH . "inc/head.php");
 			</div>
 		</div>
 	</div>
-	<script src="/sha/scripts/post.js"></script>
+	<script src="/scripts/post.js"></script>
 <?php include (ROOT_PATH . 'inc/footer.php'); ?>
 </body>
 
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/post.delete.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/comment.delete.php'); ?>
-<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/sha/controllers/modals/q.report.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/post.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/comment.delete.php'); ?>
+<?php require_once($_SERVER["DOCUMENT_ROOT"] . '/controllers/modals/q.report.php'); ?>
 <script src="<?= BASE_URL ?>scripts/comment.js"></script>
 <script>
 $('.metadata').each(function(index, value) {

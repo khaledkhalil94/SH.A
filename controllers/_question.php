@@ -1,5 +1,5 @@
 <?php
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 if(Session::get('devmode')) goto bp;
 
@@ -52,6 +52,7 @@ switch ($action) {
 
 		unset($data['token']);
 		$data['uid'] = USER_ID;
+		$data['created'] = getNow();
 
 		$QNA = new QNA();
 		$create = $QNA->create($data);
@@ -68,8 +69,11 @@ switch ($action) {
 	case 'upvote':
 		$PostID = sanitize_id($data['id']);
 
+		$post = new Post();
+		$QNA = new QNA();
+
 		// check if question exists
-		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
+		if(!is_object($QNA->get_question($PostID)) && !is_array($post->get_post($PostID, true))){
 			die(json_encode(['status' => false, 'err' => 'Post was not found.']));
 		}
 
@@ -93,10 +97,12 @@ switch ($action) {
 
 	case 'downvote':
 
+		$post = new Post();
 		$PostID = sanitize_id($data['id']);
 
 		// check if question exists
-		if(!is_object(QNA::get_question($PostID)) && !is_array(Post::get_post($PostID, true))){
+		$QNA = new QNA($PostID);
+		if(!is_object($QNA->get_question()) && !is_array($post->get_post($PostID, true))){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
 
@@ -116,9 +122,10 @@ switch ($action) {
 	case 'publish':
 
 		$PostID = sanitize_id($data['id']);
+		$QNA = new QNA($PostID);
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
@@ -137,9 +144,10 @@ switch ($action) {
 	case 'unPublish':
 
 		$PostID = sanitize_id($data['id']);
+		$QNA = new QNA($PostID);
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
@@ -158,9 +166,10 @@ switch ($action) {
 	case 'delete':
 
 		$PostID = sanitize_id($data['id']);
+		$QNA = new QNA($PostID);
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
@@ -183,7 +192,8 @@ switch ($action) {
 		$title = $data['title'];
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$QNA = new QNA($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
@@ -221,14 +231,14 @@ switch ($action) {
 	case 'save':
 
 		$PostID = sanitize_id($data['id']);
+		$QNA = new QNA($PostID);
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
 
-		$QNA = new QNA($PostID);
 		$save = $QNA->save_post();
 
 		if($save === true){
@@ -242,9 +252,10 @@ switch ($action) {
 	case 'unsave':
 
 		$PostID = sanitize_id($data['id']);
+		$QNA = new QNA($PostID);
 
 		// check if question exists
-		$question = QNA::get_question($PostID);
+		$question = $QNA->get_question();
 		if(!is_object($question)){
 			die(json_encode(['status' => false, 'err' => 'Question was not found.']));
 		}
@@ -264,8 +275,9 @@ switch ($action) {
 
 		$PostID = sanitize_id($data['id']);
 
+		$post = new Post();
 		// check if post exists
-		$post = Post::get_post($PostID, true);
+		$post = $post->get_post($PostID, true);
 
 		if(!is_array($post)){
 			die(json_encode(['status' => false, 'err' => 'Post was not found.']));
@@ -283,5 +295,3 @@ switch ($action) {
 		}
 		break;
 }
-
-

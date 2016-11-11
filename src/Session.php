@@ -1,5 +1,5 @@
-<?php 
-require_once($_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+<?php
+require_once('init.php');
 
 class Session {
 
@@ -40,7 +40,7 @@ class Session {
 		$this->check_login();
 
 		Admin::registerVisitor();
-		
+
 		if($this->logged_in){
 
 			// define user_id constant
@@ -63,7 +63,7 @@ class Session {
 	public function is_logged_in(){
 		return $this->logged_in;
 	}
-	
+
 	private function check_login(){
 		if(isset($_SESSION['user_id'])){
 			$this->user_id = $_SESSION['user_id'];
@@ -76,7 +76,7 @@ class Session {
 
 	/**
 	 * writes logged user details into the session file
-	 *	
+	 *
 	 * @param object: user detals
 	 *
 	 * @return boolean
@@ -147,7 +147,7 @@ class Session {
 		}
 	}
 
-	
+
 	/**
 	 * updates user activity field in the database
 	 *
@@ -185,7 +185,7 @@ class Session {
 
 
 	public function adminLock(){
-		if($this->is_logged_in() && $this->username == "admin" && $this->user_id == "1"){
+		if($this->is_logged_in() && $this->username == "admin" && $this->user_id === "1"){
 			return true;
 		} else {
 			exit("You must be an admin to review this page.");
@@ -193,7 +193,7 @@ class Session {
 		}
 	}
 	public function adminCheck(){
-		if($this->is_logged_in() && $this->ual == "1"){
+		if($this->is_logged_in() && $this->ual === "1"){
 			return true;
 		} else {
 			return false;

@@ -1,8 +1,9 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $user_id = sanitize_id($_GET['pm']);
 
-$user = User::get_user_info($user_id);
+$user = new User($user_id);
+$user = $user->user;
 if(!$user) Redirect::redirectTo('404');
 
 $staff = $user->ual == 1 ? true : false;
@@ -28,7 +29,8 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 			}
 
 			foreach($messages as $message):
-				$sender = User::get_user_info($message->sender_id);
+				$sender = new User($message->sender_id);
+				$sender = $sender->user;
 				$sstaf = $sender->id == 1 ? true : false;
 				$self = USER_ID == $sender->id ? true : false;
 				if (!$self) Messages::msgSeen($message->user_id, $message->id);
@@ -51,7 +53,7 @@ $messages = Messages::getConvo(USER_ID, $user_id);
 						<?php if($staff){ ?>
 						<p><?= $sender->firstName; ?>
 						<?php } else { ?>
-						<p><?= $self ? "You" : "<a href=\"/sha/user/$sender->id/\">$sender->firstName</a>"; ?>
+						<p><?= $self ? "You" : "<a href=\"/user/$sender->id/\">$sender->firstName</a>"; ?>
 						<?php } ?>
 						<a class="time" title="<?= $date; ?>" href="message.php?msg=<?= $message->id; ?>"><?= $timeAgo; ?></a></p>
 						<p class="message-content"><?= $subject; ?></p>

@@ -60,7 +60,7 @@ $('.form.create_q').submit(function(e){
 	_form.addClass('loading');
 
 	$.ajax({
-		url : '/sha/controllers/_question.php',
+		url : '/controllers/_question.php',
 		type : 'post',
 		dataType : 'json',
 		data : {'action' : 'create', 'title' : title, 'content' : content, 'section' : section, 'token' : token, 'status' : status},
@@ -69,7 +69,7 @@ $('.form.create_q').submit(function(e){
 			if(data.status == true){
 				_form.removeClass('loading');
 
-				_form.parent().load('/sha/controllers/inc/msg-send-success.php', 'id='+data.id);
+				_form.parent().load('/controllers/inc/msg-send-success.php', 'id='+data.id);
 
 			} else {
 

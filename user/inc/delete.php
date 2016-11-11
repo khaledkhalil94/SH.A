@@ -1,14 +1,13 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
-$session->is_logged_in() ? true : Redirect::redirectTo("/sha/signup.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
+$session->is_logged_in() ? true : Redirect::redirectTo("/signup.php");
 $id = USER_ID;
 
-
-$user = User::get_user_info($id);
+$user = new User($id);
+$user = $user->user;
 $session->userLock($user);
 
-
- ?>
+?>
 
 <div class="ui delete padded segment">
 	<div class="ui dividing header">
@@ -23,7 +22,6 @@ $session->userLock($user);
 			If you delete your account, everything associated with it will be forever gone.
 			<br> Are you sure about this ?<br><br>
 		</div>
-
 		<hr><br>
 		<button id="acc_del" class="ui red button" />Delete</button>
 		<a type="button" class="ui button basic" href="<?= USER_URL; ?>">Cancel</a>

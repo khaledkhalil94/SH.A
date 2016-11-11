@@ -1,1 +1,1 @@
-<?php header("Location: /sha/404.php"); ?>
+<?php header("Location: /404.php"); ?>

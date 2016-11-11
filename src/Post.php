@@ -271,10 +271,11 @@ class Post extends QNA {
 	}
 
 	public static function PorQ($id){
-
-		if(is_object(QNA::get_question($id))){
+		$QNA = new QNA();
+		$post = new self();
+		if(is_object($QNA->get_question($id))){
 			return "q";
-		} elseif(is_array(self::get_post($id, true))){
+		} elseif(is_array($post->get_post($id, true))){
 			return "p";
 		} elseif (is_array(Comment::getComment($id))){
 			return "c";
@@ -282,8 +283,5 @@ class Post extends QNA {
 			return false;
 		};
 	}
-
-
 }
-
 ?>

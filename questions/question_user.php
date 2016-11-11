@@ -1,13 +1,13 @@
 <?php
 // The view for the users
-$pageTitle = "Question/User";
+$pageTitle = "Stories";
 $id = sanitize_id($_GET['id']) ?: null;
 
 $QNA = new QNA();
 
 if(!$q = $QNA->get_question($id)) {
 	// if the id is not in the questions database, try to find it in the comment database.
-	if ($q = Comment::getComment($id)) { 
+	if ($q = Comment::getComment($id)) {
 		$q = $q['post_id'];
 		if($q == $id) Redirect::redirectTo('404');
 		Redirect::redirectTo(BASE_URL."questions/question.php?id={$q}#{$id}");
@@ -18,7 +18,8 @@ if(!$q = $QNA->get_question($id)) {
 
 if($q->status != 1 && !($session->adminCheck() || $session->userCheck($q->uid))) Redirect::redirectTo('404');
 
-$user = User::get_user_info($q->uid);
+$user = new User($q->uid);
+$user = $user->user;
 
 $self = $q->uid === USER_ID;
 

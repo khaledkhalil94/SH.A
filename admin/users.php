@@ -1,9 +1,10 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $pageTitle = "Admin Control Panel";
 $session->adminLock();
+$admin = new Admin();
 
-$users = Admin::getAllUsers();
+$users = $admin->getAllUsers();
 
 $count = count($users);
 
@@ -18,7 +19,7 @@ if($cp > $pag->total_pages() || $cp <= 0){
 
 $offset = $pag->offset();
 
-$users = Admin::getAllUsers($rpp, $offset);
+$users = $admin->getAllUsers($rpp, $offset);
 
 $sec = "users";
 require(ROOT_PATH . 'inc/head.php');
@@ -45,7 +46,7 @@ require(ROOT_PATH . 'inc/head.php');
 					 <?php  foreach ($users as $user): ?>
 						<tr>
 							<td><img src="<?= $user->img_path ?>" class="ui mini rounded image"></td>
-							<td><a href=" <?= BASE_URL ?>user/<?= $user->id ?>/"><?= $user->id; ?></a></td> 
+							<td><a href=" <?= BASE_URL ?>user/<?= $user->id ?>/"><?= $user->id; ?></a></td>
 							<td>@<?= $user->username; ?></td>
 							<td><?= $user->full_name; ?></td>
 							<td title="<?=$user->register_date?>"><?= get_timeago($user->register_date) ?></td>

@@ -1,5 +1,5 @@
 <?php
-require_once ($_SERVER["DOCUMENT_ROOT"]."/sha/src/init.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/src/init.php");
 $pageTitle = "Admin Control Panel";
 $session->adminLock();
 
@@ -18,8 +18,8 @@ $type = Post::PorQ($id);
 if(!$type) Redirect::redirectTo('404');
 
 if($type == 'q'){
-
-	$post = QNA::get_question($id);
+	$QNA = new QNA();
+	$post = $QNA->get_question($id);
 	$reps = QNA::get_reports($id);
 } else {
 

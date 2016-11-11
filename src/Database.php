@@ -1,5 +1,5 @@
  <?php
-require_once( $_SERVER["DOCUMENT_ROOT"] .'/sha/src/init.php');
+require_once('init.php');
 
 /**
  * Database class, opens the connection to the database
@@ -47,7 +47,7 @@ class Database {
 		global $connection;
 		$dsn = 'mysql:dbname=' . DB_NAME . ';host=' . DB_HOST;
 		try {
-			$connection = new PDO($dsn,DB_USER,'');
+			$connection = new PDO($dsn,DB_USER,DB_PASS);
 
 			$this->connection = $connection;
 			$this->status = true;
@@ -70,14 +70,15 @@ class Database {
 	*
 	*/
 	public function insert_data($table, $data){
-
+    global $allowed_tags;
+    
 		$fields = [];
 		$values = [];
 		$params = [];
 		foreach ($data as $k => $v) {
 			$fields[] = '`'.$k.'`';
 			$values[] = ':'.$k;
-			$v = htmlentities($v);
+			$v = strip_tags($v, $allowed_tags);
 			$params[":".$k] = $v;
 		}
 

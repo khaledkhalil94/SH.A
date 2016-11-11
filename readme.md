@@ -34,8 +34,7 @@ SH.A is a solo and original project that I've coded myself from scratch in pure 
     - Preview reported posts
     - Add and remove sections
     - Admin Panel
-
-      ![sha_admin_panel](https://github.com/khaledkhalil94/SH.A/images/admin_panel.png)
+      ![sha_admin_panel](https://github.com/khaledkhalil94/SH.A/blob/master/images/admin_panel.png)
 
 
 ## Todo

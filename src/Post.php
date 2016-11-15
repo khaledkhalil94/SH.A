@@ -10,7 +10,24 @@ class Post extends QNA {
 
 	public $errors = [];
 
+	private $feed = [];
+
+	private $timeline;
+
+	public $maxTime;
+
+	private $offset=null, $limit=null;
+
 	static $table = TABLE_ACTIVITY;
+
+	public function __construct(){
+		$this->timeline = getNow();
+		$this->maxTime = date('Y-m-d H:i:s', strtotime('3 weeks ago'));
+	}
+
+	public function getFeed(){
+		return $this->feed;
+	}
 
 	/**
 	 *
@@ -109,13 +126,9 @@ class Post extends QNA {
 
 		$database = new Database();
 
-		// initiating the feed array
-		$feed = [];
-
-
 		// getting the posts data
 		$sql = "SELECT DISTINCT ac.*, CONCAT(u.firstName, ' ', u.lastName) AS u_fullname, CONCAT(p.firstName, ' ', p.lastName) AS p_fullname, u.id AS u_id, p.id AS p_id,
-				pic.thumb_path AS path, picp.thumb_path AS p_path FROM ". TABLE_ACTIVITY ." AS ac
+				pic.thumb_path AS path, picp.thumb_path AS p_path FROM ". SELF::$table ." AS ac
 
 				INNER JOIN ". TABLE_FOLLOWING ." AS f ON ac.user_id = f.user_id OR ac.user_id = f.follower_id
 				INNER JOIN ". TABLE_USERS ." AS u ON ac.user_id = u.id
@@ -123,7 +136,7 @@ class Post extends QNA {
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS pic ON ac.user_id = pic.user_id
 				LEFT JOIN ". TABLE_PROFILE_PICS ." AS picp ON ac.poster_id = picp.user_id
 
-				WHERE f.follower_id = :uid OR ac.user_id = ". USER_ID ."
+				WHERE ac.date <= '$this->timeline' AND ac.date >= '$this->maxTime' AND (f.follower_id = :uid OR ac.user_id = $uid)
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
@@ -136,13 +149,11 @@ class Post extends QNA {
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 				$row['type'] = 'ac';
 				if(empty($row['p_path'])) $row['p_path'] = DEF_PIC;
-				$feed[] = $row;
+				$this->feed[] = $row;
 			}
 		}
 
-
 		// getting user interactions data NEEDS REWEORK
-
 		$following_ids = [];
 
 		$sql = "SELECT fl.user_id FROM ". TABLE_FOLLOWING ." AS fl
@@ -171,18 +182,16 @@ class Post extends QNA {
 					INNER JOIN ". TABLE_USERS ." AS u ON fl.user_id = u.id
 					INNER JOIN ". TABLE_USERS ." AS u_fl ON fl.follower_id = u_fl.id
 
-					WHERE fl.follower_id = {$id} AND fl.user_id != {$uid}";
+					WHERE fl.date <= '$this->timeline' AND fl.date >= '$this->maxTime' AND fl.follower_id = {$id} AND fl.user_id != {$uid}";
 
 			$stmt = $connection->query($sql);
 
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				$row['type'] = 'fl';
-				$feed[] = $row;
+				$this->feed[] = $row;
 			}
 
 		}
-		//printX($feed);
-
 
 		// getting the comments data
 		$sql = "SELECT cmt.*, cmt.created AS date, CONCAT(u.firstName, ' ', u.lastName) AS fullname, pic.thumb_path AS path FROM ". TABLE_COMMENTS ." AS cmt
@@ -192,7 +201,7 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_USERS ." AS u ON cmt.uid = u.id
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON cmt.uid = pic.user_id
 
-				WHERE f.follower_id = :uid
+				WHERE date <= '$this->timeline' AND date >= '$this->maxTime' AND f.follower_id = :uid
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
@@ -210,7 +219,7 @@ class Post extends QNA {
 				if(empty($row['path'])) $row['path'] = DEF_PIC;
 
 				$row['type'] = 'cmt';
-				$feed[] = $row;
+				$this->feed[] = $row;
 			}
 		}
 
@@ -222,7 +231,7 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_USERS ." AS u ON ps.user_id = u.id
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON ps.user_id = pic.user_id
 
-				WHERE f.follower_id = :uid
+				WHERE ps.date <= '$this->timeline' AND ps.date >= '$this->maxTime' AND f.follower_id = :uid
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
@@ -234,7 +243,7 @@ class Post extends QNA {
 
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 				$row['type'] = 'ps';
-				$feed[] = $row;
+				$this->feed[] = $row;
 			}
 		}
 
@@ -245,7 +254,7 @@ class Post extends QNA {
 				INNER JOIN ". TABLE_USERS ." AS u ON qs.uid = u.id
 				INNER JOIN ". TABLE_PROFILE_PICS ." AS pic ON qs.uid = pic.user_id
 
-				WHERE f.follower_id = :uid AND qs.status = 1 OR qs.uid = :uid
+				WHERE qs.created < '$this->timeline' AND qs.created > '$this->maxTime' AND f.follower_id = :uid AND qs.status = 1 OR qs.uid = :uid
 				ORDER BY date DESC";
 
 		$stmt = $database->xcute($sql, [':uid' => $uid]);
@@ -254,7 +263,6 @@ class Post extends QNA {
 
 			$this->errors = $database->errors;
 		} else {
-
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
 				unset($row['created']); // don't need it
@@ -263,11 +271,9 @@ class Post extends QNA {
 				if(empty($row['path'])) $row['path'] = DEF_PIC;
 
 				$row['type'] = 'qs';
-				$feed[] = $row;
+				$this->feed[] = $row;
 			}
 		}
-
-		return $feed;
 	}
 
 	public static function PorQ($id){

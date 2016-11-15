@@ -1,5 +1,16 @@
 <?php
+$post = new Post();
 $QNA = new QNA();
+$post->get_stream();
+$feed = $post->getFeed();
+
+usort($feed, 'date_compare');
+//printX($feed);
+
+//$feed = array_slice($feed, 0, 30); // limit the feed items to 30
+
+if(empty($feed)) echo "<p>There doesn't seem to be anything here, follow some users to see what they are up to!</p>";
+else;
 foreach ($feed as $value) {
 	switch ($value['type']) {
 		case 'ac':
@@ -69,7 +80,6 @@ foreach ($feed as $value) {
 			} else {
 				continue;
 			}
-
 			$p_count = QNA::get_votes($postID) ?: "0";
 			?>
 			<div class="ui segment comment-view">
@@ -79,7 +89,7 @@ foreach ($feed as $value) {
 					</div>
 					<div class="summary">
 						<?= View::user($value['uid'], true) ?>&nbsp;Commented on a&nbsp;<a href="<?= $post_id ?>"><?=$p?></a>&nbsp;
-						<div class="time"><?= View::postDate($value['post_id']) ?></div>
+						<div class="time datetime" title="<?= $value['date']." GMT".Date('P') ?>"><?= $value['date'] ?></div>
 					</div>
 				</div>
 				<div class="content">

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once( $_SERVER["DOCUMENT_ROOT"] .'/src/init.php');
 
 //Allow access only via ajax requests
@@ -36,7 +36,7 @@ switch ($action) {
 
 			die(json_encode(['status' => true]));
 		} else {
-			
+
 			die(json_encode(['status' => false, 'err' => $follow]));
 		}
 
@@ -53,7 +53,7 @@ switch ($action) {
 
 			die(json_encode(['status' => true]));
 		} else {
-			
+
 			die(json_encode(['status' => false]));
 		}
 
@@ -80,9 +80,10 @@ switch ($action) {
 		$data = $_POST;
 		unset($data['action']);
 
-		$user_id = isset($data['user_id']) ? $data['user_id'] : USER_ID;
+		$user_id = $data['user_id'] ?? USER_ID;
 		$content = $data['content'];
 		$token = $data['token'];
+		$now = getNow();
 
 		// check token validation
 		if(!Token::validateToken($token)){
@@ -91,9 +92,9 @@ switch ($action) {
 
 		$database = new Database();
 
-		$data = ['user_id' => $user_id, 'content' => $content, 'poster_id' => USER_ID];
+		$data = ['user_id' => $user_id, 'content' => $content, 'poster_id' => USER_ID, 'date' => $now];
 		$insert = $database->insert_data(TABLE_ACTIVITY, $data);
-		
+
 		if($insert === true){
 			$id = $database->lastId;
 
@@ -108,7 +109,7 @@ switch ($action) {
 		$comment = $post->get_post($id);
 
 		if(is_object($comment)){
-			
+
 			die(json_encode($comment));
 
 		} else {
@@ -116,7 +117,7 @@ switch ($action) {
 			die(json_encode(['status' => false, 'err' => $comment]));
 		}
 		break;
-	
+
 
 	default:
 		break;
